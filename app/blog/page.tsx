@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Clock, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog & Tutorials",
@@ -8,21 +9,19 @@ export const metadata: Metadata = {
     "Free guides, tutorials and tips for engineering students doing their Final Year Projects in Malaysia.",
 };
 
-const posts = [
-  {
-    slug: "how-to-choose-fyp-topic",
-    title: "How to Choose the Right Final Year Project Topic",
-    excerpt: "A practical framework to help you pick a FYP topic that impresses your supervisor, fits your skills, and is achievable within your timeline.",
-    category: "FYP Guide",
-    readTime: "5 min",
-    date: "Coming Soon",
-  },
+const categoryColors: Record<string, string> = {
+  "FYP Guide": "bg-brand-blue-light text-brand-blue",
+  Tutorial: "bg-violet-50 text-violet-600",
+  Ideas: "bg-amber-50 text-amber-600",
+};
+
+const comingSoon = [
   {
     slug: "arduino-vs-raspberry-pi",
     title: "Arduino vs Raspberry Pi: Which Should You Use for Your FYP?",
     excerpt: "Two of the most popular platforms for engineering FYPs — but they serve very different purposes. We break down which one fits your project.",
     category: "Tutorial",
-    readTime: "7 min",
+    readTime: "7 min read",
     date: "Coming Soon",
   },
   {
@@ -30,7 +29,7 @@ const posts = [
     title: "10 IoT Final Year Project Ideas That Will Impress Your Examiner",
     excerpt: "A curated list of IoT project ideas with real impact, achievable scope, and the technical depth examiners look for.",
     category: "Ideas",
-    readTime: "6 min",
+    readTime: "6 min read",
     date: "Coming Soon",
   },
   {
@@ -38,34 +37,14 @@ const posts = [
     title: "The Complete FYP Documentation Guide: What to Write and How",
     excerpt: "Most students fail not because of bad projects but because of poor documentation. Here's exactly what your report needs to include.",
     category: "FYP Guide",
-    readTime: "10 min",
-    date: "Coming Soon",
-  },
-  {
-    slug: "esp32-getting-started",
-    title: "Getting Started with ESP32: The Ultimate Beginner Guide",
-    excerpt: "ESP32 is the most versatile microcontroller for FYPs. Learn how to set it up, connect sensors, and push data to the cloud in one afternoon.",
-    category: "Tutorial",
-    readTime: "12 min",
-    date: "Coming Soon",
-  },
-  {
-    slug: "blynk-iot-dashboard",
-    title: "Build an IoT Dashboard in 30 Minutes with Blynk and ESP32",
-    excerpt: "No backend required. Connect your hardware to a professional mobile dashboard using Blynk — step by step from scratch.",
-    category: "Tutorial",
-    readTime: "8 min",
+    readTime: "10 min read",
     date: "Coming Soon",
   },
 ];
 
-const categoryColors: Record<string, string> = {
-  "FYP Guide": "bg-brand-blue-light text-brand-blue",
-  Tutorial: "bg-violet-50 text-violet-600",
-  Ideas: "bg-amber-50 text-amber-600",
-};
-
 export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <div className="pt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
@@ -93,7 +72,7 @@ export default function BlogPage() {
                 </span>
                 <span className="flex items-center gap-1 text-xs text-slate-400">
                   <Clock size={11} />
-                  {post.readTime} read
+                  {post.readTime}
                 </span>
               </div>
               <h2 className="font-semibold text-brand-navy leading-snug mb-3 group-hover:text-brand-blue transition-colors">
@@ -109,6 +88,29 @@ export default function BlogPage() {
                 </span>
               </div>
             </Link>
+          ))}
+
+          {comingSoon.map((post) => (
+            <div key={post.slug} className="card p-6 flex flex-col opacity-60">
+              <div className="flex items-center justify-between mb-4">
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${categoryColors[post.category] || "bg-slate-100 text-slate-500"}`}>
+                  {post.category}
+                </span>
+                <span className="flex items-center gap-1 text-xs text-slate-400">
+                  <Clock size={11} />
+                  {post.readTime}
+                </span>
+              </div>
+              <h2 className="font-semibold text-brand-navy leading-snug mb-3">
+                {post.title}
+              </h2>
+              <p className="text-sm text-slate-500 leading-relaxed flex-1">
+                {post.excerpt}
+              </p>
+              <div className="flex items-center justify-between mt-5">
+                <span className="text-xs text-slate-400 font-medium">{post.date}</span>
+              </div>
+            </div>
           ))}
         </div>
       </div>
