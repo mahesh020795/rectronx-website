@@ -3,7 +3,7 @@ import { MessageSquare, ArrowUpRight } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Products",
+  title: "Software Products | Spark WhatsApp AI — Rectronx",
   description:
     "Software products built by Rectronx — Spark AI WhatsApp assistant and more.",
 };

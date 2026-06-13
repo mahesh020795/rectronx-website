@@ -3,9 +3,9 @@ import { Cpu, Code2, Zap, Box } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "FYP Projects",
+  title: "FYP Projects Portfolio | Arduino, IoT & Software — Rectronx Malaysia",
   description:
-    "Browse our portfolio of Final Year Projects — IoT, Arduino, Raspberry Pi, Software, Electronics, and Robotics projects delivered across Malaysia.",
+    "Browse 100+ Final Year Projects delivered across Malaysia. IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics FYP solutions with full documentation.",
 };
 
 const categories = [

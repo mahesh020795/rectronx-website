@@ -27,11 +27,11 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-navy leading-tight tracking-tight"
         >
-          We Build Tech
+          Malaysia&apos;s Tech Studio
           <br />
-          <span className="text-brand-blue">Products</span> &amp; Engineering
+          for <span className="text-brand-blue">FYP Projects</span>
           <br />
-          Solutions
+          &amp; Software Products
         </motion.h1>
 
         <motion.p

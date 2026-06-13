@@ -3,7 +3,7 @@ import { Cpu, Code2, Zap, Users } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Rectronx | Malaysia Tech Studio for FYP & Software Products",
   description:
     "Learn about Rectronx — a tech studio from Malaysia building software products and delivering custom engineering solutions.",
 };
