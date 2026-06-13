@@ -18,7 +18,7 @@ const footerLinks = {
 const contactInfo = [
   { label: "Email", value: "rectronx@gmail.com", href: "mailto:rectronx@gmail.com" },
   { label: "WhatsApp", value: "+60 11-7279 2500", href: "https://wa.me/601172792500" },
-  { label: "Based In", value: "Malaysia 🇲🇾", href: null },
+  { label: "Address", value: "1-3-8, BL Business Centre, Solok Thean Tek, 11500 Ayer Itam, Pulau Pinang 🇲🇾", href: null },
 ];
 
 export default function Footer() {
@@ -61,7 +61,7 @@ export default function Footer() {
                 Building tech that works.
               </p>
               <p className="text-slate-500 text-xs mt-2 leading-relaxed">
-                A tech studio from Malaysia — FYP solutions, software products, and IoT systems.
+                Rectronx Circuits — FYP solutions, commercial software products, and IoT systems from Penang, Malaysia.
               </p>
 
               {/* Social icons */}
@@ -181,7 +181,7 @@ export default function Footer() {
           {/* Bottom bar */}
           <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-slate-500 text-sm">
-              © {new Date().getFullYear()} Rectronx. All rights reserved.
+              © {new Date().getFullYear()} Rectronx Circuits. All rights reserved.
             </p>
             <p className="text-slate-500 text-sm">
               Built with ❤️ in Malaysia

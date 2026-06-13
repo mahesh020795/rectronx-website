@@ -4,9 +4,9 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Rectronx | Malaysia Tech Studio for FYP & Software Products",
+  title: "About Rectronx Circuits | Penang Tech Studio for FYP & Commercial Software",
   description:
-    "Learn about Rectronx — a tech studio from Malaysia building software products and delivering custom engineering solutions.",
+    "Learn about Rectronx Circuits — an engineering studio from Penang building commercial software products and delivering custom FYP solutions.",
 };
 
 const values = [
@@ -58,10 +58,10 @@ export default function AboutPage() {
             About Rectronx
           </span>
           <h1 className="text-white text-4xl sm:text-5xl font-bold tracking-tight">
-            Building Malaysia&apos;s Tech Future
+            Rectronx Circuits, Penang
           </h1>
           <p className="text-slate-300 mt-3 text-base max-w-xl">
-            From FYP projects to real software products — we build things that work.
+            From FYP projects to commercial software products — we build things that work.
           </p>
         </div>
       </div>

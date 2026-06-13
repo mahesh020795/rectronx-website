@@ -44,7 +44,7 @@ export default function Hero() {
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 bg-brand-blue-light text-brand-blue text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                Malaysia&apos;s Tech Studio
+                Penang&apos;s Engineering Studio
               </span>
             </motion.div>
 
@@ -53,7 +53,7 @@ export default function Hero() {
               variants={item}
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
             >
-              Malaysia&apos;s Tech Studio for{" "}
+              Engineering Studio for{" "}
               <span className="text-brand-blue">FYP Projects</span>{" "}
               &amp; Software Products
             </motion.h1>
@@ -64,8 +64,8 @@ export default function Hero() {
               className="mt-5 text-lg text-slate-500 leading-relaxed max-w-lg"
             >
               From custom Final Year Projects in IoT, Arduino &amp; Raspberry Pi
-              — to SaaS products that solve real problems. Rectronx delivers
-              quality engineering, every time.
+              — to SaaS products that solve real commercial customers&apos; problems.
+              Rectronx Circuits delivers quality engineering, every time.
             </motion.p>
 
             {/* CTAs */}
@@ -131,19 +131,24 @@ export default function Hero() {
                 style={{ transform: "rotate(-2deg)" }}
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
-                  alt="Circuit board — Rectronx engineering"
+                  src="/images/project-hero.jpg"
+                  alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
                   width={800}
                   height={540}
                   className="w-full object-cover"
                   priority
+                  onError={(e) => {
+                    // fallback to Unsplash if local image not yet placed
+                    (e.target as HTMLImageElement).src =
+                      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80";
+                  }}
                 />
                 {/* Dark overlay for contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent" />
                 {/* Bottom label */}
                 <div className="absolute bottom-4 left-4 right-4">
                   <span className="text-white text-sm font-semibold">
-                    Real-world IoT Engineering
+                    IoT Gas Detector — Student FYP by Rectronx Circuits
                   </span>
                 </div>
               </div>

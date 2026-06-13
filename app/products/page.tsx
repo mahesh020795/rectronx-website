@@ -3,9 +3,9 @@ import { MessageSquare, ArrowUpRight } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Software Products | Spark WhatsApp AI — Rectronx",
+  title: "Software Products | Spark WhatsApp AI — Rectronx Circuits",
   description:
-    "Software products built by Rectronx — Spark AI WhatsApp assistant and more.",
+    "Commercial and industrial software products built by Rectronx Circuits — Spark AI WhatsApp assistant and more.",
 };
 
 export default function ProductsPage() {
@@ -15,11 +15,10 @@ export default function ProductsPage() {
         <div className="text-center mb-16">
           <span className="section-label">Products</span>
           <h1 className="mt-3 text-5xl font-bold text-brand-navy tracking-tight">
-            Software We&apos;ve Built
+            Software We&apos;ve Built for Commercial &amp; Industrial
           </h1>
           <p className="mt-4 text-slate-500 max-w-xl mx-auto text-lg">
-            Beyond client projects, Rectronx builds its own software products.
-            Tools that solve real problems for real businesses.
+            Beyond client work, we ship our own products. Real tools solving real problems for commercial and industrial customers.
           </p>
         </div>
 

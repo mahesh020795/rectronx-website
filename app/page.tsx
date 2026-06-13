@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import Hero from "@/components/home/Hero";
 
 export const metadata: Metadata = {
-  title: "Rectronx — Malaysia's FYP Projects & Tech Studio",
+  title: "Rectronx Circuits — Penang's FYP Projects & Engineering Studio",
   description:
-    "Custom Final Year Projects in IoT, Arduino, ESP32, Raspberry Pi & Software. Malaysia's trusted tech studio. Free quote via WhatsApp. Projek Akhir Tahun Malaysia.",
+    "Custom Final Year Projects in IoT, Arduino, ESP32, Raspberry Pi & Software. Penang's trusted engineering studio. Free quote via WhatsApp. Projek Akhir Tahun Malaysia.",
 };
 import Services from "@/components/home/Services";
 import Products from "@/components/home/Products";

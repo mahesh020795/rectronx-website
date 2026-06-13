@@ -6,46 +6,47 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://rectronx.com"),
   title: {
-    default: "Rectronx — Tech Studio | FYP Projects & Software Products",
-    template: "%s | Rectronx",
+    default: "Rectronx Circuits — Engineering Studio | FYP Projects & Commercial Software",
+    template: "%s | Rectronx Circuits",
   },
   description:
-    "Rectronx is Malaysia's tech studio for Final Year Projects and software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions. Get your FYP done right.",
+    "Rectronx Circuits is Penang's engineering studio for Final Year Projects and commercial software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions. Get your FYP done right.",
   keywords: [
     "final year project malaysia",
     "FYP malaysia",
     "projek akhir tahun",
     "IoT project malaysia",
     "arduino project malaysia",
-    "tech studio malaysia",
-    "Rectronx",
+    "engineering studio penang",
+    "Rectronx Circuits",
     "esp32 project",
     "raspberry pi project malaysia",
-    "software development malaysia",
+    "software development penang",
+    "commercial software malaysia",
   ],
-  authors: [{ name: "Rectronx" }],
-  creator: "Rectronx",
+  authors: [{ name: "Rectronx Circuits" }],
+  creator: "Rectronx Circuits",
   openGraph: {
     type: "website",
     locale: "en_MY",
     url: "https://rectronx.com",
-    siteName: "Rectronx",
-    title: "Rectronx — Tech Studio | FYP Projects & Software Products",
+    siteName: "Rectronx Circuits",
+    title: "Rectronx Circuits — Engineering Studio | FYP Projects & Commercial Software",
     description:
-      "We build software products and deliver custom Final Year Projects in IoT, Arduino, Raspberry Pi, and more.",
+      "We build commercial software products and deliver custom Final Year Projects in IoT, Arduino, Raspberry Pi, and more. Based in Penang, Malaysia.",
     images: [
       {
         url: "https://rectronx.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Rectronx — Malaysia's Tech Studio for FYP & Software Products",
+        alt: "Rectronx Circuits — Penang Engineering Studio for FYP & Commercial Software",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rectronx — Tech Studio",
-    description: "FYP Projects & Software Products from Malaysia",
+    title: "Rectronx Circuits — Engineering Studio",
+    description: "FYP Projects & Commercial Software from Penang, Malaysia",
   },
   robots: {
     index: true,
@@ -57,11 +58,19 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Rectronx",
+  name: "Rectronx Circuits",
   url: "https://rectronx.com",
   logo: "https://rectronx.com/logo.png",
   description:
-    "Malaysia tech studio for Final Year Projects and software products",
+    "Penang engineering studio for Final Year Projects and commercial software products",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "1-3-8, BL Business Centre, Solok Thean Tek",
+    addressLocality: "Ayer Itam",
+    postalCode: "11500",
+    addressRegion: "Pulau Pinang",
+    addressCountry: "MY",
+  },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+60-11-72792500",
