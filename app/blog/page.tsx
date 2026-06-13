@@ -75,13 +75,13 @@ export default function BlogPage() {
 
   return (
     <div className="pt-24 bg-slate-50 min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         {/* Page header */}
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 sm:mb-14">
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#2B7FD4] bg-blue-50 px-3 py-1 rounded-full mb-3">
             Knowledge Base
           </span>
-          <h1 className="text-5xl font-bold text-[#0F1C2E] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F1C2E] tracking-tight">
             Blog &amp; Tutorials
           </h1>
           <p className="mt-4 text-slate-500 max-w-2xl mx-auto text-lg">
@@ -94,8 +94,17 @@ export default function BlogPage() {
         {featured && (
           <Link href={`/blog/${featured.slug}`} className="block mb-14 group">
             <div className="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden flex flex-col md:flex-row border-l-4 border-l-[#2B7FD4] hover:shadow-xl transition-shadow duration-300">
+              {/* Image (top on mobile, right on desktop) */}
+              <div className="w-full h-48 md:hidden overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=800&q=80"
+                  alt="Featured blog post"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               {/* Left: content */}
-              <div className="flex-1 p-8 md:p-10 flex flex-col justify-center">
+              <div className="flex-1 p-6 md:p-10 flex flex-col justify-center">
                 <span
                   className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-4 w-fit ${
                     categoryColors[featured.category]?.pill ??
@@ -121,13 +130,13 @@ export default function BlogPage() {
                   Read Article <ArrowRight size={14} />
                 </div>
               </div>
-              {/* Right: image */}
-              <div className="md:w-[40%] h-56 md:h-auto overflow-hidden">
+              {/* Right: image (desktop only) */}
+              <div className="hidden md:block md:w-[40%] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=800&q=80"
                   alt="Featured blog post"
-                  className="w-full h-full object-cover rounded-xl md:rounded-none"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
@@ -135,12 +144,12 @@ export default function BlogPage() {
         )}
 
         {/* Filter bar */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex overflow-x-auto gap-2 mb-8 pb-2 flex-nowrap sm:flex-wrap">
           {FILTER_TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActive(tab)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors whitespace-nowrap shrink-0 ${
                 active === tab
                   ? "bg-[#2B7FD4] text-white border-[#2B7FD4]"
                   : "bg-white text-slate-600 border-slate-200 hover:border-[#2B7FD4] hover:text-[#2B7FD4]"
@@ -152,7 +161,7 @@ export default function BlogPage() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {gridPosts.map((post) => {
             const colors = categoryColors[post.category];
             if (!post.published) {

@@ -55,7 +55,7 @@ export default function ContactPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-14">
           <span className="section-label">Get in Touch</span>
-          <h1 className="mt-3 text-5xl font-bold text-brand-navy tracking-tight">
+          <h1 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-navy tracking-tight">
             Let&apos;s Talk
           </h1>
           <p className="mt-4 text-slate-500 max-w-xl mx-auto text-lg">
@@ -64,9 +64,9 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
           {/* Left side */}
-          <div className="space-y-8">
+          <div className="w-full lg:w-auto lg:shrink-0 lg:max-w-xs space-y-6 sm:space-y-8">
             {/* Logo + reply badge */}
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0">
@@ -132,7 +132,7 @@ export default function ContactPage() {
           </div>
 
           {/* Form card */}
-          <div className="relative bg-white rounded-2xl border border-slate-100 shadow-[0_4px_32px_0_rgba(0,0,0,0.10)] p-8">
+          <div className="relative w-full bg-white rounded-2xl border border-slate-100 shadow-[0_4px_32px_0_rgba(0,0,0,0.10)] p-5 sm:p-8">
             {/* Confetti overlay */}
             {confetti.length > 0 && (
               <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-10">

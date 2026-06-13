@@ -79,7 +79,7 @@ export default function BlogPostPage({
         {/* Back link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#2B7FD4] transition-colors mb-10"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#2B7FD4] transition-colors mb-10 py-2"
         >
           <ArrowLeft size={14} /> Back to Blog
         </Link>
@@ -88,7 +88,7 @@ export default function BlogPostPage({
           {/* Main content */}
           <article className="flex-1 min-w-0">
             {/* Header */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-10 mb-6">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 lg:p-10 mb-6">
               {/* Meta row */}
               <div className="flex flex-wrap items-center gap-3 mb-5">
                 <span
@@ -107,7 +107,7 @@ export default function BlogPostPage({
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl sm:text-5xl font-bold text-[#0F1C2E] leading-tight tracking-tight mb-4">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F1C2E] leading-tight tracking-tight mb-4">
                 {post.title}
               </h1>
 
@@ -117,7 +117,7 @@ export default function BlogPostPage({
               </p>
 
               {/* Author row */}
-              <div className="flex items-center justify-between border-t border-slate-100 pt-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-5">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-[#0F1C2E] rounded-full flex items-center justify-center text-white text-xs font-bold">
                     R
@@ -149,7 +149,7 @@ export default function BlogPostPage({
             </div>
 
             {/* Hero image */}
-            <div className="rounded-2xl overflow-hidden mb-8 h-[380px]">
+            <div className="rounded-2xl overflow-hidden mb-8 h-48 sm:h-[380px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80"
@@ -159,7 +159,7 @@ export default function BlogPostPage({
             </div>
 
             {/* Prose content */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-10">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 lg:p-10">
               <div
                 className="prose prose-slate prose-lg max-w-none
                   prose-headings:font-bold prose-headings:text-[#0F1C2E] prose-headings:tracking-tight

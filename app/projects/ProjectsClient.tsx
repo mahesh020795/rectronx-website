@@ -65,7 +65,7 @@ export default function ProjectsClient() {
             <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#2B7FD4] bg-blue-50 px-3 py-1 rounded-full mb-3">
               Our Portfolio
             </span>
-            <h1 className="text-5xl font-bold text-[#0F1C2E] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F1C2E] tracking-tight">
               Final Year Projects
             </h1>
             <p className="mt-4 text-slate-500 max-w-2xl mx-auto text-lg">
@@ -75,7 +75,7 @@ export default function ProjectsClient() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 mb-10">
             {[
               { value: "100+", label: "Projects Delivered" },
               { value: "4", label: "Categories" },
@@ -102,12 +102,12 @@ export default function ProjectsClient() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-10 justify-center">
+        <div className="flex overflow-x-auto gap-2 mb-10 pb-2 flex-nowrap sm:flex-wrap sm:justify-center">
           {TABS.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-5 py-2 rounded-full text-sm font-medium border transition-all ${
+              className={`px-5 py-2 rounded-full text-sm font-medium border transition-all whitespace-nowrap shrink-0 ${
                 activeTab === tab.key
                   ? "bg-[#2B7FD4] text-white border-[#2B7FD4] shadow-sm"
                   : "bg-white text-slate-600 border-slate-200 hover:border-[#2B7FD4] hover:text-[#2B7FD4]"
@@ -126,7 +126,7 @@ export default function ProjectsClient() {
               className="bg-white rounded-xl border border-slate-200 overflow-hidden flex flex-col shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
             >
               {/* Image */}
-              <div className="relative h-44 overflow-hidden">
+              <div className="relative h-40 sm:h-44 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={categoryImages[p.category]}
@@ -179,7 +179,7 @@ export default function ProjectsClient() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-16 bg-[#0F1C2E] rounded-2xl p-10 text-center">
+        <div className="mt-16 bg-[#0F1C2E] rounded-2xl p-6 sm:p-10 text-center">
           <h2 className="text-2xl font-bold text-white">
             Don&apos;t See Your Project Type?
           </h2>

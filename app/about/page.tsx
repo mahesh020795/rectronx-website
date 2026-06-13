@@ -43,7 +43,7 @@ export default function AboutPage() {
   return (
     <div className="pt-16">
       {/* Hero banner */}
-      <div className="relative w-full h-72 sm:h-80 overflow-hidden">
+      <div className="relative w-full h-56 sm:h-72 lg:h-80 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80"
@@ -57,7 +57,7 @@ export default function AboutPage() {
           <span className="text-brand-blue text-xs font-semibold tracking-widest uppercase mb-3 bg-brand-blue/10 border border-brand-blue/30 px-3 py-1 rounded-full">
             About Rectronx
           </span>
-          <h1 className="text-white text-4xl sm:text-5xl font-bold tracking-tight">
+          <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
             Rectronx Circuits, Penang
           </h1>
           <p className="text-slate-300 mt-3 text-base max-w-xl">
@@ -74,7 +74,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-brand-navy mb-1">Our Story</h2>
             <p className="text-brand-blue text-sm font-medium">How it all started</p>
           </div>
-          <div className="bg-slate-50 rounded-2xl p-8 space-y-4">
+          <div className="bg-slate-50 rounded-2xl p-5 sm:p-8 space-y-4">
             <p className="text-slate-600 leading-relaxed">
               Rectronx Circuits was founded to solve a problem every engineering
               student faces: you have a great idea for your Final Year Project, but
@@ -139,7 +139,7 @@ export default function AboutPage() {
         </div>
 
         {/* End CTA with pattern */}
-        <div className="relative text-center rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 p-12">
+        <div className="relative text-center rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 p-8 sm:p-12">
           {/* Subtle dot pattern */}
           <div
             className="absolute inset-0 opacity-30"
