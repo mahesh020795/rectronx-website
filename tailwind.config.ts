@@ -22,6 +22,14 @@ const config: Config = {
       boxShadow: {
         card: "0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.06)",
         "card-hover": "0 4px 16px 0 rgba(0,0,0,0.10)",
+        premium: "0 4px 32px 0 rgba(0,0,0,0.10)",
+      },
+      backgroundImage: {
+        "dot-pattern": "radial-gradient(#2B7FD4 1px, transparent 1px)",
+      },
+      backgroundSize: {
+        "dot-sm": "16px 16px",
+        "dot-md": "24px 24px",
       },
     },
   },

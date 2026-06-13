@@ -1,4 +1,12 @@
-export default function Logo({ className = "h-9 w-auto" }: { className?: string }) {
+export default function Logo({
+  className = "h-9 w-auto",
+  variant = "default",
+}: {
+  className?: string;
+  variant?: "default" | "light";
+}) {
+  const textColor = variant === "light" ? "#FFFFFF" : "#0F1C2E";
+
   return (
     <svg
       viewBox="0 0 220 60"
@@ -12,7 +20,7 @@ export default function Logo({ className = "h-9 w-auto" }: { className?: string 
         fontFamily="Inter, system-ui, sans-serif"
         fontWeight="700"
         fontSize="48"
-        fill="#0F1C2E"
+        fill={textColor}
         letterSpacing="-1"
       >
         Rectronx
