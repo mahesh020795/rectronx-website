@@ -26,11 +26,11 @@ const item = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16 pb-0">
       {/* Subtle radial gradient background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_60%_40%,rgba(43,127,212,0.07),transparent)]" />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 w-full">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* ── LEFT: Text + CTAs ── */}
@@ -51,7 +51,7 @@ export default function Hero() {
             {/* H1 */}
             <motion.h1
               variants={item}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
+              className="text-3xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
             >
               Engineering Studio for{" "}
               <span className="text-brand-blue">FYP Projects</span>{" "}
@@ -71,14 +71,14 @@ export default function Hero() {
             {/* CTAs */}
             <motion.div
               variants={item}
-              className="mt-8 flex flex-col sm:flex-row items-start gap-3"
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-start gap-3"
             >
               <WhatsAppButton
                 label="Get a Free Quote"
                 message="Hi Rectronx! I'd like to get a quote for my project."
-                className="text-base px-6 py-3"
+                className="text-base px-6 py-3 justify-center"
               />
-              <Link href="/projects" className="btn-secondary text-base px-6 py-3">
+              <Link href="/projects" className="btn-secondary text-base px-6 py-3 justify-center text-center">
                 View Projects <ArrowRight size={16} />
               </Link>
             </motion.div>
@@ -122,14 +122,11 @@ export default function Hero() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative flex items-center justify-center lg:justify-end"
+            className="relative flex items-center justify-center lg:justify-end mt-4 lg:mt-0"
           >
-            {/* Tilted image card */}
-            <div className="relative w-full max-w-md">
-              <div
-                className="relative rounded-2xl overflow-hidden shadow-2xl"
-                style={{ transform: "rotate(-2deg)" }}
-              >
+            {/* Tilted image card — no rotation on mobile */}
+            <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl sm:-rotate-2">
                 <Image
                   src="/images/project-hero.jpg"
                   alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
@@ -154,11 +151,12 @@ export default function Hero() {
               </div>
 
               {/* Floating badges */}
+              {/* Top-left badge — visible on all sizes */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8, duration: 0.4 }}
-                className="absolute -top-4 -left-6 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100 flex items-center gap-2"
+                className="absolute -top-4 -left-4 sm:-left-6 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100 flex items-center gap-2"
               >
                 <span className="text-lg">🎓</span>
                 <div>
@@ -167,11 +165,12 @@ export default function Hero() {
                 </div>
               </motion.div>
 
+              {/* Side badges — hidden on mobile */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1.0, duration: 0.4 }}
-                className="absolute -top-3 -right-4 bg-brand-blue rounded-xl px-3 py-2 shadow-lg"
+                className="hidden sm:block absolute -top-3 -right-4 bg-brand-blue rounded-xl px-3 py-2 shadow-lg"
               >
                 <div className="text-xs font-bold text-white">IoT</div>
               </motion.div>
@@ -180,7 +179,7 @@ export default function Hero() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1.2, duration: 0.4 }}
-                className="absolute -bottom-4 -right-5 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100"
+                className="hidden sm:block absolute -bottom-4 -right-5 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100"
               >
                 <div className="text-xs font-bold text-brand-navy">Arduino ⚡</div>
               </motion.div>
@@ -189,7 +188,7 @@ export default function Hero() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1.1, duration: 0.4 }}
-                className="absolute bottom-10 -left-8 bg-brand-navy rounded-xl px-3 py-2 shadow-lg"
+                className="hidden sm:block absolute bottom-10 -left-8 bg-brand-navy rounded-xl px-3 py-2 shadow-lg"
               >
                 <div className="text-xs font-bold text-white">ESP32</div>
               </motion.div>

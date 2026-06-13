@@ -52,11 +52,11 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-9 w-auto" />
+            <Logo className="h-7 lg:h-9 w-auto" />
           </Link>
 
           {/* Desktop nav — centered */}
-          <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+          <nav className="hidden lg:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             {links.map((l) => (
               <Link
                 key={l.href}
@@ -74,7 +74,7 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop right side */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <Link
               href="/contact"
               className="text-sm font-medium text-slate-600 hover:text-brand-navy transition-colors"
@@ -91,7 +91,7 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -102,7 +102,7 @@ export default function Navbar() {
         {/* Mobile menu — slide down */}
         <div
           className={clsx(
-            "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
+            "lg:hidden overflow-hidden transition-all duration-300 ease-in-out",
             open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
           )}
         >
@@ -114,7 +114,7 @@ export default function Navbar() {
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className={clsx(
-                    "flex items-center justify-between px-3 py-3 text-sm font-medium rounded-lg transition-colors",
+                    "flex items-center justify-between px-3 py-[11px] min-h-[44px] text-sm font-medium rounded-lg transition-colors",
                     isActive(l.href)
                       ? "text-brand-blue bg-brand-blue-light"
                       : "text-slate-700 hover:text-brand-navy hover:bg-slate-50"

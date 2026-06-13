@@ -38,11 +38,11 @@ export default function Products() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="rounded-2xl overflow-hidden border border-slate-100 shadow-lg flex flex-col md:flex-row"
+          className="rounded-2xl overflow-hidden border border-slate-100 shadow-lg flex flex-col md:flex-row min-h-0"
         >
           {/* Left navy panel — 40% */}
           <div
-            className="relative md:w-2/5 bg-brand-navy flex flex-col items-center justify-center p-10 overflow-hidden"
+            className="relative w-full md:w-2/5 bg-brand-navy flex flex-col items-center justify-center py-10 px-8 overflow-hidden"
             style={{
               backgroundImage:
                 "radial-gradient(circle, rgba(43,127,212,0.18) 1px, transparent 1px)",
@@ -66,7 +66,7 @@ export default function Products() {
           </div>
 
           {/* Right content panel — 60% */}
-          <div className="md:w-3/5 bg-white p-8 md:p-10 flex flex-col justify-center">
+          <div className="w-full md:w-3/5 bg-white p-8 md:p-10 flex flex-col justify-center">
             <h3 className="text-2xl font-bold text-brand-navy">
               AI-powered WhatsApp assistant for your business
             </h3>

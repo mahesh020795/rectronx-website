@@ -26,7 +26,7 @@ export default function Footer() {
     <>
       {/* CTA Strip — above dark footer */}
       <div className="bg-white border-t border-slate-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col items-center text-center sm:flex-row sm:items-center sm:text-left justify-between gap-6">
           <div>
             <p className="text-lg font-semibold text-brand-navy">
               Get FYP tips in your WhatsApp
@@ -53,9 +53,9 @@ export default function Footer() {
         style={{ background: "#0F1C2E", borderTop: "2px solid #2B7FD4" }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            {/* Brand column */}
-            <div className="md:col-span-1">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+            {/* Brand column — full width on mobile */}
+            <div className="col-span-2 md:col-span-1">
               <Logo className="h-9 w-auto mb-4" variant="light" />
               <p className="text-slate-400 text-sm leading-relaxed">
                 Building tech that works.
@@ -65,7 +65,7 @@ export default function Footer() {
               </p>
 
               {/* Social icons */}
-              <div className="flex items-center gap-2 mt-5">
+              <div className="flex items-center justify-center md:justify-start gap-2 mt-5">
                 <a
                   href="mailto:rectronx@gmail.com"
                   className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
@@ -179,7 +179,7 @@ export default function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col items-center text-center sm:flex-row sm:items-center sm:text-left justify-between gap-4">
             <p className="text-slate-500 text-sm">
               © {new Date().getFullYear()} Rectronx Circuits. All rights reserved.
             </p>
