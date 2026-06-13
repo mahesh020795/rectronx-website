@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, Code2, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const projects = [
@@ -11,7 +12,7 @@ const projects = [
     description:
       "ESP32-based temperature monitoring system with real-time dashboard, SMS alerts, and mobile app control via Blynk.",
     tags: ["ESP32", "Blynk", "Sensor", "OLED"],
-    icon: Cpu,
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
   },
   {
     title: "GSM-Based Security System",
@@ -19,7 +20,7 @@ const projects = [
     description:
       "Home security alarm system with GSM module for SMS alerts, PIR motion detection, and keypad access control.",
     tags: ["Arduino", "GSM", "PIR", "Keypad"],
-    icon: Cpu,
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
   },
   {
     title: "Inventory Management System",
@@ -27,7 +28,7 @@ const projects = [
     description:
       "Web-based inventory tracking system with barcode scanning, low-stock alerts, and detailed reporting dashboard.",
     tags: ["Python", "Flask", "MySQL", "Bootstrap"],
-    icon: Code2,
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80",
   },
   {
     title: "IoT Plant Monitoring",
@@ -35,7 +36,7 @@ const projects = [
     description:
       "Automated plant care system monitoring soil moisture, humidity, and light — with auto-watering and Telegram notifications.",
     tags: ["NodeMCU", "MQTT", "Telegram Bot"],
-    icon: Cpu,
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80",
   },
   {
     title: "Line Following Robot",
@@ -43,7 +44,7 @@ const projects = [
     description:
       "Autonomous robot that navigates using infrared sensors, with PID control for smooth and accurate line tracking.",
     tags: ["Arduino", "PID", "IR Sensors", "Motor Driver"],
-    icon: Cpu,
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80",
   },
   {
     title: "Student Attendance System",
@@ -51,15 +52,15 @@ const projects = [
     description:
       "RFID-based attendance tracking with web portal for lecturers, automated reports, and real-time student notifications.",
     tags: ["RFID", "PHP", "MySQL", "Arduino"],
-    icon: Code2,
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80",
   },
 ];
 
 const categoryColors: Record<string, string> = {
-  IoT: "bg-blue-50 text-blue-600",
-  Electronics: "bg-amber-50 text-amber-600",
-  Software: "bg-violet-50 text-violet-600",
-  Robotics: "bg-emerald-50 text-emerald-600",
+  IoT: "bg-blue-600 text-white",
+  Electronics: "bg-amber-500 text-white",
+  Software: "bg-violet-600 text-white",
+  Robotics: "bg-emerald-600 text-white",
 };
 
 export default function FeaturedProjects() {
@@ -82,39 +83,54 @@ export default function FeaturedProjects() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((p, i) => (
             <motion.div
               key={p.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: (i % 3) * 0.1 }}
-              className="card p-6 flex flex-col"
+              whileHover={{ y: -4 }}
+              className="group bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
             >
-              <div className="flex items-center justify-between mb-4">
-                <span
-                  className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                    categoryColors[p.category] || "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  {p.category}
-                </span>
-                <p.icon size={16} className="text-slate-300" />
-              </div>
-              <h3 className="font-semibold text-brand-navy mb-2">{p.title}</h3>
-              <p className="text-sm text-slate-500 leading-relaxed flex-1">
-                {p.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5 mt-4">
-                {p.tags.map((t) => (
+              {/* Image */}
+              <div className="relative w-full h-48 overflow-hidden">
+                <Image
+                  src={p.image}
+                  alt={p.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                {/* Category badge overlaid bottom-left */}
+                <div className="absolute bottom-3 left-3">
                   <span
-                    key={t}
-                    className="text-xs bg-slate-50 text-slate-500 px-2 py-0.5 rounded-md border border-slate-100"
+                    className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                      categoryColors[p.category] || "bg-slate-700 text-white"
+                    }`}
                   >
-                    {t}
+                    {p.category}
                   </span>
-                ))}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-5 flex flex-col flex-1">
+                <h3 className="font-bold text-brand-navy mb-2">{p.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed flex-1">
+                  {p.description}
+                </p>
+                <div className="flex flex-wrap gap-1.5 mt-4">
+                  {p.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-xs bg-slate-50 border border-slate-100 text-slate-500 px-2 py-0.5 rounded-md"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
