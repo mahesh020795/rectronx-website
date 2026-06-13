@@ -44,7 +44,7 @@ export default function Hero() {
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 bg-brand-blue-light text-brand-blue text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                Penang&apos;s Engineering Studio
+                Malaysia&apos;s Engineering Lab
               </span>
             </motion.div>
 
