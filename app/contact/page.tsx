@@ -1,7 +1,9 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
@@ -12,7 +14,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    const { error } = await supabase.from("contact_submissions").insert([form]);
+    const { error } = await getSupabase().from("contact_submissions").insert([form]);
     if (error) {
       setStatus("error");
     } else {
