@@ -1,0 +1,154 @@
+---
+title: "Arduino vs Raspberry Pi: Which One Should You Use for Your FYP?"
+excerpt: "Confused between Arduino and Raspberry Pi for your Final Year Project? Here's a clear breakdown of when to use each, with a decision matrix and real project examples."
+category: "Tutorial"
+date: "2026-06-14"
+---
+
+Choosing between Arduino and Raspberry Pi for your Final Year Project (FYP) is one of the most common questions we get at Rectronx. Both platforms are popular, both are beginner-friendly — but they are fundamentally different tools. Pick the wrong one and you'll spend weeks fighting the hardware instead of building your project.
+
+This guide breaks it down clearly so you can make the right call for your FYP, projek akhir tahun, or any serious electronics project in Malaysia.
+
+---
+
+## The Core Difference: Microcontroller vs Microcomputer
+
+This is the most important thing to understand before anything else.
+
+**Arduino** is a **microcontroller board**. Think of it as a very capable chip that runs one program, loops it forever, and talks directly to hardware. It has no operating system. No file system. No desktop. It boots in milliseconds and reads a sensor reliably without crashes. That simplicity is its superpower.
+
+**Raspberry Pi** is a **single-board computer (SBC)**. It runs a full Linux operating system (usually Raspberry Pi OS). It has USB ports, HDMI output, Wi-Fi, Bluetooth, and enough processing power to run Python scripts, web servers, and even machine learning models. It's essentially a tiny PC.
+
+This difference determines everything — which platform you choose, how you program it, and what kind of FYP you can build with it.
+
+---
+
+## Technical Specs Comparison
+
+| Feature | Arduino Uno R3 | Raspberry Pi 4 Model B |
+|---|---|---|
+| Type | Microcontroller | Microcomputer (SBC) |
+| Processor | ATmega328P (8-bit, 16MHz) | Cortex-A72 (64-bit, 1.8GHz) |
+| RAM | 2KB SRAM | 2GB / 4GB / 8GB |
+| Storage | 32KB Flash | MicroSD card (32GB+) |
+| Operating System | None (bare metal) | Raspberry Pi OS / Linux |
+| Programming Language | C/C++ (Arduino IDE) | Python, C++, Node.js, etc. |
+| GPIO Pins | 14 digital, 6 analog | 40 GPIO pins |
+| Wi-Fi / Bluetooth | No (base model) | Yes (built-in) |
+| USB Ports | 1 (for programming) | 4 × USB 3.0 |
+| Power Consumption | ~50mA | ~700mA–1.2A |
+| Boot Time | Instant (< 1 second) | 20–40 seconds |
+| Price (Malaysia) | RM 15–25 (clone), RM 90–110 (genuine) | RM 180–350 (depending on RAM) |
+
+---
+
+## Decision Matrix: Which Platform Fits Your FYP?
+
+Use this table to quickly match your project type to the right platform.
+
+| Your FYP Involves... | Use Arduino | Use Raspberry Pi |
+|---|---|---|
+| Reading sensors (temperature, humidity, motion) | ✅ | ✅ |
+| Real-time control (motors, relays, servos) | ✅ Best | ⚠️ Possible but tricky |
+| Computer vision / image processing | ❌ | ✅ Best |
+| Machine learning / AI inference | ❌ | ✅ Best |
+| Running a local web server | ❌ | ✅ Best |
+| Battery-powered / low power design | ✅ Best | ⚠️ High power drain |
+| Simple IoT (push data to cloud) | ✅ with ESP8266/ESP32 | ✅ |
+| Database logging (SQLite, MySQL) | ❌ | ✅ Best |
+| Audio/video processing | ❌ | ✅ Best |
+| Tight timing / interrupt-critical tasks | ✅ Best | ❌ |
+| Fast prototyping with basic components | ✅ Best | ✅ |
+
+---
+
+## Real FYP Project Examples
+
+### Projects Best Suited for Arduino
+
+- **Automatic Plant Watering System** — reads soil moisture, controls a pump. Simple, reliable, runs 24/7 without crashing.
+- **Smart Home Automation (basic)** — controls lights and fans via relay module with IR or RF remote. No need for a full OS.
+- **Ultrasonic Parking Sensor** — real-time distance measurement and buzzer feedback. Needs precise timing that Arduino handles perfectly.
+- **Heart Rate + SpO2 Monitor** — uses MAX30102 sensor, displays on OLED. Battery powered and compact.
+- **Flood Early Warning System** — water level sensors + GSM module to send SMS alerts. Extremely relevant for Malaysia's flood-prone areas.
+
+### Projects Best Suited for Raspberry Pi
+
+- **Face Recognition Attendance System** — uses Pi Camera and OpenCV to detect and log student faces. Classic FYP that examiners love.
+- **Traffic Density Counter** — computer vision counts vehicles in a video stream. Strong AI element.
+- **Raspberry Pi NAS (Network Attached Storage)** — full file server running on Linux.
+- **Voice-Controlled Home Automation** — integrates with Google Assistant or runs a local wake-word model.
+- **Raspberry Pi Weather Station with Dashboard** — collects sensor data and displays live charts on a local Flask web app.
+
+---
+
+## Cost Comparison in RM
+
+Here's a realistic budget breakdown for a typical FYP project.
+
+**Arduino-based FYP (e.g. Smart Irrigation System)**
+
+| Component | Estimated Cost (RM) |
+|---|---|
+| Arduino Uno clone | RM 18 |
+| Soil moisture sensor × 2 | RM 10 |
+| Relay module | RM 8 |
+| Water pump + tubing | RM 25 |
+| LCD 16×2 + I2C module | RM 12 |
+| Jumper wires + breadboard | RM 10 |
+| **Total** | **~RM 83** |
+
+**Raspberry Pi-based FYP (e.g. Face Recognition Attendance)**
+
+| Component | Estimated Cost (RM) |
+|---|---|
+| Raspberry Pi 4 (2GB) | RM 195 |
+| Pi Camera Module v2 | RM 65 |
+| MicroSD 32GB (Class 10) | RM 28 |
+| 5V 3A USB-C power adapter | RM 25 |
+| HDMI cable + monitor (if needed) | RM 50–200 |
+| **Total** | **~RM 363–500+** |
+
+Arduino projects are typically **3–5× cheaper** than Raspberry Pi projects. This matters a lot when you're a student on a budget.
+
+---
+
+## When to Combine Both
+
+Some of the most impressive FYP projects use **both platforms together**. A common architecture:
+
+- **Arduino** handles real-time sensor reading and hardware control (fast, reliable)
+- **Raspberry Pi** acts as the brain — collects data from Arduino via serial/I2C, runs analysis, hosts a web dashboard, and pushes data to the cloud
+
+This approach gets you the best of both worlds: rock-solid hardware control and powerful software capabilities. It's more complex to build, but it stands out in viva presentations.
+
+---
+
+## The Verdict
+
+**Choose Arduino if:**
+- Your FYP is hardware-focused (sensors, actuators, motors)
+- You need reliability and low power consumption
+- You're new to electronics and want a gentle learning curve
+- Budget is a concern
+- You need real-time, interrupt-driven behavior
+
+**Choose Raspberry Pi if:**
+- Your FYP involves computer vision, AI, or machine learning
+- You need to run a web server, database, or complex software
+- Your project benefits from a graphical interface or camera
+- Processing power matters more than hardware timing
+
+**Not sure yet?** Consider the **ESP32** — it's a middle ground with Wi-Fi and Bluetooth built in, costs only RM 15–30, and is the go-to platform for modern IoT FYP projects. We have a full ESP32 guide on the blog if you want to explore that option.
+
+---
+
+## Need Help Picking Components for Your FYP?
+
+At **Rectronx**, we supply Arduino boards, Raspberry Pi kits, ESP32 modules, sensors, and everything else you need for your FYP — delivered fast across Malaysia.
+
+Not sure what to order? Chat with us on WhatsApp and we'll help you figure out exactly what you need based on your project idea.
+
+👉 [**Chat with Rectronx on WhatsApp**](https://wa.me/601172792500?text=Hi%20Rectronx!)
+
+We help Malaysian students build better FYP projects — one component at a time.
