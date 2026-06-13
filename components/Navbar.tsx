@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import Logo from "@/components/Logo";
 import clsx from "clsx";
 
 const links = [
@@ -34,14 +34,7 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="Rectronx"
-            width={140}
-            height={40}
-            className="h-9 w-auto"
-            priority
-          />
+          <Logo className="h-9 w-auto" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">

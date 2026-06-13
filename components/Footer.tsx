@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Mail, Facebook, Instagram } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const footerLinks = {
   Services: [
@@ -26,13 +26,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
           <div className="md:col-span-2">
-            <Image
-              src="/logo.png"
-              alt="Rectronx"
-              width={130}
-              height={38}
-              className="h-9 w-auto mb-4"
-            />
+            <Logo className="h-9 w-auto mb-4" />
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
               A tech studio from Malaysia. We build software products and
               deliver custom engineering solutions for students and businesses.
