@@ -8,58 +8,33 @@ import JsonLd from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
 
 const faqs = [
-  {
-    q: "How does it work? Do I just tell you what I need?",
-    a: "Yes — WhatsApp us your FYP title or idea, your university requirements, and your submission deadline. We'll review it and send you a free quote within 2 hours. Once confirmed, we start building and keep you updated throughout.",
-  },
-  {
-    q: "Is my project information kept private?",
-    a: "Yes — we treat all client information with full confidentiality. We don't share your project details, requirements, or personal information with anyone.",
-  },
-  {
-    q: "How long does it take to complete?",
-    a: "Most IoT and Arduino projects take 1–2 weeks. Software-heavy projects or more complex systems may take 2–4 weeks depending on scope. We work to your deadline — tell us when you need it and we'll plan accordingly.",
-  },
-  {
-    q: "What if I need changes after receiving the project?",
-    a: "Before we start, we sit down with you to lock in the full scope — features, components, and deliverables. This protects both sides and keeps the project on track. If something isn't working as agreed, we'll make it right. Any new requirements added after the build has started will be scoped and quoted separately.",
-  },
-  {
-    q: "Do I get the source code and documentation?",
-    a: "Yes. Every project is delivered with full source code, circuit diagrams (if applicable), and a project documentation report that you can use as the foundation for your FYP write-up.",
-  },
-  {
-    q: "What types of projects do you handle?",
-    a: "IoT (ESP32, NodeMCU, Arduino), Raspberry Pi projects, Python/Flask web applications, React/Next.js web apps, mobile apps, and more. If you're unsure, just ask — we've likely done something similar before.",
-  },
-  {
-    q: "How much does it cost?",
-    a: "Pricing depends on complexity, components needed, and timeline. Simple Arduino projects start at a lower range; full IoT systems with web dashboards or mobile apps are priced higher. WhatsApp us with your brief and we'll give you an honest quote with no hidden costs.",
-  },
-  {
-    q: "Do you provide support after delivery?",
-    a: "Yes. We're available after delivery to explain how the system works — the circuit logic, sensor setup, and code flow. We want you to fully understand what was built.",
-  },
+  { q: "How does it work?", a: "WhatsApp us your FYP title, university requirements, and deadline. We send a free quote within 2 hours. Once confirmed, we build and send progress updates throughout." },
+  { q: "Is my project information kept private?", a: "Yes — full confidentiality. We don't share your project details, requirements, or personal information with anyone." },
+  { q: "How long does it take?", a: "Most IoT and Arduino projects take 1–2 weeks. Software-heavy or complex systems may take 2–4 weeks. Tell us your deadline and we'll plan accordingly." },
+  { q: "What if I need changes after delivery?", a: "Before we start, we lock in the full scope together. If something isn't working as agreed, we'll fix it. New requirements added after the build starts are quoted separately." },
+  { q: "Do I get source code and documentation?", a: "Yes. Every project comes with full source code, circuit diagrams (if applicable), and a documentation report you can use as the base of your FYP write-up." },
+  { q: "What types of projects do you handle?", a: "IoT (ESP32, NodeMCU, Arduino), Raspberry Pi, Python/Flask, React/Next.js web apps, mobile apps, and more. If unsure, just ask." },
+  { q: "How much does it cost?", a: "Depends on complexity, components, and timeline. Simple Arduino projects start lower; full IoT systems with web dashboards are higher. WhatsApp us for an honest quote with no hidden costs." },
+  { q: "Do you provide support after delivery?", a: "Yes. We explain how everything works — circuit logic, sensor setup, and code flow — so you fully understand what was built." },
 ];
 
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="py-24 sm:py-32 bg-slate-50/60">
+    <section className="py-24 sm:py-32 bg-[#080E1A]">
       <JsonLd schema={faqSchema(faqs)} />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-start lg:gap-16 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-16 lg:gap-24">
 
-          {/* Left — sticky header */}
-          <div className="lg:w-72 shrink-0 lg:sticky lg:top-24">
-            <span className="section-label-pill mb-4 inline-flex">FAQ</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-navy-mid tracking-[-0.02em] mb-4">
-              Questions students ask
+          {/* Left sticky */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p className="eyebrow mb-4">FAQ</p>
+            <h2 className="text-4xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em] text-white mb-6 leading-[1.0]">
+              Questions<br />students<br />ask.
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed mb-8">
+            <p className="text-white/30 text-sm leading-relaxed mb-8">
               Honest answers before you reach out.
             </p>
             <WhatsAppButton
@@ -68,35 +43,27 @@ export default function FAQ() {
             />
           </div>
 
-          {/* Right — accordion */}
-          <div className="flex-1 space-y-2">
+          {/* Accordion */}
+          <div className="border-t border-white/8">
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.35, delay: i * 0.04 }}
-                className={`rounded-2xl border overflow-hidden transition-all duration-200 ${
-                  open === i
-                    ? "border-brand-blue/25 bg-white shadow-card"
-                    : "border-slate-200 bg-white hover:border-slate-300"
-                }`}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                className="border-b border-white/8"
               >
                 <button
                   onClick={() => setOpen(open === i ? null : i)}
-                  className="w-full text-left px-6 py-5 flex items-start justify-between gap-4"
+                  className="w-full text-left py-6 flex items-start justify-between gap-6 group"
                   aria-expanded={open === i}
                 >
-                  <span className="font-semibold text-brand-navy-mid text-sm sm:text-[0.95rem] leading-snug">
+                  <span className={`font-bold text-base leading-snug transition-colors ${open === i ? "text-white" : "text-white/60 group-hover:text-white"}`}>
                     {faq.q}
                   </span>
-                  <span
-                    className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 transition-all duration-200 ${
-                      open === i ? "bg-brand-blue text-white rotate-45" : "bg-slate-100 text-slate-400"
-                    }`}
-                  >
-                    <Plus size={14} />
+                  <span className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center mt-0.5 transition-all duration-200 ${open === i ? "bg-brand-blue border-brand-blue text-white rotate-45" : "border-white/15 text-white/30"}`}>
+                    <Plus size={13} />
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
@@ -109,16 +76,13 @@ export default function FAQ() {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <p className="px-6 pb-6 text-slate-500 text-sm leading-relaxed">
-                        {faq.a}
-                      </p>
+                      <p className="pb-6 text-white/40 text-sm leading-relaxed max-w-[60ch]">{faq.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </motion.div>
             ))}
           </div>
-
         </div>
       </div>
     </section>

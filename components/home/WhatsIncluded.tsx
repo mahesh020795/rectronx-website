@@ -1,97 +1,73 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const included = [
-  { label: "Full source code", desc: "Clean, commented, ready for report" },
-  { label: "All components", desc: "Every hardware part sourced and provided" },
-  { label: "PCB / copper board", desc: "Circuit built on proper board" },
-  { label: "Professional soldering", desc: "Hand-soldered, tested connections" },
-  { label: "Project casing", desc: "Enclosure for a clean finished look" },
-  { label: "Nationwide shipping", desc: "Delivered to your door, anywhere in Malaysia" },
-  { label: "Circuit schematics", desc: "Full wiring diagrams for your report" },
-  { label: "Coaching session", desc: "We walk you through how everything works" },
+  "Full source code",
+  "All hardware components",
+  "PCB / copper board",
+  "Professional soldering",
+  "Project casing",
+  "Nationwide shipping",
+  "Circuit schematics",
+  "Coaching session",
 ];
 
 export default function WhatsIncluded() {
   return (
-    <section
-      className="py-24 sm:py-32 relative overflow-hidden grain-overlay"
-      style={{ background: "linear-gradient(160deg, #0B1628 0%, #0F1C2E 100%)" }}
-    >
-      {/* Ambient glow */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "20%",
-          right: "-5%",
-          width: "45%",
-          height: "60%",
-          background: "radial-gradient(ellipse at center, rgba(43,127,212,0.14) 0%, transparent 70%)",
-        }}
-      />
+    <section className="relative overflow-hidden" style={{ background: "#0B1628" }}>
+      {/* Top border blue accent */}
+      <div className="h-px bg-gradient-to-r from-transparent via-brand-blue to-transparent" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
-          {/* Left — text */}
+          {/* Left — headline */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="inline-flex items-center gap-1.5 text-brand-blue text-xs font-semibold tracking-[0.10em] uppercase bg-brand-blue/12 border border-brand-blue/20 px-3 py-1.5 rounded-full mb-6">
-              Everything included
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-white tracking-[-0.02em] leading-[1.1] mb-5">
-              One price.
-              <br />
-              Everything done.
+            <p className="eyebrow mb-4">Everything included</p>
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-[-0.04em] leading-[0.92] text-white mb-8">
+              One price.<br />
+              <span className="text-outline-blue">Everything</span><br />
+              done.
             </h2>
-            <p className="text-slate-400 leading-relaxed max-w-[38ch]">
-              No hidden costs, no missing parts, no surprises. Your project price covers everything — from hardware to documentation.
+            <p className="text-white/40 leading-relaxed max-w-[36ch] mb-10">
+              No hidden costs, no missing parts. Hardware, code, schematics, and documentation — all in your quote.
             </p>
-            <div className="mt-9">
-              <WhatsAppButton
-                label="Get a free quote"
-                message="Hi Rectronx! I'd like to know the price for my FYP project."
-              />
-            </div>
-            {/* Trust badge */}
-            <p className="mt-5 text-xs text-slate-500 flex items-center gap-2">
-              <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                <Check size={9} className="text-emerald-400" />
-              </span>
-              Free quote · No commitment · Delivered anywhere in Malaysia
-            </p>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-white text-[#080E1A] text-xs font-extrabold uppercase tracking-wider px-7 py-3.5 rounded-full hover:-translate-y-px hover:shadow-white-sm transition-all duration-200"
+            >
+              Get a free quote <ArrowRight size={13} />
+            </Link>
           </motion.div>
 
-          {/* Right — checklist grid */}
+          {/* Right — checklist */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/8">
               {included.map((item, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  className="flex items-start gap-3 glass rounded-xl p-4"
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-[#0B1628] px-6 py-5 group hover:bg-white/[0.04] transition-colors duration-200"
                 >
-                  <div className="w-6 h-6 rounded-lg bg-brand-blue/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check size={12} className="text-brand-blue" />
-                  </div>
-                  <div>
-                    <p className="text-white font-semibold text-sm">{item.label}</p>
-                    <p className="text-slate-500 text-xs mt-0.5 leading-snug">{item.desc}</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-brand-blue text-lg font-extrabold">✓</span>
+                    <span className="text-white font-semibold text-sm">{item}</span>
                   </div>
                 </motion.div>
               ))}
@@ -100,6 +76,8 @@ export default function WhatsIncluded() {
 
         </div>
       </div>
+
+      <div className="h-px bg-gradient-to-r from-transparent via-brand-blue to-transparent" />
     </section>
   );
 }
