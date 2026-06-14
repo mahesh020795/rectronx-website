@@ -32,7 +32,7 @@ export default function CallToAction() {
             {/* Social proof */}
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-blue-200 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 mx-auto sm:mx-0">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              Join 50+ students who trusted Rectronx with their FYP
+              500+ Customers who trusted Rectronx
             </div>
 
             <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
