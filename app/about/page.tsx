@@ -49,7 +49,7 @@ const stats = [
 
 export default function AboutPage() {
   return (
-    <div className="pt-16">
+    <div className="pt-16 bg-white text-slate-900">
       {/* Hero banner */}
       <div className="relative w-full h-56 sm:h-72 lg:h-80 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -132,7 +132,7 @@ export default function AboutPage() {
                       {isLeft && (
                         <div className="max-w-xs text-right">
                           <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
-                          <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                          <p className="font-semibold text-slate-800 mt-0.5">{m.title}</p>
                           <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
                         </div>
                       )}
@@ -155,7 +155,7 @@ export default function AboutPage() {
                       {!isLeft && (
                         <div className="hidden sm:block max-w-xs">
                           <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
-                          <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                          <p className="font-semibold text-slate-800 mt-0.5">{m.title}</p>
                           <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
                         </div>
                       )}

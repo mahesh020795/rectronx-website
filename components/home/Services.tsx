@@ -6,19 +6,27 @@ import Link from "next/link";
 
 const services = [
   {
+    title: "Custom projects",
+    description: "Bring your own idea — we scope, design, and build it from scratch. Any platform, any complexity. Tell us what you need.",
+    tags: ["Any Platform", "Custom Scope", "Full Build"],
+    href: "/contact",
+    accentColor: "#2B7FD4",
+    size: "lg",
+  },
+  {
     title: "IoT & embedded systems",
     description: "Arduino, ESP32, Raspberry Pi. Sensor integration, wireless comms, real-time dashboards — built and tested.",
     tags: ["Arduino", "ESP32", "MQTT", "Blynk"],
     href: "/projects#iot",
-    accentColor: "#2B7FD4",
-    size: "lg", // takes more space
+    accentColor: "#7c3aed",
+    size: "sm",
   },
   {
     title: "Software projects",
     description: "Web apps, mobile apps, automation scripts. Python, React, Node.js.",
     tags: ["Python", "React", "Node.js"],
     href: "/projects#software",
-    accentColor: "#7c3aed",
+    accentColor: "#059669",
     size: "sm",
   },
   {
@@ -27,14 +35,6 @@ const services = [
     tags: ["PCB", "Circuit", "Prototyping"],
     href: "/projects#electronics",
     accentColor: "#d97706",
-    size: "sm",
-  },
-  {
-    title: "Mechanical & robotics",
-    description: "CAD design, robot prototypes, automation — integrated with embedded systems.",
-    tags: ["CAD", "Robotics", "3D Print"],
-    href: "/projects#mechanical",
-    accentColor: "#059669",
     size: "sm",
   },
 ];

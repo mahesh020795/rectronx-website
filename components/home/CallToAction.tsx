@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import { ArrowRight } from "lucide-react";
+import { MessageCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function CallToAction() {
@@ -44,11 +43,15 @@ export default function CallToAction() {
             </div>
 
             <div className="flex flex-col gap-3 shrink-0">
-              <WhatsAppButton
-                label="Chat with us now"
-                message="Hi Rectronx! I'd like to discuss my project requirements."
-                className="justify-center text-sm font-extrabold uppercase tracking-wider px-8 py-4 rounded-full bg-white text-[#080E1A] hover:bg-white/90"
-              />
+              <a
+                href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20to%20discuss%20my%20project%20requirements."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white text-[#080E1A] text-xs font-extrabold uppercase tracking-wider px-8 py-4 rounded-full hover:bg-white/90 transition-all"
+              >
+                <MessageCircle size={15} />
+                Chat with us now
+              </a>
               <Link href="/projects"
                 className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white/50 text-white text-xs font-bold uppercase tracking-wider px-8 py-4 rounded-full transition-all">
                 See example projects <ArrowRight size={13} />
