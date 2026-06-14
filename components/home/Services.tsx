@@ -18,7 +18,7 @@ const services = [
     icon: Code2,
     title: "Software Projects",
     description:
-      "Web apps, desktop applications, and automation scripts. Python, React, Node.js — built to your exact requirements.",
+      "Web apps, mobile apps, desktop applications, and automation scripts. Python, React, Node.js — built to your exact requirements.",
     tags: ["Python", "React", "Node.js", "REST API"],
     href: "/projects#software",
     accent: "from-violet-500 to-purple-600",
