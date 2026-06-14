@@ -7,10 +7,10 @@ import Image from "next/image";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const stats = [
-  { value: "100+", label: "Projects Delivered" },
-  { value: "50+", label: "Happy Students" },
-  { value: "4+", label: "Years Experience" },
-  { value: "3", label: "SaaS Products" },
+  { value: "400+", label: "Projects Delivered" },
+  { value: "500+", label: "Happy Students" },
+  { value: "8", label: "Years Active" },
+  { value: "12", label: "Commercial Products Built" },
 ];
 
 const tags = ["Arduino", "ESP32", "IoT", "Raspberry Pi", "Python", "React"];
@@ -128,7 +128,7 @@ export default function Hero() {
             <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl sm:-rotate-2">
                 <Image
-                  src="/images/project picture.jpeg"
+                  src="/images/project-hero.jpeg"
                   alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
                   width={800}
                   height={540}
