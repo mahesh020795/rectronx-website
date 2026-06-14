@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Cpu, Code2, Zap, Users, Trophy, Smile, Clock, Package } from "lucide-react";
+import { Cpu, Code2, Zap, Users, Trophy, Smile, Clock, Package, CheckCircle2 } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
 
@@ -100,6 +100,59 @@ export default function AboutPage() {
               students across Malaysia and a growing engineering &amp; technology company shipping
               products used by real businesses.
             </p>
+          </div>
+        </div>
+
+        {/* Timeline */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <span className="section-label">Our Journey</span>
+            <h2 className="mt-2 text-3xl font-bold text-brand-navy">Milestones</h2>
+          </div>
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-0.5 bg-slate-200 -translate-x-1/2" />
+            <div className="space-y-10">
+              {[
+                { year: "2016", title: "Founded", desc: "Rectronx Circuits established in Penang, Malaysia." },
+                { year: "2017", title: "First Projects", desc: "Delivered our first 10 FYP projects to engineering students." },
+                { year: "2019", title: "Smart Parking", desc: "Launched our first commercial product — a Smart Parking System." },
+                { year: "2020", title: "200+ Projects", desc: "Crossed the 200 projects delivered milestone across Malaysia." },
+                { year: "2021", title: "Attendance & Access Control", desc: "Launched enterprise Attendance & Access Control system." },
+                { year: "2023", title: "Fleet Tracking", desc: "Released Fleet Tracking system for commercial vehicle management." },
+                { year: "2024", title: "Spark Launched", desc: "Built and launched Spark — our AI-powered WhatsApp platform for businesses." },
+                { year: "2025", title: "400+ Projects", desc: "Reached 400+ projects delivered and 12 commercial products built." },
+                { year: "2026", title: "Spark Full Features", desc: "Flagship Spark release with full feature suite — our most powerful product yet." },
+              ].map((m, i) => {
+                const isRight = i % 2 === 0;
+                return (
+                  <div key={m.year} className="relative flex items-start sm:items-center gap-6 sm:gap-0">
+                    {/* Left side (desktop) */}
+                    <div className={`hidden sm:flex w-1/2 ${isRight ? "justify-end pr-10" : "justify-start pl-10 order-last"}`}>
+                      <div className={`max-w-xs text-${isRight ? "right" : "left"}`}>
+                        <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
+                        <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                        <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
+                      </div>
+                    </div>
+                    {/* Dot */}
+                    <div className="relative z-10 flex-shrink-0 sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+                      <div className="w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center shadow-md ring-4 ring-white">
+                        <CheckCircle2 size={16} className="text-white" />
+                      </div>
+                    </div>
+                    {/* Mobile text / Right side (desktop) */}
+                    <div className={`sm:w-1/2 ${isRight ? "sm:pl-10" : "sm:pr-10 sm:flex sm:justify-end"}`}>
+                      <div className="sm:max-w-xs">
+                        <p className="text-xl font-bold text-brand-blue sm:hidden">{m.year}</p>
+                        <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                        <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
