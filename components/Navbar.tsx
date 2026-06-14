@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-10 lg:h-12 w-auto" />
+            <Logo className="h-8 lg:h-10 w-auto" />
           </Link>
 
           {/* Desktop nav — centered */}

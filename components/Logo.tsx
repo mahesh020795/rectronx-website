@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export default function Logo({
-  className = "h-9 w-auto",
+  className = "h-10 w-auto",
   variant = "default",
 }: {
   className?: string;
@@ -11,8 +11,8 @@ export default function Logo({
     <Image
       src="/images/logo.png"
       alt="Rectronx Circuits"
-      width={200}
-      height={60}
+      width={540}
+      height={137}
       className={className}
       style={variant === "light" ? { filter: "brightness(0) invert(1)" } : undefined}
       priority
