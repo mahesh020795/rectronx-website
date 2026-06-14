@@ -128,7 +128,7 @@ export default function Hero() {
             <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl sm:-rotate-2">
                 <Image
-                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+                  src="/images/project picture.jpeg"
                   alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
                   width={800}
                   height={540}
