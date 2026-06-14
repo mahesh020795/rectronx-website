@@ -95,6 +95,8 @@ export default function RootLayout({
     <html lang="en-MY" className={jakarta.variable}>
       <head>
         {/* Resource hints for Core Web Vitals */}
+        {/* Preload hero image for LCP */}
+        <link rel="preload" as="image" href="/images/project-hero.jpeg" fetchPriority="high" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
