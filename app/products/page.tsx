@@ -87,7 +87,7 @@ const otherProducts = [
 
 export default function ProductsPage() {
   return (
-    <div className="pt-24">
+    <div className="pt-24 bg-white text-slate-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
 
         {/* Header */}

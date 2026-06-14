@@ -148,12 +148,15 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="grid grid-cols-4 gap-6 border-t border-white/8 pt-8"
+              className="grid grid-cols-2 sm:grid-cols-4 gap-0 border border-white/8 rounded-2xl overflow-hidden"
             >
-              {stats.map((s) => (
-                <div key={s.label}>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-[-0.03em]">{s.value}</div>
-                  <div className="text-[0.65rem] text-white/35 uppercase tracking-[0.15em] mt-1">{s.label}</div>
+              {stats.map((s, i) => (
+                <div
+                  key={s.label}
+                  className={`flex flex-col gap-1.5 px-6 py-5 ${i < stats.length - 1 ? "border-r border-white/8" : ""} ${i >= 2 ? "border-t sm:border-t-0 border-white/8" : ""}`}
+                >
+                  <div className="text-2xl sm:text-[1.75rem] font-extrabold text-white tracking-[-0.03em] leading-none">{s.value}</div>
+                  <div className="text-[0.68rem] text-white/35 uppercase tracking-[0.18em] font-semibold">{s.label}</div>
                 </div>
               ))}
             </motion.div>
