@@ -13,8 +13,8 @@ const faqs = [
     a: "Yes — WhatsApp us your FYP title or idea, your university requirements, and your submission deadline. We'll review it and send you a free quote within 2 hours. Once confirmed, we start building and keep you updated throughout.",
   },
   {
-    q: "Will my university or supervisor know?",
-    a: "We treat every project with full confidentiality. We don't share client details, and the project is delivered as your work. Many students also use our project as a base and expand on it themselves — which is a completely valid approach.",
+    q: "Is my project information kept private?",
+    a: "Yes — we treat all client information with full confidentiality. We don't share your project details, requirements, or personal information with anyone.",
   },
   {
     q: "How long does it take to complete?",
@@ -37,8 +37,8 @@ const faqs = [
     a: "Pricing depends on complexity, components needed, and timeline. Simple Arduino projects start at a lower range; full IoT systems with web dashboards or mobile apps are priced higher. WhatsApp us with your brief and we'll give you an honest quote with no hidden costs.",
   },
   {
-    q: "Can you help me understand the project for my viva?",
-    a: "Absolutely. We explain how the system works so you're comfortable presenting it. We can also walk you through the technical parts — sensors, circuit logic, code flow — so you can answer supervisor questions confidently.",
+    q: "Do you provide support after project delivery?",
+    a: "Yes. We're available after delivery to explain how the system works — the circuit logic, sensor setup, and code flow. We want you to fully understand what was built.",
   },
 ];
 
