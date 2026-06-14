@@ -86,6 +86,12 @@ export default function RootLayout({
   return (
     <html lang="en-MY">
       <head>
+        {/* Resource hints for Core Web Vitals */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <JsonLd schema={organizationSchema} />
         <JsonLd schema={websiteSchema} />
         <JsonLd schema={localBusinessSchema} />

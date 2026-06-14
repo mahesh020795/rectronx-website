@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { getAllPosts, getPost } from "@/lib/blog";
+import { getAllPosts, getPost, getPostImage } from "@/lib/blog";
 import { Clock, ArrowLeft, Tag, Twitter } from "lucide-react";
 import Link from "next/link";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 
 export async function generateStaticParams() {
@@ -74,16 +75,17 @@ export default function BlogPostPage({
   if (!post) notFound();
 
   const allPosts = getAllPosts();
-  const related = allPosts
-    .filter((p) => p.slug !== post.slug)
-    .slice(0, 2);
+  const others = allPosts.filter((p) => p.slug !== post.slug);
+  // Prefer posts in the same category, then fill with the rest.
+  const sameCategory = others.filter((p) => p.category === post.category);
+  const otherCategory = others.filter((p) => p.category !== post.category);
+  const related = [...sameCategory, ...otherCategory].slice(0, 2);
   const relatedPosts =
     related.length >= 2
       ? related
-      : [
-          ...related,
-          ...relatedStubs.slice(0, 2 - related.length),
-        ];
+      : [...related, ...relatedStubs.slice(0, 2 - related.length)];
+
+  const hero = getPostImage(post.slug);
 
   return (
     <div className="pt-24 bg-slate-50 min-h-screen">
@@ -99,10 +101,19 @@ export default function BlogPostPage({
         ])}
       />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        {/* Breadcrumbs */}
+        <Breadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Blog", href: "/blog" },
+            { name: post.title },
+          ]}
+        />
+
         {/* Back link */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#2B7FD4] transition-colors mb-10 py-2"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#2B7FD4] transition-colors mb-8 py-2"
         >
           <ArrowLeft size={14} /> Back to Blog
         </Link>
@@ -175,9 +186,10 @@ export default function BlogPostPage({
             <div className="rounded-2xl overflow-hidden mb-8 h-48 sm:h-[380px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80"
-                alt="Blog post hero"
+                src={hero.url}
+                alt={hero.alt}
                 className="w-full h-full object-cover"
+                loading="eager"
               />
             </div>
 
