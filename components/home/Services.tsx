@@ -1,125 +1,105 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, Code2, Zap, Box, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 const services = [
   {
-    icon: Cpu,
     title: "IoT & embedded systems",
-    description:
-      "Custom IoT projects using Arduino, ESP32, Raspberry Pi, and more. Sensor integration, wireless communication, real-time monitoring — built and tested.",
+    description: "Arduino, ESP32, Raspberry Pi. Sensor integration, wireless comms, real-time dashboards — built and tested.",
     tags: ["Arduino", "ESP32", "MQTT", "Blynk"],
     href: "/projects#iot",
-    color: "#2B7FD4",
-    bg: "rgba(43,127,212,0.08)",
-    border: "rgba(43,127,212,0.15)",
-    featured: true,
+    accentColor: "#2B7FD4",
+    size: "lg", // takes more space
   },
   {
-    icon: Code2,
     title: "Software projects",
-    description:
-      "Web apps, mobile apps, desktop applications, and automation scripts. Python, React, Node.js — built to your exact requirements.",
-    tags: ["Python", "React", "Node.js", "REST API"],
+    description: "Web apps, mobile apps, automation scripts. Python, React, Node.js.",
+    tags: ["Python", "React", "Node.js"],
     href: "/projects#software",
-    color: "#7c3aed",
-    bg: "rgba(124,58,237,0.08)",
-    border: "rgba(124,58,237,0.15)",
-    featured: false,
+    accentColor: "#7c3aed",
+    size: "sm",
   },
   {
-    icon: Zap,
     title: "Electronics & PCB",
-    description:
-      "Circuit design, PCB layout, and electronics prototyping. From concept to working hardware ready for submission.",
-    tags: ["Circuit Design", "PCB", "Prototyping"],
+    description: "Circuit design, PCB layout, prototyping. Concept to working hardware.",
+    tags: ["PCB", "Circuit", "Prototyping"],
     href: "/projects#electronics",
-    color: "#d97706",
-    bg: "rgba(217,119,6,0.08)",
-    border: "rgba(217,119,6,0.15)",
-    featured: false,
+    accentColor: "#d97706",
+    size: "sm",
   },
   {
-    icon: Box,
     title: "Mechanical & robotics",
-    description:
-      "Mechanical system design, robot prototypes, and automation. CAD design integrated with embedded control systems.",
-    tags: ["CAD", "Robotics", "Automation", "3D Print"],
+    description: "CAD design, robot prototypes, automation — integrated with embedded systems.",
+    tags: ["CAD", "Robotics", "3D Print"],
     href: "/projects#mechanical",
-    color: "#059669",
-    bg: "rgba(5,150,105,0.08)",
-    border: "rgba(5,150,105,0.15)",
-    featured: false,
+    accentColor: "#059669",
+    size: "sm",
   },
 ];
 
 export default function Services() {
   return (
-    <section className="py-24 sm:py-32 bg-slate-50/60">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <section className="py-24 sm:py-32 bg-[#080E1A]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
+        >
           <div>
-            <span className="section-label-pill mb-4 inline-flex">What we do</span>
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-brand-navy-mid tracking-[-0.02em] max-w-sm">
-              Final year project services
+            <p className="eyebrow mb-3">What we build</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-[-0.03em] text-white">
+              Final year project<br />services.
             </h2>
           </div>
-          <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-            Specialists in helping engineering students complete their FYP on time, with quality that meets university requirements.
-          </p>
-        </div>
+          <Link href="/projects" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-white/40 hover:text-white transition-colors shrink-0">
+            All services <ArrowUpRight size={13} />
+          </Link>
+        </motion.div>
 
-        {/* Asymmetric grid: 1 large featured + 3 smaller */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Bento grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-white/8">
 
-          {/* Featured — IoT (spans 2 rows on lg) */}
-          {(() => {
-            const s = services[0];
-            const Icon = s.icon;
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:row-span-2"
-              >
-                <Link
-                  href={s.href}
-                  className="group flex flex-col h-full bg-white rounded-2xl p-8 border hover-lift transition-all duration-300 relative overflow-hidden"
-                  style={{ borderColor: s.border }}
-                >
-                  <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: s.color }} />
-                  <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-md"
-                    style={{ backgroundColor: s.color, boxShadow: `0 8px 24px ${s.color}35` }}
-                  >
-                    <Icon size={24} className="text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-brand-navy-mid mb-3 tracking-[-0.01em]">{s.title}</h3>
-                  <p className="text-slate-500 leading-relaxed flex-1">{s.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-6">
-                    {s.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="text-xs font-medium px-2.5 py-1 rounded-lg border"
-                        style={{ background: s.bg, borderColor: s.border, color: s.color }}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-8 flex items-center gap-1.5 text-sm font-semibold group-hover:gap-3 transition-all duration-200" style={{ color: s.color }}>
-                    Explore projects <ArrowRight size={14} />
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })()}
+          {/* Big featured card */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="lg:row-span-2 lg:col-span-1"
+          >
+            <Link href={services[0].href}
+              className="group flex flex-col h-full bg-[#080E1A] p-10 hover:bg-white/[0.03] transition-colors duration-300 min-h-[420px]">
+              {/* Number */}
+              <div className="text-[6rem] font-extrabold leading-none tracking-[-0.05em] mb-auto"
+                style={{ WebkitTextStroke: `1.5px ${services[0].accentColor}`, color: "transparent" }}>
+                01
+              </div>
+              <div>
+                <h3 className="text-2xl font-extrabold uppercase tracking-[-0.02em] text-white mb-3">
+                  {services[0].title}
+                </h3>
+                <p className="text-white/40 text-sm leading-relaxed mb-5">{services[0].description}</p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {services[0].tags.map((t) => (
+                    <span key={t} className="text-[0.65rem] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border"
+                      style={{ borderColor: `${services[0].accentColor}40`, color: services[0].accentColor }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider group-hover:gap-3 transition-all"
+                  style={{ color: services[0].accentColor }}>
+                  Explore <ArrowUpRight size={13} />
+                </span>
+              </div>
+            </Link>
+          </motion.div>
 
           {/* 3 smaller cards */}
           {services.slice(1).map((s, i) => (
@@ -128,41 +108,28 @@ export default function Services() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (i + 1) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5, delay: (i + 1) * 0.07 }}
             >
-              <Link
-                href={s.href}
-                className="group flex flex-col h-full bg-white rounded-2xl p-6 border hover-lift transition-all duration-300 relative overflow-hidden"
-                style={{ borderColor: s.border }}
-              >
-                <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style={{ background: s.color }} />
-
-                <div className="flex items-start gap-4 mb-4">
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
-                    style={{ backgroundColor: s.color, boxShadow: `0 6px 16px ${s.color}30` }}
-                  >
-                    <s.icon size={20} className="text-white" />
+              <Link href={s.href}
+                className="group flex flex-col h-full bg-[#080E1A] p-8 hover:bg-white/[0.03] transition-colors duration-300 min-h-[200px]">
+                <div className="flex items-start justify-between mb-auto">
+                  <span className="text-4xl font-extrabold leading-none tracking-[-0.04em]"
+                    style={{ WebkitTextStroke: `1.5px ${s.accentColor}`, color: "transparent" }}>
+                    0{i + 2}
+                  </span>
+                  <ArrowUpRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors mt-1" />
+                </div>
+                <div className="mt-8">
+                  <h3 className="text-lg font-extrabold uppercase tracking-[-0.01em] text-white mb-2">{s.title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{s.description}</p>
+                  <div className="flex flex-wrap gap-1.5 mt-4">
+                    {s.tags.map((t) => (
+                      <span key={t} className="text-[0.6rem] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border"
+                        style={{ borderColor: `${s.accentColor}40`, color: s.accentColor }}>
+                        {t}
+                      </span>
+                    ))}
                   </div>
-                  <h3 className="font-bold text-brand-navy-mid text-base mt-2 tracking-[-0.01em]">{s.title}</h3>
-                </div>
-
-                <p className="text-sm text-slate-500 leading-relaxed flex-1">{s.description}</p>
-
-                <div className="flex flex-wrap gap-1.5 mt-4">
-                  {s.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[0.7rem] font-medium px-2 py-0.5 rounded-md border"
-                      style={{ background: s.bg, borderColor: s.border, color: s.color }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold group-hover:gap-2.5 transition-all duration-200" style={{ color: s.color }}>
-                  Learn more <ArrowRight size={12} />
                 </div>
               </Link>
             </motion.div>

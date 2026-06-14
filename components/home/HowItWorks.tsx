@@ -1,117 +1,95 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search, MessageCircle, Cpu, GraduationCap } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const steps = [
   {
-    icon: Search,
     step: "01",
     title: "Browse titles",
-    description:
-      "Explore 500+ FYP titles across IoT, Arduino, Raspberry Pi, and Software. Filter by category or search by keyword.",
-    color: "#2B7FD4",
+    description: "Explore 500+ FYP titles across IoT, Arduino, Raspberry Pi, and Software. Pick yours or bring your own idea.",
+    accent: "#2B7FD4",
   },
   {
-    icon: MessageCircle,
     step: "02",
     title: "WhatsApp us",
-    description:
-      "Share your topic, deadline, and university requirements. We reply within 2 hours with a free quote — no commitment needed.",
-    color: "#7c3aed",
+    description: "Share your topic, deadline, and university requirements. We reply within 2 hours with a free quote.",
+    accent: "#7c3aed",
   },
   {
-    icon: Cpu,
     step: "03",
     title: "We build it",
-    description:
-      "Our engineers build your project with real components, working code, and full testing. Progress updates along the way.",
-    color: "#059669",
+    description: "Engineers build your project with real hardware, working code, and full testing. Progress updates throughout.",
+    accent: "#059669",
   },
   {
-    icon: GraduationCap,
     step: "04",
     title: "You submit",
-    description:
-      "Receive hardware, source code, schematics, and documentation — ready for submission and viva presentation.",
-    color: "#d97706",
+    description: "Get hardware, source code, schematics, and documentation — ready for submission and viva presentation.",
+    accent: "#d97706",
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 sm:py-32 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <section className="py-24 sm:py-32 bg-[#080E1A]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
         {/* Header */}
-        <div className="mb-16">
-          <span className="section-label-pill mb-4 inline-flex">How it works</span>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-brand-navy-mid tracking-[-0.02em] max-w-md">
-              From title to submission in 4 steps
-            </h2>
-            <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-              We&apos;ve helped 400+ students get their FYP done. Here&apos;s exactly how the process works.
-            </p>
-          </div>
-        </div>
-
-        {/* Timeline — horizontal on desktop, vertical on mobile */}
-        <div className="relative">
-          {/* Connecting line — desktop only */}
-          <div className="hidden lg:block absolute top-[28px] left-[calc(12.5%+12px)] right-[calc(12.5%+12px)] h-px bg-slate-100 z-0" />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
-            {steps.map((s, i) => (
-              <motion.div
-                key={s.step}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="relative z-10 flex flex-col"
-              >
-                {/* Step circle with number */}
-                <div className="flex items-center gap-3 mb-5 lg:flex-col lg:items-start lg:gap-0">
-                  <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-md lg:mb-4"
-                    style={{ backgroundColor: s.color, boxShadow: `0 8px 24px ${s.color}30` }}
-                  >
-                    <s.icon size={22} className="text-white" />
-                  </div>
-                  {/* Mobile: step label next to icon */}
-                  <span className="text-[0.68rem] font-bold text-slate-300 tracking-[0.15em] uppercase lg:hidden">
-                    Step {s.step}
-                  </span>
-                </div>
-
-                {/* Desktop: step number above */}
-                <span className="hidden lg:block text-[0.68rem] font-bold text-slate-300 tracking-[0.15em] uppercase mb-2">
-                  Step {s.step}
-                </span>
-
-                <h3 className="font-bold text-brand-navy-mid text-lg mb-2 tracking-[-0.01em]">{s.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{s.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-14 flex flex-col sm:flex-row items-center gap-3 pt-10 border-t border-slate-100"
+          transition={{ duration: 0.5 }}
+          className="mb-16 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 border-b border-white/8 pb-10"
         >
-          <p className="text-slate-500 text-sm">
-            Ready to start? Less than 2 minutes to reach us.
+          <div>
+            <p className="eyebrow mb-3">How it works</p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-[-0.03em] text-white">
+              Title to submission<br />in 4 steps.
+            </h2>
+          </div>
+          <p className="text-white/40 text-sm max-w-[28ch] leading-relaxed">
+            400+ students have been through this process. Here&apos;s exactly what happens.
           </p>
+        </motion.div>
+
+        {/* Steps */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/8">
+          {steps.map((s, i) => (
+            <motion.div
+              key={s.step}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="bg-[#080E1A] p-8 group hover:bg-white/[0.03] transition-colors duration-300"
+            >
+              {/* Giant step number */}
+              <div
+                className="text-[5rem] sm:text-[6rem] font-extrabold leading-none tracking-[-0.05em] mb-6 text-outline select-none"
+                style={{ WebkitTextStroke: `2px ${s.accent}`, color: "transparent" }}
+              >
+                {s.step}
+              </div>
+              <h3 className="text-xl font-extrabold uppercase tracking-[-0.01em] text-white mb-3">{s.title}</h3>
+              <p className="text-white/40 text-sm leading-relaxed">{s.description}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-12 flex flex-col sm:flex-row items-center gap-3"
+        >
           <WhatsAppButton
-            label="Start now — it's free to ask"
-            message="Hi Rectronx! I'd like to know more about how the FYP process works."
+            label="Start now — free to ask"
+            message="Hi Rectronx! I'd like to know more about the FYP process."
           />
+          <p className="text-white/30 text-xs uppercase tracking-widest">No commitment needed</p>
         </motion.div>
       </div>
     </section>

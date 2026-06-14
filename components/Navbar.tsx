@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import clsx from "clsx";
 
@@ -19,10 +19,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -33,41 +32,34 @@ export default function Navbar() {
 
   return (
     <>
-      {/* 2px brand accent line at top */}
       <div className="fixed top-0 inset-x-0 z-[60] h-0.5 bg-brand-blue" />
 
       <header
         className={clsx(
           "fixed top-0.5 inset-x-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-white/85 backdrop-blur-xl border-b border-slate-100/80 shadow-[0_1px_20px_rgba(11,22,40,0.08)]"
-            : isHome
-            ? "bg-transparent"
-            : "bg-white/95 backdrop-blur-md border-b border-slate-100"
+            ? "bg-[#080E1A]/90 backdrop-blur-xl border-b border-white/8"
+            : "bg-transparent"
         )}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between h-16">
+
           {/* Logo */}
-          <Link href="/" className="flex items-center flex-shrink-0" aria-label="Rectronx home">
-            <Logo
-              className="w-32 lg:w-36 h-auto"
-              variant={!scrolled && isHome ? "light" : "default"}
-            />
+          <Link href="/" aria-label="Rectronx home">
+            <Logo className="w-32 lg:w-36 h-auto" variant="light" />
           </Link>
 
-          {/* Desktop nav — centered */}
-          <nav className="hidden lg:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2" aria-label="Main navigation">
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 className={clsx(
-                  "nav-link px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
+                  "px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] rounded-lg transition-colors duration-200",
                   isActive(l.href)
                     ? "text-brand-blue"
-                    : !scrolled && isHome
-                    ? "text-white/80 hover:text-white"
-                    : "text-slate-600 hover:text-brand-navy-mid"
+                    : "text-white/50 hover:text-white"
                 )}
                 aria-current={isActive(l.href) ? "page" : undefined}
               >
@@ -76,20 +68,14 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Desktop right CTAs */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/contact"
-              className={clsx(
-                "text-sm font-medium transition-colors",
-                !scrolled && isHome ? "text-white/70 hover:text-white" : "text-slate-500 hover:text-brand-navy-mid"
-              )}
-            >
+            <Link href="/contact" className="text-xs font-bold uppercase tracking-[0.12em] text-white/50 hover:text-white transition-colors">
               Contact
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-brand-blue text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-blue-dark transition-all duration-200 shadow-navy-sm hover:shadow-glow hover:-translate-y-px"
+              className="bg-brand-blue text-white text-xs font-extrabold uppercase tracking-wider px-5 py-2.5 rounded-full hover:bg-brand-blue-dark transition-all duration-200 hover:-translate-y-px hover:shadow-glow"
             >
               Get a quote
             </Link>
@@ -97,62 +83,39 @@ export default function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className={clsx(
-              "lg:hidden p-2 rounded-lg transition-colors",
-              !scrolled && isHome ? "text-white hover:bg-white/10" : "text-slate-600 hover:bg-slate-100"
-            )}
+            className="lg:hidden p-2 text-white/70 hover:text-white transition-colors"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
         {/* Mobile menu */}
-        <div
-          className={clsx(
-            "lg:hidden overflow-hidden transition-all duration-300 ease-in-out",
-            open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-          )}
-        >
-          <div className="bg-white/97 backdrop-blur-xl border-b border-slate-100 px-4 pb-5 pt-2 shadow-premium">
-            <nav className="space-y-0.5 mb-4" aria-label="Mobile navigation">
-              <Link
-                href="/"
-                onClick={() => setOpen(false)}
-                className={clsx(
-                  "flex items-center justify-between px-3 py-[11px] min-h-[44px] text-sm font-medium rounded-xl transition-colors",
-                  pathname === "/" ? "text-brand-blue bg-brand-blue/8" : "text-slate-700 hover:text-brand-navy-mid hover:bg-slate-50"
-                )}
-              >
-                Home <ChevronRight size={14} className="text-slate-400" />
+        <div className={clsx(
+          "lg:hidden overflow-hidden transition-all duration-300",
+          open ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
+        )}>
+          <div className="bg-[#080E1A] border-b border-white/8 px-5 pb-6 pt-2">
+            <nav className="space-y-0.5 mb-5" aria-label="Mobile navigation">
+              <Link href="/" onClick={() => setOpen(false)}
+                className={clsx("block px-3 py-3 text-xs font-bold uppercase tracking-[0.12em] rounded-xl transition-colors",
+                  pathname === "/" ? "text-brand-blue" : "text-white/60 hover:text-white")}>
+                Home
               </Link>
               {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className={clsx(
-                    "flex items-center justify-between px-3 py-[11px] min-h-[44px] text-sm font-medium rounded-xl transition-colors",
-                    isActive(l.href)
-                      ? "text-brand-blue bg-brand-blue/8"
-                      : "text-slate-700 hover:text-brand-navy-mid hover:bg-slate-50"
-                  )}
-                  aria-current={isActive(l.href) ? "page" : undefined}
-                >
+                <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+                  className={clsx("block px-3 py-3 text-xs font-bold uppercase tracking-[0.12em] rounded-xl transition-colors",
+                    isActive(l.href) ? "text-brand-blue" : "text-white/60 hover:text-white")}
+                  aria-current={isActive(l.href) ? "page" : undefined}>
                   {l.label}
-                  <ChevronRight size={14} className="text-slate-400" />
                 </Link>
               ))}
             </nav>
-
-            <a
-              href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20to%20get%20a%20quote."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-brand-blue text-white px-4 py-3 rounded-xl text-sm font-semibold hover:bg-brand-blue-dark transition-colors"
-            >
+            <a href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote."
+              target="_blank" rel="noopener noreferrer"
+              className="block w-full text-center bg-brand-blue text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3.5 rounded-full hover:bg-brand-blue-dark transition-colors">
               Get a free quote
             </a>
           </div>
