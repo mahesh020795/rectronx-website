@@ -10,6 +10,7 @@ import Services from "@/components/home/Services";
 import Products from "@/components/home/Products";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import HowItWorks from "@/components/home/HowItWorks";
+import WhatsIncluded from "@/components/home/WhatsIncluded";
 import FAQ from "@/components/home/FAQ";
 import BlogPreview from "@/components/home/BlogPreview";
 import CallToAction from "@/components/home/CallToAction";
@@ -19,6 +20,7 @@ export default function HomePage() {
     <>
       <Hero />
       <HowItWorks />
+      <WhatsIncluded />
       <Services />
       <Products />
       <FeaturedProjects />
