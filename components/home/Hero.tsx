@@ -53,7 +53,7 @@ export default function Hero() {
               variants={item}
               className="text-3xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
             >
-              Engineering Studio for{" "}
+              Malaysia&apos;s Engineering Lab for{" "}
               <span className="text-brand-blue">FYP Projects</span>{" "}
               &amp; Software Products
             </motion.h1>
@@ -128,17 +128,12 @@ export default function Hero() {
             <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl sm:-rotate-2">
                 <Image
-                  src="/images/project-hero.jpg"
+                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
                   alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
                   width={800}
                   height={540}
                   className="w-full object-cover"
                   priority
-                  onError={(e) => {
-                    // fallback to Unsplash if local image not yet placed
-                    (e.target as HTMLImageElement).src =
-                      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80";
-                  }}
                 />
                 {/* Dark overlay for contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent" />
