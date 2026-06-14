@@ -65,7 +65,7 @@ export default function Hero() {
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
           {/* ── LEFT: Text + CTAs ── */}
           <motion.div
@@ -166,7 +166,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative flex items-center justify-center lg:justify-end order-first lg:order-last"
+            className="relative flex items-center justify-center lg:justify-end order-first lg:order-last lg:pt-14"
           >
             <div className="relative w-full max-w-[420px] mx-auto">
               {/* Glow behind image */}
