@@ -3,7 +3,6 @@
 export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
-import { getSupabase } from "@/lib/supabase";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Logo from "@/components/Logo";
 import { CheckCircle2, Loader2, ArrowRight, Clock, MessageCircle } from "lucide-react";
@@ -41,12 +40,17 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    const { error } = await getSupabase().from("contact_submissions").insert([form]);
-    if (error) {
-      setStatus("error");
-    } else {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
       setStatus("success");
       setForm({ name: "", email: "", phone: "", message: "" });
+    } catch {
+      setStatus("error");
     }
   };
 
