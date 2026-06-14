@@ -55,7 +55,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="pt-16">
+    <div className="pt-16 bg-white text-slate-900">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-14">
           <span className="section-label">Get in Touch</span>
