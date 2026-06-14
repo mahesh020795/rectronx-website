@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 import Navbar from "@/components/Navbar";
@@ -91,7 +92,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-MY" className={inter.variable}>
+    <html lang="en-MY" className={jakarta.variable}>
       <head>
         {/* Resource hints for Core Web Vitals */}
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
@@ -114,8 +115,9 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <Navbar />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
         <WhatsAppFloat />
       </body>

@@ -7,31 +7,65 @@ import Image from "next/image";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const stats = [
-  { value: "400+", label: "Projects Delivered" },
-  { value: "500+", label: "Project Titles Available" },
-  { value: "8", label: "Years Active" },
-  { value: "12", label: "Commercial Products Built" },
+  { value: "400+", label: "Projects delivered" },
+  { value: "500+", label: "Titles available" },
+  { value: "8 yrs", label: "Experience" },
+  { value: "4.7★", label: "Google rating" },
 ];
 
 const tags = ["Arduino", "ESP32", "IoT", "Raspberry Pi", "Python", "React"];
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.09 } },
 };
 const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16 pb-0">
-      {/* Subtle radial gradient background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_60%_40%,rgba(43,127,212,0.07),transparent)]" />
+    <section
+      className="relative min-h-[100dvh] flex items-center overflow-hidden pt-16 grain-overlay"
+      style={{ background: "linear-gradient(160deg, #0B1628 0%, #0F1C2E 50%, #0d1e35 100%)" }}
+      aria-label="Hero section"
+    >
+      {/* Ambient blue glow — top-right */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: "-10%",
+          right: "-5%",
+          width: "55%",
+          height: "70%",
+          background: "radial-gradient(ellipse at center, rgba(43,127,212,0.22) 0%, transparent 70%)",
+        }}
+      />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      {/* Secondary glow — bottom-left */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: "0",
+          left: "-10%",
+          width: "40%",
+          height: "50%",
+          background: "radial-gradient(ellipse at center, rgba(43,127,212,0.08) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* Subtle dot grid */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* ── LEFT: Text + CTAs ── */}
           <motion.div
@@ -40,76 +74,86 @@ export default function Hero() {
             animate="show"
             className="flex flex-col"
           >
-            {/* Badge pill */}
+            {/* Badge */}
             <motion.div variants={item}>
-              <span className="inline-flex items-center gap-2 bg-brand-blue-light text-brand-blue text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+              <span className="inline-flex items-center gap-2 text-brand-blue text-xs font-semibold tracking-[0.10em] uppercase bg-brand-blue/12 border border-brand-blue/20 px-3 py-1.5 rounded-full mb-8">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                Malaysia&apos;s Engineering &amp; Technology Company
+                Malaysia&apos;s engineering & technology company
               </span>
             </motion.div>
 
-            {/* H1 */}
+            {/* H1 — large, tight, weighted */}
             <motion.h1
               variants={item}
-              className="text-3xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
+              className="text-[2.6rem] sm:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.06] tracking-[-0.03em]"
             >
-              Malaysia&apos;s Engineering &amp; Technology Company for{" "}
-              <span className="text-brand-blue">FYP Projects</span>{" "}
-              &amp; Software Products
+              FYP projects
+              <br />
+              <span
+                style={{
+                  background: "linear-gradient(90deg, #4da3f5 0%, #2B7FD4 60%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                done right.
+              </span>
             </motion.h1>
 
             {/* Subtext */}
             <motion.p
               variants={item}
-              className="mt-5 text-lg text-slate-500 leading-relaxed max-w-lg"
+              className="mt-6 text-[1.05rem] text-slate-300/80 leading-[1.7] max-w-[42ch]"
             >
-              From custom Final Year Projects in IoT, Arduino &amp; Raspberry Pi
-              — to SaaS products that solve real commercial customers&apos; problems.
-              Rectronx Circuits delivers quality engineering, every time.
+              Custom IoT, Arduino &amp; Raspberry Pi final year projects from Penang.
+              Hardware, code, documentation — all in one price. Delivered on time.
             </motion.p>
 
             {/* CTAs */}
             <motion.div
               variants={item}
-              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-start gap-3"
+              className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
             >
               <WhatsAppButton
-                label="Get a Free Quote"
-                message="Hi Rectronx! I'd like to get a quote for my project."
-                className="text-base px-6 py-3 justify-center"
+                label="Get a free quote"
+                message="Hi Rectronx! I'd like to get a quote for my FYP project."
+                className="text-[0.95rem] px-6 py-3 justify-center font-semibold"
               />
-              <Link href="/projects" className="btn-secondary text-base px-6 py-3 justify-center text-center">
-                View Projects <ArrowRight size={16} />
+              <Link
+                href="/projects"
+                className="inline-flex items-center justify-center gap-2 border border-white/15 text-white/80 px-6 py-3 rounded-lg text-[0.95rem] font-medium hover:border-white/30 hover:text-white transition-all duration-200 hover:bg-white/5"
+              >
+                Browse 500+ titles <ArrowRight size={15} />
               </Link>
             </motion.div>
 
             {/* Stats row */}
             <motion.div
               variants={item}
-              className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-5"
+              className="mt-14 grid grid-cols-4 gap-4 border-t border-white/8 pt-10"
             >
               {stats.map((s) => (
                 <div key={s.label}>
-                  <div className="text-3xl font-bold text-brand-navy">{s.value}</div>
-                  <div className="text-xs text-slate-500 mt-1">{s.label}</div>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-white tabular-nums tracking-[-0.02em]">
+                    {s.value}
+                  </div>
+                  <div className="text-[0.72rem] text-slate-400 mt-1 leading-tight">{s.label}</div>
                 </div>
               ))}
             </motion.div>
 
-            {/* Tech tag pills */}
-            <motion.div
-              variants={item}
-              className="mt-8 flex flex-wrap gap-2"
-            >
+            {/* Tech pills */}
+            <motion.div variants={item} className="mt-8 flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 text-slate-500 text-xs font-medium px-3 py-1.5 rounded-full"
+                  className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 text-slate-400 text-xs font-medium px-3 py-1.5 rounded-full"
                 >
                   {["Arduino", "ESP32", "IoT", "Raspberry Pi"].includes(tag) ? (
-                    <Cpu size={10} />
+                    <Cpu size={9} className="text-brand-blue" />
                   ) : (
-                    <Code2 size={10} />
+                    <Code2 size={9} className="text-brand-blue" />
                   )}
                   {tag}
                 </span>
@@ -117,80 +161,76 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* ── RIGHT: Visual card ── */}
+          {/* ── RIGHT: Project image ── */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative flex items-start justify-center lg:justify-end mt-4 lg:mt-0 order-first lg:order-last"
+            transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="relative flex items-center justify-center lg:justify-end order-first lg:order-last"
           >
-            {/* Tilted image card — no rotation on mobile */}
-            <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl sm:-rotate-2">
+            <div className="relative w-full max-w-[420px] mx-auto">
+              {/* Glow behind image */}
+              <div
+                className="absolute inset-0 rounded-3xl pointer-events-none"
+                style={{
+                  background: "radial-gradient(ellipse at center, rgba(43,127,212,0.35) 0%, transparent 70%)",
+                  filter: "blur(32px)",
+                  transform: "scale(0.9) translateY(16px)",
+                }}
+              />
+
+              {/* Image card */}
+              <div className="relative rounded-2xl overflow-hidden" style={{ boxShadow: "0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)" }}>
                 <Image
                   src="/images/project-hero.jpeg"
-                  alt="Rectronx IoT gas sensor project — MQ2/MQ5 detector with OLED display"
+                  alt="IoT gas detector project built by Rectronx Circuits — MQ2/MQ5 sensor with OLED display"
                   width={800}
-                  height={540}
+                  height={560}
                   className="w-full object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 448px"
-                  quality={80}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                  quality={85}
                   priority
                 />
-                {/* Dark overlay for contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent" />
-                {/* Bottom label */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="text-white text-sm font-semibold">
-                    IoT Gas Detector — Student FYP by Rectronx Circuits
-                  </span>
+                {/* Bottom gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1628]/80 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                  <div>
+                    <p className="text-white/60 text-[0.65rem] font-medium tracking-widest uppercase mb-1">Student FYP by Rectronx</p>
+                    <p className="text-white text-sm font-semibold leading-snug">IoT gas detector — ESP32 + OLED</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Floating badges */}
-              {/* Top-left badge — visible on all sizes */}
+              {/* Floating badge — 400+ projects */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.4 }}
-                className="absolute -top-4 -left-4 sm:-left-6 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100 flex items-center gap-2"
+                initial={{ opacity: 0, scale: 0.85, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.9, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute -top-5 -left-5 glass rounded-xl px-3 py-2.5 flex items-center gap-2.5"
               >
-                <span className="text-lg">🎓</span>
+                <span className="text-xl">🎓</span>
                 <div>
-                  <div className="text-xs font-bold text-brand-navy">400+ Projects</div>
+                  <div className="text-xs font-bold text-white">400+ Projects</div>
                   <div className="text-[10px] text-slate-400">Delivered</div>
                 </div>
               </motion.div>
 
-              {/* Side badges — hidden on mobile */}
+              {/* Floating badge — response time */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.0, duration: 0.4 }}
-                className="hidden sm:block absolute -top-3 -right-4 bg-brand-blue rounded-xl px-3 py-2 shadow-lg"
+                initial={{ opacity: 0, scale: 0.85, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 1.1, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute -bottom-4 -right-4 glass rounded-xl px-3 py-2.5"
               >
-                <div className="text-xs font-bold text-white">IoT</div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, duration: 0.4 }}
-                className="hidden sm:block absolute -bottom-4 -right-5 bg-white rounded-xl px-3 py-2 shadow-lg border border-slate-100"
-              >
-                <div className="text-xs font-bold text-brand-navy">Arduino ⚡</div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.1, duration: 0.4 }}
-                className="hidden sm:block absolute bottom-10 -left-8 bg-brand-navy rounded-xl px-3 py-2 shadow-lg"
-              >
-                <div className="text-xs font-bold text-white">ESP32</div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs font-semibold text-white">Replies in 2 hrs</span>
+                </div>
+                <div className="text-[10px] text-slate-400 mt-0.5 ml-3.5">WhatsApp response</div>
               </motion.div>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>

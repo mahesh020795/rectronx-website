@@ -1,199 +1,166 @@
 import Link from "next/link";
-import { Mail, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Mail, Facebook, Instagram } from "lucide-react";
 import Logo from "@/components/Logo";
 
-const footerLinks = {
+const nav = {
   Services: [
-    { label: "Final Year Projects", href: "/projects" },
-    { label: "IoT Solutions", href: "/projects#iot" },
-    { label: "Software Projects", href: "/projects#software" },
-    { label: "Electronics Projects", href: "/projects#electronics" },
-    { label: "Project Catalog", href: "/catalog" },
+    { label: "Final year projects", href: "/projects" },
+    { label: "IoT solutions", href: "/projects#iot" },
+    { label: "Software projects", href: "/projects#software" },
+    { label: "Electronics & PCB", href: "/projects#electronics" },
+    { label: "Project catalog", href: "/catalog" },
   ],
-  Products: [
-    { label: "Spark", href: "/products#spark" },
-    { label: "All Products", href: "/products" },
+  Company: [
+    { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Products", href: "/products" },
+    { label: "Contact", href: "/contact" },
+  ],
+  Legal: [
+    { label: "Privacy policy", href: "/privacy" },
+    { label: "Terms of service", href: "/terms" },
   ],
 };
-
-const contactInfo = [
-  { label: "Email", value: "rectronx@gmail.com", href: "mailto:rectronx@gmail.com" },
-  { label: "WhatsApp", value: "+60 11-7279 2500", href: "https://wa.me/601172792500" },
-  { label: "Address", value: "1-3-8, BL Business Centre, Solok Thean Tek, 11500 Ayer Itam, Pulau Pinang 🇲🇾", href: null },
-];
 
 export default function Footer() {
   return (
     <>
-      {/* CTA Strip — above dark footer */}
-      <div className="bg-white border-t border-slate-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col items-center text-center sm:flex-row sm:items-center sm:text-left justify-between gap-6">
+      {/* Pre-footer CTA strip */}
+      <div
+        className="relative overflow-hidden grain-overlay"
+        style={{ background: "linear-gradient(135deg, #0B1628 0%, #0F1C2E 100%)" }}
+      >
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            top: "-30%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "60%",
+            height: "150%",
+            background: "radial-gradient(ellipse at center, rgba(43,127,212,0.18) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
           <div>
-            <p className="text-lg font-semibold text-brand-navy">
-              Get FYP tips in your WhatsApp
+            <p className="text-xs font-semibold tracking-[0.12em] uppercase text-brand-blue mb-3">
+              Get started today
             </p>
-            <p className="text-slate-500 text-sm mt-1">
-              Weekly tips, project ideas, and tech updates — straight to your phone.
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-[-0.02em] max-w-md">
+              Ready to get your FYP done?
+            </h2>
+            <p className="text-slate-400 text-sm mt-2 max-w-sm">
+              WhatsApp us your topic and deadline. Free quote in 2 hours.
             </p>
           </div>
-          <a
-            href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%20want%20to%20get%20FYP%20tips."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-shrink-0 inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#1ebe5d] transition-colors shadow-sm"
-          >
-            <MessageCircle size={18} />
-            Join on WhatsApp
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+            <a
+              href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote%20for%20my%20FYP."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-brand-blue text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-brand-blue-dark transition-all duration-200 hover:-translate-y-px shadow-glow"
+            >
+              Get a free quote
+            </a>
+            <Link
+              href="/catalog"
+              className="inline-flex items-center justify-center gap-2 border border-white/15 text-white/80 px-6 py-3 rounded-xl text-sm font-medium hover:border-white/30 hover:text-white transition-all duration-200"
+            >
+              Browse project titles
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Dark footer */}
       <footer
-        className="mt-0"
-        style={{ background: "#0F1C2E", borderTop: "2px solid #2B7FD4" }}
+        style={{ background: "#060e1a", borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        aria-label="Site footer"
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-            {/* Brand column — full width on mobile */}
-            <div className="col-span-2 md:col-span-1">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+
+            {/* Brand — wider */}
+            <div className="col-span-2">
               <Logo className="w-36 h-auto mb-4" variant="light" />
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Building tech that works.
-              </p>
-              <p className="text-slate-500 text-xs mt-2 leading-relaxed">
-                Rectronx Circuits — Malaysia&apos;s Engineering &amp; Technology Company. FYP solutions, commercial software, and IoT systems from Penang.
+              <p className="text-slate-400 text-sm leading-relaxed max-w-[26ch]">
+                Malaysia&apos;s engineering & technology company for FYP projects and commercial software. Based in Penang.
               </p>
 
-              {/* Social icons */}
-              <div className="flex items-center justify-center md:justify-start gap-2 mt-5">
+              {/* Social */}
+              <div className="flex items-center gap-1 mt-5">
                 <a
                   href="mailto:rectronx@gmail.com"
-                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
-                  aria-label="Email"
+                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/8 transition-colors"
+                  aria-label="Email Rectronx"
                 >
-                  <Mail size={17} />
+                  <Mail size={16} />
                 </a>
                 <a
                   href="https://www.facebook.com/rectronx.circuits"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
-                  aria-label="Facebook"
+                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/8 transition-colors"
+                  aria-label="Rectronx on Facebook"
                 >
-                  <Facebook size={17} />
+                  <Facebook size={16} />
                 </a>
                 <a
                   href="https://www.instagram.com/rectronx.circuits"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
-                  aria-label="Instagram"
+                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/8 transition-colors"
+                  aria-label="Rectronx on Instagram"
                 >
-                  <Instagram size={17} />
+                  <Instagram size={16} />
                 </a>
                 <a
                   href="https://www.tiktok.com/@rectronxcircuits"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/10 transition-colors"
-                  aria-label="TikTok"
+                  className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-white/8 transition-colors"
+                  aria-label="Rectronx on TikTok"
                 >
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
                   </svg>
                 </a>
               </div>
             </div>
 
-            {/* Services */}
-            <div>
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                Services
-              </h4>
-              <ul className="space-y-2.5">
-                {footerLinks.Services.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Products */}
-            <div>
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                Products
-              </h4>
-              <ul className="space-y-2.5">
-                {footerLinks.Products.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-slate-400 hover:text-white transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link href="/about" className="text-sm text-slate-400 hover:text-white transition-colors">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/blog" className="text-sm text-slate-400 hover:text-white transition-colors">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contact info */}
-            <div>
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                Contact
-              </h4>
-              <ul className="space-y-3">
-                {contactInfo.map((item) => (
-                  <li key={item.label}>
-                    <p className="text-xs text-slate-500 uppercase tracking-wider mb-0.5">{item.label}</p>
-                    {item.href ? (
-                      <a
+            {/* Nav columns */}
+            {Object.entries(nav).map(([section, links]) => (
+              <div key={section}>
+                <h4 className="text-[0.65rem] font-semibold text-slate-500 uppercase tracking-[0.14em] mb-4">
+                  {section}
+                </h4>
+                <ul className="space-y-2.5">
+                  {links.map((item) => (
+                    <li key={item.href}>
+                      <Link
                         href={item.href}
                         className="text-sm text-slate-400 hover:text-white transition-colors"
                       >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <p className="text-sm text-slate-400">{item.value}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
           {/* Bottom bar */}
-          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col items-center text-center sm:flex-row sm:items-center sm:text-left justify-between gap-4">
-            <p className="text-slate-500 text-sm">
-              © {new Date().getFullYear()} Rectronx Circuits. All rights reserved.
+          <div className="border-t border-white/6 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-slate-600 text-xs">
+              © {new Date().getFullYear()} Rectronx Circuits Sdn Bhd. All rights reserved.
             </p>
-            <p className="text-slate-500 text-sm">
-              Built with ❤️ in Malaysia
-            </p>
-            <div className="flex items-center gap-4 text-sm text-slate-500">
-              <Link href="/privacy" className="hover:text-slate-300 transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-slate-300 transition-colors">
-                Terms
-              </Link>
+            <div className="flex items-center gap-2 text-slate-600 text-xs">
+              <span>+60 11-7279 2500</span>
+              <span>·</span>
+              <a href="mailto:rectronx@gmail.com" className="hover:text-slate-400 transition-colors">rectronx@gmail.com</a>
+              <span>·</span>
+              <span>Penang, Malaysia</span>
             </div>
           </div>
         </div>
