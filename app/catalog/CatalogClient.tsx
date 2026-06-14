@@ -78,9 +78,9 @@ export default function CatalogClient() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-slate-50 pt-16">
       {/* Page Header */}
-      <section className="bg-brand-navy pt-28 pb-16 px-4 sm:px-6">
+      <section className="bg-brand-navy pt-14 pb-16 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
           <span className="inline-block text-xs font-semibold tracking-widest uppercase text-brand-blue mb-3">
             Project Catalog

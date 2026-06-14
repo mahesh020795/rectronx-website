@@ -35,8 +35,8 @@ const values = [
 const stats = [
   { value: "400+", label: "Projects Delivered", icon: Trophy },
   { value: "500+", label: "Project Titles Available", icon: Smile },
-  { value: "4+", label: "Years Active", icon: Clock },
-  { value: "3", label: "Products Built", icon: Package },
+  { value: "8", label: "Years Active", icon: Clock },
+  { value: "12", label: "Commercial Products Built", icon: Package },
 ];
 
 export default function AboutPage() {
