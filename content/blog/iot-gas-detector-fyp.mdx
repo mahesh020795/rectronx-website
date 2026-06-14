@@ -1,0 +1,121 @@
+---
+title: "IoT Gas Leakage Detector FYP: LPG & Flammable Gas with SMS Alert"
+excerpt: "Build an IoT-based LPG gas leakage detection system with automatic SMS alerts and buzzer alarm for your Final Year Project. Full guide with circuit diagram and code logic."
+date: "2025-11-15"
+category: "Tutorial"
+readTime: "7 min read"
+---
+
+## Why Gas Detector Projects Score High
+
+IoT gas detection systems are a strong FYP choice because they solve a real safety problem, they're visually impressive during demos (the alarm goes off when you hold a lighter near it), and the hardware is inexpensive.
+
+This is also one of Rectronx Circuits' flagship project builds — the photo on our homepage shows our actual deployed gas detector with MQ2 and MQ5 sensors, OLED display, and PIR motion detection.
+
+## Components List
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| Arduino Uno / ESP32 | Main controller | RM 20–45 |
+| MQ-2 Gas Sensor | Detect LPG, propane, smoke | RM 8–12 |
+| MQ-5 Gas Sensor | Detect natural gas, LPG | RM 8–12 |
+| OLED Display (0.96") | Show gas levels in real-time | RM 12–18 |
+| Buzzer | Audio alarm | RM 2 |
+| Red LED | Visual alarm indicator | RM 1 |
+| SIM800L / GSM Module | Send SMS alerts | RM 20–35 |
+| PIR Motion Sensor | Detect human presence (optional) | RM 8 |
+| Enclosure box | Professional housing | RM 15–25 |
+
+**Total: RM 100–180**
+
+## System Features
+
+A well-built gas detector FYP should include:
+
+1. **Dual sensor detection** — MQ-2 for smoke/LPG, MQ-5 for natural gas
+2. **Real-time OLED display** — show gas concentration values live
+3. **Threshold alarm** — buzzer + LED when gas level exceeds safe limit
+4. **SMS alert** — send warning to registered phone numbers via GSM
+5. **PIR integration** — detect human presence in the room (bonus feature)
+
+## Circuit Wiring
+
+### MQ-2 Sensor
+- VCC → 5V
+- GND → GND
+- AO (Analog Out) → Arduino A0
+- DO (Digital Out) → Arduino D2 (for threshold interrupt)
+
+### MQ-5 Sensor
+- VCC → 5V
+- GND → GND
+- AO → Arduino A1
+
+### OLED Display (I2C)
+- SDA → A4
+- SCL → A5
+- VCC → 3.3V
+- GND → GND
+
+### GSM Module (SIM800L)
+- TX → Arduino RX (via voltage divider)
+- RX → Arduino TX
+- VCC → External 4V supply (not 5V)
+- GND → Common GND
+
+## Code Logic
+
+```cpp
+// Core logic pseudocode
+void loop() {
+  mq2_value = analogRead(A0);
+  mq5_value = analogRead(A1);
+  
+  display_oled("MQ2: " + mq2_value);
+  display_oled("MQ5: " + mq5_value);
+  
+  if (mq2_value > MQ2_THRESHOLD || mq5_value > MQ5_THRESHOLD) {
+    trigger_alarm();      // buzzer + LED
+    send_sms("+60XXXXXXXXX", "GAS ALERT! Check your premises immediately.");
+    delay(30000);         // wait 30s before next SMS
+  }
+}
+```
+
+## Calibration — Important Step
+
+MQ sensors need calibration in clean air before use:
+
+1. Power on the sensor
+2. Wait **24–48 hours** for the sensor to "burn in" (this is normal — sensors need warm-up time)
+3. In clean air, read the baseline voltage (typically 0.1–0.3V)
+4. Set your threshold as baseline + safety margin
+
+**Skipping calibration is the #1 reason gas detector FYPs fail during demos.**
+
+## Enclosure Design
+
+A professional enclosure makes a huge impression on examiners. Rectronx Circuits uses a standard IP56 waterproof enclosure box (155x115x80mm) with:
+- Sensors mounted through drilled holes (facing outward)
+- OLED display visible through a cutout
+- LED indicator visible from front
+- Power cable exit at rear
+
+This is exactly what you see in our homepage photo.
+
+## Grading Tips
+
+| Feature | Marks Impact |
+|---------|-------------|
+| Dual sensor (MQ2 + MQ5) | Higher than single sensor |
+| OLED display showing live values | Visual impact on examiners |
+| SMS alert with GSM | Real-world application marks |
+| Calibrated threshold | Shows technical understanding |
+| Professional enclosure | Presentation marks |
+| IoT dashboard (Blynk/ThingSpeak) | Distinction-level feature |
+
+## Need This Project?
+
+This is one of our most-requested FYP builds. Rectronx Circuits delivers the complete gas detector system — fully assembled, calibrated, programmed, and tested — with full documentation.
+
+WhatsApp us with your university requirements and deadline. We'll have it ready for you.

@@ -8,6 +8,7 @@ const footerLinks = {
     { label: "IoT Solutions", href: "/projects#iot" },
     { label: "Software Projects", href: "/projects#software" },
     { label: "Electronics Projects", href: "/projects#electronics" },
+    { label: "Project Catalog", href: "/catalog" },
   ],
   Products: [
     { label: "Spark", href: "/products#spark" },

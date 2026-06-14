@@ -1,0 +1,124 @@
+---
+title: "RFID Attendance System FYP: Complete Build Guide for 2025"
+excerpt: "Step-by-step guide to building an RFID-based attendance system for your Final Year Project. Includes database integration, web portal, and auto-report generation."
+date: "2025-11-28"
+category: "Tutorial"
+readTime: "9 min read"
+---
+
+## Why RFID Attendance Systems Make Great FYPs
+
+RFID attendance systems are a top choice for FYP in Malaysia — and for good reason. They solve a real problem (manual attendance is slow and error-prone), use accessible hardware, and can be expanded with software features like web portals, SMS alerts, and PDF report generation.
+
+Rectronx Circuits has delivered this project for students across disciplines: Computer Science, Electrical Engineering, Information Technology, and Mechatronics.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| Arduino Uno / ESP32 | Microcontroller | RM 20–45 |
+| MFRC522 RFID Reader | Read student cards | RM 12–18 |
+| RFID Cards / Key fobs | Student identification | RM 2–5 each |
+| LCD 16x2 (I2C) | Display name and status | RM 12–18 |
+| Buzzer | Audio confirmation | RM 2 |
+| LED (Green/Red) | Visual confirmation | RM 1 each |
+| USB to PC (wired) OR ESP32 WiFi | Send data to database | — |
+
+**Total hardware cost: RM 80–150**
+
+## System Overview
+
+The RFID attendance system works in 3 stages:
+
+1. **Card tap** — student taps RFID card on reader
+2. **Verification** — system checks card ID against registered database
+3. **Recording** — attendance is logged with timestamp; display shows student name
+
+## Software Stack Options
+
+### Option A — Arduino + PHP/MySQL (Most Common)
+- Arduino sends data via Serial to a PC running XAMPP
+- PHP script reads serial data and inserts into MySQL
+- Web dashboard shows attendance records
+
+### Option B — ESP32 + Firebase (Modern, Recommended)
+- ESP32 connects to WiFi and sends data directly to Firebase
+- Real-time web dashboard using Firebase Realtime Database
+- No need for a local PC server
+
+### Option C — Arduino + Python + SQLite (Offline)
+- Python script reads Arduino serial
+- Stores in local SQLite database
+- Good for offline environments
+
+## Step-by-Step Build
+
+### Step 1: Wire the RFID Reader
+
+Connect MFRC522 to Arduino:
+- SDA → Pin 10
+- SCK → Pin 13
+- MOSI → Pin 11
+- MISO → Pin 12
+- RST → Pin 9
+- 3.3V → 3.3V (not 5V!)
+- GND → GND
+
+### Step 2: Register Cards
+
+Upload the registration sketch first. Tap each student's card and record the UID. Store UIDs with student names in your database or a lookup array.
+
+### Step 3: Program the Main Logic
+
+```cpp
+// Pseudocode
+if (card_detected) {
+  uid = read_card_uid();
+  student = lookup_student(uid);
+  if (student found) {
+    log_attendance(student, timestamp);
+    display_name(student.name);
+    green_led_on();
+    beep(1);
+  } else {
+    display("Unknown Card");
+    red_led_on();
+    beep(3);
+  }
+}
+```
+
+### Step 4: Build the Web Portal
+
+A basic PHP/MySQL portal should include:
+- **Login page** — lecturer/admin access
+- **Attendance table** — sortable by date, subject, student
+- **Export to PDF/Excel** — critical for university submission
+- **SMS alert** — optional, for absent students
+
+### Step 5: Auto-Report Generation
+
+This is what separates a good FYP from a great one. Use FPDF (PHP) or ReportLab (Python) to generate:
+- Daily attendance summary
+- Per-student attendance percentage
+- Absent list with automatic SMS notification
+
+## Examiner Tips
+
+Examiners at Malaysian universities typically look for:
+1. **Working demo** — tap card, see name on LCD, check web portal
+2. **Data persistence** — records must survive system restart
+3. **Report generation** — export attendance as PDF or Excel
+4. **Security** — unregistered cards should be rejected and logged
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Hardware + database + basic web portal
+For a **Degree FYP**: Add SMS alerts + auto PDF reports + admin dashboard with user roles
+For **Merit/Distinction**: Add face recognition fallback + mobile app + analytics charts
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete RFID Attendance Systems — hardware, software, web portal, and documentation. We've delivered this to students at UiTM, Politeknik, UTM, MMU and more.
+
+Contact us on WhatsApp with your university requirements and we'll give you a free quote within 2 hours.
