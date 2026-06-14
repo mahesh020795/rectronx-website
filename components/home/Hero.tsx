@@ -31,7 +31,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_60%_40%,rgba(43,127,212,0.07),transparent)]" />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
           {/* ── LEFT: Text + CTAs ── */}
           <motion.div
@@ -122,7 +122,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative flex items-center justify-center lg:justify-end mt-4 lg:mt-0"
+            className="relative flex items-start justify-center lg:justify-end mt-4 lg:mt-0"
           >
             {/* Tilted image card — no rotation on mobile */}
             <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
