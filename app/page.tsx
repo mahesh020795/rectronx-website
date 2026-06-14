@@ -13,6 +13,7 @@ import HowItWorks from "@/components/home/HowItWorks";
 import WhatsIncluded from "@/components/home/WhatsIncluded";
 import FAQ from "@/components/home/FAQ";
 import BlogPreview from "@/components/home/BlogPreview";
+import Testimonials from "@/components/home/Testimonials";
 import CallToAction from "@/components/home/CallToAction";
 
 export default function HomePage() {
@@ -25,6 +26,7 @@ export default function HomePage() {
       <Products />
       <FeaturedProjects />
       <FAQ />
+      <Testimonials />
       <BlogPreview />
       <CallToAction />
     </>
