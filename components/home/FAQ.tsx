@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: "What if I need changes after receiving the project?",
-    a: "We include revision rounds as part of the project. If something doesn't work as expected or your supervisor requests changes, let us know and we'll fix it. We don't disappear after delivery.",
+    a: "Before we start, we sit down with you to lock in the full scope — features, components, and deliverables. This protects both sides and keeps the project on track. If something isn't working as agreed, we'll make it right. Any new requirements added after the build has started will be scoped and quoted separately.",
   },
   {
     q: "Do I get the source code and documentation?",
