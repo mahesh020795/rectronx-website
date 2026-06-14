@@ -133,6 +133,8 @@ export default function Hero() {
                   width={800}
                   height={540}
                   className="w-full object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 448px"
+                  quality={80}
                   priority
                 />
                 {/* Dark overlay for contrast */}
