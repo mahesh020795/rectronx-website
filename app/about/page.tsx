@@ -124,30 +124,41 @@ export default function AboutPage() {
                 { year: "2025", title: "400+ Projects", desc: "Reached 400+ projects delivered and 12 commercial products built." },
                 { year: "2026", title: "Spark Full Features", desc: "Flagship Spark release with full feature suite — our most powerful product yet." },
               ].map((m, i) => {
-                const isRight = i % 2 === 0;
+                const isLeft = i % 2 === 0;
                 return (
-                  <div key={m.year} className="relative flex items-start sm:items-center gap-6 sm:gap-0">
-                    {/* Left side (desktop) */}
-                    <div className={`hidden sm:flex w-1/2 ${isRight ? "justify-end pr-10" : "justify-start pl-10 order-last"}`}>
-                      <div className={`max-w-xs text-${isRight ? "right" : "left"}`}>
-                        <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
-                        <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
-                        <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
-                      </div>
+                  <div key={m.year} className="relative flex items-center">
+                    {/* Left slot */}
+                    <div className="hidden sm:flex w-1/2 justify-end pr-10">
+                      {isLeft && (
+                        <div className="max-w-xs text-right">
+                          <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
+                          <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                          <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
+                        </div>
+                      )}
                     </div>
-                    {/* Dot */}
-                    <div className="relative z-10 flex-shrink-0 sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+                    {/* Dot — center */}
+                    <div className="relative z-10 flex-shrink-0 sm:absolute sm:left-1/2 sm:-translate-x-1/2 mr-6 sm:mr-0">
                       <div className="w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center shadow-md ring-4 ring-white">
                         <CheckCircle2 size={16} className="text-white" />
                       </div>
                     </div>
-                    {/* Mobile text / Right side (desktop) */}
-                    <div className={`sm:w-1/2 ${isRight ? "sm:pl-10" : "sm:pr-10 sm:flex sm:justify-end"}`}>
-                      <div className="sm:max-w-xs">
-                        <p className="text-xl font-bold text-brand-blue sm:hidden">{m.year}</p>
+                    {/* Right slot */}
+                    <div className="flex-1 sm:w-1/2 sm:flex-none sm:pl-10">
+                      {/* Mobile: always show */}
+                      <div className="sm:hidden">
+                        <p className="text-xl font-bold text-brand-blue">{m.year}</p>
                         <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
                         <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
                       </div>
+                      {/* Desktop: only show if right-side entry */}
+                      {!isLeft && (
+                        <div className="hidden sm:block max-w-xs">
+                          <p className="text-2xl font-bold text-brand-blue">{m.year}</p>
+                          <p className="font-semibold text-brand-navy mt-0.5">{m.title}</p>
+                          <p className="text-sm text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
