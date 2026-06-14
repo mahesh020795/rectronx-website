@@ -61,7 +61,7 @@ export default function Footer() {
                 Building tech that works.
               </p>
               <p className="text-slate-500 text-xs mt-2 leading-relaxed">
-                Rectronx Circuits — FYP solutions, commercial software products, and IoT systems from Penang, Malaysia.
+                Rectronx Circuits — Malaysia&apos;s Engineering &amp; Technology Company. FYP solutions, commercial software, and IoT systems from Penang.
               </p>
 
               {/* Social icons */}

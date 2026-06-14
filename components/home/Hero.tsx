@@ -8,7 +8,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 
 const stats = [
   { value: "400+", label: "Projects Delivered" },
-  { value: "500+", label: "Happy Students" },
+  { value: "500+", label: "Project Titles Available" },
   { value: "8", label: "Years Active" },
   { value: "12", label: "Commercial Products Built" },
 ];

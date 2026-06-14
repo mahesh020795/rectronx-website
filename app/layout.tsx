@@ -6,11 +6,11 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://rectronx.com"),
   title: {
-    default: "Rectronx Circuits — Engineering Studio | FYP Projects & Commercial Software",
+    default: "Rectronx Circuits — Engineering & Technology Company | FYP Projects & Commercial Software",
     template: "%s | Rectronx Circuits",
   },
   description:
-    "Rectronx Circuits is Penang's engineering studio for Final Year Projects and commercial software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions. Get your FYP done right.",
+    "Rectronx Circuits is Penang's engineering & technology company for Final Year Projects and commercial software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions. Get your FYP done right.",
   keywords: [
     "final year project malaysia",
     "FYP malaysia",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     locale: "en_MY",
     url: "https://rectronx.com",
     siteName: "Rectronx Circuits",
-    title: "Rectronx Circuits — Engineering Studio | FYP Projects & Commercial Software",
+    title: "Rectronx Circuits — Engineering & Technology Company | FYP Projects & Commercial Software",
     description:
       "We build commercial software products and deliver custom Final Year Projects in IoT, Arduino, Raspberry Pi, and more. Based in Penang, Malaysia.",
     images: [
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
         url: "https://rectronx.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Rectronx Circuits — Penang Engineering Studio for FYP & Commercial Software",
+        alt: "Rectronx Circuits — Penang Engineering & Technology Company for FYP & Commercial Software",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rectronx Circuits — Engineering Studio",
+    title: "Rectronx Circuits — Engineering & Technology Company",
     description: "FYP Projects & Commercial Software from Penang, Malaysia",
   },
   robots: {
@@ -62,7 +62,7 @@ const organizationSchema = {
   url: "https://rectronx.com",
   logo: "https://rectronx.com/logo.png",
   description:
-    "Penang engineering studio for Final Year Projects and commercial software products",
+    "Penang engineering & technology company for Final Year Projects and commercial software products",
   address: {
     "@type": "PostalAddress",
     streetAddress: "1-3-8, BL Business Centre, Solok Thean Tek",

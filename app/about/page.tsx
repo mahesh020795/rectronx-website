@@ -4,9 +4,9 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Rectronx Circuits | Penang Tech Studio for FYP & Commercial Software",
+  title: "About Rectronx Circuits | Penang Technology Company for FYP & Commercial Software",
   description:
-    "Learn about Rectronx Circuits — an engineering studio from Penang building commercial software products and delivering custom FYP solutions.",
+    "Learn about Rectronx Circuits — an engineering & technology company from Penang building commercial software products and delivering custom FYP solutions.",
 };
 
 const values = [
@@ -61,7 +61,7 @@ export default function AboutPage() {
             Rectronx Circuits, Penang
           </h1>
           <p className="text-slate-300 mt-3 text-base max-w-xl">
-            From FYP projects to commercial software products — we build things that work.
+            From FYP projects to commercial systems — Malaysia&apos;s Engineering &amp; Technology Company.
           </p>
         </div>
       </div>
@@ -83,13 +83,13 @@ export default function AboutPage() {
             </p>
             <p className="text-slate-600 leading-relaxed">
               We stepped in to bridge that gap. Starting with IoT and Arduino
-              projects, we&apos;ve grown into a full-service tech studio handling
+              projects, we&apos;ve grown into a full-service technology company handling
               everything from embedded systems to web applications. Along the way,
               we built Spark — our own AI-powered WhatsApp product for businesses.
             </p>
             <p className="text-slate-600 leading-relaxed">
               Today, Rectronx stands as both a trusted FYP partner for hundreds of
-              students across Malaysia and a growing software studio shipping
+              students across Malaysia and a growing engineering &amp; technology company shipping
               products used by real businesses.
             </p>
           </div>
