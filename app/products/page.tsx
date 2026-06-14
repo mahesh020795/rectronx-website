@@ -3,9 +3,17 @@ import { MessageSquare, ArrowUpRight, Car, ScanLine, MapPin, Check } from "lucid
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Commercial Products | Rectronx Circuits",
+  title: "Commercial Software Products | Rectronx Circuits Malaysia",
   description:
-    "4 commercial products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant, Smart Parking, Attendance & Access Control, and Fleet Tracking.",
+    "Commercial products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant, Smart Parking, Attendance & Access Control, and Fleet Tracking systems.",
+  alternates: { canonical: "/products" },
+  openGraph: {
+    title: "Commercial Software Products — Rectronx Circuits",
+    description:
+      "Real products deployed across Malaysia — Spark AI WhatsApp assistant, Smart Parking, Attendance & Access Control, Fleet Tracking.",
+    url: "https://rectronx.com/products",
+    type: "website",
+  },
 };
 
 const otherProducts = [

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import JsonLd from "@/components/JsonLd";
+import { faqSchema } from "@/lib/schema";
 
 const faqs = [
   {
@@ -45,6 +47,7 @@ export default function FAQ() {
 
   return (
     <section className="py-20 sm:py-28 bg-slate-50">
+      <JsonLd schema={faqSchema(faqs)} />
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-12">

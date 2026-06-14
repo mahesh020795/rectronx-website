@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "About Rectronx Circuits | Penang Technology Company for FYP & Commercial Software",
   description:
     "Learn about Rectronx Circuits — an engineering & technology company from Penang building commercial software products and delivering custom FYP solutions.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Rectronx Circuits — Penang Engineering & Technology Company",
+    description:
+      "An engineering & technology company from Penang building commercial software and delivering custom FYP solutions across Malaysia.",
+    url: "https://rectronx.com/about",
+    type: "website",
+  },
 };
 
 const values = [

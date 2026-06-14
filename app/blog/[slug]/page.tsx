@@ -5,6 +5,8 @@ import { getAllPosts, getPost } from "@/lib/blog";
 import { Clock, ArrowLeft, Tag, Twitter } from "lucide-react";
 import Link from "next/link";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import JsonLd from "@/components/JsonLd";
+import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -17,14 +19,24 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const post = getPost(params.slug);
   if (!post) return {};
+  const url = `https://rectronx.com/blog/${post.slug}`;
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
-      url: `https://rectronx.com/blog/${post.slug}`,
+      url,
+      publishedTime: post.date,
+      authors: ["Rectronx Circuits"],
+      siteName: "Rectronx Circuits",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }
@@ -75,6 +87,17 @@ export default function BlogPostPage({
 
   return (
     <div className="pt-24 bg-slate-50 min-h-screen">
+      <JsonLd schema={articleSchema(post)} />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: "Home", url: "https://rectronx.com" },
+          { name: "Blog", url: "https://rectronx.com/blog" },
+          {
+            name: post.title,
+            url: `https://rectronx.com/blog/${post.slug}`,
+          },
+        ])}
+      />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Back link */}
         <Link

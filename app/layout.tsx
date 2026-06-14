@@ -3,6 +3,12 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import JsonLd from "@/components/JsonLd";
+import {
+  organizationSchema,
+  websiteSchema,
+  localBusinessSchema,
+} from "@/lib/schema";
 import Script from "next/script";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -52,40 +58,24 @@ export const metadata: Metadata = {
     title: "Rectronx Circuits — Engineering & Technology Company",
     description: "FYP Projects & Commercial Software from Penang, Malaysia",
   },
+  alternates: {
+    canonical: "/",
+  },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
-};
-
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Rectronx Circuits",
-  url: "https://rectronx.com",
-  logo: "https://rectronx.com/logo.png",
-  description:
-    "Penang engineering & technology company for Final Year Projects and commercial software products",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "1-3-8, BL Business Centre, Solok Thean Tek",
-    addressLocality: "Ayer Itam",
-    postalCode: "11500",
-    addressRegion: "Pulau Pinang",
-    addressCountry: "MY",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
   },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+60-11-72792500",
-    contactType: "customer service",
-    availableLanguage: ["English", "Malay"],
-  },
-  sameAs: [
-    "https://www.facebook.com/rectronx.circuits",
-    "https://www.instagram.com/rectronx.circuits",
-    "https://www.tiktok.com/@rectronxcircuits",
-  ],
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -94,12 +84,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en-MY">
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
+        <JsonLd schema={organizationSchema} />
+        <JsonLd schema={websiteSchema} />
+        <JsonLd schema={localBusinessSchema} />
       </head>
       <body>
         {GA_ID && (
