@@ -6,28 +6,27 @@ import { Star, Quote } from "lucide-react";
 const testimonials = [
   {
     name: "Ahmad Faris",
-    role: "Final Year Student, USM",
     review:
-      "Rectronx helped me complete my IoT project on time. The system worked perfectly during my viva and my supervisor was impressed. Highly recommend!",
+      "Rectronx helped me complete my IoT project on time. The system worked perfectly and the team was very professional. Highly recommend!",
     rating: 5,
   },
   {
     name: "Nurul Ain",
-    role: "Engineering Student, UiTM",
+
     review:
-      "I was worried about my FYP deadline but Rectronx delivered everything — hardware, code, and documentation — within 2 weeks. Very professional service.",
+      "Rectronx delivered everything — hardware, code, and documentation — within 2 weeks. Very professional service and great support throughout.",
     rating: 5,
   },
   {
     name: "Kevin Lim",
-    role: "Computer Science Student",
+
     review:
-      "Best decision I made for my final year project. The team explained how everything works so I could present it confidently. Will recommend to my juniors.",
+      "Best decision I made. The team explained how everything works so I could present it confidently. Will definitely recommend to others.",
     rating: 5,
   },
   {
     name: "Siti Hajar",
-    role: "Electrical Engineering Student",
+
     review:
       "Very fast response on WhatsApp and delivery was earlier than expected. The circuit was neatly soldered and came with full schematics. 5 stars!",
     rating: 5,
@@ -76,7 +75,6 @@ export default function Testimonials() {
                   ))}
                 </div>
                 <p className="text-white font-semibold text-sm">{t.name}</p>
-                <p className="text-slate-500 text-xs">{t.role}</p>
               </div>
             </motion.div>
           ))}
