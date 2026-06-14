@@ -57,7 +57,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             {/* Brand column — full width on mobile */}
             <div className="col-span-2 md:col-span-1">
-              <Logo className="h-10 w-auto mb-4" variant="light" />
+              <Logo className="w-36 h-auto mb-4" variant="light" />
               <p className="text-slate-400 text-sm leading-relaxed">
                 Building tech that works.
               </p>
