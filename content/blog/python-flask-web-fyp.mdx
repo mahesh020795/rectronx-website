@@ -1,0 +1,140 @@
+---
+title: "Building a Web-Based FYP System with Python Flask"
+description: "When Flask is the right choice for your Final Year Project, what features to build, and what Malaysian supervisors look for in a web-based engineering system."
+date: "2025-06-14"
+tags: ["FYP", "Python", "Flask", "Web Development", "Malaysia", "IoT"]
+readingTime: "7 min read"
+---
+
+A web-based dashboard is one of the most effective ways to present an IoT or monitoring system for your Final Year Project. It gives your examiner something visual and interactive to assess during your viva, and it demonstrates a full-stack implementation — hardware talking to software, data stored in a database, results displayed in real time.
+
+Python Flask is one of the most student-friendly frameworks for building this kind of system. Here's how to approach it properly.
+
+## When Flask Is the Right Choice
+
+Flask makes sense for your FYP when:
+
+- Your project collects data from hardware (sensors, ESP32, Raspberry Pi) and needs to display it somewhere
+- You want a local web interface that runs on your device without depending on third-party cloud platforms
+- You're comfortable with Python and want to avoid JavaScript-heavy frameworks
+- Your project needs a simple REST API to receive data from microcontrollers
+- You want login, user roles, or data history features in your system
+
+Flask is a **micro-framework** — it gives you the basics and lets you add what you need. For a FYP, this is ideal. You're not building a commercial product; you're building a demonstration of engineering skills.
+
+If your project is purely cloud-based (using AWS, Firebase, or Blynk), Flask may not be necessary. But if you want full control over your backend — and you want to show your examiner a system you built yourself — Flask is a strong choice.
+
+## Core Features to Build
+
+A well-structured Flask FYP system typically has these components:
+
+### 1. User Authentication
+
+Login and logout. At minimum, one admin user who can view the dashboard. If your project has multiple roles (e.g., admin vs. viewer, or different devices per user), implement role-based access.
+
+Use Flask-Login for session management. Store passwords hashed — never in plain text. Libraries like `werkzeug.security` make this straightforward.
+
+Supervisors notice when authentication is missing. It's a basic security requirement for any real system.
+
+### 2. Dashboard with Live or Near-Live Data
+
+This is the visual centrepiece of your project. Build a dashboard that shows:
+
+- Current sensor readings (temperature, humidity, distance, power consumption — whatever your project measures)
+- Historical data in a chart (use Chart.js or Plotly, both work well in Flask Jinja templates)
+- Status indicators (online/offline, alerts, thresholds)
+
+For real-time updates without refreshing the page, use JavaScript `setInterval` to poll a Flask API endpoint every 5–10 seconds. For true real-time, look into Flask-SocketIO — it's more complex but impressive in a viva.
+
+### 3. Database Integration
+
+Use SQLite for simplicity (no installation required, just a file) or MySQL if your university requires it.
+
+Flask works cleanly with SQLAlchemy ORM, which lets you define your database models as Python classes. A typical FYP might have three tables:
+
+- `users` — login credentials and roles
+- `devices` — registered hardware nodes
+- `readings` — timestamped sensor data from each device
+
+Design your schema before you start coding. A clear schema diagram in your Chapter 3 shows good engineering planning.
+
+### 4. API Endpoints for Hardware
+
+Your ESP32 or Raspberry Pi needs to send data to Flask. Build a simple POST endpoint:
+
+```python
+@app.route('/api/data', methods=['POST'])
+def receive_data():
+    data = request.get_json()
+    # validate, store to database
+    return jsonify({"status": "ok"}), 200
+```
+
+On the ESP32 side, use the `HTTPClient` library to POST JSON to this endpoint over Wi-Fi. Keep the API simple — your hardware doesn't need OAuth.
+
+### 5. Alerts and Notifications
+
+Add basic alerting logic: if a sensor reading exceeds a threshold, send a Telegram message or email. Telegram Bot API is the easiest option for Malaysian students — it's free, doesn't require a server, and works with a simple HTTP request from Python.
+
+This feature alone can differentiate your project. Most students stop at displaying data. Adding proactive alerts shows the system is actually useful.
+
+## Project Structure
+
+Keep your Flask project organised. A clean structure looks like this:
+
+```
+project/
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   └── login.html
+│   └── static/
+│       ├── css/
+│       └── js/
+├── config.py
+├── run.py
+└── requirements.txt
+```
+
+A messy project folder with all files dumped in root is a red flag. Supervisors and examiners can tell at a glance whether you structured your project properly.
+
+## What Supervisors Look For
+
+From working with students across different engineering programmes in Malaysia, here's what supervisors typically expect from a Flask-based FYP:
+
+- **Security**: login with password hashing, input validation, no exposed API keys in code
+- **Data persistence**: readings stored in a database, not just displayed live and forgotten
+- **Code quality**: comments, functions that do one thing, no 500-line `app.py` files
+- **Error handling**: the system should not crash when a sensor goes offline
+- **Documentation**: ER diagram for the database, system architecture diagram, API documentation
+
+The most common criticism we hear is students who build a working system but have no error handling. In a live viva demo, if the Wi-Fi drops for two seconds and your Flask app crashes, that's a mark deduction. Handle exceptions.
+
+## Deployment Options for Viva
+
+You have three options for running your Flask app during presentation:
+
+1. **Run locally on your laptop** — simplest option, works without internet, but only accessible on your machine
+2. **Run on Raspberry Pi** — your Pi acts as a local server, hardware and software in one device, more impressive
+3. **Deploy to a cloud VM** (DigitalOcean, AWS EC2) — accessible from anywhere, but adds complexity and cost
+
+For most FYPs, option 1 or 2 is sufficient. If your project specifically requires remote access (e.g., a monitoring system for a location away from the user), then option 3 is justified and worth the extra effort.
+
+## Quick Start Checklist
+
+Before your first line of code:
+
+- [ ] Define your database schema (tables, columns, relationships)
+- [ ] Sketch the dashboard layout (what data is shown, where)
+- [ ] List all API endpoints your hardware needs
+- [ ] Choose your chart library (Chart.js is easiest)
+- [ ] Set up a virtual environment (`python -m venv venv`)
+- [ ] Create `requirements.txt` from day one (`pip freeze > requirements.txt`)
+
+Flask is a tool that rewards good planning. Students who start coding without a plan end up with a tangled mess of routes and globals. Spend a day planning, and the coding phase will go smoothly.
+
+If you need help setting up a Flask project structure for your specific FYP idea, the team at Rectronx can get you started — we've built dozens of these systems and know exactly what works in an academic engineering context.

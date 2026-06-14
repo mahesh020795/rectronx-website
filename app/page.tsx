@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 import Services from "@/components/home/Services";
 import Products from "@/components/home/Products";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
+import HowItWorks from "@/components/home/HowItWorks";
+import FAQ from "@/components/home/FAQ";
 import BlogPreview from "@/components/home/BlogPreview";
 import CallToAction from "@/components/home/CallToAction";
 
@@ -16,9 +18,11 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <HowItWorks />
       <Services />
       <Products />
       <FeaturedProjects />
+      <FAQ />
       <BlogPreview />
       <CallToAction />
     </>

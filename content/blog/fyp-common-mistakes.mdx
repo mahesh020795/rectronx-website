@@ -1,0 +1,120 @@
+---
+title: "Top 10 FYP Mistakes Malaysian Engineering Students Make (And How to Avoid Them)"
+description: "From starting too late to choosing the wrong components — a frank look at the most common Final Year Project mistakes we've seen, and exactly how to fix them."
+date: "2025-06-14"
+tags: ["FYP", "Malaysia", "Engineering", "Tips", "Common Mistakes"]
+readingTime: "8 min read"
+---
+
+After helping hundreds of engineering students in Malaysia complete their Final Year Projects, we've seen the same mistakes come up again and again. Some are small. Some cost students an entire grade band. All of them are avoidable.
+
+Here are the ten most common FYP mistakes — and what to do instead.
+
+---
+
+## 1. Starting the Actual Build Too Late
+
+This is the number one killer. Students spend the first two months reading papers, attending meetings, and thinking about what to build. Then they spend the next month ordering components. By the time the hardware arrives and the first test runs, there are six weeks left.
+
+Six weeks is not enough time to build, debug, test, and document a complete FYP.
+
+**What to do**: Have a working proof-of-concept within the first six weeks of your project. It doesn't have to be polished. It just needs to prove your core idea works. If you're building a soil moisture monitor, have a sensor reading data to your serial monitor by week 6. Documentation and refinement happen in parallel, not after.
+
+---
+
+## 2. Choosing Components Without Testing Them First
+
+Students read a tutorial online, add the components to a Shopee cart, and wait. When the parts arrive, they find the sensor doesn't work with their microcontroller, or the library is outdated, or the voltage levels are incompatible.
+
+This wastes weeks.
+
+**What to do**: Before committing to your design, buy one of each key component and test it individually. Get the sensor reading data. Confirm the library works. Run a basic end-to-end test before buying five units of anything. This is called prototyping — it's not optional.
+
+---
+
+## 3. Scope That Is Too Ambitious (Or Too Narrow)
+
+We see both extremes. Some students propose a full smart city management system with AI and blockchain for a single-semester project. Others propose "turning on a light with a phone" and are surprised when supervisors push back.
+
+Your scope should be **challenging but achievable** for one person in one semester.
+
+**What to do**: A good rule of thumb — if your project has more than five major subsystems, you've probably over-scoped it. List your features, prioritise ruthlessly, and define clearly what is "in scope" versus "future work." A well-executed three-feature system beats an unfinished ten-feature system every time.
+
+---
+
+## 4. Treating Documentation as an Afterthought
+
+"I'll write the report after everything is done." This is said every semester. It never works. The result is a rushed report written in two weeks that doesn't accurately reflect months of engineering work.
+
+**What to do**: Write as you go. Chapter 1 and 2 should be mostly done before you touch hardware. Chapter 3 is written as you design and build. Chapter 4 is written as you test. This approach also forces you to think clearly about your design decisions, which usually leads to better engineering.
+
+---
+
+## 5. Poor Problem Statement
+
+A weak problem statement is vague, generic, and disconnected from the solution. Example: "Nowadays technology is important and IoT can help people." This tells the examiner nothing.
+
+A strong problem statement is specific, quantifiable, and leads logically to your solution.
+
+**What to do**: Your problem statement should answer three questions:
+- What is the problem? (specific, not generic)
+- Who is affected and how? (context)
+- Why existing solutions are insufficient? (gap)
+
+Example: "Manual attendance recording in large lecture halls is time-consuming, error-prone, and provides no real-time data to administrators. Existing RFID systems in the market are expensive and proprietary. This project develops a low-cost RFID attendance system using ESP32 that logs data to a central database and provides a real-time dashboard."
+
+---
+
+## 6. Not Testing the System Properly
+
+Many students test their project once or twice, see it working, and move on. This is not engineering — it's luck. During a viva demo, that sensor that "always works" will fail exactly when the examiner is watching.
+
+**What to do**: Test systematically. Create a test plan table in Chapter 4 with:
+- Test case name
+- Expected result
+- Actual result
+- Pass/Fail
+
+Test edge cases. What happens if the Wi-Fi drops? What if the sensor gives an out-of-range reading? What if two users press a button at the same time? Document what works and what doesn't. Examiners respect honesty and good test methodology.
+
+---
+
+## 7. Ignoring Power and Electrical Basics
+
+Students sometimes connect components incorrectly — 5V to a 3.3V pin, wrong polarity on a power supply, missing pull-up resistors. The result is burnt components, inconsistent behaviour, or a project that only works if you hold the wire at the right angle.
+
+**What to do**: Always check voltage compatibility before connecting anything. ESP32 and most modern sensors run on 3.3V logic. Arduino Uno runs on 5V. Check your datasheets. Use a multimeter to verify voltages before powering up. Keep a 10kΩ resistor set handy for pull-up/pull-down needs.
+
+---
+
+## 8. Copy-Pasting Code Without Understanding It
+
+We've seen students who cannot explain a single function in their own project code. When an examiner asks "what does this function do?" and the student says "I got it from GitHub" — that's a serious mark deduction.
+
+**What to do**: Understand every line of code you submit. If you use a library or reference code, modify it enough to make it yours — and be able to explain how it works. Comment your code. Comments are not just for documentation; they force you to explain what the code does, which exposes gaps in your understanding.
+
+---
+
+## 9. Weak or Missing Comparison With Existing Work
+
+The literature review and the methodology section should clearly explain why your approach is better (or different) from what already exists. Students often list existing projects without comparing them.
+
+**What to do**: Build a comparison table. List 4–5 existing systems, their features, and their limitations. Then show how your system addresses those limitations. This is the academic justification for why your project needed to exist. Without it, an examiner might reasonably ask "why didn't you just use an existing solution?"
+
+---
+
+## 10. Leaving the Presentation Preparation Too Late
+
+Your project works. Your report is done. But you've never actually walked through a 15-minute presentation before the day of your viva. You're nervous, you skip steps, the demo crashes because you forgot to charge the board, and you blank on a question you definitely know the answer to.
+
+**What to do**: Do a full rehearsal at least three times before your actual viva. Present to a friend, a family member, or even record yourself. Prepare answers for the five questions you're most likely to be asked (what's your problem statement, why this hardware, how did you test it, what are the limitations, what would you do differently). Charge your hardware the night before. Bring a backup power bank.
+
+---
+
+## Final Word
+
+None of these mistakes are fatal on their own. But they compound. Students who start late also end up documenting badly. Students who don't test properly also can't answer examiner questions confidently. Getting the fundamentals right — early start, clear scope, continuous documentation, thorough testing — creates a virtuous cycle that produces good projects and good marks.
+
+If your FYP is in progress right now and you recognise two or more of these mistakes, it's not too late to course-correct. The students who succeed in their final year are not always the ones with the most impressive hardware. They're the ones who planned well, built systematically, and documented honestly.
+
+At Rectronx, we've worked with students at every stage of their FYP — from initial component selection to pre-viva system debugging. If you need a second opinion on your approach or help getting unstuck, we're here.

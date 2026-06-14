@@ -1,0 +1,103 @@
+---
+title: "Raspberry Pi for FYP: When to Use It (and When Not To)"
+description: "A practical guide for Malaysian engineering students on choosing between Raspberry Pi and microcontrollers for their Final Year Project — what supervisors expect and how to get started."
+date: "2025-06-14"
+tags: ["FYP", "Raspberry Pi", "Malaysia", "IoT", "Microcontroller"]
+readingTime: "7 min read"
+---
+
+One of the most common questions we get from students working on their Final Year Projects is: "Should I use a Raspberry Pi or a microcontroller like Arduino or ESP32?" It sounds like a simple question, but the answer actually shapes your entire project — your hardware cost, your software stack, your testing approach, and even how your supervisor evaluates your work.
+
+Let's break this down properly.
+
+## What Raspberry Pi Actually Is
+
+First, let's clear up a common confusion. Raspberry Pi is a **single-board computer**, not a microcontroller. It runs a full operating system (usually Raspberry Pi OS, which is Linux-based). This means it has:
+
+- A CPU that can multitask
+- RAM (1GB to 8GB depending on the model)
+- Wi-Fi, Bluetooth, USB, HDMI built-in
+- The ability to run Python, Node.js, databases, web servers — all at once
+
+Compare this to an Arduino (which runs one loop of code) or an ESP32 (which is powerful but still bare-metal). Raspberry Pi is in a completely different league.
+
+## When Raspberry Pi Makes Sense for FYP
+
+Use a Raspberry Pi when your project genuinely needs computing power. Good examples:
+
+- **Computer vision** — face recognition, object detection using OpenCV or TensorFlow Lite. This needs real processing power.
+- **Local server** — if your FYP needs a database, web dashboard, and sensors all running on one device without depending on internet
+- **Voice assistant or NLP** — processing audio or text locally
+- **Multi-process systems** — where you need multiple things running concurrently (sensor reading + logging + web API + display)
+- **Projects using a camera module** — Pi Camera with OpenCV is a very solid FYP combination
+
+If your project falls into any of these categories, Pi is justified. Your supervisor will understand.
+
+## When NOT to Use Raspberry Pi
+
+Here's where students go wrong. They reach for a Raspberry Pi because it feels more impressive, but it's actually overkill — and supervisors notice.
+
+Avoid Pi if:
+- You just need to read a sensor and send data to the cloud (ESP32 does this better, cheaper, and with lower power)
+- Your project is battery-powered (Pi draws too much current)
+- You only need simple GPIO control (relay, LED, motor) without complex logic
+- You're building a basic data logger
+
+Using a Pi for a simple sensor project is like using a full PC to turn on a light switch. It works, but your examiner will ask why you needed it.
+
+## What Malaysian Supervisors Typically Expect
+
+From our experience working with students across different universities, supervisors generally look for **justification**. You don't get marks just for using expensive hardware — you get marks for explaining why that hardware was the right choice.
+
+Your FYP report should clearly state:
+- Why Raspberry Pi was selected over alternatives (justify it in Chapter 3, your Methodology)
+- What specific capabilities you are using (camera, GPIO, local server, etc.)
+- How it compares to other options you considered
+
+If you can't write two solid paragraphs justifying the hardware, you probably chose the wrong hardware.
+
+Supervisors also tend to appreciate projects where the student clearly understands the **limitations** of their hardware. Saying "Raspberry Pi 4 was chosen for its ability to run a real-time computer vision pipeline at 30fps, which the ESP32 cannot support" is a strong justification.
+
+## Setting Up Raspberry Pi for Your FYP
+
+Here's a practical checklist for getting started:
+
+**Hardware you'll need:**
+- Raspberry Pi 4 (2GB is fine for most FYPs, 4GB if you're doing ML)
+- MicroSD card — minimum 32GB, use a Class 10 card
+- Official power supply (5V 3A USB-C) — cheap power supplies cause random crashes
+- Keyboard, mouse, and HDMI monitor for initial setup (or use SSH headless)
+
+**Initial setup steps:**
+1. Download Raspberry Pi Imager from the official site
+2. Flash Raspberry Pi OS Lite (headless) or Desktop version depending on your needs
+3. Enable SSH during flashing — this lets you work from your laptop
+4. Connect to your university or home WiFi
+5. Update the system: `sudo apt update && sudo apt upgrade`
+
+**Essential packages for FYP projects:**
+- `python3-pip` — for installing Python libraries
+- `opencv-python` — if doing computer vision
+- `flask` — if building a web interface
+- `sqlite3` — for local database storage
+- `gpio` or `RPi.GPIO` — for hardware control
+
+## Combining Pi with Other Microcontrollers
+
+Here's a setup that many strong FYP projects use: **Raspberry Pi as the brain, ESP32 or Arduino as the sensor nodes**.
+
+The ESP32 handles low-level sensor reading and sends data over MQTT or serial to the Pi. The Pi processes the data, stores it in a database, and serves a web dashboard. This is a proper distributed architecture — and it looks great in your report.
+
+It's also more realistic. In industry, this is actually how IoT systems are built.
+
+## Cost Consideration
+
+A Raspberry Pi 4 (2GB) costs around RM 200-280 in Malaysia. Add the SD card, power supply, and case and you're looking at RM 280-350 just for the main board. For students on a budget, make sure you actually need it before spending.
+
+ESP32 development boards cost around RM 20-30 and can handle most sensor-based FYP projects. If your project doesn't need local compute, save the money.
+
+## Final Advice
+
+Choose your hardware based on your project requirements — not based on what sounds impressive. A well-executed ESP32 project with clean code, good documentation, and proper testing will score better than a Raspberry Pi project where the student couldn't explain why they used it.
+
+If you're unsure which to pick for your specific project idea, feel free to reach out to us at Rectronx. We've helped students across Penang and beyond figure this out, and we can save you a lot of time and money by pointing you in the right direction early.

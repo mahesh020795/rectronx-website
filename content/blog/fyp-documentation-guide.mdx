@@ -1,0 +1,162 @@
+---
+title: "How to Write FYP Documentation That Actually Gets Good Marks"
+description: "A no-nonsense guide for Malaysian engineering students on writing strong FYP technical reports — chapter by chapter, with common mistakes to avoid."
+date: "2025-06-14"
+tags: ["FYP", "Documentation", "Malaysia", "Engineering", "Report Writing"]
+readingTime: "8 min read"
+---
+
+Every year, students build genuinely impressive projects — working prototypes, real sensors, live dashboards — and then lose marks because their documentation is weak. The project works, but the report doesn't reflect what was actually done or why.
+
+This guide is for students who want their report to match the quality of their work. We'll go chapter by chapter and highlight the mistakes we see most often.
+
+## Why Documentation Matters More Than You Think
+
+Your examiner cannot fully assess your project from a 15-minute presentation. The technical report is where you prove you understood what you built, why you built it that way, and what the results actually mean.
+
+In most Malaysian engineering programmes, the final report accounts for 40–60% of your FYP marks. That's not something you want to rush in your final two weeks.
+
+---
+
+## Chapter 1: Introduction
+
+This chapter sets the context. It tells the reader what problem you're solving and why it matters.
+
+**What to include:**
+- Background of the problem (real-world context, why this problem exists)
+- Problem statement — be specific, not vague
+- Project objectives — usually 3 to 4, written as measurable outcomes
+- Project scope — what your project covers and, importantly, what it doesn't
+- Report structure — a short paragraph explaining what each chapter covers
+
+**Common mistakes:**
+- Writing objectives like "To understand IoT" — this is not an engineering objective
+- Scope that is so broad it's impossible to achieve (or so narrow it seems trivial)
+- Copy-pasting problem statements from the internet without adapting them to your specific context
+
+A good objective sounds like: "To design and implement a real-time soil moisture monitoring system using ESP32 that alerts users via Telegram when moisture drops below a threshold."
+
+---
+
+## Chapter 2: Literature Review
+
+This is where students suffer the most. A literature review is not a list of summaries — it's a critical analysis of existing work.
+
+**What to include:**
+- Review of existing systems or methods related to your topic
+- Comparison table of existing solutions (hardware, software, method, limitation)
+- Identification of the gap your project addresses
+- Reference to at least 15–20 academic sources (IEEE, Scopus, Google Scholar)
+
+**Common mistakes:**
+- Summarising papers one by one without connecting them
+- Not ending with a clear statement of what gap your project fills
+- Using websites and blogs as primary references instead of journals
+- Literature review that doesn't relate to your actual project
+
+Each section of your literature review should logically lead to your project design. If your project uses MQTT, you should review MQTT. If it uses a CNN for image classification, you should review relevant CNN architectures.
+
+---
+
+## Chapter 3: Methodology / System Design
+
+This is the heart of your report. Supervisors spend the most time here.
+
+**What to include:**
+- System architecture diagram (block diagram showing all components and how they connect)
+- Hardware selection and justification (why this sensor, why this board)
+- Software design (flowcharts, UML diagrams, state diagrams)
+- Database schema (if applicable)
+- Development process — how you built it step by step
+- Gantt chart or project timeline
+
+**Common mistakes:**
+- Block diagrams with boxes and arrows but no labels
+- Hardware listed without justification ("ESP32 was used because it is available")
+- No flowchart for the main program logic
+- Skipping the database design entirely
+
+Your methodology chapter should be detailed enough that another engineering student could reproduce your project from it. If it isn't, you haven't documented enough.
+
+---
+
+## Chapter 4: Results and Discussion
+
+This chapter proves your project actually works.
+
+**What to include:**
+- System testing — functional testing of each feature
+- Performance results — data, measurements, tables, graphs
+- Screenshot of the UI or interface (if applicable)
+- Comparison with your objectives from Chapter 1 — did you achieve them?
+- Discussion of any limitations or unexpected results
+
+**Common mistakes:**
+- Results chapter that only says "the system works" with no data
+- No comparison between expected and actual results
+- Testing done only once or twice
+- Ignoring failures or errors instead of discussing them
+
+If your sensor had accuracy issues, document it. Supervisors respect honesty and analysis over hiding problems. Saying "The DHT22 sensor showed ±1.5°C variation under direct sunlight, which is within the manufacturer's stated tolerance" is much better than pretending it worked perfectly.
+
+---
+
+## Chapter 5: Conclusion and Future Work
+
+Short chapter, but often done poorly.
+
+**What to include:**
+- Summary of what was achieved (link back to your objectives)
+- Whether objectives were fully, partially, or not met — and why
+- Limitations of the current system
+- Recommendations for future improvements
+
+**Common mistakes:**
+- Conclusion that just repeats the introduction
+- Future work that is vague ("can be improved in the future")
+- Claiming all objectives were met when the testing data shows otherwise
+
+Future work should be specific: "Future iterations could integrate a solar charging module to make the system fully off-grid" or "The system could be extended to support multiple rooms using a mesh MQTT network."
+
+---
+
+## References and Appendices
+
+**References:**
+- Use a consistent citation format (IEEE is standard for engineering)
+- Every claim in the body of the report should have a citation
+- Don't cite Wikipedia as a reference
+
+**Appendices:**
+- Full source code (properly commented)
+- Circuit schematics
+- Photos of the physical prototype
+- Any data sheets for main components
+- User manual (if applicable)
+
+---
+
+## General Formatting Tips
+
+- Use consistent heading levels (H1 for chapter titles, H2 for sections)
+- All figures and tables must have captions and must be referenced in the text
+- Use 1.5 line spacing, Times New Roman or Arial 12pt (follow your university's template)
+- Page numbers on all pages except cover
+- Spell-check — basic errors make your report look careless
+
+---
+
+## A Realistic Timeline
+
+Start documenting from Day 1. The biggest mistake is treating the report as something you write after the project is done.
+
+- **Month 1–2**: Write Chapters 1 and 2 while doing your research
+- **Month 3**: Write Chapter 3 as you build the system
+- **Month 4**: Write Chapter 4 as you test
+- **Final 2 weeks**: Write Chapter 5, polish everything, format properly
+
+If you leave documentation to the last two weeks, you will be rushing, and it will show.
+
+---
+
+At Rectronx, we've reviewed hundreds of FYP reports alongside the technical builds we help students complete. The pattern is consistent — students who document as they go produce better reports and score better marks. Start early, be specific, and let your documentation tell the story of your engineering decisions.
