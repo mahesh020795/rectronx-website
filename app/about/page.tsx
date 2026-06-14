@@ -33,8 +33,8 @@ const values = [
 ];
 
 const stats = [
-  { value: "100+", label: "Projects Delivered", icon: Trophy },
-  { value: "50+", label: "Happy Students", icon: Smile },
+  { value: "400+", label: "Projects Delivered", icon: Trophy },
+  { value: "500+", label: "Project Titles Available", icon: Smile },
   { value: "4+", label: "Years Active", icon: Clock },
   { value: "3", label: "Products Built", icon: Package },
 ];

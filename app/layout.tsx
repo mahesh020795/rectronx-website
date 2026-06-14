@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "projek akhir tahun",
     "IoT project malaysia",
     "arduino project malaysia",
-    "engineering studio penang",
+    "engineering & technology company penang",
     "Rectronx Circuits",
     "esp32 project",
     "raspberry pi project malaysia",

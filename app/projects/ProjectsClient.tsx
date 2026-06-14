@@ -77,8 +77,8 @@ export default function ProjectsClient() {
           {/* Stats */}
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 mb-10">
             {[
-              { value: "100+", label: "Projects Delivered" },
-              { value: "4", label: "Categories" },
+              { value: "400+", label: "Projects Delivered" },
+              { value: "500+", label: "Project Titles Available" },
               { value: "Free", label: "Consultation" },
             ].map((s) => (
               <div

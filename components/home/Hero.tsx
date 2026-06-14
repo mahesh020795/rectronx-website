@@ -44,7 +44,7 @@ export default function Hero() {
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 bg-brand-blue-light text-brand-blue text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse" />
-                Malaysia&apos;s Engineering Lab
+                Malaysia&apos;s Engineering &amp; Technology Company
               </span>
             </motion.div>
 
@@ -53,7 +53,7 @@ export default function Hero() {
               variants={item}
               className="text-3xl sm:text-5xl lg:text-6xl font-bold text-brand-navy leading-tight tracking-tight"
             >
-              Malaysia&apos;s Engineering Lab for{" "}
+              Malaysia&apos;s Engineering &amp; Technology Company for{" "}
               <span className="text-brand-blue">FYP Projects</span>{" "}
               &amp; Software Products
             </motion.h1>
@@ -155,7 +155,7 @@ export default function Hero() {
               >
                 <span className="text-lg">🎓</span>
                 <div>
-                  <div className="text-xs font-bold text-brand-navy">100+ Projects</div>
+                  <div className="text-xs font-bold text-brand-navy">400+ Projects</div>
                   <div className="text-[10px] text-slate-400">Delivered</div>
                 </div>
               </motion.div>
