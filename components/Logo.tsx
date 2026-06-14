@@ -14,6 +14,7 @@ export default function Logo({
       width={1536}
       height={1024}
       className={className}
+      sizes="(max-width: 1024px) 128px, 160px"
       style={
         variant === "light"
           ? { filter: "brightness(0) invert(1)" }
