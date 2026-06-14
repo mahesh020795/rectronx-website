@@ -122,7 +122,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative flex items-start justify-center lg:justify-end mt-4 lg:mt-0"
+            className="relative flex items-start justify-center lg:justify-end mt-4 lg:mt-0 order-first lg:order-last"
           >
             {/* Tilted image card — no rotation on mobile */}
             <div className="relative w-full max-w-sm sm:max-w-md mx-auto">
