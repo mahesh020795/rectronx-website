@@ -1,102 +1,121 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star } from "lucide-react";
 
 const testimonials = [
   {
     name: "Ahmad Faris",
     review:
-      "Rectronx helped me complete my IoT project on time. The system worked perfectly and the team was very professional. Highly recommend!",
+      "Rectronx helped me complete my IoT project on time. The system worked perfectly and the team was very professional throughout — they kept me updated at every stage.",
     rating: 5,
   },
   {
     name: "Nurul Ain",
-
     review:
-      "Rectronx delivered everything — hardware, code, and documentation — within 2 weeks. Very professional service and great support throughout.",
+      "Delivered everything — hardware, code, and documentation — within 2 weeks. Very professional service and great support. I passed my viva with confidence.",
     rating: 5,
   },
   {
     name: "Kevin Lim",
-
     review:
-      "Best decision I made. The team explained how everything works so I could present it confidently. Will definitely recommend to others.",
+      "Best decision I made for my FYP. The team explained how everything works so I could present it confidently. Will definitely recommend to others in my department.",
     rating: 5,
   },
   {
     name: "Siti Hajar",
-
     review:
-      "Very fast response on WhatsApp and delivery was earlier than expected. The circuit was neatly soldered and came with full schematics. 5 stars!",
+      "Very fast response on WhatsApp and delivery was earlier than expected. The circuit was neatly soldered and came with full schematics.",
     rating: 5,
   },
 ];
 
 export default function Testimonials() {
   return (
-    <section className="py-20 sm:py-28 bg-[#0F1C2E]">
+    <section className="py-24 sm:py-32 bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
+
         {/* Header */}
-        <div className="text-center mb-14">
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#2B7FD4] bg-[#2B7FD4]/10 px-3 py-1 rounded-full mb-3">
-            Student Reviews
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            What Students Say About Us
-          </h2>
-          <div className="flex items-center justify-center gap-1.5 mt-3">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
-            ))}
-            <span className="text-slate-400 text-sm ml-2">4.7 · 33 Google Reviews</span>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-14">
+          <div>
+            <span className="section-label-pill mb-4 inline-flex">Student reviews</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-brand-navy-mid tracking-[-0.02em]">
+              What students say
+            </h2>
+          </div>
+
+          {/* Rating badge */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
+              ))}
+            </div>
+            <div>
+              <p className="text-brand-navy-mid font-bold text-lg leading-none">4.7</p>
+              <p className="text-slate-400 text-xs mt-0.5">33 Google reviews</p>
+            </div>
           </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Masonry-style offset grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.4 }}
-              className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4 hover:bg-white/8 transition-colors"
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className={`flex flex-col gap-4 rounded-2xl p-6 border ${
+                i % 2 === 1 ? "lg:mt-8" : ""
+              } ${
+                i === 0
+                  ? "bg-brand-navy-mid border-brand-navy-mid/0"
+                  : "bg-slate-50 border-slate-100"
+              }`}
             >
-              <Quote size={20} className="text-[#2B7FD4] shrink-0" />
-              <p className="text-slate-300 text-sm leading-relaxed flex-1">
-                "{t.review}"
+              {/* Stars */}
+              <div className="flex gap-0.5">
+                {[...Array(t.rating)].map((_, j) => (
+                  <Star key={j} size={13} className="fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+
+              <p className={`text-sm leading-relaxed flex-1 ${i === 0 ? "text-slate-300" : "text-slate-600"}`}>
+                &ldquo;{t.review}&rdquo;
               </p>
-              <div>
-                <div className="flex gap-0.5 mb-2">
-                  {[...Array(t.rating)].map((_, j) => (
-                    <Star key={j} size={12} className="fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-white font-semibold text-sm">{t.name}</p>
+
+              <div className={`text-sm font-bold ${i === 0 ? "text-white" : "text-brand-navy-mid"}`}>
+                {t.name}
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Google badge */}
-        <div className="text-center mt-10">
+        {/* Google link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="mt-10 flex justify-center"
+        >
           <a
             href="https://g.page/r/rectronx"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-brand-navy-mid transition-colors border border-slate-200 px-5 py-2.5 rounded-xl hover:border-slate-300"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            View all 33 reviews on Google
+            Read all 33 reviews on Google
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
