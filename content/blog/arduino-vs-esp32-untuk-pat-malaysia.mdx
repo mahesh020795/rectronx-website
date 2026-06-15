@@ -1,0 +1,130 @@
+---
+title: "Arduino vs ESP32 untuk PAT Malaysia — Mana Satu Patut Guna?"
+excerpt: "Keliru antara Arduino dan ESP32 untuk projek akhir tahun? Perbandingan jujur ini tutup harga dalam RM, WiFi terbina dalam, kuasa pemprosesan, sokongan komuniti, dan mana satu pemeriksa kamu akan lebih respect."
+category: "Tutorial"
+date: "2026-06-16"
+---
+
+Ini salah satu soalan paling kerap kami terima daripada pelajar Malaysia yang baru nak mula **projek akhir tahun** mereka: **patut guna Arduino atau ESP32?**
+
+Jawapan ringkas: untuk kebanyakan projek PAT pada 2026, ESP32 adalah pilihan yang lebih baik. Tapi jawapan panjangnya bergantung pada apa yang kamu bina, bajet kamu, dan apa yang penyelia kamu jangkakan. Perbandingan ini berdasarkan apa yang kami nampak berjaya dalam lebih 400 projek PAT — bukan sekadar spesifikasi teknikal.
+
+---
+
+## Apa Itu Arduino?
+
+Arduino adalah keluarga papan mikropengawal sumber terbuka berasaskan cip AVR ATmega (dalam Uno klasik) atau ARM Cortex-M0 (dalam Zero dan Nano). **Arduino Uno** asal berjalan pada 16 MHz, ada 2KB SRAM, dan datang dengan 14 pin I/O digital. Ia tiada sambungan wayarles terbina dalam.
+
+Apa yang Arduino buat dengan baik adalah kesederhanaan. IDE-nya mudah difahami, komunitinya besar, dan tutorial wujud untuk hampir setiap sensor dan aktuator yang kamu gunakan dalam PAT biasa. Jika kamu tak pernah sentuh perkakasan terbenam sebelum ni, Arduino adalah titik masuk yang lebih lembut.
+
+---
+
+## Apa Itu ESP32?
+
+ESP32 adalah mikropengawal yang dibuat oleh Espressif, syarikat semikonduktor China. Ia berjalan sehingga 240 MHz (dwi-teras), ada 520KB SRAM, dan datang dengan **WiFi dan Bluetooth terbina dalam**. Faktor bentuk paling biasa yang kamu jumpa di Malaysia adalah **ESP32 DevKit V1**, yang berharga sekitar RM12–RM18 di Shopee.
+
+Yang penting, ESP32 diprogramkan menggunakan **Arduino IDE** — kamu tulis jenis kod C/C++ yang sama. Jadi jika kamu tahu Arduino, kamu dah tahu ESP32. Kamu cuma dapat papan yang lebih berkebolehan pada harga lebih kurang sama.
+
+---
+
+## Perbandingan Terus
+
+| Ciri | Arduino Uno | ESP32 |
+|------|------------|-------|
+| Harga (RM, Shopee) | RM18–RM35 | RM12–RM18 |
+| Kelajuan jam | 16 MHz | 240 MHz (dwi-teras) |
+| RAM | 2 KB | 520 KB |
+| Storan flash | 32 KB | 4 MB |
+| WiFi | ❌ Tiada (perlukan shield) | ✅ Terbina dalam |
+| Bluetooth | ❌ Tiada (perlukan modul) | ✅ Terbina dalam (BLE + Klasik) |
+| Bahasa pengaturcaraan | C/C++ (Arduino IDE) | C/C++ (Arduino IDE) |
+| Input analog | 6 | 18 |
+| Output DAC | 0 | 2 |
+| Voltan operasi | 5V | 3.3V |
+| Penggunaan kuasa | Lebih tinggi | Lebih rendah (mod tidur dalam) |
+| Saiz komuniti | Sangat besar | Besar dan berkembang pesat |
+
+---
+
+## Situasi di Mana Arduino Masih Pilihan Tepat
+
+Walaupun ESP32 lebih berkuasa, ada situasi di mana Arduino Uno lebih masuk akal:
+
+**1. Projek kamu tak perlukan internet**
+Jika kamu bina pengawal bebas — katakan, sistem penyiraman automatik yang berjalan secara tempatan tanpa log data, atau robot pengikut garisan — kamu tak perlukan WiFi. Uno memudahkan perkara.
+
+**2. Kamu benar-benar baru dalam elektronik**
+Toleransi 5V Arduino Uno bermakna kamu kurang kemungkinan terbakar papan secara tidak sengaja. Pin GPIO ESP32 adalah 3.3V dan tidak toleran 5V — sambungkan sensor 5V terus boleh rosak kekal. Untuk pemula, itu risiko sebenar.
+
+**3. Penyelia kamu cadangkan ia**
+Sesetengah penyelia di universiti Malaysia dah ajar Arduino bertahun-tahun dan ada kod contoh dan bahan rujukan sedia ada. Jika penyelia kamu begitu, jangan tentang. Guna Arduino dan manfaatkan sokongan yang akan kamu dapat.
+
+**4. Projek berat motor**
+Jika projek kamu perlukan banyak output motor 5V, bekerja dengan 5V terus dari Arduino kadang-kadang lebih bersih berbanding level-shifting dari ESP32 3.3V.
+
+---
+
+## Di Mana ESP32 Menang (Kebanyakan Kes PAT)
+
+**1. Projek IoT**
+Ini yang besar. Jika PAT kamu melibatkan hantar data ke internet, kawal peranti dari jauh, atau bina dashboard, WiFi terbina dalam ESP32 buat ini mudah. Dengan Arduino Uno, kamu perlu tambah modul ESP8266 berasingan atau WiFi shield, tambah kos dan kerumitan.
+
+**2. Projek dengan dashboard dan aplikasi**
+Pemeriksa pada 2026 jangkakan lihat visualisasi data. ESP32 boleh sambung terus ke Firebase, pelayan web, atau platform awan seperti Blynk dengan perkakasan tambahan yang sangat minimum. Ini tukar projek yang bagus kepada projek yang hebat.
+
+**3. Pemprosesan data masa nyata**
+Tugas seperti pemprosesan gambar kamera (dengan ESP32-CAM), FFT pada isyarat audio, atau handle pelbagai strim sensor serentak, memang tidak boleh dibuat pada Uno 16 MHz. Pemproses dwi-teras 240 MHz ESP32 handle ini dengan selesa.
+
+**4. Projek berkuasa bateri**
+ESP32 ada mod tidur dalam yang betul yang guna sekitar 10 mikroampere. Arduino Uno guna bateri habis dalam masa beberapa jam. Jika PAT kamu adalah peranti mudah alih atau digunakan di lapangan, ini sangat kritikal.
+
+**5. Nilai lebih baik dalam bajet pelajar Malaysia**
+Papan ESP32 harganya kurang daripada Arduino Uno asli tapi bagi kamu WiFi, Bluetooth, lebih pin, lebih memori, dan lebih kuasa pemprosesan. Cadangan nilai ini susah nak bahas.
+
+---
+
+## Perkara Penting ESP32 (Tahu Sebelum Beli)
+
+**Voltan GPIO: 3.3V sahaja**
+Pin ESP32 tidak toleran 5V. Jika kamu guna sensor yang output logik 5V (macam beberapa modul ultrasonik murah), kamu perlukan voltage divider atau logic level converter. RM2 di Shopee, tapi kamu perlu tahu ia diperlukan.
+
+**Masalah but dengan pin tertentu**
+Beberapa pin GPIO pada ESP32 mempengaruhi proses but. GPIO0, GPIO2, GPIO12, dan GPIO15 perlu digunakan dengan berhati-hati. Tarik mereka TINGGI atau RENDAH secara tidak betul semasa but akan halang papan daripada bermula. Kekal pada GPIO 4, 5, 13, 14, 16–33 untuk sensor kamu.
+
+**Hanya peranti 3.3V pada rel kuasa 3.3V**
+Pin 3.3V pada ESP32 hanya boleh bekalkan kira-kira 50–150mA bergantung pada papan. Jangan beri kuasa pelbagai servo atau motor arus tinggi daripadanya terus. Guna kuasa luaran untuk motor.
+
+**Sesetengah klon murah ada WiFi tidak boleh dipercayai**
+Jika kamu beli klon ESP32 yang sangat murah, kualiti antena WiFi boleh jadi lemah. Belanja sedikit lebih untuk jenama yang dikenali dari penjual Shopee bereputasi. Gagal sambung ke WiFi semasa demo viva adalah pengalaman yang kamu tak nak.
+
+---
+
+## Cadangan Kami untuk PAT 2026
+
+Untuk **kebanyakan pelajar universiti Malaysia** yang buat projek akhir tahun kejuruteraan atau IT pada 2026, gunakan **ESP32**. Khususnya:
+
+- **PAT perkakasan/IoT:** ESP32 DevKit V1 (untuk kebanyakan projek) atau ESP32-CAM (jika kamu perlukan kamera)
+- **PAT perisian sahaja:** tiada satu pun — kamu tak perlukan mikropengawal
+- **PAT robotik/kawalan motor:** Arduino Mega atau Arduino Uno (I/O 5V lebih teguh untuk motor)
+- **IoT lanjutan dengan video:** Raspberry Pi 4
+
+Jika kamu buat mana-mana projek yang melibatkan dashboard web, aplikasi mudah alih, atau log data awan — dan kebanyakan projek PAT ada pada 2026 — ESP32 adalah pilihan yang betul.
+
+---
+
+## Kesilapan Biasa Pelajar Malaysia Semasa Membeli
+
+**1. Beli Arduino Uno asli tanpa sebab yang perlu**
+Arduino Uno asli boleh berharga RM60–RM100 di Malaysia. Melainkan makmal universiti kamu memerlukan ia secara khusus, klon serasi pada RM18 atau ESP32 pada RM15 buat kerja yang sama.
+
+**2. Tak beli spare**
+Beli sekurang-kurangnya dua dari setiap mikropengawal yang kamu dapat. Papan mati. Kabel USB buruk bakar papan. Ini dah tamatkan banyak PAT. RM15 untuk spare ESP32 adalah polisi insurans terbaik yang ada.
+
+**3. Beli sensor satu demi satu**
+Kit sensor yang bagus dari Shopee (kit sensor 37-dalam-1 atau 45-dalam-1) berharga RM30–RM60 dan bagi kamu kebanyakan sensor yang kamu perlukan untuk PAT IoT biasa. Jauh lebih murah berbanding beli sensor individu.
+
+---
+
+## Perlukan Bantuan Membuat Keputusan?
+
+Jika kamu ada idea projek dan tak pasti papan mana nak guna, **WhatsApp kami di Rectronx Circuits**. Kami akan beritahu kamu dalam 2 minit perkakasan apa yang kamu perlukan dan sama ada projek kamu boleh dicapai sebelum tarikh akhir kamu. Percuma, cepat, dan mungkin selamatkan kamu daripada pesan benda yang salah.

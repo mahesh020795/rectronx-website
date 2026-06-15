@@ -47,8 +47,8 @@ export function getPostImage(slug: string): { url: string; alt: string } {
     { match: /gas|detector/, url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1200&q=80", alt: "Gas sensor and electronic detection circuit" },
     { match: /home-automation|blynk/, url: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1200&q=80", alt: "Smart home automation control dashboard" },
     { match: /flask|python|web/, url: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80", alt: "Python Flask web application code on a screen" },
-    { match: /2026|ideas|30/, url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80", alt: "Engineering students brainstorming final year project ideas" },
-    { match: /2-weeks|2weeks|running|deadline/, url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80", alt: "Student working under deadline pressure on a laptop" },
+    { match: /2026|ideas|30|idea-projek|projek-akhir/, url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80", alt: "Engineering students brainstorming final year project ideas" },
+    { match: /2-weeks|2minggu|running|deadline|cara-siapkan/, url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80", alt: "Student working under deadline pressure on a laptop" },
     { match: /documentation|mistakes|budget|cost|topic|guide|malaysia/, url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80", alt: "Engineering student planning a final year project" },
     { match: /iot|projek/, url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80", alt: "IoT electronics and connected devices" },
   ];
