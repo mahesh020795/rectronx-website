@@ -1,14 +1,15 @@
 import { Metadata } from "next";
-import { MessageSquare, ArrowUpRight, Car, ScanLine, MapPin, Check } from "lucide-react";
+import { MessageSquare, ArrowUpRight, Car, ScanLine, MapPin, Leaf, Check } from "lucide-react";
+import Link from "next/link";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, itemListSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Commercial Software Products Malaysia | Spark AI, Smart Parking — Rectronx",
+  title: "Commercial Software Products Malaysia | Spark AI, Smart Parking, Smart Plant — Rectronx",
   description:
-    "Commercial software products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant for businesses, Smart Parking System, Attendance & Access Control, and Fleet Tracking.",
-  keywords: ["whatsapp ai bot malaysia", "spark ai whatsapp", "smart parking system malaysia", "attendance system malaysia", "fleet tracking malaysia", "commercial software malaysia"],
+    "Commercial software products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant, Smart Parking System, Attendance & Access Control, Fleet Tracking, and Smart Plant Monitor IoT system.",
+  keywords: ["whatsapp ai bot malaysia", "spark ai whatsapp", "smart parking system malaysia", "attendance system malaysia", "fleet tracking malaysia", "commercial software malaysia", "smart plant monitor iot", "plant monitoring system malaysia"],
   alternates: { canonical: "/products", languages: { "en-MY": "https://rectronx.com/products" } },
   openGraph: {
     title: "Commercial Software Products Malaysia — Rectronx Circuits",
@@ -42,6 +43,7 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Smart Parking Management System.",
     whatsappLabel: "Inquire about Parking System",
+    detailUrl: null,
   },
   {
     id: "attendance",
@@ -64,6 +66,7 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Attendance & Access Control System.",
     whatsappLabel: "Inquire about Attendance System",
+    detailUrl: null,
   },
   {
     id: "fleet",
@@ -86,6 +89,30 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Fleet & Vehicle Tracking Dashboard.",
     whatsappLabel: "Inquire about Fleet Tracking",
+    detailUrl: null,
+  },
+  {
+    id: "smart-plant",
+    icon: Leaf,
+    badge: "Available",
+    color: "green",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-600",
+    borderColor: "border-t-green-500",
+    badgeBg: "bg-green-100 text-green-700",
+    title: "Smart Plant Monitor",
+    description:
+      "IoT-based smart plant monitoring and auto-irrigation system. ESP32 hardware with 6 sensors streams live data to a Flutter mobile app via Firebase — with scheduled watering, push alerts, and remote pump control.",
+    features: [
+      "Live soil moisture, temperature & humidity",
+      "Auto-irrigation with schedule control",
+      "Push notifications for low water & dry soil",
+      "Remote pump ON/OFF/Auto from app",
+      "24-hour sensor history with charts",
+    ],
+    whatsappMsg: "Hi Rectronx! I'd like to inquire about the Smart Plant Monitor system.",
+    whatsappLabel: "Inquire about Smart Plant Monitor",
+    detailUrl: "/products/smart-plant-monitor",
   },
 ];
 
@@ -101,6 +128,7 @@ export default function ProductsPage() {
         { position: 2, name: "Smart Parking Management System", url: "https://rectronx.com/products#parking" },
         { position: 3, name: "Attendance & Access Control System", url: "https://rectronx.com/products#attendance" },
         { position: 4, name: "Fleet & Vehicle Tracking Dashboard", url: "https://rectronx.com/products#fleet" },
+        { position: 5, name: "Smart Plant Monitor", url: "https://rectronx.com/products/smart-plant-monitor" },
       ])} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
 
@@ -118,7 +146,7 @@ export default function ProductsPage() {
         {/* Stats bar */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 mb-16 py-6 bg-slate-50 rounded-2xl border border-slate-100">
           {[
-            { value: "4", label: "Commercial Products" },
+            { value: "5", label: "Commercial Products" },
             { value: "Deployed", label: "Across Malaysia" },
             { value: "Real", label: "Business Clients" },
           ].map((s) => (
@@ -237,11 +265,21 @@ export default function ProductsPage() {
                   </ul>
 
                   {/* CTA */}
-                  <WhatsAppButton
-                    label={product.whatsappLabel}
-                    message={product.whatsappMsg}
-                    className="w-full justify-center text-sm"
-                  />
+                  <div className="flex flex-col gap-2">
+                    <WhatsAppButton
+                      label={product.whatsappLabel}
+                      message={product.whatsappMsg}
+                      className="w-full justify-center text-sm"
+                    />
+                    {product.detailUrl && (
+                      <Link
+                        href={product.detailUrl}
+                        className="btn-secondary w-full justify-center text-sm text-center"
+                      >
+                        View Details <ArrowUpRight size={13} />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             );
