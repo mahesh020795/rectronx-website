@@ -133,14 +133,6 @@ export default function SmartPlantMonitorPage() {
                 label="Get This for My Business"
                 message="Hi Rectronx! I'm interested in the Smart Plant Monitor system. Can you tell me more?"
               />
-              <a
-                href="https://github.com/mahesh020795/smart-plant-monitor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary"
-              >
-                View on GitHub <ArrowUpRight size={14} />
-              </a>
             </div>
           </div>
         </div>
