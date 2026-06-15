@@ -43,7 +43,7 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Smart Parking Management System.",
     whatsappLabel: "Inquire about Parking System",
-    detailUrl: null,
+    detailUrl: "/products/smart-parking",
   },
   {
     id: "attendance",
@@ -66,7 +66,7 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Attendance & Access Control System.",
     whatsappLabel: "Inquire about Attendance System",
-    detailUrl: null,
+    detailUrl: "/products/attendance-access-control",
   },
   {
     id: "fleet",
@@ -89,7 +89,7 @@ const otherProducts = [
     ],
     whatsappMsg: "Hi Rectronx! I'd like to inquire about the Fleet & Vehicle Tracking Dashboard.",
     whatsappLabel: "Inquire about Fleet Tracking",
-    detailUrl: null,
+    detailUrl: "/products/fleet-tracking",
   },
   {
     id: "smart-plant",
@@ -216,6 +216,9 @@ export default function ProductsPage() {
                   label="Get Spark for Your Business"
                   message="Hi! I'm interested in Spark for my business. Can you tell me more?"
                 />
+                <Link href="/products/spark" className="btn-secondary">
+                  Learn More <ArrowUpRight size={14} />
+                </Link>
                 <a
                   href="https://dashboard.rectronx.com"
                   target="_blank"
