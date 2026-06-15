@@ -55,8 +55,10 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://rectronx.com/og-image.png",
+        secureUrl: "https://rectronx.com/og-image.png",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "Rectronx Circuits — Penang Engineering & Technology Company for FYP & Commercial Software",
       },
     ],
@@ -67,7 +69,11 @@ export const metadata: Metadata = {
     description: "FYP Projects & Commercial Software from Penang, Malaysia",
   },
   alternates: {
-    canonical: "/",
+    canonical: "https://rectronx.com",
+    languages: {
+      "en-MY": "https://rectronx.com",
+      "en": "https://rectronx.com",
+    },
   },
   robots: {
     index: true,

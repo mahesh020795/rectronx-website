@@ -4,16 +4,18 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, serviceSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "FYP Projects Portfolio | Arduino, IoT & Software — Rectronx Malaysia",
+  title: "FYP Projects Portfolio — 400+ Delivered | Arduino, IoT, Software Malaysia",
   description:
-    "Browse 400+ Final Year Projects delivered across Malaysia. IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics FYP solutions with full documentation.",
-  alternates: { canonical: "/projects" },
+    "Browse 400+ Final Year Projects delivered across Malaysia by Rectronx Circuits. IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics FYP solutions with full source code and documentation.",
+  keywords: ["FYP portfolio malaysia", "final year project examples", "arduino FYP examples", "IoT project malaysia", "ESP32 FYP portfolio", "raspberry pi project examples"],
+  alternates: { canonical: "/projects", languages: { "en-MY": "https://rectronx.com/projects" } },
   openGraph: {
-    title: "FYP Projects Portfolio — Rectronx Circuits",
+    title: "400+ FYP Projects Delivered — Arduino, IoT, Software | Rectronx Circuits",
     description:
-      "400+ Final Year Projects delivered across Malaysia — IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics.",
+      "Browse 400+ Final Year Projects delivered across Malaysia — IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics.",
     url: "https://rectronx.com/projects",
     type: "website",
+    images: [{ url: "https://rectronx.com/og-image.png", width: 1200, height: 630, alt: "Rectronx FYP Projects Portfolio" }],
   },
 };
 

@@ -1,18 +1,22 @@
 import { Metadata } from "next";
 import { MessageSquare, ArrowUpRight, Car, ScanLine, MapPin, Check } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema, itemListSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Commercial Software Products | Rectronx Circuits Malaysia",
+  title: "Commercial Software Products Malaysia | Spark AI, Smart Parking — Rectronx",
   description:
-    "Commercial products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant, Smart Parking, Attendance & Access Control, and Fleet Tracking systems.",
-  alternates: { canonical: "/products" },
+    "Commercial software products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant for businesses, Smart Parking System, Attendance & Access Control, and Fleet Tracking.",
+  keywords: ["whatsapp ai bot malaysia", "spark ai whatsapp", "smart parking system malaysia", "attendance system malaysia", "fleet tracking malaysia", "commercial software malaysia"],
+  alternates: { canonical: "/products", languages: { "en-MY": "https://rectronx.com/products" } },
   openGraph: {
-    title: "Commercial Software Products — Rectronx Circuits",
+    title: "Commercial Software Products Malaysia — Rectronx Circuits",
     description:
       "Real products deployed across Malaysia — Spark AI WhatsApp assistant, Smart Parking, Attendance & Access Control, Fleet Tracking.",
     url: "https://rectronx.com/products",
     type: "website",
+    images: [{ url: "https://rectronx.com/og-image.png", width: 1200, height: 630, alt: "Rectronx Circuits Commercial Products" }],
   },
 };
 
@@ -88,6 +92,16 @@ const otherProducts = [
 export default function ProductsPage() {
   return (
     <div className="pt-24 bg-white text-slate-900">
+      <JsonLd schema={breadcrumbSchema([
+        { name: "Home", url: "https://rectronx.com" },
+        { name: "Products", url: "https://rectronx.com/products" },
+      ])} />
+      <JsonLd schema={itemListSchema([
+        { position: 1, name: "Spark — AI WhatsApp Assistant", url: "https://rectronx.com/products#spark" },
+        { position: 2, name: "Smart Parking Management System", url: "https://rectronx.com/products#parking" },
+        { position: 3, name: "Attendance & Access Control System", url: "https://rectronx.com/products#attendance" },
+        { position: 4, name: "Fleet & Vehicle Tracking Dashboard", url: "https://rectronx.com/products#fleet" },
+      ])} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
 
         {/* Header */}

@@ -16,6 +16,22 @@ export const organizationSchema = {
     "Malaysia's engineering & technology company for Final Year Projects and commercial software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions in Penang.",
   email: "rectronx@gmail.com",
   telephone: "+60-11-72792500",
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: "+60-11-72792500",
+      contactType: "customer support",
+      contactOption: "TollFree",
+      areaServed: "MY",
+      availableLanguage: ["English", "Malay"],
+    },
+    {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      areaServed: "MY",
+      availableLanguage: ["English", "Malay"],
+    },
+  ],
   address: {
     "@type": "PostalAddress",
     streetAddress: "1-3-8, BL Business Centre, Solok Thean Tek",
@@ -55,7 +71,18 @@ export const localBusinessSchema = {
     latitude: 5.3996,
     longitude: 100.2754,
   },
-  areaServed: { "@type": "Country", name: "Malaysia" },
+  areaServed: [
+    { "@type": "Country", name: "Malaysia" },
+    { "@type": "State", name: "Penang" },
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.7",
+    reviewCount: "400",
+    bestRating: "5",
+    worstRating: "1",
+  },
+  hasMap: "https://maps.google.com/?q=Rectronx+Circuits+Penang",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -161,6 +188,33 @@ export function serviceSchema(service: {
     provider: { "@id": `${BASE}/#organization` },
     areaServed: { "@type": "Country", name: "Malaysia" },
     audience: { "@type": "Audience", audienceType: "University Students" },
+  };
+}
+
+export function itemListSchema(items: { name: string; url: string; position: number }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((item) => ({
+      "@type": "ListItem",
+      position: item.position,
+      name: item.name,
+      url: item.url,
+    })),
+  };
+}
+
+export function contactPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "@id": `${BASE}/contact#contactpage`,
+    url: `${BASE}/contact`,
+    name: "Contact Rectronx Circuits",
+    description: "Contact Rectronx Circuits for Final Year Project development and commercial software. Free quote via WhatsApp within 2 hours.",
+    mainEntity: {
+      "@id": `${BASE}/#organization`,
+    },
   };
 }
 

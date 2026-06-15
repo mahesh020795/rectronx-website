@@ -4,8 +4,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import JsonLd from "@/components/JsonLd";
-import { faqSchema } from "@/lib/schema";
 
 const faqs = [
   { q: "How does it work?", a: "WhatsApp us your FYP title, university requirements, and deadline. We send a free quote within 2 hours. Once confirmed, we build and send progress updates throughout." },
@@ -23,7 +21,6 @@ export default function FAQ() {
 
   return (
     <section className="py-24 sm:py-32 bg-[#080E1A]">
-      <JsonLd schema={faqSchema(faqs)} />
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-16 lg:gap-24">

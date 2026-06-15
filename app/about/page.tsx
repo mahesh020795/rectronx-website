@@ -2,18 +2,22 @@ import { Metadata } from "next";
 import { Cpu, Code2, Zap, Users, Trophy, Smile, Clock, Package, CheckCircle2 } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "About Rectronx Circuits | Penang Technology Company for FYP & Commercial Software",
+  title: "About Rectronx Circuits | Penang Engineering & Technology Company Since 2016",
   description:
-    "Learn about Rectronx Circuits — an engineering & technology company from Penang building commercial software products and delivering custom FYP solutions.",
-  alternates: { canonical: "/about" },
+    "Learn about Rectronx Circuits — founded in Penang 2016, delivering 400+ Final Year Projects and commercial software products across Malaysia. IoT, Arduino, ESP32 specialists.",
+  keywords: ["about rectronx", "rectronx circuits penang", "FYP company malaysia", "engineering company penang", "IoT company malaysia"],
+  alternates: { canonical: "/about", languages: { "en-MY": "https://rectronx.com/about" } },
   openGraph: {
-    title: "About Rectronx Circuits — Penang Engineering & Technology Company",
+    title: "About Rectronx Circuits — Penang Engineering & Technology Company Since 2016",
     description:
-      "An engineering & technology company from Penang building commercial software and delivering custom FYP solutions across Malaysia.",
+      "Founded in 2016, delivering 400+ Final Year Projects and commercial software products across Malaysia.",
     url: "https://rectronx.com/about",
     type: "website",
+    images: [{ url: "https://rectronx.com/og-image.png", width: 1200, height: 630, alt: "Rectronx Circuits — Penang Engineering & Technology Company" }],
   },
 };
 
@@ -50,6 +54,10 @@ const stats = [
 export default function AboutPage() {
   return (
     <div className="pt-16 bg-white text-slate-900">
+      <JsonLd schema={breadcrumbSchema([
+        { name: "Home", url: "https://rectronx.com" },
+        { name: "About", url: "https://rectronx.com/about" },
+      ])} />
       {/* Hero banner */}
       <div className="relative w-full h-56 sm:h-72 lg:h-80 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
