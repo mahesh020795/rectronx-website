@@ -182,6 +182,88 @@ export default function SmartPlantMonitorPage() {
           </div>
         </div>
 
+        {/* App Preview Showcase */}
+        <div className="mb-16 rounded-2xl overflow-hidden bg-[#0d1f14] relative">
+          {/* subtle dot grid */}
+          <div className="absolute inset-0 opacity-[0.07]"
+            style={{ backgroundImage: "radial-gradient(circle, #4ade80 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+          {/* green glow blobs */}
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative flex flex-col lg:flex-row items-center gap-0">
+
+            {/* Left: text content */}
+            <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+              <span className="inline-flex items-center gap-1.5 bg-green-500/15 border border-green-500/30 text-green-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider w-fit mb-5">
+                <Smartphone size={11} /> Flutter Mobile App
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
+                Your plant&apos;s health,<br />
+                <span className="text-green-400">in your pocket</span>
+              </h2>
+              <p className="text-slate-400 leading-relaxed mb-8 max-w-md">
+                The Smart Plant Monitor app gives you a live dashboard of all 6 sensors, full pump control, smart scheduling, and instant push alerts — all from your Android phone.
+              </p>
+
+              {/* Annotated feature list */}
+              <div className="space-y-4">
+                {[
+                  { label: "Live sensor dashboard", sub: "All 6 readings refresh every 30 seconds with status indicators", color: "bg-blue-500" },
+                  { label: "One-tap pump control", sub: "Manual ON, Manual OFF, or Smart Auto mode with schedule", color: "bg-green-500" },
+                  { label: "System health score", sub: "Instant 100% health overview so you know everything is OK", color: "bg-emerald-400" },
+                  { label: "Push notifications", sub: "Alerts for dry soil, low water tank, or temperature spikes", color: "bg-amber-400" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-start gap-3">
+                    <div className={`w-2 h-2 rounded-full ${item.color} mt-1.5 shrink-0`} />
+                    <div>
+                      <div className="text-white text-sm font-semibold">{item.label}</div>
+                      <div className="text-slate-500 text-xs mt-0.5 leading-relaxed">{item.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <WhatsAppButton
+                  label="Get This App"
+                  message="Hi Rectronx! I'm interested in the Smart Plant Monitor app. Can you tell me more?"
+                />
+              </div>
+            </div>
+
+            {/* Right: phone mockup */}
+            <div className="w-full lg:w-1/2 flex items-end justify-center px-8 pb-0 pt-10 lg:pt-10">
+              <div className="relative max-w-[260px] w-full">
+                {/* glow under phone */}
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-8 bg-green-500/30 blur-xl rounded-full" />
+                {/* phone shell */}
+                <div className="relative rounded-[2.8rem] overflow-hidden border-[6px] border-[#1e2e20] shadow-[0_32px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(74,222,128,0.12)]">
+                  {/* status bar overlay */}
+                  <div className="absolute top-0 left-0 right-0 h-8 bg-[#0f1f0f]/80 z-10 flex items-center justify-between px-5">
+                    <span className="text-white text-[10px] font-semibold">9:41</span>
+                    <div className="flex items-center gap-1">
+                      <Wifi size={10} className="text-white" />
+                      <span className="text-white text-[10px]">▌▌▌▌</span>
+                    </div>
+                  </div>
+                  {/* screenshot */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/smart-plant-app-screen.png"
+                    alt="Smart Plant Monitor Flutter App Dashboard — live sensor readings, pump control, and system health"
+                    className="w-full block"
+                    loading="lazy"
+                  />
+                </div>
+                {/* notch */}
+                <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-20 h-5 bg-[#1e2e20] rounded-b-xl z-20" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         {/* App features */}
         <div className="mb-16">
           <div className="text-center mb-10">
