@@ -183,6 +183,104 @@ export default function SparkPage() {
           </div>
         </div>
 
+        {/* App Preview Showcase */}
+        <div className="mb-16 rounded-2xl overflow-hidden bg-[#0a1628] relative">
+          {/* dot grid */}
+          <div className="absolute inset-0 opacity-[0.07]"
+            style={{ backgroundImage: "radial-gradient(circle, #60a5fa 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+          {/* glow blobs */}
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative flex flex-col lg:flex-row items-center gap-0">
+
+            {/* Left: text content */}
+            <div className="w-full lg:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+              <span className="inline-flex items-center gap-1.5 bg-blue-500/15 border border-blue-500/30 text-blue-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider w-fit mb-5">
+                <Smartphone size={11} /> Web Dashboard
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mb-4">
+                Every conversation,<br />
+                <span className="text-blue-400">one clean dashboard</span>
+              </h2>
+              <p className="text-slate-400 leading-relaxed mb-8 max-w-md">
+                See your AI performance at a glance — conversation volume, resolution rate, customer satisfaction, and every chat in one place. Built for owners who want visibility without micromanaging.
+              </p>
+
+              {/* Live stats row matching the screenshot */}
+              <div className="grid grid-cols-2 gap-3 mb-8">
+                {[
+                  { value: "247", label: "Conversations", delta: "+12%" },
+                  { value: "18",  label: "Active Today", delta: "Live" },
+                  { value: "34",  label: "Resolved Today", delta: "+8%" },
+                  { value: "94.2%", label: "Satisfaction", delta: "+4.2%" },
+                ].map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xl font-bold text-white">{s.value}</span>
+                      <span className="text-[10px] text-green-400 font-semibold">{s.delta}</span>
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Annotated feature list */}
+              <div className="space-y-4">
+                {[
+                  { label: "AI Insights, automatically", sub: "Spark surfaces patterns — peak hours, satisfaction shifts, wait times — no digging required", color: "bg-blue-500" },
+                  { label: "Weekly conversation trends", sub: "Visual chart of volume across the week so you spot busy periods instantly", color: "bg-cyan-400" },
+                  { label: "Live conversation feed", sub: "See every WhatsApp and Live Chat conversation with unread counts in real time", color: "bg-violet-400" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-start gap-3">
+                    <div className={`w-2 h-2 rounded-full ${item.color} mt-1.5 shrink-0`} />
+                    <div>
+                      <div className="text-white text-sm font-semibold">{item.label}</div>
+                      <div className="text-slate-500 text-xs mt-0.5 leading-relaxed">{item.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <WhatsAppButton
+                  label="See Spark in Action"
+                  message="Hi Rectronx! Can I get a demo of the Spark dashboard for my business?"
+                />
+              </div>
+            </div>
+
+            {/* Right: phone mockup */}
+            <div className="w-full lg:w-1/2 flex items-end justify-center px-8 pb-0 pt-10 lg:pt-10">
+              <div className="relative max-w-[260px] w-full">
+                {/* glow under phone */}
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-48 h-8 bg-blue-500/30 blur-xl rounded-full" />
+                {/* phone shell */}
+                <div className="relative rounded-[2.8rem] overflow-hidden border-[6px] border-[#16243a] shadow-[0_32px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(96,165,250,0.12)]">
+                  {/* status bar overlay */}
+                  <div className="absolute top-0 left-0 right-0 h-8 bg-[#0a1628]/80 z-10 flex items-center justify-between px-5">
+                    <span className="text-white text-[10px] font-semibold">9:41</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-white text-[10px]">▌▌▌▌</span>
+                    </div>
+                  </div>
+                  {/* screenshot */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/spark-app-screen.jpeg"
+                    alt="Spark AI WhatsApp Assistant Dashboard — live conversation stats, AI insights, and weekly trends"
+                    className="w-full block"
+                    loading="lazy"
+                  />
+                </div>
+                {/* notch */}
+                <div className="absolute top-[6px] left-1/2 -translate-x-1/2 w-20 h-5 bg-[#16243a] rounded-b-xl z-20" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+
         {/* Use cases */}
         <div className="mb-16">
           <div className="text-center mb-10">
