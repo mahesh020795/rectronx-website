@@ -1,0 +1,274 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kualiti Air Sungai dan Tasik Berasaskan IoT"
+excerpt: "Tutorial lengkap cara bina sistem pemantauan kualiti air menggunakan ESP32, sensor pH, turbidity, dissolved solids, dan suhu waterproof yang hantar data secara wireless untuk pantau kesihatan ekosistem sungai Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kualiti air", "water quality", "alam sekitar", "sungai", "thingspeak"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kualiti Air Sungai dan Tasik Berasaskan IoT
+
+Sungai Klang, Sungai Gombak, Sungai Langat — sungai-sungai ini adalah nadi kehidupan Malaysia, tapi kebanyakannya tercemar teruk. Data dari Jabatan Alam Sekitar menunjukkan bahawa sebahagian besar sungai di Malaysia dikategorikan sebagai "tercemar" atau "sangat tercemar."
+
+Pemantauan kualiti air secara manual adalah mahal, perlahan, dan tidak boleh dilakukan secara berterusan. Inilah jurang yang boleh diisi oleh sistem IoT yang kamu bina.
+
+---
+
+## Kenapa Projek Ini Hebat untuk FYP?
+
+Projek ini menyentuh isu yang benar-benar penting di Malaysia. Selain itu, ia melibatkan **electrochemical sensing**, **wireless data transmission**, **data logging**, dan **environmental science** — kombinasi yang kaya untuk thesis.
+
+Yang lebih menarik: kalau kampus kamu berhampiran dengan sungai atau tasik, kamu boleh jalankan ujian data sebenar di lokasi sebenar. Data dari sungai sebenar jauh lebih bernilai dari simulasi makmal.
+
+---
+
+## Senarai Komponen
+
+| Bil | Komponen | Kuantiti | Anggaran Harga |
+|-----|----------|----------|----------------|
+| 1 | ESP32 Development Board | 1 | RM 25–35 |
+| 2 | pH Sensor Probe + Module (BNC connector) | 1 | RM 35–60 |
+| 3 | Turbidity Sensor SEN0189 | 1 | RM 20–35 |
+| 4 | DS18B20 Waterproof Temperature Sensor | 1 | RM 8–15 |
+| 5 | TDS Sensor (Total Dissolved Solids) | 1 | RM 15–25 |
+| 6 | OLED Display 0.96" I2C | 1 | RM 10–15 |
+| 7 | MicroSD Card Module + Card 8GB | 1 set | RM 23–32 |
+| 8 | RTC Module DS3231 | 1 | RM 8–12 |
+| 9 | Waterproof Enclosure IP65 | 1 | RM 20–40 |
+| 10 | 4x Resistor 4.7kΩ (untuk DS18B20 pull-up) | 4 | RM 1 |
+| 11 | LiPo Battery 3.7V 2000mAh + TP4056 charger | 1 set | RM 20–30 |
+| 12 | Solar Panel mini 6V 1W (opsional) | 1 | RM 15–25 |
+
+**Jumlah Anggaran: RM 200–325**
+
+> **Tip Bajet**: Mulakan dengan pH, Turbidity, dan Suhu sahaja (3 parameter ini mencukupi untuk FYP yang solid) kemudian tambah TDS jika bajet ada.
+
+---
+
+## Gambarajah Pendawaian
+
+**pH Sensor Module → ESP32:**
+- VCC→5V, GND→GND, PO (analog output)→GPIO36
+- Module perlu kalibrasi dengan larutan buffer pH 4.0 dan pH 7.0
+
+**Turbidity Sensor SEN0189 → ESP32:**
+- VCC→5V, GND→GND, Signal→GPIO39 (ADC)
+
+**DS18B20 Waterproof → ESP32:**
+- Merah (VCC)→3.3V, Hitam (GND)→GND, Kuning (DATA)→GPIO4
+- Pasang 4.7kΩ pull-up resistor antara DATA dan VCC
+
+**TDS Sensor → ESP32:**
+- VCC→3.3V, GND→GND, AOUT→GPIO34
+
+**RTC DS3231 (I2C):**
+- SDA→GPIO21, SCL→GPIO22, VCC→3.3V
+
+**MicroSD Module (SPI):**
+- MOSI→GPIO23, MISO→GPIO19, SCK→GPIO18, CS→GPIO5
+
+**OLED SSD1306 (I2C, kongsi dengan RTC):**
+- SDA→GPIO21, SCL→GPIO22, VCC→3.3V
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <RTClib.h>
+#include <SD.h>
+#include <SPI.h>
+#include <ThingSpeak.h>
+
+const char* ssid     = "YOUR_WIFI";
+const char* password = "YOUR_PASSWORD";
+unsigned long channelID  = YOUR_CHANNEL_ID;
+const char*   writeAPIKey = "YOUR_WRITE_KEY";
+
+#define ONE_WIRE_BUS 4
+#define PH_PIN       36
+#define TURB_PIN     39
+#define TDS_PIN      34
+#define SD_CS        5
+
+// Kalibrasi pH (WAJIB buat sebelum guna — bergantung kepada sensor spesifik kamu)
+float pH_voltage_at_7 = 2.5;   // Volt pada pH 7 neutral point
+float pH_slope        = -0.18; // Volt per unit pH (negatif kerana terbalik)
+float pH_offset       = 0.0;   // Offset kalibrasi
+
+// Kalibrasi TDS
+float TDS_factor = 0.5;
+
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature tempSensors(&oneWire);
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+RTC_DS3231 rtc;
+WiFiClient client;
+
+float waterTemp = 0, phValue = 0, turbidity = 0, tds = 0;
+unsigned long lastSend = 0, lastLog = 0;
+int readingCount = 0;
+
+String kategoriAir() {
+  // Klasifikasi berdasarkan INWQS Malaysia (Interim National Water Quality Standards)
+  if (phValue >= 6.5 && phValue <= 7.5 && turbidity < 5   && tds < 500)  return "Kelas I (Sangat Bersih)";
+  if (phValue >= 6.0 && phValue <= 8.5 && turbidity < 50  && tds < 1000) return "Kelas II (Bersih)";
+  if (phValue >= 5.5 && phValue <= 9.0 && turbidity < 150)               return "Kelas III (Sederhana)";
+  if (turbidity > 150 || phValue < 5.5 || phValue > 9.0)                 return "Kelas IV (Tercemar)";
+  return "Kelas V (Sangat Tercemar)";
+}
+
+void bacaSemua() {
+  tempSensors.requestTemperatures();
+  waterTemp = tempSensors.getTempCByIndex(0);
+
+  // Baca pH
+  int phRaw = analogRead(PH_PIN);
+  float phVolt = (phRaw / 4095.0) * 3.3;
+  phValue = 7.0 + (pH_voltage_at_7 - phVolt) / abs(pH_slope);
+  phValue = constrain(phValue, 0, 14) + pH_offset;
+
+  // Baca Turbidity (kekeruhan) dalam NTU
+  int turbRaw = analogRead(TURB_PIN);
+  float turbVolt = (turbRaw / 4095.0) * 5.0;
+  if (turbVolt >= 4.2) turbidity = 0;
+  else if (turbVolt >= 2.5) turbidity = -1120.4 * sq(turbVolt) + 5742.3 * turbVolt - 4353.8;
+  else turbidity = 3000;
+  turbidity = max(0.0f, turbidity);
+
+  // Baca TDS dengan temperature compensation
+  int tdsRaw = analogRead(TDS_PIN);
+  float tdsVolt = (tdsRaw / 4095.0) * 3.3;
+  float compCoeff = 1.0 + 0.02 * (waterTemp - 25.0);
+  float compVolt  = tdsVolt / compCoeff;
+  tds = (133.42 * pow(compVolt, 3) - 255.86 * pow(compVolt, 2) + 857.39 * compVolt) * TDS_factor;
+
+  Serial.printf("pH:%.2f Turbidity:%.1fNTU TDS:%.0fppm Temp:%.1f°C\n",
+    phValue, turbidity, tds, waterTemp);
+}
+
+void kemaskiniDisplay() {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.printf("pH:     %.2f\n", phValue);
+  display.printf("Keruh:  %.0f NTU\n", turbidity);
+  display.printf("TDS:    %.0f ppm\n", tds);
+  display.printf("Suhu:   %.1f C\n", waterTemp);
+  display.println("---");
+  String kat = kategoriAir();
+  display.println(kat.length() > 16 ? kat.substring(0, 16) : kat);
+  display.display();
+}
+
+void logKeSD() {
+  DateTime now = rtc.now();
+  char ts[20];
+  sprintf(ts, "%04d-%02d-%02d %02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute());
+
+  File f = SD.open("/waterlog.csv", FILE_APPEND);
+  if (f) {
+    f.printf("%s,%.2f,%.1f,%.0f,%.1f,%s\n",
+      ts, phValue, turbidity, tds, waterTemp, kategoriAir().c_str());
+    f.close();
+    Serial.println("Log: " + String(ts));
+  }
+}
+
+void hantarThingSpeak() {
+  ThingSpeak.setField(1, phValue);
+  ThingSpeak.setField(2, turbidity);
+  ThingSpeak.setField(3, tds);
+  ThingSpeak.setField(4, waterTemp);
+  ThingSpeak.setStatus(kategoriAir());
+  int code = ThingSpeak.writeFields(channelID, writeAPIKey);
+  Serial.printf("ThingSpeak: %d\n", code);
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  tempSensors.begin();
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay(); display.setTextSize(1); display.setTextColor(WHITE);
+  rtc.begin();
+
+  if (!SD.begin(SD_CS)) { Serial.println("SD gagal!"); }
+  else if (!SD.exists("/waterlog.csv")) {
+    File f = SD.open("/waterlog.csv", FILE_WRITE);
+    f.println("Timestamp,pH,Turbidity_NTU,TDS_ppm,Temp_C,Kategori");
+    f.close();
+  }
+
+  WiFi.begin(ssid, password);
+  display.println("Connecting WiFi...");
+  display.display();
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+
+  ThingSpeak.begin(client);
+  display.clearDisplay(); display.println("Sistem Kualiti Air"); display.println("Bersedia!"); display.display();
+  delay(2000);
+}
+
+void loop() {
+  bacaSemua();
+  kemaskiniDisplay();
+
+  if (millis() - lastLog > 60000) {
+    lastLog = millis();
+    logKeSD();
+    readingCount++;
+  }
+
+  if (millis() - lastSend > 15000) {
+    lastSend = millis();
+    hantarThingSpeak();
+  }
+
+  delay(2000);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Install Library**
+Install dalam Arduino IDE:
+- `OneWire` dan `DallasTemperature` (untuk DS18B20)
+- `RTClib` oleh Adafruit
+- `ThingSpeak` oleh MathWorks
+- `Adafruit SSD1306`
+
+**Langkah 2 — Kalibrasi pH Sensor (LANGKAH PALING KRITIKAL)**
+Kamu perlukan larutan buffer pH 4.0 dan pH 7.0 (boleh beli di kedai fishkeeping atau kedai kimia). Celup probe ke buffer pH 7.0, catat voltage output. Celup ke pH 4.0, catat voltage. Guna dua nilai ini untuk kira slope dan offset dalam kod. Tanpa kalibrasi, bacaan pH tidak accurate.
+
+**Langkah 3 — Setup ThingSpeak**
+Daftar akaun percuma di thingspeak.com, buat channel baru dengan 4 fields. Salin Channel ID dan Write API Key ke kod.
+
+**Langkah 4 — Test di Makmal Dulu**
+Test dengan air paip (pH ~7), air cuka (pH ~3), larutan baking soda (pH ~9). Pastikan bacaan masuk akal sebelum pergi ke sungai.
+
+**Langkah 5 — Field Testing di Sungai/Tasik**
+Bawa sistem dalam waterproof enclosure ke lokasi sebenar. Ambil bacaan di beberapa titik berbeza — upstream, midstream, downstream. Data ini adalah gold untuk thesis.
+
+---
+
+## Tips Pembentangan FYP
+
+- **Tunjukkan data dari sungai sebenar**: Plot graf 24-jam bacaan pH dari sungai berdekatan kampus. Ini yang paling impressive.
+- **Bandingkan dengan standard INWQS Malaysia**: Masukkan jadual INWQS dalam thesis dan tunjukkan di mana bacaan kamu jatuh dalam klasifikasi.
+- **Highlight nilai SD card logging**: Log data offline sangat penting — kalau WiFi tiada di lokasi, sistem masih boleh log data.
+- **Terangkan ketepatan berbanding alatan profesional**: Jujur — sensor DIY kurang accurate dari alatan profesional, tapi untuk monitoring trend dan screening, ia mencukupi dan jauh lebih cost-effective.
+
+---
+
+## Penutup
+
+Sistem pemantauan kualiti air IoT ini menggabungkan sensor electrochemistry, embedded programming, wireless communication, dan environmental science. Ia adalah FYP yang ada kedalaman akademik dan relevan kepada isu Malaysia. Untuk pH sensor, turbidity sensor, DS18B20 waterproof, dan semua komponen lain, lawati **Rectronx** di rectronx.com!

@@ -1,0 +1,240 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Jatuh dan Amaran Kecemasan Orang Tua Menggunakan IoT"
+excerpt: "Bina sistem IoT yang boleh kesan jatuh orang tua secara automatik dan hantar amaran kecemasan kepada ahli keluarga melalui Telegram. Tutorial lengkap dengan kod ESP32, pendawaian, dan tips pembentangan FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kesihatan", "mpu6050", "telegram bot"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Jatuh dan Amaran Kecemasan Orang Tua Menggunakan IoT
+
+Kalau kau tengah cari idea FYP yang **meaningful**, boleh buat kerja teknikal yang solid, dan mudah nak impress panel — sistem pengesanan jatuh untuk orang tua ni antara pilihan terbaik. Aku cakap dari pengalaman: panel memang suka projek yang ada **social impact** yang jelas. "Ini boleh selamatkan nyawa ibu bapa kita" — ayat tu dah cukup kuat untuk pembentangan.
+
+Lebih dari tu, projek ni meliputi banyak domain: **sensor fusion**, **IoT connectivity**, **mobile notification**, dan **embedded programming**. Dari segi markah teknikal, kau dah cover banyak aspek sekaligus.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Malaysia sekarang menghadapi populasi penuaan yang pesat. Menurut statistik Jabatan Perangkaan Malaysia, menjelang 2030, lebih 15% penduduk Malaysia akan berumur 60 tahun ke atas. Masalah jatuh antara punca kecederaan nombor satu dalam kalangan warga emas — dan banyak kes berlaku sewaktu tiada orang di rumah.
+
+Sistem yang kau bina ni boleh:
+- Kesan jatuh dalam masa nyata (real-time)
+- Hantar notifikasi kepada anak atau penjaga melalui Telegram
+- Log data untuk analisis doktor
+
+Ini bukan sekadar projek lab — ini **produk yang boleh dipakai**.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 Development Board | 38-pin, dual-core | RM 15–25 |
+| MPU-6050 | Accelerometer + Gyroscope 6-axis | RM 5–10 |
+| Buzzer Aktif | 5V, 85dB | RM 2–3 |
+| LED Merah | 5mm, 2V | RM 0.50 |
+| Push Button | 6x6mm tactile switch | RM 0.50 |
+| Bateri LiPo | 3.7V, 1000mAh | RM 15–20 |
+| Modul Pengecas TP4056 | Dengan perlindungan | RM 3–5 |
+| Resis 220Ω | Untuk LED | RM 0.10 |
+| Breadboard + Jumper Wire | Standard | RM 10–15 |
+| Enclosure/Bekas | Plastik kecil, boleh ikat di pinggang | RM 5–10 |
+
+**Jumlah anggaran: RM 55–90** — jauh lebih murah dari peranti komersial yang boleh cecah ribuan ringgit.
+
+---
+
+## Cara Kerja Sistem
+
+Sebelum kita masuk kod, faham dulu konsepnya:
+
+1. **MPU-6050** membaca data pecutan (acceleration) pada paksi X, Y, Z setiap 50ms
+2. Apabila seseorang jatuh, bacaan pecutan akan spike mendadak — biasanya melebihi **2.5g** pada mana-mana paksi
+3. Selepas spike tu, bacaan akan jatuh mendadak (orang dah terbaring) — ini dipanggil **impact + stillness pattern**
+4. ESP32 akan hantar mesej Telegram kepada nombor yang ditetapkan
+5. Buzzer bunyi untuk bagi tahu si pesakit bahawa bantuan sedang dipanggil
+6. Tekan butang reset untuk clear amaran
+
+---
+
+## Gambarajah Pendawaian
+
+Sambungkan komponen seperti berikut:
+
+**MPU-6050 ke ESP32:**
+- VCC → 3.3V
+- GND → GND
+- SCL → GPIO 22
+- SDA → GPIO 21
+- INT → GPIO 19 (optional, untuk interrupt-based reading)
+
+**Buzzer:**
+- Positif (+) → GPIO 25
+- Negatif (-) → GND
+
+**LED Merah:**
+- Anod (+) → GPIO 26 (melalui resistor 220Ω)
+- Katod (-) → GND
+
+**Push Button (Reset):**
+- Satu kaki → GPIO 27
+- Kaki lain → GND (gunakan INPUT_PULLUP dalam kod)
+
+**Modul Pengecas TP4056:**
+- OUT+ → VIN ESP32
+- OUT- → GND
+
+---
+
+## Kod Arduino/ESP32
+
+Pasang library berikut dalam Arduino IDE sebelum mula:
+- `Adafruit MPU6050` (via Library Manager)
+- `Adafruit Unified Sensor`
+- `WiFi.h` (built-in ESP32)
+- `UniversalTelegramBot` by Brian Lough
+- `ArduinoJson`
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <UniversalTelegramBot.h>
+
+const char* WIFI_SSID     = "NamaWiFiKau";
+const char* WIFI_PASSWORD = "PasswordWiFi";
+const char* BOT_TOKEN     = "TOKEN_DARI_BOTFATHER";
+const char* CHAT_ID       = "CHAT_ID_KAU";
+
+#define BUZZER_PIN   25
+#define LED_PIN      26
+#define BUTTON_PIN   27
+#define FALL_THRESHOLD     2.5
+#define STILLNESS_DURATION 1500
+
+Adafruit_MPU6050 mpu;
+WiFiClientSecure client;
+UniversalTelegramBot bot(BOT_TOKEN, client);
+
+bool fallDetected   = false;
+bool alertSent      = false;
+unsigned long impactTime = 0;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  if (!mpu.begin()) {
+    Serial.println("MPU6050 tidak dijumpai! Semak pendawaian.");
+    while (1) delay(10);
+  }
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nWiFi bersambung!");
+
+  client.setInsecure();
+  bot.sendMessage(CHAT_ID, "✅ Sistem Pengesanan Jatuh AKTIF. Memantau...", "");
+}
+
+void checkForFall() {
+  sensors_event_t accel, gyro, temp;
+  mpu.getEvent(&accel, &gyro, &temp);
+
+  float ax = accel.acceleration.x;
+  float ay = accel.acceleration.y;
+  float az = accel.acceleration.z;
+  float magnitude = sqrt(ax*ax + ay*ay + az*az) / 9.81;
+
+  Serial.printf("Magnitude: %.2fg\n", magnitude);
+
+  if (magnitude > FALL_THRESHOLD && !fallDetected) {
+    Serial.println("IMPAK DIKESAN!");
+    impactTime   = millis();
+    fallDetected = true;
+  }
+
+  if (fallDetected && !alertSent) {
+    float stillMagnitude = abs(magnitude - 1.0);
+    if (stillMagnitude < 0.3 && (millis() - impactTime) > STILLNESS_DURATION) {
+      triggerAlert();
+    }
+    if ((millis() - impactTime) > 5000 && magnitude > 1.5) {
+      fallDetected = false;
+    }
+  }
+}
+
+void triggerAlert() {
+  alertSent = true;
+  String msg = "🚨 AMARAN KECEMASAN!\n\nKemungkinan *JATUH* dikesan!\nSila semak keadaan pesakit dengan segera.";
+  bot.sendMessage(CHAT_ID, msg, "Markdown");
+
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(BUZZER_PIN, HIGH); digitalWrite(LED_PIN, HIGH); delay(500);
+    digitalWrite(BUZZER_PIN, LOW);  digitalWrite(LED_PIN, LOW);  delay(300);
+  }
+}
+
+void loop() {
+  checkForFall();
+
+  if (digitalRead(BUTTON_PIN) == LOW) {
+    fallDetected = false;
+    alertSent    = false;
+    bot.sendMessage(CHAT_ID, "✅ Amaran di-reset. Sistem memantau semula.", "");
+    delay(1000);
+  }
+
+  delay(50);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Setup Telegram Bot**
+Buka Telegram, cari `@BotFather`, taip `/newbot`, ikut arahan, dapatkan TOKEN. Cari `@userinfobot` untuk dapatkan CHAT_ID kau.
+
+**Langkah 2 — Pasang Library**
+Buka Arduino IDE → Sketch → Include Library → Manage Libraries. Cari dan pasang: `Adafruit MPU6050`, `UniversalTelegramBot`, `ArduinoJson`.
+
+**Langkah 3 — Wiring**
+Ikut jadual pendawaian di atas. Gunakan breadboard untuk prototype awal. Pastikan MPU-6050 stabil.
+
+**Langkah 4 — Kalibrasi Threshold**
+Upload kod, buka Serial Monitor (115200 baud). Angkat dan jatuhkan objek untuk tengok bacaan magnitude. Laraskan nilai `FALL_THRESHOLD` mengikut bacaan sebenar.
+
+**Langkah 5 — Test Lapangan**
+Ikat peranti pada pinggang atau dada dengan casing. Lakukan simulasi jatuh (berhati-hati!). Pastikan notifikasi Telegram sampai dalam masa 5 saat.
+
+**Langkah 6 — Packaging**
+Masukkan semua komponen dalam casing plastik kecil. Gunakan tali atau klip untuk ikat pada badan. Pastikan bateri cukup kapasiti (1000mAh boleh tahan 8–12 jam).
+
+---
+
+## Tips untuk Pembentangan Projek Akhir Tahun
+
+1. **Tunjukkan demo langsung** — bawa peranti, buat demo jatuh di depan panel. Ini paling impress.
+2. **Sediakan graf data** — export bacaan MPU-6050 ke Excel, tunjukkan spike waktu jatuh.
+3. **Bandingkan dengan produk komersial** — Life Alert di US berharga USD 300+. Produk kau RM 70. Ini selling point.
+4. **Sebut limitation dengan jujur** — false positive boleh berlaku. Cadangkan cara tingkatkan: machine learning model, multi-sensor fusion.
+5. **Future work yang jelas** — GPS integration untuk lokasi, integrasi dengan hospital sistem.
+
+---
+
+## Penutup
+
+Projek sistem pengesanan jatuh ni bukan sekadar untuk dapat markah — ia boleh jadi produk sebenar yang bantu keluarga Malaysia jaga ibu bapa mereka. Kalau kau rasa overwhelmed nak bina ni sorang-sorang, atau nak upgrade projek ni ke versi yang lebih polished dengan PCB custom, app mobile, atau dashboard web — **Rectronx boleh bantu**. Kami buat projek IoT dari A sampai Z, dari prototaip sampai produk siap. Lawati [rectronx.com](https://rectronx.com) untuk tahu lebih lanjut.
+
+Selamat membina, dan semoga Projek Akhir Tahun kau score!

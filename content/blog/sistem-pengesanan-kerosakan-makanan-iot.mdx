@@ -1,0 +1,275 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan dan Pemantauan Kerosakan Makanan Berasaskan IoT"
+excerpt: "Bina sistem IoT yang boleh kesan kerosakan makanan secara automatik menggunakan sensor gas, suhu, dan kelembapan, lengkap dengan notifikasi Telegram dan dashboard real-time. Projek FYP yang relevan dengan industri makanan Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "kerosakan makanan", "sensor gas", "pemantauan makanan", "telegram bot"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan dan Pemantauan Kerosakan Makanan Berasaskan IoT
+
+Setiap tahun, Malaysia membuang makanan bernilai berbillion ringgit — dan sebahagian besar kerugian ini berlaku kerana masalah yang boleh dielakkan: makanan rosak sebelum sempat digunakan kerana sistem penyimpanan yang tidak dipantau dengan baik.
+
+Projek FYP ini membina sistem IoT yang menggabungkan beberapa sensor untuk kesan tanda-tanda awal kerosakan makanan: kenaikan suhu luar normal, peningkatan kelembapan, dan gas berbau (ammonia, methane) yang dihasilkan oleh makanan membusuk. Apabila dua atau lebih parameter melampaui threshold, sistem beri amaran kepada pengurus secara automatik.
+
+---
+
+## Kenapa Projek Ini Kuat untuk FYP?
+
+**Sensor fusion yang sophisticated** — Menggunakan tiga jenis sensor untuk buat keputusan yang lebih tepat. Ini adalah konsep engineering yang sophisticated yang panel akan hargai.
+
+**Konteks industri makanan Malaysia** — Sektor makanan dan minuman Malaysia bernilai lebih RM 50 bilion. Isu keselamatan makanan (food safety) sentiasa relevan dan ada kaitan dengan standard HACCP dan Food Act 1983.
+
+**Demo yang menarik** — Bawa sampel makanan ke demo. Tunjukkan sistem beri amaran bila makanan hampir rosak. Ini adalah demo yang memorable.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 DevKit V1 | 38-pin, WiFi+BT | RM 20–28 |
+| Sensor Gas MQ-135 | Ammonia, CO2, Benzene | RM 8–12 |
+| Sensor Gas MQ-4 | Methane / Gas semulajadi | RM 8–12 |
+| DHT22 | Suhu & Kelembapan (±0.5°C) | RM 10–15 |
+| LCD 20x4 I2C | Display status | RM 18–25 |
+| Buzzer Aktif | 5V | RM 3–5 |
+| LED RGB | Common Cathode | RM 2–4 |
+| Breadboard & Jumper | Set lengkap | RM 15 |
+| Resistor Set | 220Ω, 10kΩ | RM 3 |
+| Kotak Projek | Acrylic atau ABS | RM 20–30 |
+| Power Bank 10000mAh | Untuk portabiliti | RM 40–60 |
+
+**Jumlah anggaran: RM 147–209**
+
+**Tip**: Gunakan DHT22 dan bukan DHT11. DHT22 mempunyai accuracy ±0.5°C berbanding ±2°C. Untuk projek food safety, accuracy penting.
+
+---
+
+## Cara Kerja Sistem: Sistem Skor Kerosakan
+
+Sistem ini tidak bergantung pada satu sensor sahaja. Sebaliknya, ia mengira **skor kerosakan** berdasarkan semua parameter:
+
+```
+skor_rosak = 0
+if (suhu > SUHU_MAX):         skor_rosak += 1
+if (kelembapan > LEMBAP_MAX): skor_rosak += 1
+if (gas_mq135 > GAS_THRESHOLD): skor_rosak += 1
+if (gas_mq4 > GAS_THRESHOLD):   skor_rosak += 1
+
+if skor_rosak >= 2: AMARAN KEROSAKAN
+```
+
+Dengan cara ini, satu false positive dari satu sensor tidak akan trigger amaran palsu.
+
+---
+
+## Gambarajah Pendawaian
+
+**MQ-135 ke ESP32:**
+- VCC → 5V, GND → GND
+- AO (Analog) → GPIO36, DO (Digital) → GPIO39
+
+**MQ-4 ke ESP32:**
+- VCC → 5V, GND → GND
+- AO → GPIO34, DO → GPIO35
+
+**DHT22 ke ESP32:**
+- VCC → 3.3V, GND → GND
+- DATA → GPIO4 (pull-up 10kΩ ke 3.3V)
+
+**LCD I2C 20x4:**
+- SDA → GPIO21, SCL → GPIO22
+- VCC → 5V (atau 3.3V), GND → GND
+
+**Buzzer & LED RGB:**
+- Buzzer (+) → GPIO25 (melalui transistor NPN 2N2222 atau BC547)
+- LED R → GPIO26, G → GPIO27, B → GPIO14 (masing-masing 220Ω)
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <DHT.h>
+#include <LiquidCrystal_I2C.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
+const char* ssid     = "WiFi_Korang";
+const char* password = "Password_Korang";
+const char* botToken = "TOKEN_BOT_TELEGRAM_KORANG";
+const char* chatID   = "CHAT_ID_KORANG";
+
+#define DHT_PIN  4
+#define MQ135_PIN 36
+#define MQ4_PIN   34
+#define BUZZER_PIN 25
+#define LED_RED    26
+#define LED_GREEN  27
+#define LED_BLUE   14
+#define DHT_TYPE DHT22
+
+// Threshold kerosakan makanan
+const float SUHU_MAX        = 8.0;     // °C untuk penyimpanan sejuk
+const float KELEMBAPAN_MAX  = 85.0;    // %RH
+const int GAS_MQ135_THRESH  = 400;
+const int GAS_MQ4_THRESH    = 300;
+
+DHT dht(DHT_PIN, DHT_TYPE);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+
+float suhu, kelembapan;
+int nilaiMQ135, nilaiMQ4;
+bool statusRosak = false;
+unsigned long lastTelegramSent = 0;
+const unsigned long COOLDOWN = 60000; // 1 minit
+
+void hantarTelegram(String mesej) {
+  if (millis() - lastTelegramSent < COOLDOWN) return;
+
+  HTTPClient http;
+  String url = "https://api.telegram.org/bot" + String(botToken) + "/sendMessage";
+  http.begin(url);
+  http.addHeader("Content-Type", "application/json");
+
+  StaticJsonDocument<300> doc;
+  doc["chat_id"]    = chatID;
+  doc["text"]       = mesej;
+  doc["parse_mode"] = "HTML";
+  String jsonStr;
+  serializeJson(doc, jsonStr);
+
+  if (http.POST(jsonStr) == 200) {
+    lastTelegramSent = millis();
+    Serial.println("Telegram dihantar!");
+  }
+  http.end();
+}
+
+void setWarna(bool merah, bool hijau, bool biru) {
+  digitalWrite(LED_RED,   merah ? HIGH : LOW);
+  digitalWrite(LED_GREEN, hijau ? HIGH : LOW);
+  digitalWrite(LED_BLUE,  biru  ? HIGH : LOW);
+}
+
+void periksaKerosakan() {
+  bool rosakSuhu   = (suhu > SUHU_MAX || isnan(suhu));
+  bool rosakLembap = (kelembapan > KELEMBAPAN_MAX || isnan(kelembapan));
+  bool rosakGas135 = (nilaiMQ135 > GAS_MQ135_THRESH);
+  bool rosakGas4   = (nilaiMQ4   > GAS_MQ4_THRESH);
+
+  int skor = (rosakSuhu ? 1:0) + (rosakLembap ? 1:0) + (rosakGas135 ? 1:0) + (rosakGas4 ? 1:0);
+
+  if (skor >= 2 && !statusRosak) {
+    statusRosak = true;
+
+    // Buzzer 3 kali
+    for (int i = 0; i < 3; i++) {
+      digitalWrite(BUZZER_PIN, HIGH); delay(300);
+      digitalWrite(BUZZER_PIN, LOW);  delay(200);
+    }
+    setWarna(true, false, false); // Merah
+
+    String msg = "<b>⚠️ AMARAN KEROSAKAN MAKANAN</b>\n\n";
+    msg += "📍 Lokasi: Peti Sejuk Gudang A\n";
+    msg += "🌡️ Suhu: " + String(suhu, 1) + "°C\n";
+    msg += "💧 Kelembapan: " + String(kelembapan, 1) + "%\n";
+    msg += "🔬 Gas MQ135: " + String(nilaiMQ135) + "\n";
+    msg += "🔬 Gas MQ4: " + String(nilaiMQ4) + "\n\n";
+    msg += "<b>Sila periksa makanan segera!</b>";
+    hantarTelegram(msg);
+
+  } else if (skor == 1) {
+    setWarna(true, true, false); // Kuning — amaran awal
+
+  } else if (skor == 0) {
+    statusRosak = false;
+    setWarna(false, true, false); // Hijau — selamat
+  }
+}
+
+void kemaskiniLCD() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Suhu: " + String(suhu, 1) + "C");
+  lcd.setCursor(0, 1);
+  lcd.print("Lembap: " + String(kelembapan, 1) + "%");
+  lcd.setCursor(0, 2);
+  lcd.print("MQ135: " + String(nilaiMQ135) + "  MQ4: " + String(nilaiMQ4));
+  lcd.setCursor(0, 3);
+  lcd.print(statusRosak ? "!! AMARAN ROSAK !!" : "Status: SELAMAT    ");
+}
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  lcd.init();
+  lcd.backlight();
+
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_RED,    OUTPUT);
+  pinMode(LED_GREEN,  OUTPUT);
+  pinMode(LED_BLUE,   OUTPUT);
+
+  lcd.setCursor(0, 0); lcd.print("Rectronx FoodGuard");
+  lcd.setCursor(0, 1); lcd.print("Sambung WiFi...");
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  Serial.println("WiFi OK!");
+
+  lcd.setCursor(0, 1); lcd.print("Warm-up sensor...   ");
+  delay(20000); // MQ sensor warm-up
+
+  setWarna(false, true, false);
+  hantarTelegram("✅ Sistem Pemantauan Makanan AKTIF.");
+}
+
+void loop() {
+  suhu       = dht.readTemperature();
+  kelembapan = dht.readHumidity();
+  nilaiMQ135 = analogRead(MQ135_PIN);
+  nilaiMQ4   = analogRead(MQ4_PIN);
+
+  periksaKerosakan();
+  kemaskiniLCD();
+
+  Serial.printf("Suhu:%.1f Lembap:%.1f MQ135:%d MQ4:%d\n",
+    suhu, kelembapan, nilaiMQ135, nilaiMQ4);
+
+  delay(3000);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Setup Telegram Bot**
+Cari `@BotFather` dalam Telegram, taip `/newbot`, dapatkan TOKEN. Cari `@userinfobot` untuk CHAT_ID.
+
+**Langkah 2 — Kalibrasi MQ Sensors**
+Sensor MQ perlukan masa warm-up. Baca nilai baseline dalam udara bersih. Untuk menguji, simpan makanan yang sengaja dibiarkan rosak dalam bekas tertutup dan rekod bacaan sensor.
+
+**Langkah 3 — Test Sensor Satu per Satu**
+Mulakan dengan DHT22 sahaja, pastikan bacaan betul. Tambah MQ135, kemudian MQ4. Integrate secara berperingkat.
+
+**Langkah 4 — Validasi Sistem**
+Uji dalam tiga keadaan: makanan segar, makanan dalam suhu tinggi, makanan yang sudah mula rosak. Rekod semua data untuk laporan FYP.
+
+---
+
+## Tips Pembentangan
+
+- **Data eksperimen**: Bandingkan accuracy sistem vs penilaian manual untuk 10–20 sampel.
+- **Jelaskan sensor fusion**: Mengapa tiga sensor lebih baik dari satu — kurangkan false positive.
+- **Demo Telegram live**: Tunjukkan notifikasi masuk secara live.
+- **Bandingkan kos**: Sistem manual perlukan pekerja bertugas 24 jam. Sistem IoT ini beroperasi automatik.
+
+---
+
+## Penutup
+
+Sistem pengesanan kerosakan makanan ini adalah FYP yang menggabungkan kepakaran teknikal dengan impak sosial yang nyata dalam industri makanan Malaysia. Untuk semua komponen termasuk DHT22, MQ135, dan MQ4, lawati **Rectronx** di rectronx.com.

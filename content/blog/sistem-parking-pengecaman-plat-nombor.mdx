@@ -1,0 +1,256 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan Parking Pintar dengan Pengecaman Plat Nombor"
+excerpt: "Bina sistem parking pintar yang boleh cam plat nombor kenderaan secara automatik menggunakan ESP32-CAM, OpenCV, dan dashboard web. Projek FYP yang impressive dan praktikal untuk Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "pengecaman plat nombor", "computer vision", "parking pintar", "opencv"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan Parking Pintar dengan Pengecaman Plat Nombor
+
+Kalau korang tengah cari projek FYP yang betul-betul impress panel examiner, sistem parking pintar dengan pengecaman plat nombor ni memang salah satu pilihan terbaik. Kenapa? Sebab projek ni gabungkan tiga bidang sekaligus — **IoT, Computer Vision, dan Web Development** — dan ia menyentuh masalah nyata yang semua orang di Malaysia hadapi setiap hari: mencari parking.
+
+Bayangkan korang boleh tunjukkan kepada panel examiner sebuah sistem yang boleh **automatically detect** plat nombor kenderaan, log masa masuk dan keluar, kira bayaran, dan paparkan status parking dalam real-time atas dashboard web.
+
+---
+
+## Kenapa Projek Ini Sesuai Untuk FYP?
+
+Pertama, ia relevan dengan konteks Malaysia. Masalah parking di bandar-bandar besar seperti KL, Penang, dan JB memang kronik. Projek ni bukan sekadar akademik — ia boleh diimplementasi sebenar.
+
+Kedua, ia menunjukkan **kedalaman teknikal**. Korang bukan sekadar pasang sensor dan kelip LED. Korang bekerja dengan camera module, image processing, server backend, dan frontend dashboard. Ini menunjukkan korang faham software-hardware integration secara menyeluruh.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32-CAM Module | AI-Thinker, 2MP OV2640 | RM 25–35 |
+| Servo Motor | SG90, 180° | RM 8–12 (x2) |
+| Ultrasonic Sensor | HC-SR04 | RM 5–8 (x4) |
+| LED Merah & Hijau | 5mm, 20mA | RM 2 (set) |
+| Breadboard | 830 lubang | RM 8 |
+| Resistor | 220Ω, 1kΩ | RM 3 |
+| Jumper Wire | Set lelaki-betina | RM 5 |
+| Power Supply | 5V 2A adapter | RM 15 |
+| FTDI Programmer | CH340 USB-to-Serial | RM 12 |
+| Laptop/Raspberry Pi 4 | Untuk OCR server | Sudah ada / RM 250 |
+
+**Nota**: Untuk OCR processing, korang boleh jalankan server Python di laptop sendiri semasa development dan demo.
+
+---
+
+## Cara Kerja Sistem
+
+1. Kenderaan masuk ke kawasan parking → sensor IR/ultrasonik detect kehadiran
+2. ESP32-CAM ambil gambar plat nombor secara automatik
+3. Gambar dihantar ke Python OCR server (di laptop atau Raspberry Pi)
+4. Server proses gambar dengan EasyOCR → extract teks plat nombor
+5. Data (plat, masa masuk, slot) disimpan ke database
+6. Gate servo buka untuk benarkan kenderaan masuk
+7. Dashboard web tunjukkan slot yang kosong dan penuh secara real-time
+
+---
+
+## Gambarajah Pendawaian
+
+**ESP32-CAM ke Servo Motor (Gate):**
+- Servo masuk → GPIO 12 (melalui level shifter 3.3V→5V)
+- Servo keluar → GPIO 13
+
+**HC-SR04 ke ESP32-CAM (Slot Sensor):**
+- Sensor 1 (Slot A): Trig→GPIO 14, Echo→GPIO 15 (melalui voltage divider)
+- Sensor 2 (Slot B): Trig→GPIO 2, Echo→GPIO 4
+
+**LED Status:**
+- LED Merah (Slot penuh): GPIO 16 → 220Ω → GND
+- LED Hijau (Slot kosong): GPIO 17 → 220Ω → GND
+
+**PENTING**: Kamera OV2640 sudah onboard pada ESP32-CAM. Untuk programming, gunakan FTDI CH340: TX→U0R, RX→U0T, GND→GND, 5V→5V, dan short IO0 ke GND semasa upload.
+
+---
+
+## Kod Arduino/ESP32-CAM
+
+```cpp
+#include <Arduino.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <esp_camera.h>
+#include <ESP32Servo.h>
+
+const char* ssid      = "NamaWiFiKorang";
+const char* password  = "PasswordWiFi";
+const char* serverURL = "http://192.168.1.100:5000/api/plate";
+
+// Gate servo pins
+#define SERVO_ENTRY_PIN  12
+#define SERVO_EXIT_PIN   13
+
+// Ultrasonic sensor pins
+#define TRIG_PIN_A  14
+#define ECHO_PIN_A  15
+#define TRIG_PIN_B  2
+#define ECHO_PIN_B  4
+
+// Status LED
+#define LED_RED_A    16
+#define LED_GREEN_A  17
+
+// Camera config untuk AI-Thinker ESP32-CAM
+#define PWDN_GPIO_NUM  32
+#define RESET_GPIO_NUM -1
+#define XCLK_GPIO_NUM  0
+#define SIOD_GPIO_NUM  26
+#define SIOC_GPIO_NUM  27
+#define Y9_GPIO_NUM    35
+#define Y8_GPIO_NUM    34
+#define Y7_GPIO_NUM    39
+#define Y6_GPIO_NUM    36
+#define Y5_GPIO_NUM    21
+#define Y4_GPIO_NUM    19
+#define Y3_GPIO_NUM    18
+#define Y2_GPIO_NUM    5
+#define VSYNC_GPIO_NUM 25
+#define HREF_GPIO_NUM  23
+#define PCLK_GPIO_NUM  22
+
+Servo servoEntry, servoExit;
+bool slotA_occupied = false;
+bool slotB_occupied = false;
+
+void initCamera() {
+  camera_config_t config;
+  config.ledc_channel = LEDC_CHANNEL_0;
+  config.ledc_timer   = LEDC_TIMER_0;
+  config.pin_d0 = Y2_GPIO_NUM; config.pin_d1 = Y3_GPIO_NUM;
+  config.pin_d2 = Y4_GPIO_NUM; config.pin_d3 = Y5_GPIO_NUM;
+  config.pin_d4 = Y6_GPIO_NUM; config.pin_d5 = Y7_GPIO_NUM;
+  config.pin_d6 = Y8_GPIO_NUM; config.pin_d7 = Y9_GPIO_NUM;
+  config.pin_xclk  = XCLK_GPIO_NUM;  config.pin_pclk  = PCLK_GPIO_NUM;
+  config.pin_vsync = VSYNC_GPIO_NUM; config.pin_href  = HREF_GPIO_NUM;
+  config.pin_sscb_sda = SIOD_GPIO_NUM; config.pin_sscb_scl = SIOC_GPIO_NUM;
+  config.pin_pwdn  = PWDN_GPIO_NUM;  config.pin_reset = RESET_GPIO_NUM;
+  config.xclk_freq_hz = 20000000;
+  config.pixel_format = PIXFORMAT_JPEG;
+  config.frame_size   = FRAMESIZE_VGA;
+  config.jpeg_quality = 10;
+  config.fb_count     = 1;
+
+  if (esp_camera_init(&config) != ESP_OK) {
+    Serial.println("Camera init GAGAL!");
+    return;
+  }
+  Serial.println("Camera OK!");
+}
+
+long ukurJarak(int trigPin, int echoPin) {
+  digitalWrite(trigPin, LOW);  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  return pulseIn(echoPin, HIGH) * 0.034 / 2;
+}
+
+void captureAndSendPlate() {
+  camera_fb_t* fb = esp_camera_fb_get();
+  if (!fb) { Serial.println("Gagal ambil gambar"); return; }
+
+  HTTPClient http;
+  http.begin(serverURL);
+  http.addHeader("Content-Type", "image/jpeg");
+  int code = http.POST(fb->buf, fb->len);
+
+  if (code == 200) {
+    String response = http.getString();
+    Serial.println("Plat dikesan: " + response);
+    if (response.length() > 0 && response != "UNKNOWN") {
+      servoEntry.write(90); // Buka gate
+      delay(5000);
+      servoEntry.write(0);  // Tutup gate
+    }
+  } else {
+    Serial.printf("HTTP Error: %d\n", code);
+  }
+
+  esp_camera_fb_return(fb);
+  http.end();
+}
+
+void kemaskiniSlot() {
+  slotA_occupied = (ukurJarak(TRIG_PIN_A, ECHO_PIN_A) < 20);
+  slotB_occupied = (ukurJarak(TRIG_PIN_B, ECHO_PIN_B) < 20);
+
+  digitalWrite(LED_RED_A,   slotA_occupied ? HIGH : LOW);
+  digitalWrite(LED_GREEN_A, slotA_occupied ? LOW  : HIGH);
+
+  Serial.printf("Slot A: %s | Slot B: %s\n",
+    slotA_occupied ? "PENUH" : "KOSONG",
+    slotB_occupied ? "PENUH" : "KOSONG");
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(TRIG_PIN_A, OUTPUT); pinMode(ECHO_PIN_A, INPUT);
+  pinMode(TRIG_PIN_B, OUTPUT); pinMode(ECHO_PIN_B, INPUT);
+  pinMode(LED_RED_A, OUTPUT);  pinMode(LED_GREEN_A, OUTPUT);
+
+  servoEntry.attach(SERVO_ENTRY_PIN);
+  servoExit.attach(SERVO_EXIT_PIN);
+  servoEntry.write(0); servoExit.write(0);
+
+  initCamera();
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nWiFi OK: " + WiFi.localIP().toString());
+}
+
+unsigned long lastCapture = 0;
+
+void loop() {
+  kemaskiniSlot();
+
+  if (millis() - lastCapture > 10000) {
+    captureAndSendPlate();
+    lastCapture = millis();
+  }
+
+  delay(500);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Setup Python OCR Server**
+```bash
+pip install flask opencv-python easyocr pillow numpy
+```
+Buat `server.py` yang terima POST request dengan gambar JPEG, proses dengan EasyOCR, dan return teks plat nombor yang dikesan.
+
+**Langkah 2 — Upload Kod ke ESP32-CAM**
+Short GPIO 0 ke GND semasa upload. Selepas upload berjaya, cabut short dan tekan RST.
+
+**Langkah 3 — Bina Model Parking Fizikal**
+Guna kotak kadbod atau papan balsa untuk buat model parking dengan 4–6 slot dan gate dari servo motor. Ini sangat impressive untuk demo.
+
+**Langkah 4 — Bina Web Dashboard**
+Guna Flask + Bootstrap untuk tunjukkan status slot secara real-time dan log kenderaan yang pernah masuk.
+
+---
+
+## Tips Pembentangan
+
+- **Tunjukkan Data Sebenar**: Pastikan dashboard ada beberapa rekod kenderaan sebelum demo.
+- **Terangkan Algoritma OCR**: Tunjukkan proses: raw image → grayscale → threshold → EasyOCR.
+- **Bandingkan Accuracy**: Data perbandingan accuracy sistem vs manual checking sangat kuat.
+- **Sebut Potensi Komersil**: Sistem ini boleh dikembangkan untuk shopping mall, hospital, universiti.
+
+---
+
+## Penutup
+
+Sistem parking pintar dengan pengecaman plat nombor adalah antara projek FYP paling impressive yang boleh korang bina. Dapatkan ESP32-CAM, servo motor, dan semua komponen lain di **Rectronx** — rectronx.com.

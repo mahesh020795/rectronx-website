@@ -1,0 +1,351 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Penyelenggaraan Ramalan Pendingin Hawa Berasaskan IoT"
+excerpt: "Bina sistem IoT yang boleh pantau kesihatan pendingin hawa secara real-time, predict kegagalan lebih awal, dan hantar amaran servis kepada teknisi. Tutorial dengan sensor DHT22, DS18B20, ACS712, dan algoritma health score."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "pendingin hawa", "predictive maintenance", "dht22", "acs712"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Penyelenggaraan Ramalan Pendingin Hawa Berasaskan IoT
+
+Pendingin hawa adalah peralatan kritikal di Malaysia — dalam iklim tropika kita, ia bukan sekadar kemewahan tetapi keperluan. Namun berapa ramai yang pernah mengalami aircond rosak secara mengejut, justeru pada waktu paling panas? Kerosakan ini hampir selalu boleh dikesan lebih awal jika ada sistem pemantauan yang betul.
+
+Inilah premis projek FYP ini: bina sistem IoT yang mampu **meramal kegagalan pendingin hawa** sebelum ia berlaku, berdasarkan data sensor suhu, arus elektrik, dan getaran yang dikumpul secara berterusan.
+
+---
+
+## Kenapa Ini Adalah FYP Yang Kuat?
+
+**Predictive Maintenance (PdM)** adalah antara bidang paling trending dalam industri 4.0 dan smart building. Projek ini menunjukkan kau faham konsep melebihi sekadar "pasang sensor dan baca data" — kau menganalisis data untuk buat ramalan. Ini adalah tahap sophistication yang panel examiner dan panel industri akan sangat hargai.
+
+Selain itu, projek ini ada potensi komersil yang jelas. Bayangkan syarikat penyelenggaraan aircond yang boleh jadualkan servis secara proaktif berdasarkan data, bukan sekadar menunggu pelanggan komplen.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 Development Board | 38-pin | RM 20–28 |
+| DHT22 | Suhu & kelembapan ruang | RM 10–15 |
+| DS18B20 Waterproof | Suhu paip kondenser | RM 8–15 |
+| ACS712-20A | Sensor arus elektrik | RM 10–15 |
+| SW-420 | Sensor getaran/vibration | RM 3–5 |
+| ZMPT101B | Sensor voltan AC | RM 8–12 |
+| LCD I2C 20x4 | Display | RM 18–25 |
+| Buzzer + LED | Status indicator | RM 3–5 |
+| MicroSD Module | Log data | RM 8–12 |
+| MicroSD 8GB | Storage | RM 15 |
+| RTC DS3231 | Timestamp data | RM 10–15 |
+| CT Clamp 100A | Untuk clamp pada kabel AC | RM 15–20 |
+
+**Jumlah anggaran: RM 128–182**
+
+---
+
+## Parameter Yang Diukur dan Maknanya
+
+| Parameter | Sensor | Tanda Kegagalan |
+|---|---|---|
+| Suhu udara keluar | DHT22 | Lebih tinggi dari biasa = masalah refrigeran |
+| Suhu paip kondenser | DS18B20 | Terlalu tinggi = kondenser kotor |
+| Arus motor kompressor | ACS712 | Terlalu tinggi = motor bermasalah |
+| Getaran unit | SW-420 | Getaran berlebihan = bearing haus |
+| Voltan bekalan | ZMPT101B | Voltan rendah = tekanan pada motor |
+
+---
+
+## Algoritma Health Score
+
+Ini adalah bahagian yang paling menarik dan boleh jadi unique selling point thesis kau. Kita kira "Health Score" dari 0–100 berdasarkan semua parameter:
+
+```
+health_score = 100
+- deduct(suhu_berlebihan)     // -5 point setiap 2°C melebihi normal
+- deduct(arus_berlebihan)     // -10 point setiap 10% melebihi rated current
+- deduct(getaran_kerap)       // -15 point bila getaran melebihi threshold
+- deduct(kelembapan_tinggi)   // -5 point bila kelembapan > 80%
+```
+
+Skor 80–100 = Baik, 60–80 = Perlu Perhatian, di bawah 60 = Servis Segera.
+
+---
+
+## Gambarajah Pendawaian
+
+**DHT22 ke ESP32:** VCC→3.3V, GND→GND, DATA→GPIO4 (pull-up 10kΩ ke 3.3V)
+
+**DS18B20 ke ESP32:** DATA→GPIO5 (pull-up 4.7kΩ ke 3.3V), VCC→3.3V, GND→GND
+
+**ACS712-20A ke ESP32:** VCC→5V, GND→GND, AOUT→GPIO34. Masukkan kabel fasa motor melalui lubang sensor.
+
+**SW-420 ke ESP32:** VCC→3.3V, GND→GND, DO→GPIO35
+
+**ZMPT101B ke ESP32:** VCC→5V, GND→GND, OUT→GPIO36
+
+**LCD I2C:** SDA→GPIO21, SCL→GPIO22
+
+**MicroSD (SPI):** MOSI→GPIO23, MISO→GPIO19, SCK→GPIO18, CS→GPIO15
+
+**RTC DS3231 (I2C, kongsi dengan LCD):** SDA→GPIO21, SCL→GPIO22
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <Wire.h>
+#include <WiFi.h>
+#include <DHT.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <LiquidCrystal_I2C.h>
+#include <RTClib.h>
+#include <SD.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
+const char* WIFI_SSID     = "NamaWiFiKau";
+const char* WIFI_PASSWORD = "PasswordWiFi";
+const char* SERVER_URL    = "http://server-kau.com/api/aircond";
+
+#define DHT_PIN        4
+#define DS18B20_PIN    5
+#define ACS712_PIN     34
+#define VIBRATION_PIN  35
+#define VOLTAGE_PIN    36
+#define SD_CS          15
+#define BUZZER_PIN     32
+
+#define DHT_TYPE DHT22
+#define ACS712_SENSITIVITY  0.1   // V/A untuk ACS712-20A
+#define ACS712_MIDPOINT     2.5   // Volt pada 0A
+#define RATED_CURRENT       8.0   // Ampere — rated current motor aircond
+#define NORMAL_TEMP_DIFF    8.0   // °C — perbezaan suhu masuk vs keluar normal
+
+DHT dht(DHT_PIN, DHT_TYPE);
+OneWire oneWire(DS18B20_PIN);
+DallasTemperature ds18b20(&oneWire);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+RTC_DS3231 rtc;
+
+// Data bacaan
+float suhuRuang, kelembaapan, suhuPaip;
+float arusMotor, voltanBekalan;
+bool getaranKerap = false;
+int healthScore = 100;
+String statusKesihatan = "BAIK";
+
+// Kiraan getaran
+unsigned long kiraan_getaran = 0;
+unsigned long masa_semakan_getaran = 0;
+
+void IRAM_ATTR detectVibration() { kiraan_getaran++; }
+
+float bacaArus() {
+  long jumlah = 0;
+  for (int i = 0; i < 1000; i++) {
+    int raw = analogRead(ACS712_PIN);
+    float volt = (raw / 4095.0) * 3.3;
+    float arus = (volt - ACS712_MIDPOINT) / ACS712_SENSITIVITY;
+    jumlah += (long)(arus * 1000); // dalam mA
+    delayMicroseconds(200);
+  }
+  return abs(jumlah / 1000.0) / 1000.0; // Kembali ke Ampere
+}
+
+float bacaVoltan() {
+  long sum = 0;
+  for (int i = 0; i < 500; i++) {
+    int raw = analogRead(VOLTAGE_PIN) - 2048;
+    sum += (long)raw * raw;
+  }
+  float rms = sqrt((float)sum / 500);
+  return (rms / 4096.0) * 3.3 * 480.0; // Kalibrasi untuk 240V
+}
+
+int kiraHealthScore() {
+  int skor = 100;
+
+  // Semak arus motor
+  float lebih_arus = arusMotor - RATED_CURRENT;
+  if (lebih_arus > 0) {
+    skor -= (int)(lebih_arus / RATED_CURRENT * 100 * 0.4); // Tolak hingga 40 markah
+  }
+
+  // Semak suhu paip (kondenser)
+  if (suhuPaip > 55.0) skor -= 20;
+  else if (suhuPaip > 50.0) skor -= 10;
+  else if (suhuPaip > 45.0) skor -= 5;
+
+  // Semak getaran
+  if (getaranKerap) skor -= 25;
+
+  // Semak kelembapan (kelembapan tinggi boleh menyebabkan ais membeku)
+  if (kelembaapan > 85.0) skor -= 10;
+  else if (kelembaapan > 75.0) skor -= 5;
+
+  // Semak voltan
+  if (voltanBekalan < 210.0 || voltanBekalan > 260.0) skor -= 15;
+
+  return constrain(skor, 0, 100);
+}
+
+void tentukan_status(int skor) {
+  if (skor >= 80) {
+    statusKesihatan = "BAIK";
+    digitalWrite(BUZZER_PIN, LOW);
+  } else if (skor >= 60) {
+    statusKesihatan = "PERHATIAN";
+    tone(BUZZER_PIN, 500, 200);
+  } else {
+    statusKesihatan = "SERVIS SEGERA";
+    tone(BUZZER_PIN, 1500, 1000);
+  }
+}
+
+void simpanLog() {
+  DateTime now = rtc.now();
+  char buf[30];
+  sprintf(buf, "%04d-%02d-%02d %02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute());
+
+  File f = SD.open("/aircond_log.csv", FILE_APPEND);
+  if (f) {
+    f.printf("%s,%.1f,%.1f,%.1f,%.2f,%.1f,%d,%s\n",
+      buf, suhuRuang, kelembaapan, suhuPaip, arusMotor, voltanBekalan, healthScore, statusKesihatan.c_str());
+    f.close();
+  }
+}
+
+void kemaskiniLCD() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.printf("Suhu:%.1fC Lembap:%.0f%%", suhuRuang, kelembaapan);
+  lcd.setCursor(0, 1);
+  lcd.printf("Paip:%.1fC Arus:%.1fA", suhuPaip, arusMotor);
+  lcd.setCursor(0, 2);
+  lcd.printf("Voltan:%.0fV Getar:%s", voltanBekalan, getaranKerap ? "YA" : "X");
+  lcd.setCursor(0, 3);
+  lcd.printf("Skor:%d/100 %s", healthScore, statusKesihatan.c_str());
+}
+
+void hantarKeServer() {
+  if (WiFi.status() != WL_CONNECTED) return;
+
+  StaticJsonDocument<256> doc;
+  doc["unit_id"] = "AC-BILIK-101";
+  doc["suhu_ruang"] = suhuRuang;
+  doc["kelembapan"] = kelembaapan;
+  doc["suhu_paip"] = suhuPaip;
+  doc["arus"] = arusMotor;
+  doc["voltan"] = voltanBekalan;
+  doc["getaran"] = getaranKerap;
+  doc["health_score"] = healthScore;
+  doc["status"] = statusKesihatan;
+
+  String body;
+  serializeJson(doc, body);
+
+  HTTPClient http;
+  http.begin(SERVER_URL);
+  http.addHeader("Content-Type", "application/json");
+  http.POST(body);
+  http.end();
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  dht.begin();
+  ds18b20.begin();
+  lcd.init();
+  lcd.backlight();
+  rtc.begin();
+
+  pinMode(VIBRATION_PIN, INPUT_PULLUP);
+  pinMode(BUZZER_PIN, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(VIBRATION_PIN), detectVibration, FALLING);
+
+  if (!SD.begin(SD_CS)) Serial.println("SD gagal!");
+  else {
+    if (!SD.exists("/aircond_log.csv")) {
+      File f = SD.open("/aircond_log.csv", FILE_WRITE);
+      f.println("Timestamp,Suhu,Lembap,Paip,Arus,Voltan,HealthScore,Status");
+      f.close();
+    }
+  }
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  Serial.println("WiFi bersambung!");
+
+  lcd.print("Sistem PdM Aircond");
+  delay(2000);
+}
+
+unsigned long lastRead = 0;
+unsigned long lastSend = 0;
+
+void loop() {
+  // Semak getaran setiap 10 saat
+  if (millis() - masa_semakan_getaran > 10000) {
+    getaranKerap = (kiraan_getaran > 50);
+    kiraan_getaran = 0;
+    masa_semakan_getaran = millis();
+  }
+
+  if (millis() - lastRead > 5000) {
+    lastRead = millis();
+
+    suhuRuang   = dht.readTemperature();
+    kelembaapan = dht.readHumidity();
+    ds18b20.requestTemperatures();
+    suhuPaip    = ds18b20.getTempCByIndex(0);
+    arusMotor   = bacaArus();
+    voltanBekalan = bacaVoltan();
+
+    healthScore = kiraHealthScore();
+    tentukan_status(healthScore);
+    kemaskiniLCD();
+    simpanLog();
+
+    Serial.printf("Skor: %d | Status: %s\n", healthScore, statusKesihatan.c_str());
+  }
+
+  if (millis() - lastSend > 30000) {
+    lastSend = millis();
+    hantarKeServer();
+  }
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Kalibrasi ACS712**
+Ukur arus motor aircond dengan clamp meter sebenar. Bandingkan dengan bacaan ACS712. Laraskan `ACS712_MIDPOINT` dan nilai kalibrasi sehingga bacaan match dalam ±0.3A.
+
+**Langkah 2 — Tentukan Nilai Normal**
+Jalankan aircond dalam keadaan baik selama 30 minit. Rekod semua bacaan — ini adalah baseline "normal". Gunakan nilai ini untuk tentukan threshold dalam kod.
+
+**Langkah 3 — Pasang Sensor Secara Selamat**
+DS18B20 boleh diletakkan pada paip kondenser menggunakan klip aluminium atau pita thermally-conductive. Jauhkan dari bahagian bergerak.
+
+**Langkah 4 — Test Skenario Masalah**
+Simulate masalah dengan: blok sebahagian aliran udara (suhu naik), letak beban berat tambahan (arus naik). Rekod perubahan skor kesihatan.
+
+---
+
+## Tips Pembentangan
+
+- **Tunjukkan trend jangka masa**: Graf health score selama beberapa hari lebih persuasive dari bacaan sesaat.
+- **Bandingkan dengan jadual servis konvensional**: Konvensional = servis setiap 3 bulan tanpa mengira keadaan. Sistem kau = servis hanya bila perlu berdasarkan data.
+- **Kira penjimatan**: Aircond yang diselenggara dengan baik menggunakan 20–30% lebih sedikit elektrik. Dengan sistem PdM, pemilik jimat kos utiliti dan servis.
+
+---
+
+## Penutup
+
+Sistem penyelenggaraan ramalan aircond ini menunjukkan bahawa IoT bukan sekadar "connect ke internet" — ia tentang menggunakan data untuk buat keputusan yang lebih bijak. Dapatkan semua sensor dan komponen untuk projek ini di **Rectronx** — rectronx.com.

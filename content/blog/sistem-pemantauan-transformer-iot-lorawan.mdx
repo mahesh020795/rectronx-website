@@ -1,0 +1,332 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kesihatan Transformer Secara Real-Time Menggunakan IoT dan LoRaWAN"
+excerpt: "Tutorial lengkap cara bina sistem pemantauan transformer menggunakan ESP32, CT Clamp, sensor suhu, sensor getaran MPU6050, dan LoRa SX1278 untuk pantau kesihatan transformer secara wireless dari jarak jauh — projek FYP premium untuk Kejuruteraan Elektrik Kuasa."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "transformer", "lorawan", "lora", "power engineering", "tenaga elektrik", "predictive maintenance"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kesihatan Transformer Secara Real-Time Menggunakan IoT dan LoRaWAN
+
+Transformer adalah jantung sistem pengedaran elektrik Malaysia. TNB sahaja mengoperasikan lebih daripada 100,000 unit transformer merentasi seluruh negara. Bila sebuah transformer rosak tanpa amaran, ia boleh menyebabkan blackout yang menjejaskan ribuan pengguna, kos pembaikan mencecah ratusan ribu ringgit, dan dalam kes terburuk — kebakaran yang membahayakan nyawa.
+
+Masalahnya, sebahagian besar transformer di Malaysia masih dipantau secara manual — juruteknik perlu ke lokasi secara fizikal untuk baca suhu dan periksa keadaan minyak. Ini adalah proses yang mahal, perlahan, dan tidak boleh detect kegagalan awal.
+
+---
+
+## Kenapa Ini Adalah FYP Paling Impressive untuk Pelajar Kejuruteraan Elektrik Kuasa?
+
+Projek ini mempunyai komponen teknikal yang sangat kaya: **power systems knowledge** (transformer, CT clamp, current sensing), **IoT engineering** (ESP32, LoRa), dan **data analytics** (predictive maintenance algorithm). Ini adalah kombinasi yang panel dari industri TNB, Gamuda, atau firma konsultan elektrik akan langsung kenal nilai.
+
+**Kenapa LoRaWAN dan bukan WiFi biasa?** Transformer seringkali terletak di kawasan jauh atau substation yang tiada liputan WiFi. LoRa boleh hantar data sejauh 5–15 km dalam kawasan terbuka dengan hanya bateri kecil — ini menyelesaikan masalah connectivity yang realistik.
+
+> **Amaran Keselamatan PENTING**: Untuk demo FYP, gunakan transformator kecil (12V atau 24V dari bench power supply). JANGAN sekali-kali sentuh terminal transformer TNB sebenar atau wayar kuasa tinggi tanpa latihan keselamatan yang betul dan kebenaran bertulis.
+
+---
+
+## Senarai Komponen
+
+| Bil | Komponen | Kuantiti | Anggaran Harga |
+|-----|----------|----------|----------------|
+| 1 | ESP32 Development Board | 2 (1 node + 1 gateway) | RM 25–35 seunit |
+| 2 | Ra-02 LoRa Module SX1278 433MHz | 2 | RM 15–20 seunit |
+| 3 | Antena 433MHz SMA | 2 | RM 5–10 seunit |
+| 4 | SCT-013-030 CT Clamp Sensor (30A) | 2 | RM 12–20 seunit |
+| 5 | DS18B20 Waterproof Temperature | 2 | RM 8–15 seunit |
+| 6 | MPU6050 Vibration/Accelerometer | 1 | RM 5–10 |
+| 7 | ZMPT101B AC Voltage Sensor | 1 | RM 8–12 |
+| 8 | MQ-2 Gas Sensor | 1 | RM 8–12 |
+| 9 | OLED Display 0.96" | 1 | RM 10–15 |
+| 10 | RTC DS3231 | 1 | RM 8–12 |
+| 11 | MicroSD Module + Card 8GB | 1 set | RM 20–25 |
+| 12 | Burden Resistor 33Ω | 2 | RM 1–2 |
+| 13 | Kapasitor 10µF, 100µF | beberapa | RM 3–5 |
+| 14 | Waterproof Enclosure IP67 | 1 | RM 25–50 |
+
+**Jumlah Anggaran: RM 218–322**
+
+---
+
+## Senibina Sistem: Node + Gateway
+
+Sistem ini terdiri daripada dua bahagian:
+
+**Sensor Node** (di lokasi transformer):
+- ESP32 + LoRa module
+- Semua sensor (CT clamp, suhu, getaran, gas, voltan)
+- Battery-powered + solar panel untuk operasi standalone
+- Hantar data setiap 30 saat via LoRa
+
+**Gateway** (di bilik kawalan / pejabat):
+- ESP32 + LoRa module
+- Sambung ke WiFi
+- Terima paket LoRa dari sensor node
+- Forward data ke cloud/server
+
+---
+
+## Gambarajah Pendawaian (Sensor Node)
+
+**CT Clamp SCT-013-030 → ESP32 (Current Sensing Circuit):**
+- CT Clamp output → Burden Resistor 33Ω (antara dua pin CT)
+- Kapasitor 10µF dari mid-point ke GND (untuk bias)
+- Mid-point melalui voltage divider ke GPIO36
+
+> CT Clamp menghasilkan signal AC. Kita bias signal ke 1.65V (3.3V/2) supaya ADC ESP32 boleh baca nilai positif dan negatif.
+
+**DS18B20 (x2 — suhu winding & minyak) → ESP32:**
+- DATA → GPIO4 (dengan 4.7kΩ pull-up ke 3.3V)
+- Boleh daisy-chain dua sensor pada satu pin
+
+**MPU6050 Vibration → ESP32 (I2C):**
+- SDA→GPIO21, SCL→GPIO22, INT→GPIO19
+
+**Ra-02 LoRa SX1278 → ESP32 (SPI):**
+- VCC→3.3V (JANGAN guna 5V!), GND→GND
+- NSS→GPIO15, MOSI→GPIO23, MISO→GPIO19, SCK→GPIO18
+- RST→GPIO14, DIO0→GPIO2
+
+**RTC DS3231 & OLED (I2C, kongsi dengan MPU6050):**
+- SDA→GPIO21, SCL→GPIO22
+
+**MicroSD (SPI):** MOSI→GPIO23, MISO→GPIO19, SCK→GPIO18, CS→GPIO5
+
+---
+
+## Kod Arduino/ESP32 (Sensor Node)
+
+```cpp
+#include <SPI.h>
+#include <LoRa.h>
+#include <Wire.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <ArduinoJson.h>
+#include <RTClib.h>
+
+#define LORA_SS   15
+#define LORA_RST  14
+#define LORA_DIO0 2
+#define ONE_WIRE_BUS 4
+#define CT_PIN    36
+#define VOLT_PIN  39
+#define GAS_PIN   34
+#define LORA_FREQ 433E6
+#define TRX_ID    "TRX-001"
+
+// Threshold amaran
+#define TEMP_WARNING  70.0    // °C
+#define TEMP_CRITICAL 85.0    // °C
+#define CURRENT_MAX   25.0    // Ampere
+#define VIBRATION_MAX 2.0     // g
+
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature tempSensor(&oneWire);
+Adafruit_MPU6050 mpu;
+RTC_DS3231 rtc;
+
+float temp1 = 0, temp2 = 0, current = 0, voltage = 0;
+float vibX = 0, vibY = 0, vibZ = 0;
+int gasLevel = 0;
+String alarmStatus = "NORMAL";
+int packetCount = 0;
+unsigned long lastSend = 0;
+
+float bacaArus() {
+  long sum = 0;
+  for (int i = 0; i < 1000; i++) {
+    int raw = analogRead(CT_PIN);
+    int centered = raw - 2048;
+    sum += (long)centered * centered;
+    delayMicroseconds(200);
+  }
+  float rms = sqrt((float)sum / 1000);
+  float voltRms = (rms / 4096.0) * 3.3;
+  // SCT-013-030: 30A/1V — kira arus
+  return voltRms * 30.0;
+}
+
+float bacaVoltan() {
+  long sum = 0;
+  for (int i = 0; i < 500; i++) {
+    int raw = analogRead(VOLT_PIN) - 2048;
+    sum += (long)raw * raw;
+  }
+  float rms = sqrt((float)sum / 500);
+  return (rms / 4096.0) * 3.3 * 480.0; // Kalibrasi untuk 240V
+}
+
+void tentukan_alarm() {
+  alarmStatus = "NORMAL";
+  float maxTemp = max(temp1, temp2);
+  float vibMag  = sqrt(sq(vibX) + sq(vibY) + sq(vibZ));
+
+  if (maxTemp > TEMP_CRITICAL || current > CURRENT_MAX) alarmStatus = "KRITIKAL";
+  else if (maxTemp > TEMP_WARNING || vibMag > VIBRATION_MAX || gasLevel > 2000) alarmStatus = "AMARAN";
+}
+
+void hantarLoRa() {
+  StaticJsonDocument<256> doc;
+  doc["id"]    = TRX_ID;
+  doc["pkt"]   = ++packetCount;
+  doc["t1"]    = temp1;
+  doc["t2"]    = temp2;
+  doc["i"]     = current;
+  doc["v"]     = voltage;
+  doc["vx"]    = vibX;
+  doc["vy"]    = vibY;
+  doc["vz"]    = vibZ;
+  doc["gas"]   = gasLevel;
+  doc["alarm"] = alarmStatus;
+
+  String payload;
+  serializeJson(doc, payload);
+
+  LoRa.beginPacket();
+  LoRa.print(payload);
+  LoRa.endPacket();
+
+  Serial.printf("LoRa #%d sent: %s\n", packetCount, payload.c_str());
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  tempSensor.begin();
+  mpu.begin();
+  mpu.setAccelerometerRange(MPU6050_RANGE_2_G);
+  rtc.begin();
+
+  LoRa.setPins(LORA_SS, LORA_RST, LORA_DIO0);
+  if (!LoRa.begin(LORA_FREQ)) {
+    Serial.println("LoRa init GAGAL!");
+    while (1);
+  }
+  LoRa.setSpreadingFactor(9);
+  LoRa.setSignalBandwidth(125E3);
+  LoRa.setCodingRate4(5);
+  LoRa.setTxPower(17);
+
+  Serial.println("LoRa Sensor Node Bersedia");
+  Serial.printf("Transformer ID: %s\n", TRX_ID);
+}
+
+void loop() {
+  tempSensor.requestTemperatures();
+  temp1 = tempSensor.getTempCByIndex(0);
+  temp2 = tempSensor.getTempCByIndex(1);
+  current  = bacaArus();
+  voltage  = bacaVoltan();
+  gasLevel = analogRead(GAS_PIN);
+
+  sensors_event_t a, g, t;
+  mpu.getEvent(&a, &g, &t);
+  vibX = a.acceleration.x;
+  vibY = a.acceleration.y;
+  vibZ = a.acceleration.z;
+
+  tentukan_alarm();
+
+  Serial.printf("T1:%.1f T2:%.1f A:%.2f V:%.1f Gas:%d Status:%s\n",
+    temp1, temp2, current, voltage, gasLevel, alarmStatus.c_str());
+
+  if (millis() - lastSend > 30000) {
+    lastSend = millis();
+    hantarLoRa();
+  }
+
+  delay(1000);
+}
+```
+
+## Kod Arduino/ESP32 (Gateway — Terima LoRa → Forward ke Cloud)
+
+```cpp
+#include <SPI.h>
+#include <LoRa.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+#define LORA_SS   15
+#define LORA_RST  14
+#define LORA_DIO0 2
+
+const char* ssid      = "YOUR_WIFI";
+const char* password  = "YOUR_PASSWORD";
+const char* serverURL = "http://server-kamu.com/api/transformer";
+
+void setup() {
+  Serial.begin(115200);
+  LoRa.setPins(LORA_SS, LORA_RST, LORA_DIO0);
+  LoRa.begin(433E6);
+  LoRa.setSpreadingFactor(9);
+  LoRa.setSignalBandwidth(125E3);
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println("Gateway bersedia. Menunggu paket LoRa...");
+}
+
+void loop() {
+  int packetSize = LoRa.parsePacket();
+  if (packetSize) {
+    String incoming = "";
+    while (LoRa.available()) incoming += (char)LoRa.read();
+
+    int rssi = LoRa.packetRssi();
+    float snr = LoRa.packetSnr();
+    Serial.printf("Diterima: %s (RSSI:%d SNR:%.1f)\n", incoming.c_str(), rssi, snr);
+
+    if (WiFi.status() == WL_CONNECTED) {
+      // Tambah RSSI dan SNR ke payload
+      String payload = incoming.substring(0, incoming.length()-1);
+      payload += ",\"rssi\":" + String(rssi) + ",\"snr\":" + String(snr, 1) + "}";
+
+      HTTPClient http;
+      http.begin(serverURL);
+      http.addHeader("Content-Type", "application/json");
+      int code = http.POST(payload);
+      Serial.printf("Server: %d\n", code);
+      http.end();
+    }
+  }
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Faham Asas LoRa**
+LoRa (Long Range) adalah teknologi radio modulasi yang membolehkan komunikasi jarak jauh dengan kuasa rendah. Test LoRa peer-to-peer dulu sebelum integrate sensor — upload contoh `LoRaSender` dan `LoRaReceiver` dari Arduino IDE Examples.
+
+**Langkah 2 — Bina Bias Circuit untuk CT Clamp**
+CT Clamp menghasilkan signal AC. Buat voltage divider (dua resistor 10kΩ) untuk hasilkan 1.65V reference, kemudian couple signal CT melalui kapasitor 10µF.
+
+**Langkah 3 — Kalibrasi CT Clamp**
+Guna clamp meter sebenar untuk baca arus, bandingkan dengan bacaan sistem. Adjust calibration factor dalam kod sehingga bacaan match.
+
+**Langkah 4 — Test dengan Transformer Kecil**
+Guna bench power supply atau transformer lampu 220V/12V untuk demo. Sambung beban (lampu atau resistor) pada secondary, CT clamp pada primary.
+
+**Langkah 5 — Test Jarak LoRa**
+Ukur RSSI dan SNR pada jarak berbeza (10m, 50m, 100m, 200m). Plot graf distance vs RSSI. Ini adalah eksperimen yang sangat relevan untuk bahagian results thesis.
+
+---
+
+## Tips Pembentangan FYP
+
+- **Kuasai soalan kenapa LoRa**: LoRa boleh hantar data sejauh 5–15km, kuasa rendah (bateri tahan bertahun), tidak bergantung kepada infrastruktur telco.
+- **Bincangkan Predictive Maintenance**: Data trend suhu dan getaran selama beberapa bulan boleh predict kegagalan transformer sebelum ia berlaku.
+- **Tunjukkan RSSI testing**: Laporan jarak ujian LoRa — buktikan system boleh communicate dari satu hujung kampus ke hujung lain.
+- **Kira ROI untuk industri**: Transformer 250 kVA berharga RM 20,000–50,000. Kos sistem pemantauan: RM 500. ROI sangat obvious.
+- **Path to LoRaWAN penuh**: Tunjukkan bagaimana sistem ini boleh di-scale ke LoRaWAN dengan The Things Network (TTN) — platform percuma global.
+
+---
+
+## Penutup
+
+Sistem pemantauan transformer IoT dengan LoRaWAN adalah antara projek FYP paling sophisticated dan paling dihargai dalam bidang kejuruteraan elektrik di Malaysia. Ia menggabungkan power engineering dengan IoT dan wireless communication — bidang yang sangat dicari industri tenaga Malaysia. Untuk modul LoRa Ra-02, ESP32, CT Clamp SCT-013, dan semua sensor lain, lawati **Rectronx** di rectronx.com dan biarkan kami bantu kamu bina FYP yang cemerlang!

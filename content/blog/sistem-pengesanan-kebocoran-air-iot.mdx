@@ -1,0 +1,292 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Kebocoran Air dan Kawalan Automatik Menggunakan IoT"
+excerpt: "Bina sistem IoT yang boleh kesan kebocoran paip secara automatik, tutup injap solenoid, dan hantar amaran kepada pengguna melalui Telegram. Tutorial lengkap dengan sensor aliran YF-S201, solenoid valve fail-safe, dan kod ESP32."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kebocoran air", "solenoid valve", "yf-s201", "telegram"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Kebocoran Air dan Kawalan Automatik Menggunakan IoT
+
+Di Malaysia, kebocoran air dalam sistem paip perumahan dan komersial menyebabkan kerugian yang sangat besar setiap tahun — baik dari segi bil air yang membengkak, kerosakan harta benda akibat banjir dalam rumah, mahupun pembaziran sumber air yang semakin berharga.
+
+Projek FYP ini membina sistem yang boleh **kesan kebocoran secara automatik**, **tutup bekalan air tanpa campur tangan manusia**, dan **hantar amaran segera kepada pengguna** melalui Telegram. Ini adalah sistem yang boleh benar-benar menyelamatkan rumah seseorang daripada banjir dalaman.
+
+---
+
+## Kenapa Projek Ini Cemerlang untuk FYP?
+
+Projek ini mempunyai tiga komponen teknikal yang kuat:
+
+1. **Pengukuran aliran air** — menggunakan sensor YF-S201 yang mengira aliran berdasarkan putaran rotor magnetik
+2. **Kawalan aktuator** — solenoid valve yang tutup/buka bekalan air secara elektrik
+3. **Logik pengesanan kebocoran** — algoritma yang bandingkan aliran masuk vs aliran keluar untuk kesan anomali
+
+Gabungan ketiga-tiga komponen ni tunjukkan pemahaman mendalam tentang **sistem kawalan** — konsep yang sangat dihargai dalam FYP kejuruteraan.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 Development Board | 38-pin | RM 20–28 |
+| Sensor Aliran Air YF-S201 | 1–30 L/min, 1–2% accuracy | RM 12–18 (x2) |
+| Solenoid Valve NC | 12V DC, 1/2" BSP, Normally Closed | RM 25–40 |
+| Modul Relay | 1-channel, 5V coil | RM 4–6 |
+| Sensor Kelembapan Tanah | Resistif (sebagai sensor air di lantai) | RM 3–5 |
+| DHT22 | Suhu & kelembapan persekitaran | RM 10–15 |
+| OLED 0.96" | SSD1306, I2C | RM 10–15 |
+| Buzzer Aktif | 5V | RM 2–3 |
+| Power Supply 12V | 1A (untuk solenoid) | RM 15–20 |
+| Buck Converter | 12V→5V, untuk ESP32 | RM 5–8 |
+| Fitting Paip | 1/2", untuk sensor aliran | RM 8–15 |
+| Jumper + Breadboard | Standard | RM 10–15 |
+
+**Jumlah anggaran: RM 124–188**
+
+---
+
+## Konsep Penting: Solenoid Valve Normally Closed (NC)
+
+Ini adalah pilihan reka bentuk yang kritikal dan sering diabaikan oleh pelajar FYP.
+
+Solenoid valve **Normally Closed (NC)** bermakna injap adalah **TERTUTUP** apabila tiada kuasa. Injap hanya terbuka bila diberi kuasa elektrik.
+
+**Kenapa pilih NC dan bukan Normally Open (NO)?**
+
+Bayangkan berlaku pemadaman elektrik atau ESP32 crash sewaktu kau tidur. Kalau sistem kau guna valve NO, valve akan **terbuka** bila sistem fail — air terus mengalir tanpa kawalan. Ini bahaya. Dengan valve NC, sistem fail-safe: bila tiada kuasa, air **diputuskan** secara automatik. Ini adalah prinsip kejuruteraan keselamatan yang panel FYP akan sangat appreciate bila kau terangkan.
+
+---
+
+## Gambarajah Pendawaian
+
+**Sensor YF-S201 (Sensor 1 — Masuk) ke ESP32:**
+- Merah (VCC) → 5V
+- Hitam (GND) → GND
+- Kuning (Signal) → GPIO 4 (interrupt pin)
+
+**Sensor YF-S201 (Sensor 2 — Keluar) ke ESP32:**
+- Signal → GPIO 5
+
+**Solenoid Valve NC ke Relay ke ESP32:**
+- Solenoid: sambung 12V ke COM relay, NO ke terminal solenoid
+- Relay IN → GPIO 26
+- Relay VCC → 5V, GND → GND
+- Pasang dioda flyback 1N4007 selari dengan solenoid untuk lindungi relay daripada voltage spike
+
+**Sensor Kelembapan (pengesan banjir lantai) ke ESP32:**
+- AO → GPIO 34
+
+**OLED:**
+- SDA → GPIO 21, SCL → GPIO 22
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <Wire.h>
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <UniversalTelegramBot.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+const char* WIFI_SSID     = "NamaWiFiKau";
+const char* WIFI_PASSWORD = "PasswordWiFi";
+const char* BOT_TOKEN     = "TOKEN_BOT_TELEGRAM";
+const char* CHAT_ID       = "CHAT_ID_KAU";
+
+#define SENSOR_MASUK_PIN  4
+#define SENSOR_KELUAR_PIN 5
+#define RELAY_PIN         26   // HIGH = valve BUKA (relay active HIGH)
+#define FLOOR_SENSOR_PIN  34
+#define BUZZER_PIN        32
+
+// Calibration factor YF-S201: 450 pulses/litre
+#define PULSES_PER_LITRE  450.0
+
+// Threshold kebocoran
+#define KEBOCORAN_LITRE   0.5  // Perbezaan > 0.5L dalam masa 1 minit = kebocoran
+#define BANJIR_THRESHOLD  2000 // ADC value untuk pengesan lantai basah
+
+volatile unsigned long pulseMasuk  = 0;
+volatile unsigned long pulseKeluar = 0;
+
+void IRAM_ATTR countMasuk()  { pulseMasuk++; }
+void IRAM_ATTR countKeluar() { pulseKeluar++; }
+
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+WiFiClientSecure client;
+UniversalTelegramBot bot(BOT_TOKEN, client);
+
+bool valveOpen   = true;
+bool leakDetected = false;
+bool floodDetected = false;
+unsigned long lastCheck = 0;
+unsigned long lastTelegramSent = 0;
+
+void bukaValve() {
+  digitalWrite(RELAY_PIN, HIGH); // Relay HIGH = valve BUKA (NC valve)
+  valveOpen = true;
+  Serial.println("Valve BUKA");
+}
+
+void tutupValve() {
+  digitalWrite(RELAY_PIN, LOW); // Relay LOW = valve TUTUP (NC valve kembali NC)
+  valveOpen = false;
+  Serial.println("Valve TUTUP");
+}
+
+void hantarTelegram(String msg) {
+  if (millis() - lastTelegramSent < 60000) return; // Cooldown 1 minit
+  bot.sendMessage(CHAT_ID, msg, "Markdown");
+  lastTelegramSent = millis();
+}
+
+void periksaKebocoran() {
+  // Simpan dan reset kiraan pulsa
+  unsigned long masuk  = pulseMasuk;
+  unsigned long keluar = pulseKeluar;
+  pulseMasuk  = 0;
+  pulseKeluar = 0;
+
+  // Kira jumlah liter
+  float lMasuk  = masuk  / PULSES_PER_LITRE;
+  float lKeluar = keluar / PULSES_PER_LITRE;
+  float beza = lMasuk - lKeluar;
+
+  Serial.printf("Masuk: %.3fL | Keluar: %.3fL | Beza: %.3fL\n", lMasuk, lKeluar, beza);
+
+  // Kesan kebocoran
+  if (beza > KEBOCORAN_LITRE && valveOpen && !leakDetected) {
+    leakDetected = true;
+    tutupValve();
+    String msg = "🚰 *AMARAN KEBOCORAN AIR DIKESAN!*\n\n";
+    msg += "Air Masuk: " + String(lMasuk, 3) + "L\n";
+    msg += "Air Keluar: " + String(lKeluar, 3) + "L\n";
+    msg += "Perbezaan: " + String(beza, 3) + "L\n\n";
+    msg += "⛔ Bekalan air telah *DIPUTUSKAN* secara automatik.\n";
+    msg += "Sila periksa paip dan balas dengan /buka untuk buka semula.";
+    hantarTelegram(msg);
+  }
+
+  // Kesan banjir lantai
+  int floorVal = analogRead(FLOOR_SENSOR_PIN);
+  if (floorVal > BANJIR_THRESHOLD && !floodDetected) {
+    floodDetected = true;
+    tutupValve();
+    hantarTelegram("🌊 *AMARAN BANJIR!* Air dikesan di lantai. Bekalan diputuskan segera.");
+  }
+
+  // Kemaskini OLED
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.printf("Masuk:  %.2fL/min\n", lMasuk * 60);
+  display.printf("Keluar: %.2fL/min\n", lKeluar * 60);
+  display.printf("Beza:   %.3fL\n", beza);
+  display.printf("Valve: %s\n", valveOpen ? "BUKA" : "TUTUP");
+  display.printf("Status: %s\n", leakDetected ? "BOCOR!" : "NORMAL");
+  display.display();
+}
+
+// Terima arahan dari Telegram
+void semakTelegramCommand() {
+  int numMsg = bot.getUpdates(bot.last_message_received + 1);
+  while (numMsg) {
+    for (int i = 0; i < numMsg; i++) {
+      String text = bot.messages[i].text;
+      String dari = bot.messages[i].chat_id;
+
+      if (text == "/buka" && dari == CHAT_ID) {
+        leakDetected = false;
+        floodDetected = false;
+        bukaValve();
+        bot.sendMessage(CHAT_ID, "✅ Bekalan air dibuka semula. Sila pastikan tiada lagi kebocoran.", "");
+      } else if (text == "/tutup" && dari == CHAT_ID) {
+        tutupValve();
+        bot.sendMessage(CHAT_ID, "⛔ Bekalan air diputuskan secara manual.", "");
+      } else if (text == "/status" && dari == CHAT_ID) {
+        String status = "📊 *Status Sistem*\n";
+        status += "Valve: " + String(valveOpen ? "BUKA" : "TUTUP") + "\n";
+        status += "Kebocoran: " + String(leakDetected ? "YA" : "TIDAK") + "\n";
+        status += "Banjir: " + String(floodDetected ? "YA" : "TIDAK") + "\n";
+        bot.sendMessage(CHAT_ID, status, "Markdown");
+      }
+    }
+    numMsg = bot.getUpdates(bot.last_message_received + 1);
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(SENSOR_MASUK_PIN, INPUT_PULLUP);
+  pinMode(SENSOR_KELUAR_PIN, INPUT_PULLUP);
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  attachInterrupt(digitalPinToInterrupt(SENSOR_MASUK_PIN),  countMasuk,  RISING);
+  attachInterrupt(digitalPinToInterrupt(SENSOR_KELUAR_PIN), countKeluar, RISING);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.println("Sistem Kebocoran Air");
+  display.display();
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  client.setInsecure();
+
+  bukaValve(); // Mulakan dengan valve terbuka
+  bot.sendMessage(CHAT_ID, "✅ Sistem Pengesanan Kebocoran Air AKTIF.\nArahan: /buka /tutup /status", "");
+}
+
+void loop() {
+  if (millis() - lastCheck >= 60000) { // Semak setiap minit
+    lastCheck = millis();
+    periksaKebocoran();
+  }
+
+  static unsigned long lastTelegramCheck = 0;
+  if (millis() - lastTelegramCheck >= 3000) {
+    lastTelegramCheck = millis();
+    semakTelegramCommand();
+  }
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Pasang Sensor Aliran**
+Potong paip dan pasang sensor YF-S201 menggunakan fitting paip 1/2". Pastikan arah aliran betul (ada anak panah pada sensor). Sensor pertama di titik masuk air, sensor kedua di titik keluar.
+
+**Langkah 2 — Setup Solenoid Valve**
+Pasang solenoid valve NC pada paip masuk utama. Sambung ke relay dan pastikan anda faham logik NC: tiada kuasa = tutup, ada kuasa = buka.
+
+**Langkah 3 — Kalibrasi Sensor**
+Guna baldi yang diketahui isipadunya (contoh: 5 liter). Buka valve, kumpul air sehingga penuh, tutup. Rekod jumlah pulsa. Kira `PULSES_PER_LITRE = total_pulsa / isi_padu`. Adjust dalam kod.
+
+**Langkah 4 — Test Skenario Kebocoran**
+Simulasikan kebocoran dengan membuka pili di antara dua sensor tanpa diketahui sistem. Pastikan sistem kesan perbezaan aliran dan tutup valve dalam masa kurang dari 2 minit.
+
+**Langkah 5 — Packaging**
+Letak ESP32 dan relay dalam kotak kalis air. Waterproof semua sambungan dengan heat shrink tube dan silicone.
+
+---
+
+## Tips Pembentangan
+
+- **Demonstrasi live**: Simulasikan kebocoran di depan panel — buka pili secara rahsia, kemudian tunjukkan Telegram notification masuk secara automatik.
+- **Terangkan NC valve**: Ini adalah design decision yang menunjukkan pemikiran engineering yang matang. Panel yang faham akan sangat appreciate.
+- **Data penjimatan air**: Kira berapa liter air yang boleh diselamatkan dengan sistem ni berbanding kebocoran yang tak dikesan selama beberapa jam.
+
+---
+
+## Penutup
+
+Sistem pengesanan kebocoran air ini adalah gabungan hardware yang elegan dengan logik kawalan yang bijak. Dengan solenoid valve fail-safe dan notifikasi Telegram, ia boleh menjadi produk komersial yang sebenar. Dapatkan semua komponen termasuk solenoid valve NC dan sensor YF-S201 di **Rectronx** — rectronx.com.

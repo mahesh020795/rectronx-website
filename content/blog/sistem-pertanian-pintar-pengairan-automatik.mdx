@@ -1,0 +1,232 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Pertanian Pintar dan Pengairan Automatik"
+excerpt: "Belajar cara bina sistem pertanian pintar menggunakan ESP32, sensor kelembapan tanah kapasitif, dan pengairan automatik yang boleh dipantau melalui telefon pintar melalui Blynk. Sesuai untuk FYP kejuruteraan elektrik, mekanikal, dan komputer."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "pertanian pintar", "smart farming", "pengairan automatik", "blynk"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Pertanian Pintar dan Pengairan Automatik
+
+Kalau kamu pelajar kejuruteraan yang tengah tercari-cari idea FYP yang ada nilai, ada impact, dan senang nak dibentangkan depan panel — projek pertanian pintar ini adalah pilihan yang sangat solid.
+
+Malaysia adalah negara pertanian. Sektor agrikultur menyumbang bilion ringgit kepada ekonomi negara, tapi ramai petani kita masih bergantung pada kaedah manual — siram bila ingat, periksa tanah bila ada masa, dan keliru bila tanaman mati tanpa sebab yang jelas. Masalah ini boleh diselesaikan dengan teknologi IoT yang murah dan praktikal.
+
+---
+
+## Kenapa Projek Ini Sesuai untuk FYP?
+
+Projek ini menggabungkan **sensor kelembapan tanah**, **ESP32 dengan WiFi built-in**, **pam air automatik**, dan **dashboard monitoring** yang boleh diakses dari telefon pintar. Panel assessor FYP suka projek yang ada **real-world application**, dan pertanian pintar adalah salah satu bidang yang selalu dapat kredit tinggi kerana ia menyentuh isu kemapanan (sustainability) dan Industry 4.0.
+
+Lebih best lagi — kamu boleh bawa demo hidup ke pembentangan. Letak pasu bunga kecil, tunjukkan sensor baca data, tunjukkan pam start automatik bila tanah kering.
+
+---
+
+## Senarai Komponen
+
+| Bil | Komponen | Kuantiti | Anggaran Harga |
+|-----|----------|----------|----------------|
+| 1 | ESP32 Development Board (30-pin) | 1 | RM 25–35 |
+| 2 | Capacitive Soil Moisture Sensor v1.2 | 2–4 | RM 8–12 seunit |
+| 3 | DHT22 Temperature & Humidity Sensor | 1 | RM 12–18 |
+| 4 | 5V Mini Water Pump (submersible) | 1–2 | RM 8–15 seunit |
+| 5 | 5V Relay Module (1 channel) | 1 | RM 5–10 |
+| 6 | LDR (Light Dependent Resistor) | 1 | RM 1–2 |
+| 7 | LCD I2C 16x2 Display | 1 | RM 10–15 |
+| 8 | Breadboard + Jumper Wires | 1 set | RM 10–15 |
+| 9 | Power Supply 5V 2A | 1 | RM 15–25 |
+| 10 | Selang air plastik kecil (1 meter) | 1 | RM 3–5 |
+
+**Jumlah Anggaran: RM 120–180**
+
+> **Tip Penting**: Guna **capacitive** soil moisture sensor, bukan resistive. Sensor resistive akan karat dalam beberapa minggu dan bacaan tak stable. Capacitive lebih tahan lama dan accurate.
+
+---
+
+## Gambarajah Pendawaian
+
+**Soil Moisture Sensor → ESP32:**
+- VCC → 3.3V, GND → GND
+- AOUT → GPIO34 (ADC input)
+
+**DHT22 → ESP32:**
+- VCC → 3.3V, GND → GND
+- DATA → GPIO4 (dengan 10kΩ pull-up resistor ke 3.3V)
+
+**LCD I2C → ESP32:**
+- SDA → GPIO21, SCL → GPIO22, VCC → 5V, GND → GND
+
+**Relay Module → ESP32:**
+- VCC → 5V, GND → GND, IN → GPIO26
+
+**Water Pump → Relay:**
+- Sambung pam melalui relay (NO — Normally Open contact)
+- Power pam dari supply berasingan untuk elak noise pada ESP32
+
+**LDR → ESP32 (Voltage Divider):**
+- 3.3V → LDR → GPIO35 → 10kΩ → GND
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <DHT.h>
+#include <LiquidCrystal_I2C.h>
+#include <BlynkSimpleEsp32.h>
+
+#define DHTPIN     4
+#define DHTTYPE    DHT22
+#define SOIL_PIN   34
+#define RELAY_PIN  26
+#define LDR_PIN    35
+
+char auth[] = "YOUR_BLYNK_AUTH_TOKEN";
+char ssid[] = "YOUR_WIFI_NAME";
+char pass[] = "YOUR_WIFI_PASSWORD";
+
+// Threshold kelembapan (0-4095 untuk ADC 12-bit ESP32)
+// Nilai TINGGI = tanah KERING, nilai RENDAH = tanah BASAH
+#define SOIL_DRY_THRESHOLD  2800
+#define WATERING_DURATION   5000  // 5 saat
+
+DHT dht(DHTPIN, DHTTYPE);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+#define VPIN_SOIL     V0
+#define VPIN_TEMP     V1
+#define VPIN_HUMIDITY V2
+#define VPIN_LIGHT    V3
+#define VPIN_PUMP     V4
+#define VPIN_AUTO     V5
+
+bool autoMode = true;
+bool pumpRunning = false;
+unsigned long pumpStartTime = 0;
+unsigned long lastSendTime = 0;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, HIGH); // Active LOW relay — HIGH = pump OFF
+
+  dht.begin();
+  lcd.init(); lcd.backlight();
+  lcd.setCursor(0, 0); lcd.print("Rectronx FarmBot");
+  lcd.setCursor(0, 1); lcd.print("Connecting...");
+
+  Blynk.begin(auth, ssid, pass);
+  lcd.clear(); lcd.print("Sistem Aktif!");
+  delay(2000);
+}
+
+void loop() {
+  Blynk.run();
+
+  if (millis() - lastSendTime > 2000) {
+    lastSendTime = millis();
+    bacaDanHantar();
+  }
+
+  if (pumpRunning && (millis() - pumpStartTime > WATERING_DURATION)) {
+    hentikanPam();
+  }
+}
+
+void bacaDanHantar() {
+  int soilRaw = analogRead(SOIL_PIN);
+  float temp  = dht.readTemperature();
+  float hum   = dht.readHumidity();
+  int lightRaw = analogRead(LDR_PIN);
+
+  int soilPct  = map(soilRaw, 4095, 0, 0, 100);
+  soilPct      = constrain(soilPct, 0, 100);
+  int lightPct = map(lightRaw, 4095, 0, 0, 100);
+
+  Serial.printf("Soil:%d%% Temp:%.1f°C Humid:%.1f%% Light:%d%%\n",
+    soilPct, temp, hum, lightPct);
+
+  Blynk.virtualWrite(VPIN_SOIL,     soilPct);
+  Blynk.virtualWrite(VPIN_TEMP,     temp);
+  Blynk.virtualWrite(VPIN_HUMIDITY, hum);
+  Blynk.virtualWrite(VPIN_LIGHT,    lightPct);
+
+  lcd.clear();
+  lcd.setCursor(0, 0); lcd.printf("Tanah:%d%% T:%.0fC", soilPct, temp);
+  lcd.setCursor(0, 1); lcd.printf("H:%.0f%% Cahaya:%d%%", hum, lightPct);
+
+  if (autoMode && !pumpRunning && soilRaw > SOIL_DRY_THRESHOLD) {
+    Serial.println("Tanah kering! Mulakan pengairan...");
+    hidupkanPam();
+    Blynk.logEvent("tanah_kering", "Tanah kering! Pengairan automatik dimulakan.");
+  }
+}
+
+void hidupkanPam() {
+  digitalWrite(RELAY_PIN, LOW); // Active LOW
+  pumpRunning   = true;
+  pumpStartTime = millis();
+  Blynk.virtualWrite(VPIN_PUMP, 1);
+  Serial.println("PAM ON");
+}
+
+void hentikanPam() {
+  digitalWrite(RELAY_PIN, HIGH);
+  pumpRunning = false;
+  Blynk.virtualWrite(VPIN_PUMP, 0);
+  Serial.println("PAM OFF");
+}
+
+BLYNK_WRITE(VPIN_PUMP) {
+  if (param.asInt() == 1) hidupkanPam();
+  else hentikanPam();
+}
+
+BLYNK_WRITE(VPIN_AUTO) {
+  autoMode = param.asInt();
+  Serial.printf("Auto Mode: %s\n", autoMode ? "ON" : "OFF");
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Setup Arduino IDE untuk ESP32**
+Pergi ke File → Preferences, tambah URL boards ESP32:
+`https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
+
+**Langkah 2 — Install Library**
+Dalam Manage Libraries, cari dan install:
+- `DHT sensor library` oleh Adafruit
+- `LiquidCrystal I2C` oleh Frank de Brabander
+- `Blynk` oleh Volodymyr Shymanskyy
+
+**Langkah 3 — Daftar Blynk dan Dapatkan Auth Token**
+Pergi ke blynk.cloud, daftar akaun percuma. Buat template baru, tambah datastreams untuk V0 hingga V5. Copy auth token ke kod.
+
+**Langkah 4 — Kalibrasi Sensor Kelembapan Tanah**
+Langkah kritikal! Baca nilai ADC bila sensor dalam udara kering (nilai maksimum, contoh 3800) dan dalam air (nilai minimum, contoh 1200). Update nilai dalam `map()` mengikut sensor spesifik kamu.
+
+**Langkah 5 — Test Relay dan Pam**
+Dengar bunyi "klik" dari relay bila tanah kering disimulasikan. Pastikan pam start dan berhenti dalam tempoh yang betul.
+
+**Langkah 6 — Setup Blynk Dashboard**
+Tambah widgets: Gauge (soil moisture), Value Display (suhu & kelembapan), Button (kawalan manual pam), Switch (toggle auto mode).
+
+---
+
+## Tips Pembentangan FYP
+
+- **Bawa demo hidup**: Bawa pasu bunga, tunjukkan bacaan dalam Blynk app di telefon secara real-time.
+- **Highlight penjimatan air**: Sistem ini boleh jimat 30–50% berbanding pengairan manual.
+- **Eksperimen perbandingan**: Siram manual seminggu vs automatik — rekod berapa banyak air digunakan.
+- **Terangkan kenapa capacitive sensor**: Sensor resistive karat → bacaan tak tepat → keputusan salah.
+- **Cadangkan penambahbaikan**: Solar panel, integrasi weather API, machine learning untuk optimise jadual.
+
+---
+
+## Penutup
+
+Sistem pertanian pintar ini adalah FYP yang sempurna — ada nilai praktikal, boleh demo hidup, dan mudah diperluas. Dengan kos bawah RM 200 dan masa build sekitar 1–2 minggu, ini adalah salah satu projek IoT paling cost-effective untuk FYP. Untuk komponen berkualiti termasuk capacitive soil moisture sensor, ESP32, dan relay module, lawati **Rectronx** di rectronx.com!

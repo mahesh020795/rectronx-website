@@ -1,0 +1,345 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Gas LPG dan Kebakaran dengan Kawalan Injap Automatik"
+excerpt: "Bina sistem keselamatan IoT yang boleh kesan kebocoran gas LPG, asap kebakaran, dan api secara serentak, kemudian tutup injap gas dan hantar amaran kecemasan. Tutorial dengan sensor MQ-2, MQ-6, flame sensor, solenoid valve fail-safe, dan ESP32."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "gas lpg", "kebakaran", "mq2", "mq6", "solenoid valve", "keselamatan"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Gas LPG dan Kebakaran dengan Kawalan Injap Automatik
+
+Kebakaran rumah di Malaysia — banyak daripadanya berpunca daripada kebocoran gas LPG yang tidak dikesan — menyebabkan kehilangan nyawa dan harta benda setiap tahun. Bomba Malaysia menerima ribuan panggilan berkaitan kebakaran dapur dan ledakan gas setiap tahun.
+
+Projek FYP ini membina sistem keselamatan IoT yang komprehensif: kesan gas LPG, asap, DAN api secara serentak, tutup bekalan gas secara automatik sebaik kebocoran dikesan, dan hantar amaran kepada penghuni serta pihak bomba melalui tiga peringkat alert yang berbeza.
+
+---
+
+## Kenapa Projek Ini Outstanding untuk FYP?
+
+**Sistem tiga lapis**: Kebanyakan projek keselamatan hanya ada satu sensor. Projek ini guna **sensor fusion** — tiga jenis sensor secara serentak untuk kurangkan false positive dan tingkatkan kebolehpercayaan. Ini adalah reka bentuk sistem yang matang.
+
+**Fail-safe design**: Penggunaan solenoid valve NC (Normally Closed) memastikan bahawa walaupun sistem terputus kuasa atau ESP32 crash, bekalan gas tetap diputuskan. Ini adalah konsep **defence-in-depth** dalam kejuruteraan keselamatan.
+
+**Tiga peringkat alert**: Amaran awal (pra-berbahaya), amaran bahaya, dan amaran kecemasan — masing-masing dengan tindak balas yang berbeza. Ini menunjukkan pemikiran sistem yang terstruktur.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 Development Board | 38-pin | RM 20–28 |
+| Sensor Gas MQ-2 | LPG, Butana, Propana, Asap, H2 | RM 8–12 |
+| Sensor Gas MQ-6 | LPG, Butana, Propana (lebih spesifik) | RM 8–12 |
+| Sensor Nyala Api (Flame Sensor) | IR, 760–1100nm, 60° | RM 5–8 |
+| Solenoid Valve NC | 12V DC, 1/2" BSP | RM 25–40 |
+| Modul Relay | 1-channel, 5V | RM 4–6 |
+| Buzzer Kuat | 12V, 95dB | RM 8–12 |
+| LED Merah, Kuning, Hijau | 5mm | RM 2 |
+| Ekzos/Exhaust Fan Kecil | 5V atau 12V, 80mm | RM 15–20 |
+| Relay Kedua | Untuk fan | RM 4–6 |
+| OLED 0.96" | I2C, SSD1306 | RM 10–15 |
+| Buck Converter 12V→5V | Untuk ESP32 dari supply solenoid | RM 5–8 |
+| Resistor Set | 220Ω, 10kΩ | RM 3 |
+
+**Jumlah anggaran: RM 117–172**
+
+---
+
+## Sistem Tiga Peringkat Alert
+
+| Peringkat | Trigger | Tindakan |
+|---|---|---|
+| ⚠️ WASPADA | Gas > 30% dari threshold maksimum | LED kuning, Telegram amaran awal |
+| 🚨 BAHAYA | Gas > 70% threshold ATAU nyala api kesan | LED merah, buzzer, tutup gas, hidupkan fan |
+| 🆘 KECEMASAN | Gas > 100% threshold DAN api | Semua amaran, Telegram kecemasan, cadangkan hubungi Bomba |
+
+---
+
+## Gambarajah Pendawaian
+
+**Sensor MQ-2 ke ESP32:**
+- VCC → 5V, GND → GND
+- AO (Analog) → GPIO36, DO (Digital) → GPIO34
+
+**Sensor MQ-6 ke ESP32:**
+- VCC → 5V, GND → GND
+- AO → GPIO39, DO → GPIO35
+
+**Flame Sensor ke ESP32:**
+- VCC → 3.3V, GND → GND
+- DO (Digital) → GPIO32 (api = LOW)
+- AO (Analog) → GPIO33
+
+**Solenoid Valve NC via Relay:**
+- Relay IN → GPIO26
+- Relay COM → 12V, Relay NO → Solenoid terminal
+- Dioda flyback 1N4007 selari solenoid
+
+**Exhaust Fan via Relay 2:**
+- Relay 2 IN → GPIO27
+- Sambung fan ke relay dalam konfigurasi yang sama
+
+**LED & Buzzer:**
+- LED Hijau → GPIO14 → 220Ω → GND
+- LED Kuning → GPIO12 → 220Ω → GND
+- LED Merah → GPIO13 → 220Ω → GND
+- Buzzer → GPIO25
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <Wire.h>
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <UniversalTelegramBot.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+const char* WIFI_SSID     = "NamaWiFiKau";
+const char* WIFI_PASSWORD = "PasswordWiFi";
+const char* BOT_TOKEN     = "TOKEN_BOT_TELEGRAM";
+const char* CHAT_ID       = "CHAT_ID_KAU";
+
+// Pins
+#define MQ2_AO     36
+#define MQ6_AO     39
+#define FLAME_DO   32
+#define FLAME_AO   33
+#define RELAY_GAS  26   // LOW = buka gas, HIGH = tutup gas (active HIGH untuk NC valve)
+#define RELAY_FAN  27
+#define LED_GREEN  14
+#define LED_YELLOW 12
+#define LED_RED    13
+#define BUZZER_PIN 25
+
+// Threshold (perlu kalibrasi mengikut sensor sebenar)
+#define GAS_WASPADA  800   // ADC value — ~30% dari maksimum
+#define GAS_BAHAYA   2000  // ADC value — ~70% dari maksimum
+#define GAS_KRITIKAL 3000  // ADC value
+
+// Status peringkat
+enum AlertLevel { SELAMAT, WASPADA, BAHAYA, KECEMASAN };
+AlertLevel tahapSemasa = SELAMAT;
+AlertLevel tahapLepas  = SELAMAT;
+
+bool gasValveOpen = true; // True = valve BUKA (gas mengalir)
+bool fanRunning   = false;
+
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+WiFiClientSecure client;
+UniversalTelegramBot bot(BOT_TOKEN, client);
+
+unsigned long lastTelegramSent = 0;
+unsigned long warmUpEnd = 0;
+bool warmUpDone = false;
+
+void bukaGas() {
+  digitalWrite(RELAY_GAS, LOW); // LOW = relay OFF = solenoid NC = tutup gas...
+  // NOTA: Bergantung kepada jenis relay (active HIGH atau LOW) dan sambungan COM/NC/NO
+  // Verify dengan multimeter sebelum sambung gas sebenar!
+  gasValveOpen = true;
+}
+
+void tutupGas() {
+  digitalWrite(RELAY_GAS, HIGH);
+  gasValveOpen = false;
+}
+
+void hidupFan() {
+  digitalWrite(RELAY_FAN, LOW);
+  fanRunning = true;
+}
+
+void matiFan() {
+  digitalWrite(RELAY_FAN, HIGH);
+  fanRunning = false;
+}
+
+void setLED(AlertLevel tahap) {
+  digitalWrite(LED_GREEN,  tahap == SELAMAT  ? HIGH : LOW);
+  digitalWrite(LED_YELLOW, tahap == WASPADA  ? HIGH : LOW);
+  digitalWrite(LED_RED,    (tahap == BAHAYA || tahap == KECEMASAN) ? HIGH : LOW);
+}
+
+void hantarTelegram(String msg) {
+  if (millis() - lastTelegramSent < 30000) return;
+  bot.sendMessage(CHAT_ID, msg, "Markdown");
+  lastTelegramSent = millis();
+  Serial.println("Telegram dihantar");
+}
+
+AlertLevel tentukan_tahap(int mq2, int mq6, bool ada_api) {
+  int gasMax = max(mq2, mq6);
+
+  if (ada_api && gasMax > GAS_BAHAYA) return KECEMASAN;
+  if (ada_api || gasMax > GAS_BAHAYA) return BAHAYA;
+  if (gasMax > GAS_WASPADA) return WASPADA;
+  return SELAMAT;
+}
+
+void kendalikanTahap(AlertLevel tahap, int mq2, int mq6, bool ada_api) {
+  setLED(tahap);
+
+  switch (tahap) {
+    case SELAMAT:
+      noTone(BUZZER_PIN);
+      if (!gasValveOpen) bukaGas();
+      matiFan();
+      break;
+
+    case WASPADA:
+      noTone(BUZZER_PIN);
+      if (tahap != tahapLepas) {
+        hantarTelegram("⚠️ *WASPADA GAS*\nGas dikesan pada tahap rendah. Sila periksa kawasan dapur.\n"
+                       "MQ2: " + String(mq2) + " | MQ6: " + String(mq6));
+      }
+      break;
+
+    case BAHAYA:
+      tone(BUZZER_PIN, 1500, 500);
+      tutupGas();
+      hidupFan();
+      if (tahap != tahapLepas) {
+        hantarTelegram("🚨 *BAHAYA! KEBOCORAN GAS DIKESAN!*\n\n"
+                       "MQ2: " + String(mq2) + " | MQ6: " + String(mq6) + "\n"
+                       "Api: " + String(ada_api ? "KESAN" : "Tidak") + "\n\n"
+                       "⛔ Bekalan gas *DIPUTUSKAN* automatik\n"
+                       "💨 Kipas ekzos *DIHIDUPKAN*\n\n"
+                       "Sila keluar dari kawasan dan pastikan tingkap terbuka!");
+      }
+      break;
+
+    case KECEMASAN:
+      tone(BUZZER_PIN, 2000);
+      tutupGas();
+      hidupFan();
+      if (tahap != tahapLepas) {
+        hantarTelegram("🆘 *KECEMASAN! GAS + API DIKESAN!*\n\n"
+                       "BAHAYA LETUPAN/KEBAKARAN!\n\n"
+                       "⛔ Gas diputuskan\n"
+                       "🚒 Hubungi Bomba: *994*\n"
+                       "⚡ Matikan suis utama elektrik\n"
+                       "🏃 KELUAR SEGERA!");
+      }
+      break;
+  }
+}
+
+void kemaskiniOLED(int mq2, int mq6, bool api) {
+  const char* statusStr[] = {"SELAMAT", "WASPADA", "BAHAYA", "KECEMASAN"};
+
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("SISTEM KESELAMATAN GAS");
+  display.drawLine(0, 9, 127, 9, SSD1306_WHITE);
+  display.setCursor(0, 12);
+  display.printf("MQ2:  %d\n", mq2);
+  display.printf("MQ6:  %d\n", mq6);
+  display.printf("Api:  %s\n", api ? "KESAN!" : "Tiada");
+  display.printf("Gas:  %s\n", gasValveOpen ? "BUKA" : "TUTUP");
+  display.printf("Fan:  %s\n", fanRunning ? "ON" : "OFF");
+  display.setCursor(0, 55);
+  display.printf("[%s]", statusStr[tahapSemasa]);
+  display.display();
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  pinMode(RELAY_GAS,  OUTPUT); pinMode(RELAY_FAN, OUTPUT);
+  pinMode(LED_GREEN,  OUTPUT); pinMode(LED_YELLOW, OUTPUT);
+  pinMode(LED_RED,    OUTPUT); pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(FLAME_DO, INPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+
+  // Mulakan valve dalam keadaan BUKA (gas mengalir secara normal)
+  bukaGas(); matiFan();
+  setLED(SELAMAT);
+
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.println("Warm-up sensor...");
+  display.println("Sila tunggu 30 saat");
+  display.display();
+
+  warmUpEnd = millis() + 30000;
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  client.setInsecure();
+
+  Serial.println("WiFi bersambung. Menunggu warm-up sensor...");
+}
+
+void loop() {
+  if (!warmUpDone && millis() < warmUpEnd) {
+    display.setCursor(0, 32);
+    display.printf("Tinggal: %ds    ", (warmUpEnd - millis()) / 1000);
+    display.display();
+    delay(500);
+    return;
+  }
+
+  if (!warmUpDone) {
+    warmUpDone = true;
+    bot.sendMessage(CHAT_ID, "✅ Sistem Pengesanan Gas & Kebakaran AKTIF.\nSistem memantau kawasan dapur.", "");
+    display.clearDisplay();
+    display.display();
+  }
+
+  int mq2Val   = analogRead(MQ2_AO);
+  int mq6Val   = analogRead(MQ6_AO);
+  bool adaApi  = (digitalRead(FLAME_DO) == LOW);
+
+  tahapLepas  = tahapSemasa;
+  tahapSemasa = tentukan_tahap(mq2Val, mq6Val, adaApi);
+
+  kendalikanTahap(tahapSemasa, mq2Val, mq6Val, adaApi);
+  kemaskiniOLED(mq2Val, mq6Val, adaApi);
+
+  Serial.printf("MQ2:%d MQ6:%d Api:%s Tahap:%d\n", mq2Val, mq6Val, adaApi ? "YA" : "TIDAK", tahapSemasa);
+
+  delay(500); // Semak setiap 500ms untuk response pantas
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Warm-up Sensor MQ**
+Sensor MQ memerlukan masa warm-up 2–5 minit sebelum bacaan stabil. Pastikan sistem dihidupkan beberapa minit sebelum digunakan. Kod sudah ada timer warm-up 30 saat sebagai minimum.
+
+**Langkah 2 — Kalibrasi Threshold Dalam Persekitaran Selamat**
+Ambil bacaan baseline dalam udara bersih. Kemudian uji dengan gas LPG dalam kuantiti sangat kecil (semburan ringan dari pemetik api yang ditekan tanpa menyala) dan rekod nilai ADC. Tetapkan threshold berdasarkan data sebenar ini.
+
+**Langkah 3 — Verify Logik Relay SEBELUM Sambung Gas**
+Ini langkah KRITIKAL. Guna multimeter untuk pastikan relay berfungsi betul sebelum sambung solenoid gas. Verify: bila ESP32 kasi signal HIGH pada relay, adakah solenoid dapat kuasa atau tidak? Pastikan logik betul.
+
+**Langkah 4 — Test Sistem Lengkap Tanpa Gas**
+Test semua fungsi — LED, buzzer, fan, Telegram — tanpa melibatkan gas. Guna asap daripada dupa (incense stick) untuk trigger sensor asap.
+
+**Langkah 5 — Packaging yang Selamat**
+Pastikan semua komponen elektrik dalam kotak yang tidak boleh jadi punca pencetus api. Jauhkan komponen electronic daripada kawasan yang mungkin ada gas. Letak sensor pada ketinggian yang betul (LPG lebih berat dari udara, kumpul di bawah).
+
+---
+
+## Tips Pembentangan
+
+- **Jelaskan prinsip NC fail-safe**: Ini biasanya mencuri markah dalam FYP keselamatan — panel faham implikasinya.
+- **Terangkan sensor fusion**: Mengapa guna MQ-2 DAN MQ-6? MQ-2 lebih sensitif kepada asap, MQ-6 lebih spesifik untuk LPG. Gabungan keduanya kurangkan false positive.
+- **Demo dengan kawalan**: Guna dupa atau asap dari kertas terbakar (dalam keadaan terkawal!) untuk demo. JANGAN guna gas sebenar semasa pembentangan.
+- **Tunjukkan tiga tahap amaran**: Demo setiap tahap dengan trigger yang berbeza — tunjukkan eskalasi amaran secara visual.
+
+---
+
+## Penutup
+
+Sistem pengesanan gas dan kebakaran ini boleh menyelamatkan nyawa — dan itulah poin terkuat yang boleh kau bawa ke pembentangan FYP. Untuk komponen sensor MQ-2, MQ-6, solenoid valve NC, dan semua aksesori, kunjungi **Rectronx** di rectronx.com.

@@ -1,0 +1,326 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Amaran Awal Banjir dan Pemantauan Paras Air Pintar"
+excerpt: "Bina sistem amaran banjir IoT yang boleh kesan paras air secara real-time, hantar amaran SMS dan Telegram, dan papar data dalam dashboard. Projek FYP yang sangat relevan dengan masalah banjir kronik di Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "sistem amaran banjir", "paras air", "sensor ultrasonik", "malaysia"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Amaran Awal Banjir dan Pemantauan Paras Air Pintar
+
+Kalau korang tinggal di Malaysia, korang tahu betapa seriusnya masalah banjir di negara kita. Dari Kelantan hingga Selangor, banjir kilat dan banjir besar menjadi masalah berulang yang menyebabkan kerugian harta benda dan kehilangan nyawa. Yang paling menyedihkan? Banyak banjir ini boleh diantisipasi lebih awal kalau ada sistem pemantauan yang betul.
+
+Sebagai pelajar kejuruteraan Malaysia, projek FYP tentang sistem amaran banjir bukan sahaja relevan secara teknikal — ia mempunyai **impak kemanusiaan yang nyata**. Panel examiner yang nampak projek yang boleh selamatkan nyawa akan tentu beri perhatian yang lebih.
+
+---
+
+## Kenapa Projek Ini Kuat Untuk FYP?
+
+Dari sudut teknikal, projek ini melibatkan **sensor selection yang kritikal** — korang perlu justify kenapa JSN-SR04T waterproof lebih sesuai dari HC-SR04 biasa untuk deployment outdoor. Ini tunjukkan critical thinking yang examiner suka.
+
+Dari sudut konteks, **Malaysia adalah negara tropika** dengan hujan yang sangat lebat. Korang boleh reference data banjir sebenar dari Jabatan Pengairan dan Saliran (JPS) Malaysia untuk benchmark sistem korang.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 DevKit V1 | 38-pin, dual-core | RM 20–28 |
+| JSN-SR04T | Ultrasonic waterproof, 20–600cm | RM 18–25 |
+| Sensor Hujan | YL-83, analog | RM 5–8 |
+| RTC Module | DS3231 (I2C) | RM 10–15 |
+| MicroSD Module | SPI interface | RM 8–12 |
+| GSM Module | SIM800L (untuk SMS) | RM 35–50 |
+| LCD 16x2 I2C | Display | RM 12–18 |
+| Buzzer | 12V, 90dB | RM 8–12 |
+| LED (Merah, Kuning, Hijau) | 5mm | RM 3 |
+| Waterproof Enclosure | IP65, 150x100mm | RM 25–35 |
+| Solar Panel + Controller | 6V 2W | RM 30–45 |
+| LiPo Battery | 3.7V 2000mAh | RM 20–30 |
+
+**Jumlah anggaran: RM 194–281**
+
+---
+
+## Sistem Empat Peringkat Amaran
+
+Berdasarkan standard JPS Malaysia, sistem ini mempunyai empat tahap:
+
+| Tahap | Jarak Sensor | Status | Tindakan |
+|---|---|---|---|
+| SELAMAT | > 80cm | LED Hijau | Log data sahaja |
+| BERHATI-HATI | 50–80cm | LED Kuning | Telegram amaran awal |
+| BAHAYA | 30–50cm | LED Merah + Buzzer | Telegram + SMS |
+| KRITIKAL | < 30cm | Semua amaran | Telegram kecemasan + SMS |
+
+---
+
+## Gambarajah Pendawaian
+
+**JSN-SR04T ke ESP32:**
+- Modul elektronik dalam enclosure kalis air
+- Probe dihadap ke bawah permukaan air
+- Trig → GPIO5, Echo → GPIO18 (melalui voltage divider: 1kΩ + 2kΩ, kerana output 5V)
+
+**Sensor Hujan YL-83:**
+- AO → GPIO34, DO → GPIO19
+
+**RTC DS3231 (I2C):**
+- SDA → GPIO21, SCL → GPIO22
+
+**MicroSD (SPI):**
+- MOSI → GPIO23, MISO → GPIO19, SCK → GPIO18, CS → GPIO15
+
+**GSM SIM800L:**
+- TX → GPIO16 (RX2 ESP32), RX → GPIO17 (TX2 ESP32)
+- VCC dari supply berasingan 3.7–4.2V dengan kapasitor 1000µF
+- JANGAN sambung terus ke ESP32 3.3V — SIM800L makan arus hingga 2A
+
+**LED & Buzzer:**
+- LED Hijau → GPIO25, LED Kuning → GPIO26, LED Merah → GPIO27 (masing-masing 220Ω)
+- Buzzer → GPIO32
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <LiquidCrystal_I2C.h>
+#include <RTClib.h>
+#include <SPI.h>
+#include <SD.h>
+#include <ArduinoJson.h>
+
+const char* ssid      = "WiFi_Korang";
+const char* password  = "Password_Korang";
+const char* botToken  = "TOKEN_BOT";
+const char* chatID    = "CHAT_ID";
+const char* serverURL = "http://server-korang.com/api/water-level";
+
+#define TRIG_PIN    5
+#define ECHO_PIN    18
+#define RAIN_AO     34
+#define RAIN_DO     19
+#define BUZZER_PIN  25
+#define LED_GREEN   26
+#define LED_YELLOW  27
+#define LED_RED     14
+#define SD_CS       15
+
+// Threshold amaran (cm dari sensor ke paras air — jauh = selamat)
+#define PARAS_SELAMAT    80
+#define PARAS_BERHATI    50
+#define PARAS_BAHAYA     30
+#define PARAS_KRITIKAL   15
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+RTC_DS3231 rtc;
+
+float parasAir_cm;
+int nilaiHujan;
+String statusParas = "SELAMAT";
+unsigned long lastTelegramTime = 0;
+unsigned long lastDataSent = 0;
+
+float ukurParasAir() {
+  digitalWrite(TRIG_PIN, LOW);  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  long dur = pulseIn(ECHO_PIN, HIGH, 30000);
+  return dur == 0 ? -1 : (dur * 0.034) / 2.0;
+}
+
+float ambilRataRata() {
+  float jumlah = 0; int sah = 0;
+  for (int i = 0; i < 5; i++) {
+    float b = ukurParasAir();
+    if (b > 0 && b < 400) { jumlah += b; sah++; }
+    delay(100);
+  }
+  return sah > 0 ? jumlah / sah : -1;
+}
+
+void setStatusAmaran(float jarak) {
+  String statusLama = statusParas;
+
+  digitalWrite(LED_GREEN,  LOW);
+  digitalWrite(LED_YELLOW, LOW);
+  digitalWrite(LED_RED,    LOW);
+  noTone(BUZZER_PIN);
+
+  if (jarak > PARAS_SELAMAT) {
+    statusParas = "SELAMAT";
+    digitalWrite(LED_GREEN, HIGH);
+
+  } else if (jarak > PARAS_BERHATI) {
+    statusParas = "BERHATI-HATI";
+    digitalWrite(LED_YELLOW, HIGH);
+
+  } else if (jarak > PARAS_BAHAYA) {
+    statusParas = "BAHAYA";
+    digitalWrite(LED_RED, HIGH);
+    tone(BUZZER_PIN, 1000, 500);
+
+  } else {
+    statusParas = "KRITIKAL";
+    digitalWrite(LED_RED,    HIGH);
+    digitalWrite(LED_YELLOW, HIGH);
+    tone(BUZZER_PIN, 2000);
+  }
+
+  bool statusBerubah   = (statusParas != statusLama);
+  bool perluNotif      = (statusParas != "SELAMAT");
+  bool masaTiba        = (millis() - lastTelegramTime > 300000);
+
+  if (statusBerubah || (perluNotif && masaTiba)) {
+    hantarTelegram(jarak);
+  }
+}
+
+void hantarTelegram(float jarak) {
+  if (WiFi.status() != WL_CONNECTED) return;
+
+  DateTime now = rtc.now();
+  String masa   = String(now.hour()) + ":" + (now.minute() < 10 ? "0" : "") + String(now.minute());
+  String tarikh = String(now.day()) + "/" + String(now.month()) + "/" + String(now.year());
+
+  String emoji = statusParas == "SELAMAT" ? "✅" :
+                 statusParas == "BERHATI-HATI" ? "⚠️" :
+                 statusParas == "BAHAYA" ? "🚨" : "🆘";
+
+  String mesej = emoji + " <b>SISTEM AMARAN BANJIR</b>\n\n";
+  mesej += "📅 " + tarikh + " | ⏰ " + masa + "\n";
+  mesej += "💧 Paras Air: <b>" + String(jarak, 1) + " cm</b>\n";
+  mesej += "🌧️ Hujan: " + String(nilaiHujan) + "/4095\n";
+  mesej += "Status: <b>" + statusParas + "</b>\n";
+  if (statusParas == "KRITIKAL") mesej += "\n⚡ <b>TINDAKAN SEGERA! Maklumkan penduduk!</b>";
+
+  HTTPClient http;
+  String url = "https://api.telegram.org/bot" + String(botToken) + "/sendMessage";
+  http.begin(url);
+  http.addHeader("Content-Type", "application/json");
+
+  StaticJsonDocument<500> doc;
+  doc["chat_id"]    = chatID;
+  doc["text"]       = mesej;
+  doc["parse_mode"] = "HTML";
+  String jsonStr;
+  serializeJson(doc, jsonStr);
+  http.POST(jsonStr);
+  http.end();
+
+  lastTelegramTime = millis();
+}
+
+void simpanKeSD(float jarak) {
+  DateTime now = rtc.now();
+  String ts = String(now.year()) + "-" + String(now.month()) + "-" + String(now.day())
+            + " " + String(now.hour()) + ":" + String(now.minute());
+
+  File f = SD.open("/log_air.csv", FILE_APPEND);
+  if (f) {
+    f.println(ts + "," + String(jarak, 1) + "," + String(nilaiHujan) + "," + statusParas);
+    f.close();
+  }
+}
+
+void kemaskiniLCD() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Air:" + String(parasAir_cm, 0) + "cm " + statusParas.substring(0, 7));
+  lcd.setCursor(0, 1);
+  lcd.print("Hujan:" + String(nilaiHujan) + " WiFi:" + (WiFi.status() == WL_CONNECTED ? "OK" : "X"));
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);
+  pinMode(RAIN_DO, INPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT); pinMode(LED_YELLOW, OUTPUT); pinMode(LED_RED, OUTPUT);
+
+  lcd.init(); lcd.backlight();
+  lcd.print("Sistem Amaran"); lcd.setCursor(0,1); lcd.print("Banjir v1.0");
+
+  rtc.begin();
+
+  if (!SD.begin(SD_CS)) { Serial.println("SD gagal!"); }
+  else if (!SD.exists("/log_air.csv")) {
+    File f = SD.open("/log_air.csv", FILE_WRITE);
+    f.println("Timestamp,Jarak_cm,Hujan,Status");
+    f.close();
+  }
+
+  WiFi.begin(ssid, password);
+  int cuba = 0;
+  while (WiFi.status() != WL_CONNECTED && cuba++ < 20) { delay(500); }
+  Serial.println(WiFi.status() == WL_CONNECTED ? "WiFi OK" : "WiFi gagal — mod offline");
+
+  digitalWrite(LED_GREEN, HIGH);
+}
+
+void loop() {
+  parasAir_cm = ambilRataRata();
+  nilaiHujan  = analogRead(RAIN_AO);
+
+  if (parasAir_cm > 0) {
+    setStatusAmaran(parasAir_cm);
+    simpanKeSD(parasAir_cm);
+  }
+
+  kemaskiniLCD();
+
+  if (millis() - lastDataSent > 30000 && WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverURL);
+    http.addHeader("Content-Type", "application/json");
+    StaticJsonDocument<200> doc;
+    doc["jarak"]  = parasAir_cm;
+    doc["hujan"]  = nilaiHujan;
+    doc["status"] = statusParas;
+    String body; serializeJson(doc, body);
+    http.POST(body); http.end();
+    lastDataSent = millis();
+  }
+
+  delay(2000);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Tentukan Lokasi dan Konteks**
+Tetapkan konteks yang spesifik: "longkang utama di kawasan perumahan padat" atau "sungai berhampiran kampus." Ini membantu dalam penentuan threshold yang lebih bermakna.
+
+**Langkah 2 — Kalibrasi Sensor JSN-SR04T**
+Letakkan sensor pada ketinggian tetap. Ukur jarak sebenar dengan pembaris, bandingkan dengan bacaan sensor. Buat jadual kalibrasi.
+
+**Langkah 3 — Threshold Berdasarkan Data JPS**
+Hubungi atau cari di portal data.gov.my untuk data threshold amaran banjir sebenar JPS. Ini menguatkan justifikasi threshold dalam laporan FYP.
+
+**Langkah 4 — Bina Enclosure Kalis Air**
+Gunakan kotak IP65. Drill lubang kecil untuk kabel dan pasang cable gland. Seal dengan silicone sealant.
+
+**Langkah 5 — Test dalam Simulasi**
+Guna bekas air besar. Naikkan paras air perlahan-lahan dan semak respons sistem. Rakam video untuk pembentangan.
+
+---
+
+## Tips Pembentangan
+
+- **Reference data banjir Malaysia**: Sebut statistik banjir besar 2021/2022 yang menyebabkan kerugian lebih RM6.1 bilion.
+- **Tunjukkan graf masa nyata**: Dashboard dengan graf paras air dari masa ke masa.
+- **Bandingkan masa tindak balas**: Dari paras naik ke notifikasi Telegram — kalau kurang 30 saat, itu selling point yang kuat.
+
+---
+
+## Penutup
+
+Sistem amaran banjir yang korang bina adalah prototaip penyelesaian kepada masalah yang Malaysia hadapi setiap musim tengkujuh. Untuk semua komponen termasuk JSN-SR04T waterproof dan SIM800L GSM, lawati **Rectronx** di rectronx.com.

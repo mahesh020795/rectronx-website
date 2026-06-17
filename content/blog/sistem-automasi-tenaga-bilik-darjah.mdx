@@ -1,0 +1,310 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan dan Automasi Tenaga Bilik Darjah Pintar"
+excerpt: "Bina sistem automasi tenaga bilik darjah yang boleh kawal lampu, kipas, dan AC secara automatik berdasarkan kehadiran dan jadual, dengan pemantauan penggunaan elektrik real-time. Projek FYP yang menyentuh isu kecekapan tenaga di Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "automasi tenaga", "bilik darjah pintar", "penjimatan elektrik", "pir sensor"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan dan Automasi Tenaga Bilik Darjah Pintar
+
+Pernah perasan tak, bilik darjah atau dewan kuliah yang lampu dan kipas masih menyala walaupun sudah tiada sesiapa? Kita semua pernah nampak keadaan ni — dan setiap kilowatt-hour yang membazir tu adalah kos yang ditanggung universiti (dan akhirnya rakyat) tanpa sebab.
+
+Di Malaysia, bangunan komersial dan institusi pendidikan menyumbang lebih 30% daripada jumlah penggunaan tenaga elektrik negara. Projek FYP ini bertujuan selesaikan masalah sebenar ini.
+
+---
+
+## Kenapa Projek Ini Sangat Relevan?
+
+Malaysia komited dengan sasaran kecekapan tenaga sebagai sebahagian daripada Dasar Tenaga Negara. Projek korang secara langsung menyentuh isu sustainability — ini buat projek korang bukan sahaja teknikal tetapi juga **relevant secara polisi dan sosial**.
+
+Dari sudut teknikal, projek ini melibatkan kawalan beban AC (mains voltage), yang menunjukkan korang tahu cara kerja dengan sistem kuasa sebenar. Ini tunjukkan kematangan engineering.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 DevKit V1 | 38-pin | RM 20–28 |
+| PIR Sensor HC-SR501 | Adjustable delay, sensitivity | RM 8–12 (x3) |
+| Relay Module 4-channel | 5V coil, 10A contact | RM 15–20 |
+| PZEM-004T v3 | AC Energy Meter, 100A | RM 35–50 |
+| Current Transformer | SCT013-100A | RM 15–20 |
+| DHT22 | Suhu & Kelembapan | RM 10–15 |
+| RTC DS3231 | I2C Real-time Clock | RM 10–15 |
+| LCD 20x4 I2C | Display | RM 18–25 |
+| Touch Sensor TTP223 | Butang sentuh untuk override | RM 3–5 (x4) |
+| LED Strip 12V | Simulasi lampu untuk demo | RM 20–30 |
+| Mosfet IRF520 | Driver LED strip | RM 8–12 |
+| Kotak Projek | DIN rail atau wall mount | RM 25–35 |
+
+**Jumlah anggaran: RM 187–267**
+
+**Amaran Keselamatan**: PZEM-004T bekerja dengan voltan AC 240V. Jangan sambung ke bekalan mains sebelum faham sepenuhnya. Untuk demo FYP, boleh simulasikan dengan LED strip 12V dan relay.
+
+---
+
+## Logik Kawalan Automasi
+
+Sistem menggunakan **dua sumber maklumat** untuk buat keputusan:
+
+1. **Jadual kelas** (dari RTC): Sistem tahu bila ada kelas dijadualkan
+2. **Sensor PIR** (kehadiran sebenar): Sistem kesan adakah ada orang dalam bilik
+
+Gabungan kedua-dua sumber ini memberikan kawalan yang lebih robust:
+
+```
+HIDUPKAN lampu & kipas jika:
+  - (Ada orang dalam bilik) ATAU
+  - (Dalam tempoh jadual kelas ±15 minit)
+
+HIDUPKAN AC jika:
+  - Ada kelas DAN suhu > 28°C
+```
+
+---
+
+## Gambarajah Pendawaian
+
+**PIR Sensor (x3) ke ESP32:**
+- PIR1 (depan) → GPIO34, PIR2 (tengah) → GPIO35, PIR3 (belakang) → GPIO32
+- Semua: VCC→5V, GND→GND
+- Laraskan delay PIR ke 30–60 saat supaya lampu tak terus padam bila orang duduk diam
+
+**Relay Module 4-channel ke ESP32:**
+- IN1→GPIO26, IN2→GPIO27, IN3→GPIO14, IN4→GPIO12
+- VCC→5V, GND→GND
+- Kebanyakan relay module adalah active LOW (relay ON bila pin LOW)
+
+**PZEM-004T ke ESP32:**
+- TX→GPIO16 (RX ESP32), RX→GPIO17 (TX ESP32)
+- Bahagian volt: sambung ke 240V AC dengan fius 10A
+- CT coil: lingkar pada satu kabel fasa
+
+**Touch Sensor TTP223 (x4):**
+- GPIO4 (lampu), GPIO5 (kipas), GPIO18 (AC), GPIO19 (override)
+
+**RTC DS3231 & LCD (I2C):**
+- SDA→GPIO21, SCL→GPIO22
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <LiquidCrystal_I2C.h>
+#include <RTClib.h>
+#include <DHT.h>
+#include <PZEM004Tv30.h>
+#include <ArduinoJson.h>
+
+const char* ssid       = "WiFi_Kampus";
+const char* password   = "Password_WiFi";
+const char* serverURL  = "http://dashboard.server.com/api/energy";
+
+#define PIR1_PIN    34
+#define PIR2_PIN    35
+#define PIR3_PIN    32
+#define DHT_PIN     4
+#define RELAY_LAMPU 26
+#define RELAY_KIPAS 27
+#define RELAY_AC    14
+#define RELAY_PAPAN 12
+#define TOUCH_LAMPU 5
+#define TOUCH_KIPAS 18
+#define TOUCH_AC    19
+#define TOUCH_OVR   21  // Override button
+
+struct JadualKelas {
+  int hariMinggu; // 0=Ahad, 1=Isnin...6=Sabtu
+  int jamMula, minMula, jamTamat, minTamat;
+};
+
+JadualKelas jadual[] = {
+  {1, 8, 0, 10, 0},   // Isnin 8:00–10:00
+  {1, 14, 0, 16, 0},  // Isnin 14:00–16:00
+  {2, 10, 0, 12, 0},  // Selasa 10:00–12:00
+  {3, 8, 0, 10, 0},   // Rabu 8:00–10:00
+  {4, 14, 0, 17, 0},  // Khamis 14:00–17:00
+  {5, 9, 0, 11, 0},   // Jumaat 9:00–11:00
+};
+const int BILANGAN_JADUAL = 6;
+const unsigned long TIMEOUT_KOSONG = 300000; // 5 minit
+
+DHT dht(DHT_PIN, DHT22);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+RTC_DS3231 rtc;
+PZEM004Tv30 pzem(Serial2, 16, 17);
+
+bool statusLampu = false, statusKipas = false, statusAC = false;
+bool modManual = false, adaOrang = false;
+unsigned long lastMotion = 0;
+float voltas, amper, kuasa, tenaga;
+unsigned long lastDashboard = 0;
+
+bool periksaJadual() {
+  DateTime now = rtc.now();
+  int masaSekarang = now.hour() * 60 + now.minute();
+
+  for (int i = 0; i < BILANGAN_JADUAL; i++) {
+    if (jadual[i].hariMinggu == now.dayOfTheWeek()) {
+      int masaMula  = jadual[i].jamMula * 60 + jadual[i].minMula;
+      int masaTamat = jadual[i].jamTamat * 60 + jadual[i].minTamat;
+      if (masaSekarang >= (masaMula - 15) && masaSekarang < masaTamat) return true;
+    }
+  }
+  return false;
+}
+
+bool periksaKehadiran() {
+  if (digitalRead(PIR1_PIN) || digitalRead(PIR2_PIN) || digitalRead(PIR3_PIN)) {
+    lastMotion = millis();
+    return true;
+  }
+  return (millis() - lastMotion < TIMEOUT_KOSONG);
+}
+
+void kawalRelay(int pin, bool &status, bool hidupkan) {
+  if (status != hidupkan) {
+    status = hidupkan;
+    digitalWrite(pin, hidupkan ? LOW : HIGH); // Active LOW
+  }
+}
+
+void bacaTenaga() {
+  voltas = pzem.voltage();
+  amper  = pzem.current();
+  kuasa  = pzem.power();
+  tenaga = pzem.energy();
+}
+
+void kendalikanTouch() {
+  static unsigned long lastTouch = 0;
+  if (millis() - lastTouch < 500) return;
+
+  if (digitalRead(TOUCH_OVR)) {
+    modManual = !modManual;
+    lastTouch = millis();
+  }
+
+  if (modManual) {
+    if (digitalRead(TOUCH_LAMPU)) { kawalRelay(RELAY_LAMPU, statusLampu, !statusLampu); lastTouch = millis(); }
+    if (digitalRead(TOUCH_KIPAS)) { kawalRelay(RELAY_KIPAS, statusKipas, !statusKipas); lastTouch = millis(); }
+    if (digitalRead(TOUCH_AC))    { kawalRelay(RELAY_AC,    statusAC,    !statusAC);    lastTouch = millis(); }
+  }
+}
+
+void kemaskiniLCD() {
+  DateTime now = rtc.now();
+  lcd.clear();
+  char buf[20];
+  sprintf(buf, "%02d:%02d %02d/%02d/%04d", now.hour(), now.minute(), now.day(), now.month(), now.year());
+  lcd.setCursor(0, 0); lcd.print(buf);
+  lcd.setCursor(0, 1);
+  lcd.print("L:" + String(statusLampu ? "ON " : "OFF") +
+            " K:" + String(statusKipas ? "ON " : "OFF") +
+            " AC:" + String(statusAC ? "ON" : "OFF"));
+  lcd.setCursor(0, 2);
+  lcd.print("W:" + String(kuasa, 0) + " T:" + String(dht.readTemperature(), 1) + "C");
+  lcd.setCursor(0, 3);
+  lcd.print(modManual ? "MOD:MANUAL " : "MOD:AUTO   ");
+  lcd.print(adaOrang ? "ADA" : "KOSONG");
+}
+
+void hantarDashboard() {
+  if (WiFi.status() != WL_CONNECTED) return;
+  DateTime now = rtc.now();
+  float suhu = dht.readTemperature();
+
+  StaticJsonDocument<300> doc;
+  doc["timestamp"] = now.unixtime();
+  doc["voltas"] = voltas; doc["amper"] = amper;
+  doc["kuasa_w"] = kuasa; doc["tenaga_kwh"] = tenaga;
+  doc["suhu"] = suhu; doc["ada_orang"] = adaOrang;
+  doc["lampu"] = statusLampu; doc["kipas"] = statusKipas;
+  doc["ac"] = statusAC; doc["mod_manual"] = modManual;
+  String body; serializeJson(doc, body);
+
+  HTTPClient http;
+  http.begin(serverURL);
+  http.addHeader("Content-Type", "application/json");
+  http.POST(body); http.end();
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  for (int pin : {PIR1_PIN, PIR2_PIN, PIR3_PIN}) pinMode(pin, INPUT);
+  for (int pin : {RELAY_LAMPU, RELAY_KIPAS, RELAY_AC, RELAY_PAPAN})
+    { pinMode(pin, OUTPUT); digitalWrite(pin, HIGH); } // Semua relay OFF
+  for (int pin : {TOUCH_LAMPU, TOUCH_KIPAS, TOUCH_AC, TOUCH_OVR}) pinMode(pin, INPUT);
+
+  dht.begin(); lcd.init(); lcd.backlight(); rtc.begin();
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  Serial.println("WiFi OK");
+}
+
+void loop() {
+  kendalikanTouch();
+  adaOrang = periksaKehadiran();
+  bacaTenaga();
+
+  if (!modManual) {
+    bool adaKelas = periksaJadual();
+    bool perluHidup = adaOrang || adaKelas;
+    kawalRelay(RELAY_LAMPU, statusLampu, perluHidup);
+    kawalRelay(RELAY_KIPAS, statusKipas, perluHidup);
+    float suhu = dht.readTemperature();
+    kawalRelay(RELAY_AC, statusAC, (adaKelas && suhu > 28.0));
+  }
+
+  kemaskiniLCD();
+
+  if (millis() - lastDashboard > 30000) {
+    hantarDashboard();
+    lastDashboard = millis();
+  }
+
+  delay(1000);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Tentukan Skop Bilik Darjah**
+Pilih bilik darjah yang spesifik sebagai konteks. Buat pelan lantai mudah dan tunjukkan di mana sensor dan beban diletakkan.
+
+**Langkah 2 — Isikan Jadual Kelas**
+Edit array `jadual[]` untuk sepadan dengan jadual bilik darjah yang dipilih. Dapatkan jadual sebenar dari fakulti jika boleh.
+
+**Langkah 3 — Kalibrasi PIR Sensor**
+Laraskan sensitivity dan delay PIR. Uji dengan berjalan dan duduk diam — pastikan sistem detect kehadiran dengan betul.
+
+**Langkah 4 — Setup PZEM-004T dengan Berhati-hati**
+Baca manual dengan teliti. Untuk ujian, gunakan beban kecil seperti lampu mentol. Jangan uji dengan beban besar dulu.
+
+**Langkah 5 — Bina Dashboard Pemantauan Tenaga**
+Dashboard web yang papar graf penggunaan kuasa dari masa ke masa adalah value-add yang significant.
+
+---
+
+## Tips Pembentangan
+
+- **Quantify penjimatan**: "Kalau lampu dan kipas dimatikan 2 jam sehari apabila bilik kosong, fakulti boleh jimat RM X sebulan."
+- **Tunjukkan perbandingan sebelum-selepas**: Data penggunaan elektrik sebelum vs selepas sistem dipasang.
+- **Demo mod manual**: Tunjukkan override capability — sistem tidak sekadar automasi buta.
+- **Terangkan logik jadual + PIR**: Kombinasi lebih robust dari sekadar PIR sahaja.
+
+---
+
+## Penutup
+
+Sistem automasi tenaga bilik darjah ini tunjukkan bahawa engineering boleh membuat perbezaan nyata dalam kecekapan operasi institusi. Untuk ESP32, PIR sensor, relay module, dan PZEM-004T, lawati **Rectronx** di rectronx.com.

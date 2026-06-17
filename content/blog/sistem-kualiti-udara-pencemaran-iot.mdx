@@ -1,0 +1,267 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kualiti Udara dan Amaran Pencemaran Berasaskan IoT"
+excerpt: "Belajar cara bina sistem pemantauan kualiti udara menggunakan ESP32, sensor MQ-135, SDS011 PM2.5, dan MQ-7 yang boleh detect CO2, habuk halus PM2.5, dan karbon monoksida, dengan amaran real-time ke telefon dan dashboard API index."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kualiti udara", "pencemaran", "air quality", "pm2.5", "api index"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kualiti Udara dan Amaran Pencemaran Berasaskan IoT
+
+Pencemaran udara adalah isu yang semakin serius di Malaysia. Setiap tahun, jerebu dari kebakaran hutan menyelimuti Semenanjung dan Borneo, menyebabkan sekolah tutup, orang ramai jatuh sakit, dan ekonomi terjejas. Indeks Pencemaran Udara (API) yang direkodkan oleh Jabatan Alam Sekitar (JAS) bergantung kepada stesen pemantauan tetap yang terhad bilangannya.
+
+Di sinilah projek FYP kamu masuk. Sistem pemantauan kualiti udara berasaskan IoT yang murah dan mudah dipasang boleh melengkapi rangkaian pemantauan yang sedia ada.
+
+---
+
+## Kenapa Projek Ini Relevan dan Bernilai Tinggi?
+
+Projek ini menyentuh beberapa bidang sekaligus: **elektronik sensor**, **komunikasi IoT**, **pemprosesan data**, dan **kesedaran alam sekitar**. Panel assessor FYP sangat menghargai projek yang ada kaitan dengan isu semasa Malaysia.
+
+Selain itu, projek ini boleh divalidasi secara langsung dengan membandingkan data kamu dengan stesen JAS berdekatan — cara terbaik untuk buktikan accuracy sistem dalam bahagian results thesis.
+
+---
+
+## Senarai Komponen
+
+| Bil | Komponen | Kuantiti | Anggaran Harga |
+|-----|----------|----------|----------------|
+| 1 | ESP32 Development Board | 1 | RM 25–35 |
+| 2 | MQ-135 Air Quality Sensor (CO2, NH3, Benzene) | 1 | RM 8–12 |
+| 3 | SDS011 Nova PM Sensor (PM2.5 & PM10) | 1 | RM 45–65 |
+| 4 | MQ-7 Carbon Monoxide (CO) Sensor | 1 | RM 10–15 |
+| 5 | DHT22 Temperature & Humidity Sensor | 1 | RM 12–18 |
+| 6 | OLED Display 0.96" I2C (SSD1306) | 1 | RM 10–15 |
+| 7 | Buzzer Aktif 5V | 1 | RM 2–3 |
+| 8 | LED Merah, Kuning, Hijau | 3 | RM 2 |
+| 9 | Resistor 220Ω, 10kΩ | beberapa | RM 3–5 |
+| 10 | Breadboard + Jumper Wires | 1 set | RM 10–15 |
+| 11 | Kotak projek plastik | 1 | RM 10–20 |
+
+**Jumlah Anggaran: RM 137–205**
+
+> **Nota SDS011**: Sensor ini menggunakan UART dan memberikan bacaan PM2.5 dan PM10 yang sangat accurate — setanding dengan peralatan profesional. Ia lebih mahal dari sensor lain tapi sangat berbaloi untuk FYP.
+
+---
+
+## Gambarajah Pendawaian
+
+**MQ-135 → ESP32:** VCC→5V, GND→GND, AOUT→GPIO36
+
+**MQ-7 → ESP32:** VCC→5V, GND→GND, AOUT→GPIO34
+
+**SDS011 → ESP32 (UART2):**
+- VCC→5V (WAJIB 5V, jangan 3.3V)
+- GND→GND
+- TXD (SDS011) → GPIO16 (RX2 ESP32)
+- RXD (SDS011) → GPIO17 (TX2 ESP32)
+
+**DHT22 → ESP32:** VCC→3.3V, GND→GND, DATA→GPIO4 (10kΩ pull-up ke 3.3V)
+
+**OLED SSD1306 (I2C):** SDA→GPIO21, SCL→GPIO22
+
+**LED Indicator:**
+- LED Hijau → GPIO25 → 220Ω → GND (API Baik)
+- LED Kuning → GPIO26 → 220Ω → GND (API Sederhana)
+- LED Merah → GPIO27 → 220Ω → GND (API Bahaya)
+
+**Buzzer:** GPIO32 → Buzzer(+) → GND
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <DHT.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <HTTPClient.h>
+
+const char* ssid     = "YOUR_WIFI";
+const char* password = "YOUR_PASSWORD";
+const char* botToken = "YOUR_BOT_TOKEN";
+const char* chatID   = "YOUR_CHAT_ID";
+
+#define MQ135_PIN  36
+#define MQ7_PIN    34
+#define DHT_PIN    4
+#define BUZZ_PIN   32
+#define LED_GREEN  25
+#define LED_YELLOW 26
+#define LED_RED    27
+#define DHTTYPE    DHT22
+
+HardwareSerial sdsSerial(2); // UART2: RX=16, TX=17
+DHT dht(DHT_PIN, DHTTYPE);
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+
+// Threshold API Malaysia (berdasarkan JAS)
+#define API_BAIK      50
+#define API_SEDERHANA 100
+#define API_TIDAK_SIHAT 200
+
+float pm25 = 0, pm10 = 0;
+int   mq135Value = 0;
+float temperature = 0, humidity = 0;
+int   apiIndex = 0;
+unsigned long lastAlert = 0;
+bool  alertSent = false;
+
+void setup() {
+  Serial.begin(115200);
+  sdsSerial.begin(9600, SERIAL_8N1, 16, 17);
+  dht.begin();
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextSize(1); display.setTextColor(SSD1306_WHITE);
+
+  pinMode(LED_GREEN,  OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  pinMode(LED_RED,    OUTPUT);
+  pinMode(BUZZ_PIN,   OUTPUT);
+
+  WiFi.begin(ssid, password);
+  display.println("Connecting WiFi...");
+  display.display();
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  Serial.println("WiFi OK");
+
+  // Warm-up MQ sensors (perlukan 20–30 saat)
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.println("Sensor warm-up...");
+  display.println("Tunggu 30 saat");
+  display.display();
+  delay(30000);
+}
+
+void loop() {
+  bacaSDS011();
+  mq135Value  = analogRead(MQ135_PIN);
+  temperature = dht.readTemperature();
+  humidity    = dht.readHumidity();
+  apiIndex    = kiraPM25API(pm25);
+
+  updateStatus();
+  updateDisplay();
+
+  // Hantar alert Telegram jika bahaya
+  if (apiIndex > API_TIDAK_SIHAT && !alertSent) {
+    hantarAlertTelegram();
+    alertSent = true;
+    lastAlert = millis();
+  }
+
+  // Reset alert selepas 10 minit
+  if (alertSent && millis() - lastAlert > 600000) alertSent = false;
+
+  delay(2000);
+}
+
+void bacaSDS011() {
+  uint8_t buf[10];
+  int idx = 0;
+  while (sdsSerial.available() && idx < 10) {
+    buf[idx++] = sdsSerial.read();
+  }
+  if (idx >= 10 && buf[0] == 0xAA && buf[1] == 0xC0) {
+    pm25 = ((buf[3] * 256) + buf[2]) / 10.0;
+    pm10 = ((buf[5] * 256) + buf[4]) / 10.0;
+    Serial.printf("PM2.5: %.1f µg/m³ | PM10: %.1f µg/m³\n", pm25, pm10);
+  }
+}
+
+int kiraPM25API(float val) {
+  // Simplified formula berdasarkan PM2.5
+  if (val <= 12.0)  return map(val * 10, 0, 120, 0, 50);
+  if (val <= 35.4)  return map(val * 10, 120, 354, 51, 100);
+  if (val <= 55.4)  return map(val * 10, 354, 554, 101, 150);
+  if (val <= 150.4) return map(val * 10, 554, 1504, 151, 200);
+  return 300;
+}
+
+void updateStatus() {
+  digitalWrite(LED_GREEN,  LOW);
+  digitalWrite(LED_YELLOW, LOW);
+  digitalWrite(LED_RED,    LOW);
+  noTone(BUZZ_PIN);
+
+  if (apiIndex <= API_BAIK) {
+    digitalWrite(LED_GREEN, HIGH);
+  } else if (apiIndex <= API_SEDERHANA) {
+    digitalWrite(LED_YELLOW, HIGH);
+  } else {
+    digitalWrite(LED_RED, HIGH);
+    tone(BUZZ_PIN, 1000, 500);
+  }
+}
+
+void updateDisplay() {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.printf("PM2.5: %.1f ug/m3\n", pm25);
+  display.printf("PM10:  %.1f ug/m3\n", pm10);
+  display.printf("API:   %d\n", apiIndex);
+  display.printf("Suhu:  %.1fC\n", temperature);
+  display.printf("Lembap:%.0f%%\n", humidity);
+  display.setCursor(0, 55);
+  if (apiIndex <= API_BAIK)      display.print("Status: BAIK");
+  else if (apiIndex <= API_SEDERHANA) display.print("Status: SEDERHANA");
+  else                           display.print("Status: BAHAYA!");
+  display.display();
+}
+
+void hantarAlertTelegram() {
+  if (WiFi.status() != WL_CONNECTED) return;
+
+  String msg = "⚠️ AMARAN KUALITI UDARA!\n";
+  msg += "API: " + String(apiIndex) + "\n";
+  msg += "PM2.5: " + String(pm25, 1) + " µg/m³\n";
+  msg += "PM10: " + String(pm10, 1) + " µg/m³\n";
+  msg += "Status: TIDAK SIHAT — Sila pakai pelitup muka!";
+
+  String url = "https://api.telegram.org/bot" + String(botToken) +
+               "/sendMessage?chat_id=" + String(chatID) +
+               "&text=" + msg;
+  HTTPClient http;
+  http.begin(url);
+  http.GET();
+  http.end();
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Faham Sensor Kamu**
+Pelajari cara kerja setiap sensor. MQ sensors bekerja menggunakan perubahan rintangan kimia. SDS011 menggunakan laser scattering untuk kira zarah udara. Baca datasheet ringkas — ini berguna dalam bahagian Methodology thesis.
+
+**Langkah 2 — Test Setiap Sensor Secara Berasingan**
+Jangan wire semua sekali gus. Test satu sensor, pastikan bacaan logik, kemudian tambah seterusnya.
+
+**Langkah 3 — Setup Telegram Bot**
+Cari `@BotFather` dalam Telegram, buat bot baru, dapatkan token. Cari `@userinfobot` untuk chat ID.
+
+**Langkah 4 — Kalibrasi MQ Sensors**
+MQ sensors perlukan kalibrasi dalam udara bersih untuk dapatkan nilai R0 (rintangan rujukan). Guna library `MQUnifiedsensor` untuk proses kalibrasi yang lebih tepat.
+
+**Langkah 5 — Test di Lokasi Berbeza**
+Bawa sistem ke bilik, tepi jalan, kawasan masak. Tengok bacaan berubah. Ini adalah eksperimen bagus untuk data validation dalam thesis.
+
+---
+
+## Tips Pembentangan FYP
+
+- **Bandingkan dengan stesen JAS**: Tunjukkan bahawa data PM2.5 kamu dekat dengan stesen JAS berdekatan — ini validate accuracy sistem.
+- **Rekod data semasa jerebu**: Data PM2.5 semasa musim jerebu adalah sangat bernilai untuk thesis.
+- **Terangkan limitasi dengan jujur**: MQ sensors perlu warm-up dan kalibrasi. Mengakui limitasi ini secara proaktif menunjukkan kamu faham projek dengan mendalam.
+- **Cadangkan aplikasi masa depan**: Network of sensors untuk peta pencemaran bandar, integrasi dengan sistem amaran awam.
+
+---
+
+## Penutup
+
+Sistem pemantauan kualiti udara IoT ini adalah FYP yang ada impak sebenar kepada kesihatan awam — sangat relevan di Malaysia hari ini. Untuk MQ-135, SDS011, dan semua komponen lain, lawati **Rectronx** di rectronx.com!

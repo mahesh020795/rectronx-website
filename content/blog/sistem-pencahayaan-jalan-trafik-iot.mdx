@@ -1,0 +1,318 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pencahayaan Jalan Pintar dan Pemantauan Trafik Berasaskan IoT"
+excerpt: "Bina sistem lampu jalan pintar yang adaptif kepada ketumpatan trafik dan cahaya sekeliling, dengan pemantauan bilangan kenderaan secara real-time dan analitik trafik. Projek FYP yang sangat relevan dengan inisiatif bandar pintar Malaysia."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "lampu jalan pintar", "pemantauan trafik", "bandar pintar", "ir sensor", "pwm"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pencahayaan Jalan Pintar dan Pemantauan Trafik Berasaskan IoT
+
+Malaysia sedang menuju era bandar pintar. Dari Putrajaya Smart City hingga Iskandar Malaysia di Johor, kerajaan dan sektor swasta sedang melabur besar-besaran dalam infrastruktur kota yang lebih cerdas. Salah satu komponen paling asas — dan paling membazir — dalam infrastruktur bandar adalah sistem pencahayaan jalan.
+
+Lampu jalan konvensional menyala pada keamatan penuh sepanjang malam, tidak kira sama ada jalan itu sibuk atau lenggang. Di Malaysia, ini bermakna jutaan ringgit tenaga elektrik digunakan untuk menerangi jalan-jalan yang mungkin tiada satu kenderaan pun selama beberapa jam pada waktu dini hari.
+
+---
+
+## Kenapa Projek Ini Cemerlang Untuk FYP?
+
+Projek ini ada **tiga lapisan teknikal yang jelas**: hardware (sensor dan LED/lampu), firmware (ESP32 logic), dan software (dashboard analitik trafik). Tiga lapisan ini menunjukkan bahawa korang mampu reka sistem end-to-end yang lengkap.
+
+Konteks bandar pintar memberikan projek ini **relevansi dasar awam** yang kuat. Korang boleh reference blueprint Bandar Malaysia Smart City, polisi kecekapan tenaga TNB, atau kajian akademik tentang adaptive street lighting.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 DevKit V1 | 38-pin, WiFi+BT | RM 20–28 |
+| IR Sensor E18-D80NK | Adjustable 3–80cm, weatherproof | RM 12–18 (x4) |
+| LDR GL5528 | Light Dependent Resistor | RM 2–3 (x2) |
+| LED High Power 3W | 6500K cool white | RM 5–8 (x6) |
+| Mosfet IRLZ44N | N-channel, logic-level | RM 5–8 (x3) |
+| Heatsink Aluminium | Untuk LED 3W | RM 3–5 |
+| RTC DS3231 | I2C | RM 10–15 |
+| MicroSD Module | SPI | RM 8–12 |
+| OLED 0.96" | 128x64, I2C, SSD1306 | RM 12–18 |
+| Resistor Set | 220Ω, 10kΩ, 12Ω (2W) | RM 5 |
+| Kapasitor | 100nF, 100µF | RM 3 |
+| Mini Model Jalan | Balsa wood atau foam board | RM 20–30 |
+| Power Supply 12V 2A | Untuk LED | RM 18–25 |
+
+**Jumlah anggaran: RM 123–178**
+
+**Tip Model Fizikal**: Buat model jalan skala 1:50 menggunakan foam board. Letak 6 tiang lampu dengan LED high-power. Tambah kereta mainan untuk demo live. Model fizikal yang cantik selalu tambah markah.
+
+---
+
+## Cara Kerja Sistem Adaptif
+
+Sistem menggunakan tiga kaedah kawalan serentak:
+
+1. **Kehadiran kenderaan** (IR sensor): Bila kenderaan masuk zon, lampu di zon tersebut terang penuh
+2. **Cahaya ambient** (LDR): Bila siang, semua lampu dimatikan automatik
+3. **Waktu** (RTC): Waktu sibuk (7–9 pagi, 5–7 petang) = keamatan minimum lebih tinggi
+
+PWM (Pulse Width Modulation) digunakan untuk kawal keamatan LED secara halus dari 0 hingga 255.
+
+---
+
+## Gambarajah Pendawaian
+
+**IR Sensor E18-D80NK ke ESP32:**
+- 4 sensor: GPIO34, GPIO35, GPIO32, GPIO33
+- VCC → 5V, GND → GND, Output (active LOW saat detect) → GPIO pin
+- Laraskan jarak detection ke ~50–80cm untuk detect kenderaan
+
+**LDR ke ESP32 (Voltage Divider):**
+- 3.3V → LDR → GPIO36 → 10kΩ → GND
+
+**LED 3W via Mosfet IRLZ44N:**
+- Gate → ESP32 GPIO (melalui 220Ω) → Mosfet Driver
+- Drain → LED katod, Source → GND
+- Anode LED → 12V melalui resistor 12Ω (2W)
+- Tiga zon: LED_ZON1→GPIO26 (PWM ch0), LED_ZON2→GPIO27 (ch1), LED_ZON3→GPIO14 (ch2)
+- Pasang heatsink pada LED!
+
+**RTC & OLED (I2C):**
+- SDA→GPIO21, SCL→GPIO22
+
+**MicroSD (SPI):**
+- MOSI→GPIO23, MISO→GPIO19, SCK→GPIO18, CS→GPIO15
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <RTClib.h>
+#include <SPI.h>
+#include <SD.h>
+#include <ArduinoJson.h>
+
+const char* ssid      = "WiFi_Korang";
+const char* password  = "Password_Korang";
+const char* serverURL = "http://server.com/api/traffic";
+
+#define IR1   34
+#define IR2   35
+#define IR3   32
+#define IR4   33
+#define LDR   36
+#define LED_Z1 26
+#define LED_Z2 27
+#define LED_Z3 14
+#define SD_CS  15
+
+#define PWM_FREQ 5000
+#define PWM_RES  8   // 8-bit: 0–255
+#define TERANG_PENUH   255
+#define TERANG_SEDANG  150
+#define TERANG_MIN     30
+#define TERANG_MATI    0
+#define LDR_SIANG      2000
+#define TIMEOUT_KEND   10000  // ms selepas detect — kekal terang
+
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+RTC_DS3231 rtc;
+
+int  bilanganKenderaan[4] = {0,0,0,0};
+int  totalKenderaan = 0, kenderaanPerJam = 0;
+unsigned long masaDetect[4] = {0,0,0,0};
+bool statusSensor[4]  = {false,false,false,false};
+int  keamatanSemasa[3] = {0,0,0};
+bool modSiang = false;
+int  sensorPins[4] = {IR1, IR2, IR3, IR4};
+unsigned long lastDataSent = 0, lastHourReset = 0;
+
+void setKeamatan(int zon, int nilai) {
+  if (keamatanSemasa[zon] == nilai) return;
+  keamatanSemasa[zon] = nilai;
+  ledcWrite(zon, nilai);
+}
+
+void prosesDeteksi() {
+  for (int i = 0; i < 4; i++) {
+    bool adaObjek = (digitalRead(sensorPins[i]) == LOW);
+    if (adaObjek && !statusSensor[i]) {
+      statusSensor[i] = true;
+      masaDetect[i] = millis();
+      bilanganKenderaan[i]++;
+      totalKenderaan++;
+      kenderaanPerJam++;
+    } else if (!adaObjek && statusSensor[i]) {
+      statusSensor[i] = false;
+    }
+  }
+}
+
+void kawalCahayaAdaptif() {
+  modSiang = (analogRead(LDR) > LDR_SIANG);
+
+  if (modSiang) {
+    setKeamatan(0, TERANG_MATI);
+    setKeamatan(1, TERANG_MATI);
+    setKeamatan(2, TERANG_MATI);
+    return;
+  }
+
+  unsigned long skrg = millis();
+  DateTime now = rtc.now();
+  bool waktuSibuk = (now.hour() >= 7 && now.hour() <= 9) ||
+                    (now.hour() >= 17 && now.hour() <= 19);
+  int keamatanAktif = waktuSibuk ? TERANG_PENUH : TERANG_SEDANG;
+
+  bool aktif[3];
+  aktif[0] = statusSensor[0] || statusSensor[1] ||
+             (skrg - masaDetect[0] < TIMEOUT_KEND) || (skrg - masaDetect[1] < TIMEOUT_KEND);
+  aktif[1] = statusSensor[1] || statusSensor[2] ||
+             (skrg - masaDetect[1] < TIMEOUT_KEND) || (skrg - masaDetect[2] < TIMEOUT_KEND);
+  aktif[2] = statusSensor[2] || statusSensor[3] ||
+             (skrg - masaDetect[2] < TIMEOUT_KEND) || (skrg - masaDetect[3] < TIMEOUT_KEND);
+
+  for (int z = 0; z < 3; z++) setKeamatan(z, aktif[z] ? keamatanAktif : TERANG_MIN);
+}
+
+float kiraPenjimatan() {
+  int total = keamatanSemasa[0] + keamatanSemasa[1] + keamatanSemasa[2];
+  return ((255.0 * 3 - total) / (255.0 * 3)) * 100.0;
+}
+
+void kemaskiniOLED() {
+  DateTime now = rtc.now();
+  display.clearDisplay();
+  display.setTextSize(1); display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0); display.print("Smart Street Light");
+  display.drawLine(0, 9, 127, 9, SSD1306_WHITE);
+
+  char buf[20]; sprintf(buf, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
+  display.setCursor(0, 12); display.print(buf);
+  display.setCursor(0, 22); display.print("Kend/jam: "); display.print(kenderaanPerJam);
+  display.setCursor(0, 32); display.print("Total: "); display.print(totalKenderaan);
+  display.setCursor(0, 42);
+  display.printf("Z1:%d Z2:%d Z3:%d", keamatanSemasa[0], keamatanSemasa[1], keamatanSemasa[2]);
+  display.setCursor(0, 54); display.printf("Jimat: %.0f%%", kiraPenjimatan());
+  display.display();
+}
+
+void simpanLog() {
+  DateTime now = rtc.now();
+  char ts[30];
+  sprintf(ts, "%04d-%02d-%02d %02d:%02d", now.year(), now.month(), now.day(), now.hour(), now.minute());
+  File f = SD.open("/trafik_log.csv", FILE_APPEND);
+  if (f) {
+    f.printf("%s,%d,%d,%d,%d,%d,%d\n", ts, kenderaanPerJam, totalKenderaan,
+      keamatanSemasa[0], keamatanSemasa[1], keamatanSemasa[2], (int)kiraPenjimatan());
+    f.close();
+  }
+}
+
+void hantarDataServer() {
+  if (WiFi.status() != WL_CONNECTED) return;
+  DateTime now = rtc.now();
+  StaticJsonDocument<300> doc;
+  doc["timestamp"]  = now.unixtime();
+  doc["kend_jam"]   = kenderaanPerJam;
+  doc["total"]      = totalKenderaan;
+  doc["zon1"]       = keamatanSemasa[0];
+  doc["zon2"]       = keamatanSemasa[1];
+  doc["zon3"]       = keamatanSemasa[2];
+  doc["jimat_pct"]  = kiraPenjimatan();
+  doc["mod_siang"]  = modSiang;
+  String body; serializeJson(doc, body);
+
+  HTTPClient http;
+  http.begin(serverURL);
+  http.addHeader("Content-Type", "application/json");
+  http.POST(body); http.end();
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  for (int i = 0; i < 4; i++) pinMode(sensorPins[i], INPUT_PULLUP);
+
+  ledcSetup(0, PWM_FREQ, PWM_RES); ledcAttachPin(LED_Z1, 0);
+  ledcSetup(1, PWM_FREQ, PWM_RES); ledcAttachPin(LED_Z2, 1);
+  ledcSetup(2, PWM_FREQ, PWM_RES); ledcAttachPin(LED_Z3, 2);
+  setKeamatan(0, TERANG_MIN); setKeamatan(1, TERANG_MIN); setKeamatan(2, TERANG_MIN);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay(); display.setTextSize(1); display.setTextColor(SSD1306_WHITE);
+  display.print("Smart Street Light"); display.display();
+
+  rtc.begin();
+
+  if (!SD.begin(SD_CS)) Serial.println("SD gagal!");
+  else if (!SD.exists("/trafik_log.csv")) {
+    File f = SD.open("/trafik_log.csv", FILE_WRITE);
+    f.println("Timestamp,Kend_Jam,Total,Zon1,Zon2,Zon3,Jimat_Pct");
+    f.close();
+  }
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+  Serial.println("WiFi OK");
+  lastHourReset = millis();
+}
+
+void loop() {
+  prosesDeteksi();
+  kawalCahayaAdaptif();
+  kemaskiniOLED();
+
+  if (millis() - lastHourReset > 3600000) {
+    simpanLog();
+    kenderaanPerJam = 0;
+    lastHourReset = millis();
+  }
+
+  if (millis() - lastDataSent > 60000) {
+    hantarDataServer();
+    lastDataSent = millis();
+  }
+
+  delay(100); // Loop pantas untuk response trafik yang baik
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Bina Model Jalan Skala**
+Guna foam board 5mm untuk buat jalan dua lorong ~60–80cm panjang. Buat tiang lampu dari straw ~10–12cm tinggi. Letak LED 3W dengan heatsink.
+
+**Langkah 2 — Kalibrasi LDR**
+Uji dalam keadaan terang dan gelap. Rekod nilai ADC dan tetapkan threshold. Untuk demo dalam bilik, simulasikan siang dengan lampu suluh ke arah LDR.
+
+**Langkah 3 — Uji Logik Adaptif**
+Uji setiap kombinasi: kenderaan di zon 1 sahaja, semua zon, tiada kenderaan, waktu sibuk vs senyap. Log ke Serial Monitor dan verify keamatan berubah seperti yang dijangka.
+
+**Langkah 4 — Bina Dashboard Analitik Trafik**
+Graf bilangan kenderaan per jam, perbandingan keamatan vs bilangan kenderaan, dan peratus penjimatan. Gunakan Chart.js atau D3.js.
+
+**Langkah 5 — Lakukan Ujian Penjimatan Tenaga**
+Ukur jumlah tenaga sistem adaptif vs lampu penuh selama tempoh yang sama. Ini adalah data paling penting untuk justifikasi projek.
+
+---
+
+## Tips Pembentangan
+
+- **Demo dramatic**: Padamkan lampu bilik, bawa model jalan, gerakkan kereta mainan — tunjukkan lampu "mengikut" kenderaan. Sangat memorable.
+- **Quantify penjimatan**: "Dalam ujian 3 malam, sistem jimat purata 42% tenaga. Untuk 1,000 lampu jalan, ini RM X sebulan."
+- **Reference Smart City Malaysia**: Sebut projek bandar pintar Malaysia yang relevan.
+- **Tunjukkan data historik**: Graf corak trafik dalam masa semalam atau seminggu.
+
+---
+
+## Penutup
+
+Sistem pencahayaan jalan pintar ini adalah prototaip teknologi yang Malaysia perlukan untuk capai sasaran bandar pintar. Untuk IR sensor E18-D80NK, LED high power, mosfet driver, dan semua komponen lain, lawati **Rectronx** di rectronx.com.

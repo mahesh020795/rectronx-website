@@ -1,0 +1,266 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Pesakit Penjagaan Kesihatan Pintar Menggunakan IoT"
+excerpt: "Tutorial lengkap cara bina sistem pemantauan pesakit IoT menggunakan ESP32, sensor degupan jantung MAX30102, sensor suhu MLX90614, dan modul ECG AD8232 untuk hantar data vital sign ke Firebase secara real-time."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kesihatan", "healthcare", "pemantauan pesakit", "vital signs", "max30102"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Pesakit Penjagaan Kesihatan Pintar Menggunakan IoT
+
+Bayangkan seorang pesakit tua yang tinggal sorang diri di rumah. Anak-anak dia bekerja jauh, dan doktor hanya dapat periksa dia seminggu sekali. Kalau tiba-tiba SpO2 turun mendadak pada tengah malam, siapa yang tahu?
+
+Inilah masalah sebenar yang boleh diselesaikan oleh sistem IoT healthcare yang kamu akan bina dalam projek FYP ini. Remote Patient Monitoring (RPM) adalah salah satu bidang paling pesat berkembang dalam teknologi kesihatan global, terutama selepas COVID-19.
+
+---
+
+## Kenapa Projek Ini Adalah FYP Impian untuk Biomedik dan Elektrik?
+
+Projek ini sangat kaya dengan kandungan teknikal: **biomedical signal processing**, **wireless communication**, **embedded systems**, dan **cloud computing**. Kamu boleh pilih mana-mana aspek untuk dijadikan fokus utama bergantung kepada bidang pengajian kamu.
+
+Yang paling best: sistem ini boleh didemo secara live dengan kamu sendiri sebagai "pesakit" — pakai sensor di jari, tunjukkan bacaan SpO2 dan BPM kepada panel dalam masa nyata.
+
+> **Disclaimer Etika**: Sistem yang kamu bina adalah untuk tujuan **pendidikan dan prototaip** sahaja. Ia TIDAK menggantikan peralatan perubatan bertauliah dan TIDAK boleh digunakan untuk diagnosis perubatan sebenar. Nyatakan disclaimer ini dengan jelas dalam thesis kamu.
+
+---
+
+## Senarai Komponen
+
+| Bil | Komponen | Kuantiti | Anggaran Harga |
+|-----|----------|----------|----------------|
+| 1 | ESP32 Development Board | 1 | RM 25–35 |
+| 2 | MAX30102 Pulse Oximeter & Heart Rate Sensor | 1 | RM 15–25 |
+| 3 | MLX90614 Infrared Temperature Sensor (non-contact) | 1 | RM 25–40 |
+| 4 | AD8232 ECG Sensor Module | 1 | RM 20–35 |
+| 5 | OLED Display 0.96" I2C (SSD1306) | 1 | RM 10–15 |
+| 6 | Buzzer Aktif 5V | 1 | RM 2–3 |
+| 7 | LED Merah dan Hijau | 2 | RM 1 |
+| 8 | Resistor 220Ω | beberapa | RM 2 |
+| 9 | Breadboard + Jumper Wires | 1 set | RM 10–15 |
+| 10 | Power Bank 5V (untuk mobile demo) | 1 | RM 30–50 |
+
+**Jumlah Anggaran: RM 140–221**
+
+> **Nota Penting**: Pastikan MAX30102 yang kamu beli adalah tulen — ada versi tiruan di pasaran yang bacaannya tidak boleh dipercayai. Cari yang ada tulisan "MAXIM" pada IC.
+
+---
+
+## Gambarajah Pendawaian
+
+**MAX30102 → ESP32 (I2C):**
+- VIN→3.3V, GND→GND, SDA→GPIO21, SCL→GPIO22, INT→GPIO19 (opsional)
+
+**MLX90614 → ESP32 (I2C, kongsi dengan MAX30102):**
+- VCC→3.3V, GND→GND, SDA→GPIO21, SCL→GPIO22
+- (Alamat I2C berbeza: MLX90614=0x5A, MAX30102=0x57 — tidak ada konflik)
+
+**AD8232 ECG → ESP32:**
+- 3.3V→3.3V, GND→GND
+- OUTPUT→GPIO36 (ADC input)
+- LO+→GPIO34 (lead-off detection)
+- LO-→GPIO35 (lead-off detection)
+
+**OLED SSD1306:** SDA→GPIO21, SCL→GPIO22
+
+**LED & Buzzer:**
+- LED Hijau→GPIO25→220Ω→GND
+- LED Merah→GPIO26→220Ω→GND
+- Buzzer→GPIO32→GND
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <Wire.h>
+#include <WiFi.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <MAX30105.h>
+#include <spo2_algorithm.h>
+#include <Adafruit_MLX90614.h>
+#include <FirebaseESP32.h>
+
+const char* ssid     = "YOUR_WIFI";
+const char* password = "YOUR_PASSWORD";
+#define FIREBASE_HOST "your-project.firebaseio.com"
+#define FIREBASE_AUTH "YOUR_DATABASE_SECRET"
+
+#define ECG_PIN    36
+#define LO_PLUS    34
+#define LO_MINUS   35
+#define BUZZ_PIN   32
+#define LED_GREEN  25
+#define LED_RED    26
+
+// Threshold vital signs (normal range)
+#define SPO2_LOW_THRESH 95   // SpO2 < 95% = amaran
+#define HR_LOW_THRESH   50   // < 50 bpm = bradycardia
+#define HR_HIGH_THRESH  120  // > 120 bpm = tachycardia
+#define TEMP_HIGH_THRESH 37.8
+
+MAX30105 particleSensor;
+Adafruit_MLX90614 mlx;
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
+FirebaseData fbData;
+FirebaseConfig fbConfig;
+FirebaseAuth fbAuth;
+
+uint32_t irBuffer[100], redBuffer[100];
+int32_t bufferLength = 100;
+int32_t spo2, heartRate;
+int8_t  validSPO2, validHeartRate;
+float   bodyTemp = 0;
+String  patientID = "PESAKIT_001";
+unsigned long lastUpload = 0;
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+
+  pinMode(BUZZ_PIN,  OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_RED,   OUTPUT);
+  pinMode(LO_PLUS,  INPUT);
+  pinMode(LO_MINUS, INPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay(); display.setTextSize(1); display.setTextColor(WHITE);
+  display.println("Sistem Pemantauan"); display.println("Pesakit IoT"); display.display();
+  delay(2000);
+
+  if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) {
+    Serial.println("MAX30102 tidak dijumpai!");
+    while (1);
+  }
+  particleSensor.setup(60, 4, 2, 100, 411, 4096);
+
+  mlx.begin();
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) { delay(500); }
+
+  fbConfig.host = FIREBASE_HOST;
+  fbConfig.signer.tokens.legacy_token = FIREBASE_AUTH;
+  Firebase.begin(&fbConfig, &fbAuth);
+  Firebase.reconnectWiFi(true);
+
+  display.clearDisplay();
+  display.println("Sistem Bersedia!");
+  display.println("Letak jari pada sensor");
+  display.display();
+  delay(2000);
+}
+
+void loop() {
+  bacaMAX30102();
+  bodyTemp = mlx.readObjectTempC();
+
+  int ecgValue = 0;
+  if (digitalRead(LO_PLUS) == 0 && digitalRead(LO_MINUS) == 0) {
+    ecgValue = analogRead(ECG_PIN);
+  }
+
+  updateDisplay();
+  semakAmaran();
+
+  if (millis() - lastUpload > 5000) {
+    lastUpload = millis();
+    uploadKeFirebase(ecgValue);
+  }
+
+  delay(100);
+}
+
+void bacaMAX30102() {
+  for (byte i = 0; i < bufferLength; i++) {
+    while (particleSensor.available() == false) particleSensor.check();
+    redBuffer[i] = particleSensor.getRed();
+    irBuffer[i]  = particleSensor.getIR();
+    particleSensor.nextSample();
+  }
+  maxim_heart_rate_and_oxygen_saturation(
+    irBuffer, bufferLength, redBuffer,
+    &spo2, &validSPO2, &heartRate, &validHeartRate);
+}
+
+void updateDisplay() {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("SpO2: ");
+  display.println(validSPO2 ? String(spo2) + "%" : "--");
+  display.print("BPM:  ");
+  display.println(validHeartRate ? String(heartRate) : "--");
+  display.printf("Suhu: %.1f C\n", bodyTemp);
+  display.println("---------------");
+
+  bool normal = validSPO2 && spo2 >= SPO2_LOW_THRESH &&
+                validHeartRate && heartRate >= HR_LOW_THRESH &&
+                heartRate <= HR_HIGH_THRESH && bodyTemp < TEMP_HIGH_THRESH;
+
+  if (normal) {
+    display.println("STATUS: NORMAL");
+    digitalWrite(LED_GREEN, HIGH); digitalWrite(LED_RED, LOW);
+  } else {
+    display.println("STATUS: AMARAN!");
+    digitalWrite(LED_GREEN, LOW); digitalWrite(LED_RED, HIGH);
+  }
+  display.display();
+}
+
+void semakAmaran() {
+  bool bahaya = false;
+  if (validSPO2 && spo2 < SPO2_LOW_THRESH) bahaya = true;
+  if (validHeartRate && (heartRate < HR_LOW_THRESH || heartRate > HR_HIGH_THRESH)) bahaya = true;
+  if (bodyTemp > TEMP_HIGH_THRESH) bahaya = true;
+
+  if (bahaya) tone(BUZZ_PIN, 1500, 300);
+  else noTone(BUZZ_PIN);
+}
+
+void uploadKeFirebase(int ecg) {
+  if (!Firebase.ready()) return;
+  String path = "/pesakit/" + patientID;
+  Firebase.setInt(fbData,    path + "/heartRate", validHeartRate ? heartRate : -1);
+  Firebase.setInt(fbData,    path + "/spo2",      validSPO2 ? spo2 : -1);
+  Firebase.setFloat(fbData,  path + "/suhu",      bodyTemp);
+  Firebase.setInt(fbData,    path + "/ecg",       ecg);
+  Firebase.setString(fbData, path + "/lastUpdate", String(millis()));
+  Serial.printf("Data: HR=%d SpO2=%d%% Suhu=%.1f°C\n", heartRate, spo2, bodyTemp);
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Install Library**
+Dalam Arduino IDE, install:
+- `SparkFun MAX3010x Pulse and Proximity Sensor Library`
+- `Adafruit MLX90614 Library`
+- `Adafruit SSD1306`
+- `Firebase ESP32 Client` oleh Mobizt
+
+**Langkah 2 — Setup Firebase Realtime Database**
+Pergi ke console.firebase.google.com, buat projek baru, aktifkan Realtime Database dalam mod test. Salin URL database dan auth token ke dalam kod.
+
+**Langkah 3 — Bina Web Dashboard**
+Dashboard web mudah menggunakan Firebase SDK untuk papar data secara real-time. HTML, CSS, dan JavaScript sudah cukup. Dashboard ini adalah value-add yang significant.
+
+**Langkah 4 — Test dan Validate Data**
+Bandingkan bacaan SpO2 dan BPM sistem dengan oximeter komersial (RM 30–50 di farmasi). Rekod 10–20 perbandingan — data ini sangat bernilai untuk bahagian results thesis.
+
+---
+
+## Tips Pembentangan FYP
+
+- **Jadikan diri kamu pesakit demo**: Pakai sensor semasa pembentangan. Tunjukkan panel data real-time kamu sendiri.
+- **Sediakan data validation**: Bandingkan sistem dengan oximeter komersial. Kira mean absolute error (MAE).
+- **Bincangkan etika dan privasi**: Panel healthcare sering tanya tentang isu ini. Bincangkan perlindungan data pesakit.
+- **Highlight potensi scale**: Sistem ini boleh jadi ward monitoring untuk hospital, atau home healthcare untuk warga emas.
+
+---
+
+## Penutup
+
+Sistem pemantauan pesakit IoT ini bukan sahaja FYP yang technical-heavy — ia ada impak kemanusiaan yang jelas. Kamu akan belajar biomedical sensors, embedded programming, cloud databases, dan real-time visualization dalam satu projek. Untuk MAX30102, MLX90614, dan AD8232, lawati **Rectronx** di rectronx.com!

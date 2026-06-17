@@ -1,0 +1,232 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan Tong Sampah Pintar Berasaskan IoT"
+excerpt: "Bina sistem tong sampah pintar yang boleh kesan tahap penuh secara automatik dan hantar notifikasi kepada pasukan pembersihan. Tutorial lengkap dengan kod ESP32, sensor HC-SR04, Firebase, dan dashboard web."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-06-17"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "smart waste", "pengurusan sampah", "hc-sr04", "firebase"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengurusan Tong Sampah Pintar Berasaskan IoT
+
+Pernah nampak tong sampah awam yang melimpah-limpah sehingga sampah bertaburan di jalanan? Ini masalah sebenar yang berlaku di bandar-bandar Malaysia — bukan kerana tiada pekerja kebersihan, tapi kerana jadual pengutipan sampah adalah tetap tanpa mengira sama ada tong sudah penuh atau masih separuh kosong.
+
+Projek FYP ini selesaikan masalah tu dengan teknologi IoT: sistem tong sampah pintar yang kesan tahap penuh secara real-time dan maklumkan pasukan pembersihan hanya bila diperlukan. Hasilnya? Penjimatan kos operasi, bandar yang lebih bersih, dan data untuk perancangan bandar yang lebih baik.
+
+---
+
+## Kenapa Projek Ini Sesuai untuk FYP?
+
+Projek ni ada dua kekuatan utama untuk panel FYP:
+
+**Impak sosial yang jelas** — Pengurusan sisa pepejal adalah cabaran serius buat kerajaan tempatan Malaysia. Projek ni menunjukkan bagaimana teknologi boleh selesaikan masalah yang orang ramai boleh nampak dan rasai setiap hari.
+
+**Stack teknologi yang lengkap** — Kau akan bina hardware (sensor + ESP32), backend (Firebase), dan frontend (dashboard web). Ini tunjukkan kau boleh handle full-stack IoT development.
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| ESP32 Development Board | 38-pin, WiFi built-in | RM 20–28 |
+| Sensor Ultrasonik HC-SR04 | 2cm–400cm, ±3mm accuracy | RM 5–8 |
+| LED RGB | Common cathode | RM 2–4 |
+| Buzzer Pasif | 5V | RM 2–3 |
+| Breadboard + Jumper Wire | Standard set | RM 10–15 |
+| Resistor 220Ω | Untuk LED | RM 1 |
+| Bateri 18650 + Holder | 3.7V 2600mAh | RM 15–20 |
+| Modul Pengecas TP4056 | Dengan perlindungan over-discharge | RM 3–5 |
+| Kotak Projek | Plastik sederhana besar | RM 10–15 |
+
+**Jumlah anggaran: RM 68–99**
+
+---
+
+## Cara Kerja Sistem
+
+1. HC-SR04 dipasang di bahagian dalam penutup tong menghadap ke bawah
+2. Sensor mengukur jarak dari sensor ke permukaan sampah setiap 30 saat
+3. ESP32 kira peratus penuh: `((tinggi_tong - jarak) / tinggi_tong) * 100`
+4. Data dihantar ke Firebase Realtime Database
+5. Dashboard web papar status semua tong dalam kawasan
+6. Bila mana-mana tong mencapai 80%, notifikasi automatik dihantar ke WhatsApp atau Telegram pengurus
+
+---
+
+## Gambarajah Pendawaian
+
+**HC-SR04 ke ESP32:**
+- VCC → 5V (gunakan pin VIN jika pakai USB, atau step-up converter jika pakai bateri LiPo)
+- GND → GND
+- Trig → GPIO 5
+- Echo → GPIO 18 (melalui voltage divider: 1kΩ dan 2kΩ ke GND, kerana HC-SR04 output 5V)
+
+**LED RGB:**
+- R → GPIO 25 melalui 220Ω
+- G → GPIO 26 melalui 220Ω
+- B → GPIO 27 melalui 220Ω
+- Katod → GND
+
+**Buzzer:**
+- Positif → GPIO 32
+- Negatif → GND
+
+---
+
+## Kod Arduino/ESP32
+
+```cpp
+#include <WiFi.h>
+#include <FirebaseESP32.h>
+
+const char* WIFI_SSID     = "NamaWiFiKau";
+const char* WIFI_PASSWORD = "PasswordWiFi";
+#define FIREBASE_HOST "projek-kau.firebaseio.com"
+#define FIREBASE_AUTH "DATABASE_SECRET_DARI_FIREBASE"
+
+#define TRIG_PIN   5
+#define ECHO_PIN   18
+#define LED_RED    25
+#define LED_GREEN  26
+#define LED_BLUE   27
+#define BUZZER_PIN 32
+
+#define TINGGI_TONG_CM   60    // Tinggi dalaman tong dalam cm
+#define THRESHOLD_AMARAN 80    // % — beri amaran bila sampah mencapai 80%
+#define THRESHOLD_PENUH  95    // % — tong dianggap penuh
+
+#define TONG_ID "TONG_A_001"  // ID unik untuk setiap tong
+
+FirebaseData fbData;
+FirebaseConfig fbConfig;
+FirebaseAuth fbAuth;
+
+float ukurJarak() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000);
+  if (duration == 0) return -1;
+  return (duration * 0.034) / 2.0;
+}
+
+float ambilRataRata() {
+  float jumlah = 0;
+  int sah = 0;
+  for (int i = 0; i < 5; i++) {
+    float d = ukurJarak();
+    if (d > 0 && d < 400) { jumlah += d; sah++; }
+    delay(100);
+  }
+  return sah > 0 ? jumlah / sah : -1;
+}
+
+int kiraPelusPenuh(float jarak) {
+  if (jarak < 0) return -1;
+  float isiPadu = ((TINGGI_TONG_CM - jarak) / TINGGI_TONG_CM) * 100.0;
+  return (int)constrain(isiPadu, 0, 100);
+}
+
+void setWarnLED(int peratus) {
+  if (peratus < 0) {
+    // Error — LED biru
+    digitalWrite(LED_RED, LOW); digitalWrite(LED_GREEN, LOW); digitalWrite(LED_BLUE, HIGH);
+  } else if (peratus < THRESHOLD_AMARAN) {
+    // Selamat — LED hijau
+    digitalWrite(LED_RED, LOW); digitalWrite(LED_GREEN, HIGH); digitalWrite(LED_BLUE, LOW);
+  } else if (peratus < THRESHOLD_PENUH) {
+    // Amaran — LED kuning (merah + hijau)
+    digitalWrite(LED_RED, HIGH); digitalWrite(LED_GREEN, HIGH); digitalWrite(LED_BLUE, LOW);
+  } else {
+    // Penuh — LED merah + buzzer
+    digitalWrite(LED_RED, HIGH); digitalWrite(LED_GREEN, LOW); digitalWrite(LED_BLUE, LOW);
+    tone(BUZZER_PIN, 1000, 500);
+  }
+}
+
+void hantarKeFirebase(int peratus, float jarak) {
+  String path = "/tong_sampah/" + String(TONG_ID);
+  Firebase.setInt(fbData, path + "/peratus_penuh", peratus);
+  Firebase.setFloat(fbData, path + "/jarak_cm", jarak);
+  Firebase.setBool(fbData, path + "/perlukan_kutipan", peratus >= THRESHOLD_AMARAN);
+
+  // Timestamp (epoch ms dari millis — guna RTC untuk ketepatan tinggi)
+  Firebase.setInt(fbData, path + "/last_update", (int)(millis() / 1000));
+
+  Serial.printf("[Firebase] %s: %d%% penuh (%.1f cm)\n", TONG_ID, peratus, jarak);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Sambung WiFi");
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nWiFi bersambung: " + WiFi.localIP().toString());
+
+  fbConfig.host = FIREBASE_HOST;
+  fbConfig.signer.tokens.legacy_token = FIREBASE_AUTH;
+  Firebase.begin(&fbConfig, &fbAuth);
+  Firebase.reconnectWiFi(true);
+}
+
+unsigned long lastUpdate = 0;
+const unsigned long UPDATE_INTERVAL = 30000; // 30 saat
+
+void loop() {
+  if (millis() - lastUpdate >= UPDATE_INTERVAL) {
+    lastUpdate = millis();
+
+    float jarak = ambilRataRata();
+    int peratus = kiraPelusPenuh(jarak);
+
+    Serial.printf("Jarak: %.1f cm | Peratus: %d%%\n", jarak, peratus);
+
+    setWarnLED(peratus);
+    hantarKeFirebase(peratus, jarak);
+  }
+}
+```
+
+---
+
+## Langkah Demi Langkah
+
+**Langkah 1 — Setup Firebase**
+Pergi ke console.firebase.google.com, buat projek baru, aktifkan Realtime Database dalam mode test. Salin URL database dan secret key.
+
+**Langkah 2 — Install Library**
+Dalam Arduino IDE, install `Firebase ESP32 Client` by Mobizt.
+
+**Langkah 3 — Kalibrasi Sensor**
+Ukur tinggi dalaman tong dengan pembaris dan masukkan nilai sebenar dalam `TINGGI_TONG_CM`. Uji dengan meletak objek pada tahap berbeza.
+
+**Langkah 4 — Bina Dashboard Web**
+Buat halaman HTML ringkas yang guna Firebase SDK untuk papar data real-time. Tambah peta lokasi dengan marker yang bertukar warna mengikut status tong.
+
+**Langkah 5 — Deploy Ke Tong Sebenar**
+Pasang sensor dalam penutup tong dengan jarak bersih ke permukaan dalam. Seal semua lubang kabel dengan silicone sealant.
+
+---
+
+## Tips Pembentangan
+
+- **Demo fizikal**: Bawa tong kecil sebagai model, tunjukkan bacaan bertukar masa korang masukkan objek satu-persatu.
+- **Tunjukkan dashboard**: Data real-time dari Firebase yang muncul dalam browser adalah wow factor yang kuat.
+- **Bandingkan kos**: Sistem konvensional hantar lori setiap hari vs sistem smart yang hantar lori hanya bila perlu — kira penjimatan fuel dan masa.
+- **Cadangkan skala**: Satu sistem boleh pantau berpuluh tong sekaligus dengan perubahan kod yang minimal.
+
+---
+
+## Penutup
+
+Sistem tong sampah pintar ini adalah FYP yang selesaikan masalah nyata dengan teknologi yang praktikal. Untuk komponen berkualiti pada harga pelajar, lawati **Rectronx** di rectronx.com — kami ada ESP32, HC-SR04, dan semua yang kau perlukan untuk projek ni.
