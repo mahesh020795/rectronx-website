@@ -46,6 +46,7 @@ export async function generateMetadata({
 const categoryColors: Record<string, string> = {
   "FYP Guide": "bg-blue-50 text-blue-700",
   Tutorial: "bg-violet-50 text-violet-700",
+  "Tutorial Projek Akhir Tahun": "bg-emerald-50 text-emerald-700",
   Ideas: "bg-amber-50 text-amber-700",
 };
 

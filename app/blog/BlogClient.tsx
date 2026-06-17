@@ -16,10 +16,11 @@ type Post = {
 const categoryColors: Record<string, { pill: string; bar: string }> = {
   "FYP Guide": { pill: "bg-blue-50 text-blue-700", bar: "bg-[#2B7FD4]" },
   Tutorial: { pill: "bg-violet-50 text-violet-700", bar: "bg-violet-500" },
+  "Tutorial Projek Akhir Tahun": { pill: "bg-emerald-50 text-emerald-700", bar: "bg-emerald-500" },
   Ideas: { pill: "bg-amber-50 text-amber-700", bar: "bg-amber-500" },
 };
 
-const FILTER_TABS = ["All", "FYP Guide", "Tutorial", "Ideas"];
+const FILTER_TABS = ["All", "FYP Guide", "Tutorial Projek Akhir Tahun", "Tutorial", "Ideas"];
 
 export default function BlogClient({ posts }: { posts: Post[] }) {
   const [active, setActive] = useState("All");
