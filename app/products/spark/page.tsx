@@ -281,6 +281,102 @@ export default function SparkPage() {
           </div>
         </div>
 
+        {/* Desktop Dashboard Showcase */}
+        <div className="mb-16 rounded-2xl overflow-hidden bg-[#0a1628] relative">
+          {/* dot grid */}
+          <div className="absolute inset-0 opacity-[0.06]"
+            style={{ backgroundImage: "radial-gradient(circle, #60a5fa 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+          {/* glow blobs */}
+          <div className="absolute top-0 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-green-400/8 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative p-8 md:p-12 lg:p-16">
+
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+              <div>
+                <span className="inline-flex items-center gap-1.5 bg-green-500/15 border border-green-500/30 text-green-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-5">
+                  <BarChart2 size={11} /> Desktop Dashboard
+                </span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight mt-3">
+                  Full business control,<br />
+                  <span className="text-blue-400">from your computer</span>
+                </h2>
+                <p className="text-slate-400 leading-relaxed mt-3 max-w-lg">
+                  The Spark desktop dashboard gives you a complete operational view — revenue, pipeline, live conversations, AI insights, and channel breakdown — all in one screen.
+                </p>
+              </div>
+
+              {/* Quick stats */}
+              <div className="flex flex-wrap gap-3 shrink-0">
+                {[
+                  { value: "RM 12,450", label: "Revenue", delta: "+14.2%" },
+                  { value: "24.6%",     label: "Conversion", delta: "+5.1%" },
+                  { value: "5",         label: "Active Jobs", delta: "+25%" },
+                ].map((s) => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center min-w-[90px]">
+                    <div className="text-lg font-bold text-white">{s.value}</div>
+                    <div className="text-[10px] text-green-400 font-semibold">{s.delta}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Browser mockup */}
+            <div className="relative">
+              {/* glow under screen */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-blue-500/20 blur-2xl rounded-full" />
+
+              {/* browser chrome */}
+              <div className="rounded-xl overflow-hidden border border-white/10 shadow-[0_32px_80px_rgba(0,0,0,0.7),0_0_0_1px_rgba(96,165,250,0.1)]">
+                {/* browser toolbar */}
+                <div className="bg-[#0f1e35] border-b border-white/10 px-4 py-3 flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500/70" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                    <div className="w-3 h-3 rounded-full bg-green-500/70" />
+                  </div>
+                  <div className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-1 text-xs text-slate-500 flex items-center gap-2">
+                    <Shield size={10} className="text-green-400 shrink-0" />
+                    dashboard.rectronx.com
+                  </div>
+                  <div className="flex gap-2 opacity-40">
+                    <div className="w-4 h-4 rounded bg-white/10" />
+                    <div className="w-4 h-4 rounded bg-white/10" />
+                  </div>
+                </div>
+                {/* screenshot */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/spark-dashboard-desktop.jpeg"
+                  alt="Spark AI Platform Desktop Dashboard — revenue, pipeline, conversations, AI insights, and channel breakdown"
+                  className="w-full block"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            {/* Annotated callouts below the screen */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-10">
+              {[
+                { color: "bg-blue-500",  label: "Needs Attention panel",    sub: "3 leads waiting, 2 quotations pending, 1 approval — your to-do list, automated" },
+                { color: "bg-green-400", label: "Revenue & pipeline KPIs",  sub: "RM 12,450 revenue, 8 in pipeline, 5 active jobs — all with month-on-month deltas" },
+                { color: "bg-violet-400",label: "AI Engine Insights",       sub: "Satisfaction up 4.2%, 2 customers waiting >2h, peak time 10AM–2PM — surfaced automatically" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl p-4">
+                  <div className={`w-2 h-2 rounded-full ${item.color} mt-1.5 shrink-0`} />
+                  <div>
+                    <div className="text-white text-sm font-semibold">{item.label}</div>
+                    <div className="text-slate-500 text-xs mt-1 leading-relaxed">{item.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+
         {/* Use cases */}
         <div className="mb-16">
           <div className="text-center mb-10">
