@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { getAllPosts, getPost, getPostImage } from "@/lib/blog";
 import { Clock, ArrowLeft, Tag, Twitter } from "lucide-react";
 import Link from "next/link";
@@ -206,7 +207,7 @@ export default function BlogPostPage({
                   prose-li:text-slate-600
                   prose-p:text-slate-600 prose-p:leading-relaxed"
               >
-                <MDXRemote source={post.content} />
+                <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
               </div>
             </div>
 
