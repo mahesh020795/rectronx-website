@@ -4,9 +4,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, serviceSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "FYP Projects Portfolio — 400+ Delivered | Arduino, IoT, Software Malaysia",
+  title: {
+    absolute: "FYP Projects Portfolio Malaysia | Rectronx",
+  },
   description:
-    "Browse 400+ Final Year Projects delivered across Malaysia by Rectronx Circuits. IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics FYP solutions with full source code and documentation.",
+    "Browse FYP examples delivered by Rectronx across Malaysia: IoT, Arduino, ESP32, Raspberry Pi, software and robotics projects.",
   keywords: ["FYP portfolio malaysia", "final year project examples", "arduino FYP examples", "IoT project malaysia", "ESP32 FYP portfolio", "raspberry pi project examples"],
   alternates: { canonical: "/projects", languages: { "en-MY": "https://rectronx.com/projects" } },
   openGraph: {

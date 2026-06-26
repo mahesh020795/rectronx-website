@@ -6,9 +6,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, itemListSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Commercial Software Products Malaysia | Spark AI, Smart Parking, Smart Plant — Rectronx",
+  title: {
+    absolute: "Software Products Malaysia | Rectronx",
+  },
   description:
-    "Commercial software products deployed across Malaysia by Rectronx Circuits — Spark AI WhatsApp assistant, Smart Parking System, Attendance & Access Control, Fleet Tracking, and Smart Plant Monitor IoT system.",
+    "Commercial products by Rectronx: Spark AI WhatsApp assistant, smart parking, attendance control, fleet tracking and IoT monitoring.",
   keywords: ["whatsapp ai bot malaysia", "spark ai whatsapp", "smart parking system malaysia", "attendance system malaysia", "fleet tracking malaysia", "commercial software malaysia", "smart plant monitor iot", "plant monitoring system malaysia"],
   alternates: { canonical: "/products", languages: { "en-MY": "https://rectronx.com/products" } },
   openGraph: {
@@ -215,6 +217,7 @@ export default function ProductsPage() {
                 <WhatsAppButton
                   label="Get Spark for Your Business"
                   message="Hi! I'm interested in Spark for my business. Can you tell me more?"
+                  trackingSource="products_spark"
                 />
                 <Link href="/products/spark" className="btn-secondary">
                   Learn More <ArrowUpRight size={14} />
@@ -272,6 +275,7 @@ export default function ProductsPage() {
                     <WhatsAppButton
                       label={product.whatsappLabel}
                       message={product.whatsappMsg}
+                      trackingSource={`products_${product.title.toLowerCase().replaceAll(" ", "_")}`}
                       className="w-full justify-center text-sm"
                     />
                     {product.detailUrl && (

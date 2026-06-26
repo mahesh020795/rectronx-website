@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Search, MessageCircle } from "lucide-react";
 import { allCatalogProjects, totalCount } from "@/data/projects";
+import { trackWhatsAppLead } from "@/lib/analytics";
 
 type Category = "all" | "iot" | "software";
 
@@ -181,6 +182,7 @@ export default function CatalogClient() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppLead("catalog_no_results")}
               className="inline-flex items-center gap-2 bg-[#25D366] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#1ebe5d] transition-colors"
             >
               <MessageCircle size={16} />
@@ -225,6 +227,7 @@ export default function CatalogClient() {
                   href={waLink(project.title)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppLead("catalog_project_card")}
                   className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[#25D366] hover:text-[#1ebe5d] transition-colors"
                 >
                   <MessageCircle size={14} />
@@ -249,6 +252,7 @@ export default function CatalogClient() {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppLead("catalog_bottom_cta")}
             className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#1ebe5d] transition-colors shadow-sm"
           >
             <MessageCircle size={18} />

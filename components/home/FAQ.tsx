@@ -37,6 +37,7 @@ export default function FAQ() {
             <WhatsAppButton
               label="Ask us anything"
               message="Hi Rectronx! I have a question about getting my FYP done."
+              trackingSource="home_faq"
             />
           </div>
 

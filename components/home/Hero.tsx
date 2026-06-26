@@ -135,6 +135,7 @@ export default function Hero() {
               <WhatsAppButton
                 label="Get a free quote"
                 message="Hi Rectronx! I'd like to get a quote for my FYP project."
+                trackingSource="home_hero"
                 className="justify-center text-sm font-extrabold uppercase tracking-wider px-7 py-3.5 rounded-full"
               />
               <Link href="/catalog"

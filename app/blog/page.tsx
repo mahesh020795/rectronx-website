@@ -5,9 +5,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "FYP Blog & Tutorials | Arduino, ESP32, IoT Guides — Rectronx Malaysia",
+  title: {
+    absolute: "FYP Blog Malaysia | Arduino, ESP32 & IoT Guides",
+  },
   description:
-    "Free Final Year Project guides and tutorials for Malaysian students. Arduino, ESP32, Raspberry Pi, IoT project ideas, FYP topic selection, documentation tips and more.",
+    "Free FYP guides for Malaysian students: Arduino, ESP32, Raspberry Pi, IoT ideas, topic selection, documentation tips and tutorials.",
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "FYP Blog & Tutorials | Rectronx Circuits",

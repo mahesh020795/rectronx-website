@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MessageCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { trackWhatsAppLead } from "@/lib/analytics";
 
 export default function CallToAction() {
   return (
@@ -47,6 +48,7 @@ export default function CallToAction() {
                 href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20to%20discuss%20my%20project%20requirements."
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackWhatsAppLead("home_bottom_cta")}
                 className="inline-flex items-center justify-center gap-2 bg-white text-[#080E1A] text-xs font-extrabold uppercase tracking-wider px-8 py-4 rounded-full hover:bg-white/90 transition-all"
               >
                 <MessageCircle size={15} />

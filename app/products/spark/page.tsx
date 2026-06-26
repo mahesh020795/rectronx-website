@@ -10,9 +10,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Spark — AI WhatsApp Assistant for Malaysian Businesses | Rectronx",
+  title: {
+    absolute: "Spark AI WhatsApp Assistant Malaysia | Rectronx",
+  },
   description:
-    "Spark by Rectronx is an AI-powered WhatsApp assistant for Malaysian SMEs. Auto-reply customers 24/7, capture leads, monitor conversations from a dashboard. Setup in under a day.",
+    "Spark is an AI WhatsApp assistant for Malaysian SMEs. Auto-reply 24/7, capture leads, monitor conversations and set up fast.",
   keywords: ["whatsapp ai bot malaysia", "spark ai whatsapp assistant", "whatsapp chatbot malaysia", "ai customer service malaysia", "whatsapp business automation malaysia"],
   alternates: { canonical: "/products/spark", languages: { "en-MY": "https://rectronx.com/products/spark" } },
   openGraph: {
@@ -130,6 +132,7 @@ export default function SparkPage() {
               <WhatsAppButton
                 label="Get Spark for My Business"
                 message="Hi Rectronx! I'm interested in Spark for my business. Can you tell me more about pricing and setup?"
+                trackingSource="spark_hero"
               />
               <a href="https://dashboard.rectronx.com" target="_blank" rel="noopener noreferrer" className="btn-secondary">
                 Open Dashboard <ArrowUpRight size={14} />
@@ -246,6 +249,7 @@ export default function SparkPage() {
                 <WhatsAppButton
                   label="See Spark in Action"
                   message="Hi Rectronx! Can I get a demo of the Spark dashboard for my business?"
+                  trackingSource="spark_demo_cta"
                 />
               </div>
             </div>
@@ -437,6 +441,7 @@ export default function SparkPage() {
             <WhatsAppButton
               label="Get Spark Now"
               message="Hi Rectronx! I want to get Spark for my business. What's the next step?"
+              trackingSource="spark_bottom_cta"
             />
             <Link href="/contact" className="btn-secondary border-white/20 text-white hover:bg-white/10">
               Contact Us <ArrowUpRight size={14} />

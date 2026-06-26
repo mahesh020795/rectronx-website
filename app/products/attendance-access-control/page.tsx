@@ -10,9 +10,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Attendance & Access Control System Malaysia | Fingerprint + RFID — Rectronx",
+  title: {
+    absolute: "Attendance Access Control Malaysia | Rectronx",
+  },
   description:
-    "Enterprise attendance and access control system deployed for schools, factories, and offices across Malaysia. Biometric fingerprint + RFID dual-authentication with real-time database sync and auto-generated reports.",
+    "Fingerprint and RFID attendance access control for Malaysian schools, factories and offices. Real-time sync, reports and multi-door support.",
   keywords: ["attendance system malaysia", "access control system malaysia", "fingerprint attendance system", "rfid attendance malaysia", "biometric attendance malaysia", "school attendance system"],
   alternates: { canonical: "/products/attendance-access-control", languages: { "en-MY": "https://rectronx.com/products/attendance-access-control" } },
   openGraph: {
@@ -131,6 +133,7 @@ export default function AttendanceAccessControlPage() {
               <WhatsAppButton
                 label="Inquire About This System"
                 message="Hi Rectronx! I'm interested in the Attendance & Access Control System. Can you share more details?"
+                trackingSource="attendance_access_hero"
               />
             </div>
           </div>
@@ -241,6 +244,7 @@ export default function AttendanceAccessControlPage() {
             <WhatsAppButton
               label="Get a System Quote"
               message="Hi Rectronx! I'm interested in the Attendance & Access Control System. How do we get started?"
+              trackingSource="attendance_access_bottom_cta"
             />
             <Link href="/contact" className="btn-secondary border-white/20 text-white hover:bg-white/10">
               Contact Us <ArrowUpRight size={14} />

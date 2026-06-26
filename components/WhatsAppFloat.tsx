@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { trackWhatsAppLead } from "@/lib/analytics";
 
 export default function WhatsAppFloat() {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -25,6 +26,7 @@ export default function WhatsAppFloat() {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppLead("floating_whatsapp_tooltip")}
             className="mt-3 block text-center bg-[#25D366] text-white text-xs font-semibold py-2 px-3 rounded-lg hover:bg-[#1ebe5d] transition-colors"
           >
             Start Chat →

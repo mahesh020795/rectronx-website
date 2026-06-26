@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { trackWhatsAppLead } from "@/lib/analytics";
 
 const categoryImages: Record<string, string> = {
   iot: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80",
@@ -95,6 +96,7 @@ export default function ProjectsClient() {
             <WhatsAppButton
               label="Request a Custom Project"
               message="Hi Rectronx! I'd like to request a custom FYP."
+              trackingSource="projects_hero"
             />
           </div>
         </div>
@@ -169,6 +171,7 @@ export default function ProjectsClient() {
                   href={`https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27m%20interested%20in%20a%20project%20similar%20to%20${encodeURIComponent(p.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppLead("projects_card")}
                   className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#2B7FD4] hover:gap-2.5 transition-all"
                 >
                   Get Similar Project <ArrowRight size={13} />
@@ -191,6 +194,7 @@ export default function ProjectsClient() {
             <WhatsAppButton
               label="Send Your Requirements"
               message="Hi Rectronx! I have a custom FYP requirement I'd like to discuss."
+              trackingSource="projects_bottom_cta"
             />
           </div>
         </div>

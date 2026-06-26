@@ -10,9 +10,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Smart Parking Management System Malaysia | Real-Time RFID Parking — Rectronx",
+  title: {
+    absolute: "Smart Parking System Malaysia | Rectronx",
+  },
   description:
-    "Full-stack smart parking system deployed in commercial buildings across Malaysia. Real-time slot monitoring, RFID vehicle identification, automated payment, and owner analytics dashboard.",
+    "Smart parking system for Malaysia with RFID access, live bay sensors, automated payment, owner dashboard and site installation support.",
   keywords: ["smart parking system malaysia", "parking management system", "rfid parking malaysia", "automated parking malaysia", "car park management system"],
   alternates: { canonical: "/products/smart-parking", languages: { "en-MY": "https://rectronx.com/products/smart-parking" } },
   openGraph: {
@@ -129,6 +131,7 @@ export default function SmartParkingPage() {
               <WhatsAppButton
                 label="Inquire About This System"
                 message="Hi Rectronx! I'm interested in the Smart Parking Management System. Can you share more details and pricing?"
+                trackingSource="smart_parking_hero"
               />
             </div>
           </div>
@@ -239,6 +242,7 @@ export default function SmartParkingPage() {
             <WhatsAppButton
               label="Get a Site Assessment"
               message="Hi Rectronx! I'm interested in the Smart Parking System for my property. Can we arrange a site assessment?"
+              trackingSource="smart_parking_bottom_cta"
             />
             <Link href="/contact" className="btn-secondary border-white/20 text-white hover:bg-white/10">
               Contact Us <ArrowUpRight size={14} />

@@ -10,9 +10,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Fleet & Vehicle Tracking System Malaysia | GPS Live Dashboard — Rectronx",
+  title: {
+    absolute: "Fleet Tracking System Malaysia | Rectronx",
+  },
   description:
-    "Commercial GPS fleet tracking system with live dashboard deployed across Malaysia. Real-time vehicle location, route history, driver behaviour monitoring, fuel analytics, and automated SMS alerts for geofence and speeding.",
+    "GPS fleet tracking for Malaysian businesses with live map, route history, driver behaviour, fuel analytics, geofence and SMS alerts.",
   keywords: ["fleet tracking system malaysia", "gps vehicle tracking malaysia", "fleet management system", "vehicle tracking malaysia", "lorry tracking system malaysia", "commercial fleet gps"],
   alternates: { canonical: "/products/fleet-tracking", languages: { "en-MY": "https://rectronx.com/products/fleet-tracking" } },
   openGraph: {
@@ -131,6 +133,7 @@ export default function FleetTrackingPage() {
               <WhatsAppButton
                 label="Inquire About Fleet Tracking"
                 message="Hi Rectronx! I'm interested in the Fleet & Vehicle Tracking system. Can you share more details and pricing?"
+                trackingSource="fleet_tracking_hero"
               />
             </div>
           </div>
@@ -241,6 +244,7 @@ export default function FleetTrackingPage() {
             <WhatsAppButton
               label="Get a Fleet Quote"
               message="Hi Rectronx! I'm interested in fleet tracking for my vehicles. Can we discuss pricing and setup?"
+              trackingSource="fleet_tracking_bottom_cta"
             />
             <Link href="/contact" className="btn-secondary border-white/20 text-white hover:bg-white/10">
               Contact Us <ArrowUpRight size={14} />

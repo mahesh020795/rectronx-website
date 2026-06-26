@@ -88,6 +88,7 @@ export default function HowItWorks() {
           <WhatsAppButton
             label="Start now — free to ask"
             message="Hi Rectronx! I'd like to know more about the FYP process."
+            trackingSource="home_how_it_works"
           />
           <p className="text-white/30 text-xs uppercase tracking-widest">No commitment needed</p>
         </motion.div>

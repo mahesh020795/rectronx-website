@@ -275,6 +275,7 @@ export default function BlogPostPage({
                 <WhatsAppButton
                   label="Chat with Rectronx"
                   message="Hi Rectronx! I read your blog and need help with my FYP."
+                  trackingSource="blog_sidebar"
                 />
               </div>
             </div>
@@ -290,6 +291,7 @@ export default function BlogPostPage({
           <WhatsAppButton
             label="Chat with Rectronx"
             message="Hi Rectronx! I read your blog and need help with my FYP."
+            trackingSource="blog_mobile_cta"
           />
         </div>
       </div>

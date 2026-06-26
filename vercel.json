@@ -2,5 +2,18 @@
   "framework": "nextjs",
   "buildCommand": "next build",
   "devCommand": "next dev",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.rectronx.com"
+        }
+      ],
+      "destination": "https://rectronx.com/:path*",
+      "permanent": true
+    }
+  ]
 }

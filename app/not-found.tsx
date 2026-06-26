@@ -20,6 +20,7 @@ export default function NotFound() {
           <WhatsAppButton
             label="Chat with Us"
             message="Hi Rectronx! I need some help."
+            trackingSource="not_found"
             className="text-base px-6 py-3"
           />
         </div>

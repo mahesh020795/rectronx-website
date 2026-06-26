@@ -5,9 +5,11 @@ import JsonLd from "@/components/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Rectronx Circuits | Final Year Project (FYP) Malaysia — IoT, Arduino, ESP32",
+  title: {
+    absolute: "Rectronx Circuits | FYP Projects Malaysia",
+  },
   description:
-    "Malaysia's #1 FYP company — 400+ projects delivered. Custom Final Year Projects in IoT, Arduino, ESP32, Raspberry Pi & Software. Based in Penang. Free quote via WhatsApp in 2 hours. Projek Akhir Tahun Malaysia.",
+    "Custom FYP projects in Malaysia: IoT, Arduino, ESP32, Raspberry Pi and software. 400+ delivered from Penang. Free WhatsApp quote in 2 hours.",
   keywords: [
     "final year project malaysia",
     "FYP malaysia",

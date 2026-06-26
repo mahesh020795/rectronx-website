@@ -10,9 +10,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Smart Plant Monitor — IoT Plant Monitoring & Auto-Irrigation System | Rectronx",
+  title: {
+    absolute: "Smart Plant Monitor IoT System | Rectronx",
+  },
   description:
-    "ESP32-based smart plant monitoring system with Flutter mobile app. Live soil moisture, temperature, humidity, light, and water level sensors. Auto-irrigation, push notifications, and remote pump control via Firebase.",
+    "ESP32 smart plant monitoring system with Flutter app, soil sensors, auto-irrigation, push alerts, Firebase sync and remote pump control.",
   keywords: [
     "smart plant monitor malaysia",
     "iot plant monitoring system",
@@ -132,6 +134,7 @@ export default function SmartPlantMonitorPage() {
               <WhatsAppButton
                 label="Get This for My Business"
                 message="Hi Rectronx! I'm interested in the Smart Plant Monitor system. Can you tell me more?"
+                trackingSource="smart_plant_hero"
               />
             </div>
           </div>
@@ -333,6 +336,7 @@ export default function SmartPlantMonitorPage() {
             <WhatsAppButton
               label="Get a Quote"
               message="Hi Rectronx! I'm interested in the Smart Plant Monitor for my business. Can you give me a quote?"
+              trackingSource="smart_plant_bottom_cta"
             />
             <Link href="/contact" className="btn-secondary border-white/20 text-white hover:bg-white/10">
               Contact Us <ArrowUpRight size={14} />

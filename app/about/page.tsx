@@ -6,9 +6,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "About Rectronx Circuits | Penang Engineering & Technology Company Since 2016",
+  title: {
+    absolute: "About Rectronx Circuits | Penang Technology Company",
+  },
   description:
-    "Learn about Rectronx Circuits — founded in Penang 2016, delivering 400+ Final Year Projects and commercial software products across Malaysia. IoT, Arduino, ESP32 specialists.",
+    "Rectronx Circuits is a Penang technology company delivering FYP projects, IoT systems and commercial software across Malaysia.",
   keywords: ["about rectronx", "rectronx circuits penang", "FYP company malaysia", "engineering company penang", "IoT company malaysia"],
   alternates: { canonical: "/about", languages: { "en-MY": "https://rectronx.com/about" } },
   openGraph: {
@@ -240,6 +242,7 @@ export default function AboutPage() {
               <WhatsAppButton
                 label="Start a Conversation"
                 message="Hi Rectronx! I'd like to work together."
+                trackingSource="about_bottom_cta"
               />
               <Link href="/contact" className="btn-secondary">
                 Send a Message

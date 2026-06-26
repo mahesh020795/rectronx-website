@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Logo from "@/components/Logo";
 import { CheckCircle2, Loader2, ArrowRight, Clock, MessageCircle } from "lucide-react";
+import { trackContactFormLead } from "@/lib/analytics";
 
 // Confetti piece component
 function ConfettiPiece({ style }: { style: React.CSSProperties }) {
@@ -47,6 +48,7 @@ export default function ContactPage() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
+      trackContactFormLead();
       setStatus("success");
       setForm({ name: "", email: "", phone: "", message: "" });
     } catch {
@@ -105,6 +107,7 @@ export default function ContactPage() {
               <WhatsAppButton
                 label="Open WhatsApp Chat"
                 message="Hi Rectronx! I'd like to get in touch."
+                trackingSource="contact_page_whatsapp"
                 className="w-full justify-center"
               />
             </div>

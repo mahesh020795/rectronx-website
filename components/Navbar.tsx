@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 import clsx from "clsx";
+import { trackWhatsAppLead } from "@/lib/analytics";
 
 const links = [
   { href: "/projects", label: "Projects" },
@@ -116,6 +117,7 @@ export default function Navbar() {
             </nav>
             <a href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote."
               target="_blank" rel="noopener noreferrer"
+              onClick={() => trackWhatsAppLead("mobile_nav_quote")}
               className="block w-full text-center bg-brand-blue text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3.5 rounded-full hover:bg-brand-blue-dark transition-colors">
               Get a free quote
             </a>

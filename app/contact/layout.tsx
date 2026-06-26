@@ -3,9 +3,11 @@ import JsonLd from "@/components/JsonLd";
 import { breadcrumbSchema, contactPageSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Contact Rectronx | Free FYP Quote via WhatsApp — Penang Malaysia",
+  title: {
+    absolute: "Contact Rectronx | Free FYP Quote Malaysia",
+  },
   description:
-    "Contact Rectronx Circuits for your Final Year Project or commercial software. Get a free quote via WhatsApp within 2 hours. Based in Penang, Malaysia. Open Mon–Fri 9am–10pm MYT.",
+    "Contact Rectronx for a Final Year Project or software quote. WhatsApp us for a free reply within 2 hours. Based in Penang, Malaysia.",
   keywords: ["contact rectronx", "FYP quote malaysia", "whatsapp FYP help", "final year project quote penang"],
   alternates: { canonical: "/contact", languages: { "en-MY": "https://rectronx.com/contact" } },
   openGraph: {
