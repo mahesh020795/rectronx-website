@@ -1,0 +1,124 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Tangki Air Pintar dengan Paras Ultrasonik dan Kawalan Pam Automatik"
+excerpt: "Bina sistem yang boleh pantau paras air tangki secara real-time dan kawal pam secara automatik menggunakan ESP32. Tutorial lengkap dengan kod, pendawaian, dan tips pembentangan FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-03"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "tangki air", "ultrasonik"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Tangki Air Pintar dengan Paras Ultrasonik dan Kawalan Pam Automatik
+
+Setiap rumah kat Malaysia ada tangki air — dan setiap rumah tu confirm pernah alami dua masalah: tangki tiba-tiba kering sebab pam tak on time, atau tangki melimpah sebab pam lupa off. Sistem tangki air pintar ni selesaikan kedua-dua masalah dengan satu je board ESP32 dan satu sensor ultrasonik.
+
+Kelebihan projek ni untuk FYP: senang nak faham konsepnya (panel takkan pening), tapi ada ruang teknikal yang cukup dalam — kau kena handle sensor jarak, kawalan motor melalui relay, automasi berasaskan threshold, dan notifikasi jarak jauh. Semua tu boleh dijelaskan dalam satu pembentangan yang padat.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Masalah air ni universal — setiap panel pernah alami sendiri tangki air rumah kering atau melimpah. Bila kau cakap "sistem ni boleh jimatkan air dan elak kerosakan akibat air melimpah," panel terus faham kepentingan projek tanpa kau perlu explain panjang-panjang.
+
+Dari segi teknikal, sistem ni ajar kau:
+- Pengukuran jarak menggunakan gelombang ultrasonik
+- Logik kawalan automatik (automation logic) berasaskan threshold
+- Kawalan motor AC melalui relay dengan selamat
+- Penghantaran notifikasi jarak jauh (Telegram atau aplikasi mudah alih)
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| [ESP32](/blog/esp32-getting-started) Development Board | 38-pin, dual-core | RM 20–30 |
+| Sensor Ultrasonik JSN-SR04T | Waterproof, sesuai untuk tangki | RM 15–25 |
+| Modul Relay 5V | Kawalan pam | RM 5–8 |
+| Pam Air (sedia ada di rumah) | Pam sumber air | — |
+| LED Indikator (Merah/Hijau) | Status paras air | RM 1 setiap satu |
+| Buzzer | Amaran paras kritikal | RM 2 |
+| Bekas Kalis Air | Lindungi litar dari lembapan | RM 10–15 |
+
+**Jumlah anggaran: RM 55–85**
+
+---
+
+## Cara Kerja Sistem
+
+1. Sensor ultrasonik JSN-SR04T dipasang di bahagian atas tangki, menghadap ke bawah
+2. Sensor menghantar gelombang bunyi dan mengukur masa gema (echo) untuk kira jarak ke permukaan air
+3. ESP32 tukar jarak ni kepada peratus paras air (0% = kosong, 100% = penuh)
+4. Bila paras air jatuh bawah 20%, ESP32 hidupkan relay untuk on-kan pam
+5. Bila paras capai 95%, relay off-kan pam secara automatik — elak limpah
+6. Kalau paras jatuh bawah 10% walaupun pam dah on (mungkin masalah bekalan air), sistem hantar amaran kecemasan melalui Telegram
+
+---
+
+## Gambarajah Pendawaian
+
+**JSN-SR04T ke ESP32:**
+- VCC → 5V
+- GND → GND
+- Trig → GPIO 5
+- Echo → GPIO 18
+
+**Relay ke Pam:**
+- IN → GPIO 26
+- Pam disambung melalui terminal NO (Normally Open) relay, pada sumber kuasa AC berasingan
+
+**LED & Buzzer:**
+- LED Hijau → GPIO 25
+- LED Merah → GPIO 27
+- Buzzer → GPIO 33
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+void loop() {
+  float distance = readUltrasonicDistance();
+  int waterLevel = calculatePercentage(distance, tankHeight);
+
+  if (waterLevel < 20 && !pumpRunning) {
+    turnOnPump();
+    pumpRunning = true;
+  }
+
+  if (waterLevel >= 95 && pumpRunning) {
+    turnOffPump();
+    pumpRunning = false;
+  }
+
+  if (waterLevel < 10 && pumpRunning) {
+    sendTelegramAlert("Amaran: Paras air kritikal walaupun pam menyala");
+  }
+
+  updateLEDStatus(waterLevel);
+  pushToDashboard(waterLevel);
+  delay(10000); // semak setiap 10 saat
+}
+```
+
+---
+
+## Tips Pembentangan
+
+- Guna bekas air kecil (contoh: baldi atau akuarium) untuk demo live semasa viva — tunjuk paras air naik dan turun dengan pam on/off secara automatik
+- Sediakan graf data paras air sepanjang beberapa hari sebagai bukti sistem berfungsi tanpa pengawasan
+- Bersedia jelaskan kenapa kau pilih sensor ultrasonik berbanding sensor apungan (float switch) — ini soalan biasa dari penilai
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Pengesanan paras air + kawalan pam automatik
+Untuk **FYP Degree**: Tambah amaran Telegram + dashboard pemantauan jarak jauh
+Untuk **Merit/Distinction**: Tambah ramalan penggunaan air, aplikasi mudah alih, dan kawalan berbilang tangki
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem tangki air pintar lengkap — pendawaian selamat, setup dashboard, dan dokumentasi FYP penuh. WhatsApp kami dengan keperluan universiti kau dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

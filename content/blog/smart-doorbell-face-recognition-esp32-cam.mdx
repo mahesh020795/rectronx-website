@@ -1,0 +1,93 @@
+---
+title: "Smart Doorbell with Face Recognition (ESP32-CAM): Complete FYP Build Guide"
+excerpt: "Build a working smart doorbell that recognises faces, sends a Telegram alert with a photo, and logs every visitor. Full component list, wiring, and code for your Final Year Project."
+date: "2026-07-03"
+category: "Tutorial"
+readTime: "9 min read"
+---
+
+## Why a Smart Doorbell Makes a Strong FYP
+
+A face-recognition doorbell hits the sweet spot examiners look for: it's visual (the demo is genuinely impressive), it touches computer vision, embedded systems, and networking all in one build, and it solves a problem people actually recognise — knowing who's at the door before you open it.
+
+Unlike a lot of sensor-and-buzzer projects, this one produces a photo and a name on your phone within seconds. That's the kind of live demo that keeps a viva panel's attention.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32-CAM](/blog/esp32-getting-started) (AI-Thinker) | Camera + microcontroller | RM 25–35 |
+| FTDI Programmer | Flash the ESP32-CAM | RM 8–12 |
+| Push Button | Doorbell trigger | RM 1 |
+| Buzzer | Audio confirmation | RM 2 |
+| PIR Motion Sensor (optional) | Wake camera on approach | RM 4–6 |
+| 5V Power Supply | Continuous power | RM 10–15 |
+| Enclosure | Weatherproof housing | RM 10–20 |
+
+**Total hardware cost: RM 60–90**
+
+## How It Works
+
+1. Someone presses the button (or the PIR sensor detects motion)
+2. ESP32-CAM captures a photo
+3. The photo is compared against a small set of registered faces stored on the device or sent to a lightweight recognition API
+4. If the face matches a known person, the doorbell logs it as "recognised"; if not, it's logged as "unknown visitor"
+5. Either way, a Telegram bot sends the photo and result straight to your phone
+6. The buzzer gives the visitor audio confirmation that the doorbell registered them
+
+For FYP scope, most students use one of two approaches:
+
+**Option A — On-device with `esp32-cam` + Edge Impulse:** faster response, works without internet, but recognition accuracy is lower with only a handful of training images.
+
+**Option B — Cloud-assisted with a Python/Flask backend:** ESP32-CAM sends the photo to a small [Flask server](/blog/python-flask-web-fyp) running OpenCV + `face_recognition`, which does the actual matching and pushes the Telegram alert. Slightly more setup, noticeably better accuracy — this is what we recommend for degree-level FYPs.
+
+## Wiring the ESP32-CAM
+
+- 5V → VCC
+- GND → GND
+- Push button → GPIO 12 (with pull-down resistor)
+- Buzzer → GPIO 13
+- PIR sensor (optional) → GPIO 14
+
+The ESP32-CAM doesn't have a built-in USB port, so you'll need the FTDI programmer for flashing: connect FTDI TX → ESP32 RX, FTDI RX → ESP32 TX, and bridge GPIO 0 to GND only while uploading code.
+
+## Core Logic (Pseudocode)
+
+```cpp
+void loop() {
+  if (buttonPressed() || motionDetected()) {
+    camera_fb_t *photo = capturePhoto();
+    sendToServer(photo);          // Flask backend does face matching
+    String result = waitForResult();
+
+    if (result == "recognised") {
+      beep(1);
+      sendTelegramAlert(photo, "Recognised visitor");
+    } else {
+      beep(3);
+      sendTelegramAlert(photo, "Unknown visitor");
+    }
+  }
+}
+```
+
+On the server side, a simple Flask endpoint using the `face_recognition` library can compare the incoming image against a folder of known faces and return a match name or "unknown" in under a second on a laptop-grade CPU.
+
+## Presentation Tips for the Viva
+
+- Bring 2-3 registered faces and one "stranger" (a coursemate) for a live demo — panels want to see both the positive and negative case
+- Show the Telegram log with timestamps as evidence of data persistence
+- Be ready to explain the tradeoff between on-device and cloud-based recognition — this is a common follow-up question
+- If you have time, add a simple web dashboard showing visitor history; it turns a hardware demo into a full-stack one
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Camera + button + Telegram alert with photo is enough
+For a **Degree FYP**: Add face matching (recognised vs unknown) + visitor log
+For **Merit/Distinction**: Add a web dashboard, multiple registered users, and a report of visit frequency
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete face-recognition doorbell systems — camera setup, recognition backend, Telegram integration, and full documentation. WhatsApp us your university's requirements and we'll send a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

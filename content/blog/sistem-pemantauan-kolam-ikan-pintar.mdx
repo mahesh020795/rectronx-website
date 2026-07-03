@@ -1,0 +1,120 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kolam Ikan Pintar — pH, Oksigen dan Suhu Air"
+excerpt: "Bina sistem IoT untuk pantau kualiti air kolam ikan (akuakultur) secara real-time — pH, oksigen terlarut, dan suhu — dengan amaran automatik. Tutorial lengkap untuk FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-03"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "akuakultur", "kolam ikan"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pemantauan Kolam Ikan Pintar — pH, Oksigen dan Suhu Air
+
+Industri akuakultur di Malaysia terus berkembang, dan salah satu punca utama kerugian penternak ikan ialah kualiti air yang tak dipantau dengan rapi — pH tidak stabil, oksigen terlarut jatuh waktu malam, atau suhu air naik mendadak boleh bunuh sekawan ikan dalam masa beberapa jam sahaja. Sistem pemantauan pintar ni bagi penternak (atau pelajar FYP) cara untuk kesan masalah tu sebelum ia jadi bencana.
+
+Projek ni sesuai untuk pelajar yang nak buat sesuatu dengan aplikasi industri sebenar — bukan sekadar konsep makmal. Kalau kau ada akses kepada kolam ikan sebenar (rumah, ladang keluarga, atau makmal universiti), demo projek ni jadi jauh lebih meyakinkan.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Akuakultur adalah sektor ekonomi yang penting untuk Malaysia, dan kualiti air adalah faktor paling kritikal dalam penternakan ikan yang berjaya. Bila kau boleh tunjuk sistem kau boleh selamatkan kerugian sebenar (kematian ikan akibat kualiti air), panel nampak nilai praktikal projek ni dengan jelas.
+
+Dari segi teknikal, kau akan belajar:
+- Integrasi sensor pH analog (yang perlukan kalibrasi tepat)
+- Pengukuran oksigen terlarut (dissolved oxygen)
+- Sistem amaran berbilang parameter secara serentak
+- Logging data untuk analisis trend kualiti air jangka panjang
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| [ESP32](/blog/esp32-getting-started) Development Board | 38-pin, dual-core, waterproof case | RM 20–30 |
+| Sensor pH Analog (dengan probe kalis air) | Pengukuran keasidan air | RM 40–60 |
+| Sensor Oksigen Terlarut (DO Sensor) | Pengukuran oksigen dalam air | RM 80–150 |
+| Sensor Suhu DS18B20 (Waterproof) | Suhu air | RM 8–12 |
+| Buzzer & LED Amaran | Notifikasi kritikal | RM 3–5 |
+| Aerator/Pam Udara Kecil (untuk auto-response) | Tambah oksigen bila perlu | RM 20–30 |
+
+**Jumlah anggaran: RM 170–290** (sensor pH dan DO adalah komponen paling mahal, tapi boleh dikongsi antara beberapa kumpulan FYP jika perlu)
+
+---
+
+## Cara Kerja Sistem
+
+1. Sensor pH, DO, dan suhu membaca kualiti air setiap beberapa minit
+2. ESP32 proses bacaan dan bandingkan dengan julat selamat untuk spesies ikan yang diternak (contoh: pH 6.5–8.5, DO > 5mg/L untuk kebanyakan ikan air tawar)
+3. Kalau mana-mana parameter keluar dari julat selamat, sistem hantar amaran Telegram kepada penternak
+4. Untuk oksigen rendah, sistem boleh secara automatik hidupkan aerator/pam udara sehingga paras oksigen kembali normal
+5. Semua bacaan direkod ke dashboard untuk analisis trend mingguan/bulanan
+
+---
+
+## Gambarajah Pendawaian
+
+**Sensor pH:**
+- Signal → GPIO 34 (ADC)
+- VCC → 3.3V / GND → GND
+
+**Sensor DO:**
+- Signal → GPIO 35 (ADC)
+- VCC → 3.3V / GND → GND
+
+**DS18B20 (Suhu, protokol OneWire):**
+- Data → GPIO 4 (dengan resistor pull-up 4.7kΩ)
+
+**Relay ke Aerator:**
+- IN → GPIO 26
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+void loop() {
+  float ph = readPHSensor();
+  float dissolvedOxygen = readDOSensor();
+  float waterTemp = readTemperature();
+
+  if (ph < 6.5 || ph > 8.5) {
+    sendTelegramAlert("Amaran: pH air luar julat selamat: " + ph);
+  }
+
+  if (dissolvedOxygen < 5.0) {
+    activateAerator();
+    sendTelegramAlert("Oksigen rendah, aerator diaktifkan");
+  } else {
+    deactivateAerator();
+  }
+
+  logToDashboard(ph, dissolvedOxygen, waterTemp);
+  delay(300000); // semak setiap 5 minit
+}
+```
+
+**Nota kalibrasi:** sensor pH dan DO memerlukan kalibrasi berkala menggunakan larutan buffer standard (pH 4.0, 7.0, 10.0). Ini adalah langkah penting yang perlu didokumenkan dalam laporan FYP kau — panel selalu tanya soalan tentang ketepatan sensor.
+
+---
+
+## Tips Pembentangan
+
+- Kalau tiada akses kepada kolam sebenar, guna akuarium kecil dengan ikan hiasan untuk demo — konsepnya tetap sama
+- Tunjuk graf trend pH dan oksigen sepanjang beberapa hari sebagai bukti sistem berfungsi secara berterusan
+- Bersedia terangkan proses kalibrasi sensor pH — ini adalah soalan teknikal yang paling kerap ditanya untuk projek jenis ni
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Pemantauan pH dan suhu + amaran asas
+Untuk **FYP Degree**: Tambah sensor oksigen terlarut + kawalan aerator automatik
+Untuk **Merit/Distinction**: Tambah dashboard analitik trend jangka panjang, sokongan berbilang kolam, dan cadangan tindakan berasaskan spesies ikan
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem pemantauan kolam ikan pintar lengkap — kalibrasi sensor, setup automasi, dan dokumentasi FYP penuh. WhatsApp kami dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

@@ -1,0 +1,88 @@
+---
+title: "Smart Mirror with Raspberry Pi: Complete FYP Build Guide"
+excerpt: "Build a two-way smart mirror that displays time, weather, calendar, and notifications using a Raspberry Pi. Full hardware list, assembly steps, and software setup for your FYP."
+date: "2026-07-03"
+category: "Tutorial"
+readTime: "9 min read"
+---
+
+## Why a Smart Mirror Stands Out as an FYP
+
+Most FYP demos involve a breadboard and a laptop screen. A smart mirror is different — it's a finished, physical product that looks genuinely polished when it's done, which makes a strong first impression on a viva panel before you've said a word.
+
+Under the hood, it's also a legitimate software and hardware integration project: [Raspberry Pi](/blog/raspberry-pi-fyp-guide) running a display framework, pulling live data from APIs, and rendering it through a two-way mirror. That combination of embedded systems, front-end development, and API integration covers a lot of ground for one project.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [Raspberry Pi 4](/blog/raspberry-pi-fyp-guide) (2GB+) | Runs the mirror software | RM 180–250 |
+| Monitor/LCD Panel (used) | Display | RM 100–200 |
+| Two-Way Acrylic Mirror | Reflective front panel | RM 60–100 |
+| Wooden Frame | Housing | RM 50–100 |
+| PIR Motion Sensor | Wake on approach | RM 4–6 |
+| MicroSD Card (32GB) | OS storage | RM 15–20 |
+
+**Total hardware cost: RM 400–650** (varies significantly with monitor size and frame material)
+
+Many students save on cost by reusing an old monitor and building the frame themselves — this is common and doesn't hurt your marks, since the assembly work itself is part of the technical contribution.
+
+## How It Works
+
+1. Raspberry Pi runs MagicMirror² (an open-source modular smart mirror platform built on Electron/Node.js) or a custom-built dashboard
+2. The display shows time, date, weather (via a weather API), and calendar events against a black background
+3. A two-way acrylic mirror sits in front of the screen — where the display is black, it reflects like a normal mirror; where content is shown, it's visible through the glass
+4. A PIR sensor detects when someone approaches and wakes the display, saving power/screen life when no one's around
+5. Optional modules add news headlines, to-do lists, or Telegram notifications
+
+## Assembly Steps
+
+### Step 1: Prepare the Display
+Strip the monitor's bezel if possible to reduce the frame's depth. Test that the screen still works before mounting anything permanently.
+
+### Step 2: Mount the Two-Way Mirror
+Cut the acrylic mirror to the monitor's dimensions (or slightly larger to fit the frame). Clean both sides thoroughly — dust between the mirror and screen will be very visible once assembled.
+
+### Step 3: Build the Frame
+A simple wooden box frame works well. Leave enough depth behind the mirror for the monitor and Raspberry Pi, plus airflow — these setups can run warm if enclosed too tightly.
+
+### Step 4: Install MagicMirror² on Raspberry Pi
+
+```bash
+bash -c "$(curl -sL https://raw.githubusercontent.com/MagicMirrorOrg/MagicMirror/master/installers/raspberry.sh)"
+```
+
+Configure `config/config.js` with your location for weather, and add modules for calendar, news, or notifications.
+
+### Step 5: Wire the PIR Sensor
+
+- VCC → 5V
+- GND → GND
+- OUT → GPIO 17
+
+```python
+# Simplified wake/sleep logic
+if pir_sensor.motion_detected():
+    turn_on_display()
+    reset_idle_timer()
+elif idle_timer_exceeds(300):  # 5 minutes
+    turn_off_display()
+```
+
+## Presentation Tips
+
+- Bring the finished mirror to your viva if possible — the physical build carries a lot of the "wow factor" that's hard to replicate on a projector
+- Be ready to explain the two-way mirror principle (partial reflection vs. transmission) — it's a common examiner question and shows you understand the physics, not just the assembly
+- Highlight any custom module you built yourself (rather than using only pre-built MagicMirror modules) as your main technical contribution
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Time, date, weather display in a basic frame
+For a **Degree FYP**: Add PIR wake/sleep, calendar integration, and a custom-built module
+For **Merit/Distinction**: Add voice control, Telegram notifications, and a mobile app to remotely configure the display
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete smart mirror projects — frame assembly, software setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

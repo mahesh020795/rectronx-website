@@ -1,0 +1,118 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pintu Pintar dengan Pengecaman Wajah Menggunakan ESP32-CAM"
+excerpt: "Bina sistem pintu pintar yang boleh kenal pasti wajah dan buka kunci secara automatik menggunakan ESP32-CAM. Tutorial lengkap dengan kod, pendawaian, dan tips pembentangan FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-03"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "pengecaman wajah", "keselamatan"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pintu Pintar dengan Pengecaman Wajah Menggunakan ESP32-CAM
+
+Kalau kau nak projek FYP yang ada elemen "wow factor" masa demo, sistem pintu pintar dengan pengecaman wajah antara pilihan terbaik. Bayangkan panel tengah tengok — kau berdiri depan kamera, pintu automatik unlock. Coursemate kau pula cuba, sistem tolak dan bunyi buzzer. Tak perlu banyak cakap, sistem tu sendiri yang buktikan ia berfungsi.
+
+Lebih penting, projek ni meliputi topik yang serius dari segi teknikal: computer vision, embedded programming, dan kawalan kunci elektronik. Ini bukan projek "senang" — tapi struktur build dia sebenarnya boleh diuruskan dengan baik kalau kau ikut langkah yang betul.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Keselamatan rumah dan pejabat sentiasa jadi topik yang relevan — dan pengecaman wajah adalah teknologi masa depan yang panel tahu akan makin penting. Bila kau boleh terangkan cara sistem kau bezakan wajah dikenali dengan wajah asing, itu sendiri dah cukup untuk tunjuk kefahaman teknikal yang mendalam.
+
+Dari segi skop kerja, kau akan belajar:
+- Pengambilan dan pemprosesan imej dari kamera
+- Algoritma pemadanan wajah (face matching)
+- Kawalan kunci solenoid/servo secara elektronik
+- Log akses dan sistem amaran untuk percubaan tanpa kebenaran
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| [ESP32-CAM](/blog/esp32-getting-started) (AI-Thinker) | Kamera + mikrokontroler | RM 25–35 |
+| Programmer FTDI | Untuk flash ESP32-CAM | RM 8–12 |
+| Kunci Solenoid Elektronik 12V | Kawalan kunci pintu | RM 20–30 |
+| Modul Relay 5V | Kawalan solenoid | RM 5–8 |
+| Buzzer | Amaran akses ditolak | RM 2 |
+| LED (Hijau/Merah) | Status akses | RM 1 setiap satu |
+| Bekalan Kuasa 12V | Untuk solenoid | RM 15–20 |
+
+**Jumlah anggaran: RM 75–110**
+
+---
+
+## Cara Kerja Sistem
+
+1. ESP32-CAM tangkap gambar apabila pergerakan dikesan berhampiran pintu
+2. Gambar dihantar ke pelayan Flask (Python) yang menjalankan library `face_recognition`
+3. Pelayan bandingkan wajah dalam gambar dengan senarai wajah berdaftar yang disimpan
+4. Kalau padanan dijumpai (dengan tahap keyakinan yang cukup tinggi), pelayan hantar arahan "unlock" kembali ke ESP32
+5. ESP32 aktifkan relay untuk buka kunci solenoid selama beberapa saat, LED hijau menyala
+6. Kalau tiada padanan, LED merah menyala dan buzzer bunyi — percubaan direkod dalam log akses
+
+---
+
+## Gambarajah Pendawaian
+
+**ESP32-CAM:**
+- 5V → VCC
+- GND → GND
+
+**Relay ke Solenoid:**
+- IN → GPIO 12
+- Solenoid disambung melalui terminal NO relay pada bekalan 12V berasingan
+
+**LED & Buzzer:**
+- LED Hijau → GPIO 13
+- LED Merah → GPIO 14
+- Buzzer → GPIO 15
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+void loop() {
+  if (motionDetected()) {
+    camera_fb_t *photo = capturePhoto();
+    String result = sendToRecognitionServer(photo);
+
+    if (result == "recognised") {
+      unlockDoor();
+      digitalWrite(GREEN_LED, HIGH);
+      logAccess("Berjaya", timestamp);
+    } else {
+      digitalWrite(RED_LED, HIGH);
+      buzzAlert();
+      logAccess("Ditolak", timestamp);
+    }
+  }
+}
+```
+
+Di bahagian pelayan (Python/Flask), gunakan library `face_recognition` untuk banding encoding wajah — proses ni ambil kurang dari satu saat pada komputer riba biasa.
+
+---
+
+## Tips Pembentangan
+
+- Bawa 2-3 wajah berdaftar dan satu "orang asing" (coursemate) untuk demo live semasa viva — panel nak tengok kedua-dua kes: berjaya dan ditolak
+- Tunjuk log akses lengkap dengan cap masa sebagai bukti sistem simpan rekod
+- Bersedia terangkan had sistem — contohnya, prestasi dalam keadaan cahaya rendah atau bila seseorang pakai topeng muka — ini soalan biasa dari penilai
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Kamera + pengecaman asas + kawalan kunci
+Untuk **FYP Degree**: Tambah log akses + amaran percubaan tanpa kebenaran
+Untuk **Merit/Distinction**: Tambah dashboard web untuk urus pengguna berdaftar dan laporan akses mengikut tarikh
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem pintu pintar pengecaman wajah lengkap — setup kamera, pelayan pengecaman, dan dokumentasi FYP penuh. WhatsApp kami dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

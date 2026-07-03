@@ -1,0 +1,100 @@
+---
+title: "DIY IoT Weather Station with ESP32 and BME280: Complete FYP Build Guide"
+excerpt: "Build a real-time IoT weather station that tracks temperature, humidity, and air pressure with a live web dashboard. Full parts list, wiring, and code included."
+date: "2026-07-03"
+category: "Tutorial"
+readTime: "8 min read"
+---
+
+## Why an IoT Weather Station Makes a Solid FYP
+
+A weather station is one of the most beginner-friendly IoT builds, but that doesn't mean it can't score well — the difference between a pass and a distinction is entirely in what you build around the sensor. Raw readings are easy; forecasting trends, historical graphs, and alert thresholds are where the technical marks come from.
+
+It's also a project that's easy to demo live: plug it in during your viva, and the panel sees real numbers updating in real time on a dashboard.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Microcontroller + WiFi | RM 20–30 |
+| BME280 Sensor | Temperature, humidity, pressure | RM 12–18 |
+| Rain Sensor Module (optional) | Detect rainfall | RM 5–8 |
+| Anemometer (optional) | Wind speed | RM 30–50 |
+| OLED Display 0.96" | Local readout | RM 10–15 |
+| Weatherproof Enclosure | Outdoor housing | RM 15–25 |
+
+**Total hardware cost (basic build): RM 60–90**
+
+## How It Works
+
+1. The BME280 reads temperature, humidity, and barometric pressure over I2C every few seconds
+2. The ESP32 pushes these readings to a cloud dashboard (Blynk, ThingSpeak, or a custom Firebase-backed web app)
+3. Barometric pressure trends over a few hours can be used to make a basic "rain likely" prediction — a falling pressure trend generally signals incoming rain
+4. Data is displayed locally on an OLED and logged for historical graphs
+5. Optional: add a rain sensor and anemometer for a more complete station
+
+## Wiring Overview
+
+**BME280 (I2C):**
+- VCC → 3.3V
+- GND → GND
+- SDA → GPIO 21
+- SCL → GPIO 22
+
+**OLED (shares the same I2C bus, different address):**
+- SDA → GPIO 21
+- SCL → GPIO 22
+
+**Rain sensor (if used):**
+- Analog output → GPIO 34 (ADC pin)
+
+## Core Logic (Pseudocode)
+
+```cpp
+void loop() {
+  float temp = bme.readTemperature();
+  float humidity = bme.readHumidity();
+  float pressure = bme.readPressure() / 100.0F; // hPa
+
+  logPressureHistory(pressure);
+  String forecast = predictWeather(pressureHistory);
+
+  displayOnOLED(temp, humidity, pressure, forecast);
+  pushToDashboard(temp, humidity, pressure, forecast);
+
+  delay(5000);
+}
+
+String predictWeather(float history[]) {
+  float trend = history[latest] - history[3HoursAgo];
+  if (trend < -1.5) return "Rain likely";
+  if (trend > 1.5) return "Clearing up";
+  return "Stable";
+}
+```
+
+The pressure-trend forecasting logic above is simple but genuinely useful — it's the kind of "light algorithm" that gives examiners something to ask about beyond just wiring.
+
+## Dashboard Options
+
+- **ThingSpeak** — free, built-in charting, good for showing weeks of historical data with minimal setup
+- **Blynk** — best for a clean live gauge view during your demo
+- **Custom Firebase + web app** — more effort, but lets you build a full dashboard with daily/weekly summaries, which is worth extra marks at degree level
+
+## Presentation Tips
+
+- Show a graph of at least a week of logged data — a single live reading isn't enough to demonstrate the "IoT" part convincingly
+- Be ready to explain how barometric pressure relates to weather changes; it's the most common question this project draws
+- If you added the rain-prediction logic, walk the panel through your threshold choices and how you validated them against actual weather
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Live readings + basic dashboard
+For a **Degree FYP**: Add historical logging + rain-likelihood prediction
+For **Merit/Distinction**: Add anemometer, rain sensor, and a mobile-friendly dashboard with weekly reports
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete IoT weather stations — sensor calibration, dashboard setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

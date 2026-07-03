@@ -1,0 +1,86 @@
+---
+title: "Smart Garden Irrigation System for Home Use: ESP32 FYP Build Guide"
+excerpt: "Build an automatic home garden irrigation system that waters plants based on real soil moisture readings and lets you monitor everything from your phone. Full build guide for your FYP."
+date: "2026-07-03"
+category: "Tutorial"
+readTime: "8 min read"
+---
+
+## Why a Smart Irrigation System Works Well as an FYP
+
+Automatic irrigation is a classic FYP topic, but most student builds stop at "if soil is dry, turn on pump." That's a fine starting point, but examiners have seen it dozens of times. The version below is scoped for home/rooftop garden use with a mobile dashboard and scheduling — enough extra depth to stand out without needing farm-scale hardware.
+
+It's also genuinely practical. A working prototype that keeps a small set of plants alive over your project's duration is a strong, undeniable demo — no simulation needed.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Microcontroller + WiFi | RM 20–30 |
+| Capacitive Soil Moisture Sensor | Moisture reading (corrosion-resistant) | RM 8–12 each |
+| 5V Relay Module | Pump control | RM 5–8 |
+| Mini Submersible Water Pump | Water delivery | RM 10–15 |
+| Water Tubing | Delivery to plants | RM 5–10 |
+| DHT22 Sensor (optional) | Ambient temp/humidity | RM 10–15 |
+| Water Reservoir | Water source | RM 10–20 |
+
+**Total hardware cost: RM 60–100** (single-zone build)
+
+## How It Works
+
+1. A capacitive soil moisture sensor reads moisture level every few minutes (capacitive sensors don't corrode like resistive ones, which matters for a project that needs to survive weeks of testing)
+2. When moisture drops below a threshold you set, the ESP32 triggers the relay to run the pump for a fixed duration
+3. Readings and pump events are logged and pushed to a dashboard (Blynk works well here) so you can monitor your plants remotely
+4. Optional scheduling lets you restrict watering to early morning or evening, avoiding water loss to midday heat
+5. A DHT22 sensor can factor ambient humidity into the watering decision — skip watering if it just rained, for example
+
+## Wiring Overview
+
+**Soil moisture sensor:**
+- VCC → 3.3V
+- GND → GND
+- AOUT → GPIO 34 (ADC pin)
+
+**Relay to pump:**
+- IN → GPIO 26
+- Pump wired through relay's NO (normally open) terminal to a separate power source (do not power the pump from the ESP32 directly)
+
+**DHT22 (optional):**
+- Data → GPIO 4
+
+## Core Logic (Pseudocode)
+
+```cpp
+void loop() {
+  int moisture = readSoilMoisture();  // 0-100%
+  float humidity = readAmbientHumidity();
+
+  if (moisture < DRY_THRESHOLD && isWithinScheduledWindow() && humidity < 85) {
+    activatePump(durationSeconds: 10);
+    logEvent("Watered", moisture, timestamp);
+  }
+
+  pushToDashboard(moisture, humidity, pumpStatus);
+  delay(300000); // check every 5 minutes
+}
+```
+
+Calibrate `DRY_THRESHOLD` against your specific soil and pot size before finalising — this is worth mentioning in your documentation, since examiners like to see you tested and tuned the system rather than using arbitrary numbers.
+
+## Presentation Tips
+
+- Bring a potted plant with the sensor already installed to your viva — a live moisture reading updating on your phone is a strong, simple demo
+- Keep a log of watering events over at least 2 weeks as evidence the system worked unattended
+- Be ready to explain why you chose a capacitive sensor over a resistive one — it's a common technical question and shows deliberate component selection
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Moisture sensing + automatic pump control
+For a **Degree FYP**: Add scheduling + remote dashboard monitoring
+For **Merit/Distinction**: Add multi-zone watering, ambient humidity logic, and a mobile app with watering history and analytics
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete smart irrigation systems — sensor calibration, dashboard setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

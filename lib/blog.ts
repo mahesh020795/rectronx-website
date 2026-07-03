@@ -39,6 +39,13 @@ export function getAllPosts(): Omit<BlogPost, "content">[] {
 // slug keywords. Descriptive, unique images improve image SEO and relevance.
 export function getPostImage(slug: string): { url: string; alt: string } {
   const map: { match: RegExp; url: string; alt: string }[] = [
+    { match: /doorbell|face-recognition|pengecaman-wajah|pintu-pintar/, url: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1200&q=80", alt: "Smart doorbell camera with face recognition for home security" },
+    { match: /energy-meter|pzem|power-monitoring/, url: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80", alt: "Smart energy meter monitoring real-time power usage" },
+    { match: /weather-station|bme280/, url: "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=1200&q=80", alt: "DIY IoT weather station sensor module outdoors" },
+    { match: /smart-mirror/, url: "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=1200&q=80", alt: "Smart mirror display showing time and weather information" },
+    { match: /garden-irrigation|tangki-air|rumah-hijau|pengairan/, url: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=1200&q=80", alt: "Smart irrigation system with soil moisture sensor in a garden" },
+    { match: /kod-qr|qr-code/, url: "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?w=1200&q=80", alt: "QR code attendance scanning system" },
+    { match: /kolam-ikan|akuakultur|fish-pond/, url: "https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?w=1200&q=80", alt: "Aquaculture fish pond water quality monitoring system" },
     { match: /esp32/, url: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=1200&q=80", alt: "ESP32 microcontroller development board for IoT projects" },
     { match: /arduino/, url: "https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=1200&q=80", alt: "Arduino board with wires and electronic components" },
     { match: /raspberry-pi/, url: "https://images.unsplash.com/photo-1610548822783-c4e2e7a93f9f?w=1200&q=80", alt: "Raspberry Pi single-board computer for engineering projects" },

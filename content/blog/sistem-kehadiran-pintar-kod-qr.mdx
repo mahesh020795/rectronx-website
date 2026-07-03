@@ -1,0 +1,127 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Kehadiran Pintar dengan Kod QR"
+excerpt: "Bina sistem kehadiran berasaskan kod QR yang lebih mudah dan murah berbanding RFID, lengkap dengan dashboard web dan penjanaan laporan automatik. Tutorial penuh untuk FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-03"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kod qr", "kehadiran"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Kehadiran Pintar dengan Kod QR
+
+Sistem kehadiran RFID memang popular, tapi ada satu isu — setiap pelajar perlukan kad fizikal, dan kad boleh hilang atau dikongsi dengan orang lain. Sistem kehadiran berasaskan kod QR selesaikan masalah ni: setiap pelajar guna kod QR unik dalam telefon mereka sendiri, jadi tak perlu kad tambahan langsung.
+
+Untuk FYP, ini bermakna kau boleh fokus lebih pada bahagian software — penjanaan kod QR, pengesahan pelayan, dan dashboard — berbanding hardware semata-mata. Ini sesuai untuk pelajar Sains Komputer atau IT yang nak tunjukkan kekuatan dalam full-stack development.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Kod QR lebih murah (tak perlu beli kad RFID untuk setiap pelajar), lebih fleksibel (kod boleh dijana semula setiap hari untuk keselamatan), dan lebih relevan dengan cara pelajar guna telefon setiap hari.
+
+Projek ni ajar kau:
+- Penjanaan dan pengesahan kod QR dinamik
+- Komunikasi antara kamera ESP32-CAM dan pelayan backend
+- Reka bentuk pangkalan data untuk rekod kehadiran
+- Pembangunan dashboard web untuk pensyarah/pentadbir
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| [ESP32-CAM](/blog/esp32-getting-started) (AI-Thinker) | Kamera imbas kod QR | RM 25–35 |
+| Programmer FTDI | Untuk flash ESP32-CAM | RM 8–12 |
+| LCD 16x2 (I2C) | Papar nama & status | RM 12–18 |
+| Buzzer | Pengesahan audio | RM 2 |
+| LED (Hijau/Merah) | Status pengesahan | RM 1 setiap satu |
+| Bekas/Casing | Lindungi peranti | RM 10–15 |
+
+**Jumlah anggaran: RM 60–90**
+
+---
+
+## Cara Kerja Sistem
+
+1. Setiap pelajar dapat kod QR unik yang dijana oleh sistem (boleh dihantar melalui e-mel atau aplikasi mudah alih)
+2. Kod QR ni disimpan dalam telefon pelajar sebagai imej atau melalui aplikasi khas
+3. Semasa masuk kelas, pelajar imbas kod QR mereka di depan kamera ESP32-CAM
+4. ESP32 hantar data kod QR yang diimbas ke pelayan [Flask](/blog/python-flask-web-fyp) melalui WiFi
+5. Pelayan sahkan kod tersebut terhadap pangkalan data dan rekod kehadiran dengan cap masa
+6. Nama pelajar dipaparkan pada LCD dan LED hijau menyala sebagai pengesahan
+
+---
+
+## Gambarajah Pendawaian
+
+**ESP32-CAM:**
+- 5V → VCC
+- GND → GND
+
+**LCD I2C:**
+- SDA → GPIO 14
+- SCL → GPIO 15
+
+**Buzzer & LED:**
+- Buzzer → GPIO 13
+- LED Hijau → GPIO 12
+- LED Merah → GPIO 4
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+void loop() {
+  if (qrCodeDetected()) {
+    String qrData = decodeQRCode();
+    String response = sendToServer(qrData);
+
+    if (response == "valid") {
+      displayOnLCD(response.studentName);
+      digitalWrite(GREEN_LED, HIGH);
+      beep(1);
+    } else {
+      displayOnLCD("Kod Tidak Sah");
+      digitalWrite(RED_LED, HIGH);
+      beep(3);
+    }
+  }
+}
+```
+
+Di bahagian pelayan, gunakan Flask dengan pangkalan data MySQL untuk simpan rekod pelajar dan kehadiran. Kod QR boleh dijana menggunakan library `qrcode` dalam Python, dengan setiap kod mengandungi ID pelajar yang dienkripsi ringkas untuk elak penyalahgunaan.
+
+---
+
+## Fungsi Dashboard Web
+
+Dashboard asas patut ada:
+- **Log masuk pentadbir** — akses pensyarah sahaja
+- **Jadual kehadiran** — boleh disusun ikut tarikh, subjek, pelajar
+- **Eksport ke PDF/Excel** — penting untuk penghantaran universiti
+- **Peratusan kehadiran automatik** — kira secara langsung tanpa perlu manual
+
+---
+
+## Tips Pembentangan
+
+- Demo live dengan imbas kod QR dari telefon sebenar — tunjuk nama muncul serta-merta pada LCD dan dashboard
+- Tunjuk fungsi eksport laporan sebagai bukti sistem sedia untuk kegunaan sebenar
+- Bersedia terangkan langkah keselamatan kau — contohnya, kenapa kod QR perlu dijana semula setiap hari untuk elak dikongsi
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Imbasan kod QR + rekod kehadiran asas
+Untuk **FYP Degree**: Tambah dashboard web + eksport laporan
+Untuk **Merit/Distinction**: Tambah aplikasi mudah alih untuk jana kod QR dan notifikasi automatik untuk pelajar tidak hadir
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem kehadiran pintar kod QR lengkap — hardware, backend, dashboard, dan dokumentasi FYP penuh. WhatsApp kami dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

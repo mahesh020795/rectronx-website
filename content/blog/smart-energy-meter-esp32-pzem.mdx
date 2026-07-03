@@ -1,0 +1,98 @@
+---
+title: "Smart Energy Meter: Real-Time Power Monitoring with ESP32 and PZEM-004T"
+excerpt: "Build a smart energy meter that tracks voltage, current, power, and cost in real time on a live dashboard. Complete component list, wiring diagram, and code for your FYP."
+date: "2026-07-03"
+category: "Tutorial"
+readTime: "8 min read"
+---
+
+## Why a Smart Energy Meter Is a Strong FYP Choice
+
+Electricity monitoring projects have a rare advantage: the problem statement writes itself. Rising TNB tariffs, household energy waste, and sustainability targets are all things a panel immediately understands without you having to justify the topic for five minutes.
+
+It's also a project with real depth — you're working with actual AC power measurement (not just a simulated sensor), pushing live data to a dashboard, and optionally adding cost calculation and appliance-level breakdown. That range of technical work is exactly what separates a pass from a distinction.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Microcontroller + WiFi | RM 20–30 |
+| PZEM-004T v3 | AC voltage/current/power sensor | RM 30–45 |
+| Current Transformer (CT) Clamp | Non-invasive current sensing | Included with PZEM |
+| OLED Display 0.96" | Local readout | RM 10–15 |
+| Relay Module 5V | Remote appliance cut-off (optional) | RM 5–8 |
+| Enclosure | Safety housing for AC wiring | RM 15–25 |
+
+**Total hardware cost: RM 80–125**
+
+**Safety note:** this project involves live AC mains wiring. The PZEM-004T is designed to be safe when installed correctly, but supervise any mains-side wiring with your supervisor or an experienced technician before your first test.
+
+## How It Works
+
+1. The PZEM-004T sensor clamps around the live wire (non-invasive, no need to cut the wire) and measures voltage, current, active power, and energy consumed over time
+2. The ESP32 reads this data from the PZEM module over UART (Modbus protocol)
+3. Readings are displayed locally on the OLED and pushed to a cloud dashboard (Blynk, Firebase, or a custom web app) every few seconds
+4. The system calculates estimated cost using Malaysia's TNB tariff structure
+5. Optionally, if power draw exceeds a threshold you set, the relay can automatically cut power to a connected appliance
+
+## Wiring Overview
+
+**PZEM-004T to ESP32 (UART):**
+- PZEM TX → ESP32 RX2 (GPIO 16)
+- PZEM RX → ESP32 TX2 (GPIO 17)
+- PZEM GND → ESP32 GND
+
+**PZEM AC side:** live and neutral wires pass through the module per the manufacturer's diagram, with the CT clamp around the live wire only.
+
+**OLED (I2C):**
+- SDA → GPIO 21
+- SCL → GPIO 22
+
+## Core Logic (Pseudocode)
+
+```cpp
+void loop() {
+  float voltage = pzem.voltage();
+  float current = pzem.current();
+  float power = pzem.power();
+  float energy = pzem.energy();
+
+  float estimatedCost = calculateTNBCost(energy);
+
+  displayOnOLED(voltage, current, power, estimatedCost);
+  pushToDashboard(voltage, current, power, energy, estimatedCost);
+
+  if (power > THRESHOLD_WATTS) {
+    triggerRelayOff();
+    sendAlert("High power draw detected");
+  }
+
+  delay(2000);
+}
+```
+
+For the TNB cost calculation, Malaysia uses a tiered tariff (higher rate per kWh above certain thresholds) — implementing this tiered logic instead of a flat rate is a nice technical detail that examiners notice.
+
+## Dashboard Options
+
+- **Blynk** — fastest to set up, good for a simple gauge + graph demo
+- **Firebase + custom web app** — more work, but lets you show historical trends and per-day/per-month breakdowns, which scores well for "software depth"
+- **ThingSpeak** — free, simple, good for showing data logging over weeks
+
+## Presentation Tips
+
+- Show live readings while plugging in and unplugging an appliance — the number changing in real time is the strongest part of the demo
+- Have a week or two of logged data ready before your viva; a live demo with only 10 minutes of history looks thin
+- Be ready to explain how the CT clamp measures current without direct electrical contact — it's a common examiner question
+
+## Scope Recommendations
+
+For a **Diploma FYP**: Live readings on OLED + basic dashboard
+For a **Degree FYP**: Add TNB tariff cost calculation + historical logging
+For **Merit/Distinction**: Add automatic relay cut-off, mobile app, and per-appliance monitoring with multiple PZEM units
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete smart energy monitoring systems — safe AC wiring, dashboard setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

@@ -1,0 +1,123 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Rumah Hijau Pintar dengan Kawalan Suhu dan Kelembapan Automatik"
+excerpt: "Bina sistem rumah hijau (greenhouse) pintar yang kawal suhu, kelembapan, dan pengudaraan secara automatik menggunakan ESP32. Tutorial lengkap dengan kod dan pendawaian untuk FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-03"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "rumah hijau", "pertanian pintar"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Rumah Hijau Pintar dengan Kawalan Suhu dan Kelembapan Automatik
+
+Projek rumah hijau pintar ni sesuai untuk pelajar yang nak buat sesuatu yang lebih dari sekadar "baca sensor, papar pada skrin." Sistem ni betul-betul buat keputusan dan kawal keadaan persekitaran secara automatik — kipas pengudaraan on/off, sistem pengabusan (misting) aktif bila kelembapan rendah, dan tingkap boleh dibuka secara automatik bila suhu naik terlalu tinggi.
+
+Malaysia punya iklim panas dan lembap buat penanaman dalam rumah hijau agak mencabar tanpa kawalan yang betul — jadi projek ni ada konteks tempatan yang kukuh dan mudah dijustifikasikan dalam laporan.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Sistem rumah hijau automatik meliputi lebih banyak jenis kawalan berbanding kebanyakan projek IoT asas — bukan setakat satu suis, tapi tiga sistem berasingan (pengudaraan, pengabusan, dan bukaan tingkap/skrin) yang perlu diselaraskan berdasarkan pembacaan sensor yang sama.
+
+Ini bermakna kau dapat tunjukkan:
+- Kawalan berbilang aktuator (motor, relay, servo) secara serentak
+- Logik keputusan berlapis (multi-condition logic)
+- Integrasi sensor suhu, kelembapan, dan cahaya
+- Sistem yang benar-benar automatik, bukan sekadar papar data
+
+---
+
+## Senarai Komponen
+
+| Komponen | Spesifikasi | Anggaran Harga |
+|---|---|---|
+| [ESP32](/blog/esp32-getting-started) Development Board | 38-pin, dual-core | RM 20–30 |
+| Sensor DHT22 | Suhu & kelembapan udara | RM 10–15 |
+| Sensor LDR | Pengesanan tahap cahaya | RM 2–3 |
+| Modul Relay 4-Channel | Kawalan kipas, pam kabus, motor | RM 12–18 |
+| Kipas DC 12V | Pengudaraan | RM 15–20 |
+| Pam Kabus Ultrasonik (Mist Maker) | Sistem pengabusan | RM 15–25 |
+| Motor Servo SG90 | Kawalan bukaan tingkap/skrin | RM 8–12 |
+
+**Jumlah anggaran: RM 85–125**
+
+---
+
+## Cara Kerja Sistem
+
+1. Sensor DHT22 baca suhu dan kelembapan udara dalam rumah hijau setiap 10 saat
+2. Sensor LDR kesan tahap cahaya untuk tentukan sama ada waktu siang atau malam
+3. Bila suhu melebihi 32°C, ESP32 aktifkan kipas pengudaraan dan buka servo tingkap sedikit
+4. Bila kelembapan jatuh bawah 50%, sistem aktifkan pam kabus untuk beberapa saat
+5. Bila suhu turun bawah 25°C waktu malam, tingkap ditutup semula untuk simpan haba
+6. Semua pembacaan dan tindakan di-log ke dashboard untuk analisis trend
+
+---
+
+## Gambarajah Pendawaian
+
+**DHT22 ke ESP32:**
+- VCC → 3.3V
+- GND → GND
+- Data → GPIO 4
+
+**LDR (dengan resistor pembahagi voltan):**
+- Output → GPIO 34 (ADC)
+
+**Relay 4-Channel:**
+- IN1 (Kipas) → GPIO 25
+- IN2 (Pam Kabus) → GPIO 26
+- IN3 (Lampu Tambahan) → GPIO 27
+
+**Servo (Tingkap):**
+- Signal → GPIO 13
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+void loop() {
+  float temp = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  int lightLevel = readLDR();
+
+  if (temp > 32.0) {
+    turnOnFan();
+    openWindowServo(30); // buka 30 darjah
+  } else if (temp < 25.0) {
+    closeWindowServo();
+    turnOffFan();
+  }
+
+  if (humidity < 50.0) {
+    activateMistPump(durationSeconds: 15);
+  }
+
+  logToDashboard(temp, humidity, lightLevel);
+  delay(10000);
+}
+```
+
+---
+
+## Tips Pembentangan
+
+- Guna kotak akrilik kecil sebagai model rumah hijau untuk demo — panas dari lampu meja pun cukup untuk tunjuk kipas dan tingkap bertindak balas secara live
+- Sediakan graf suhu/kelembapan sepanjang beberapa hari sebagai bukti sistem berfungsi secara automatik tanpa campur tangan manual
+- Bersedia terangkan kenapa kau gunakan threshold suhu dan kelembapan yang kau pilih — kaitkan dengan keperluan tumbuhan sebenar (contoh: sayuran daun vs cili)
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Sensor suhu/kelembapan + kawalan kipas automatik
+Untuk **FYP Degree**: Tambah sistem pengabusan + kawalan tingkap servo
+Untuk **Merit/Distinction**: Tambah dashboard analitik trend, jadual penyiraman bersepadu, dan notifikasi mudah alih
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem rumah hijau pintar lengkap — kalibrasi sensor, setup automasi, dan dokumentasi FYP penuh. WhatsApp kami dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.
