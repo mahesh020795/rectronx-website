@@ -52,16 +52,6 @@ export const metadata: Metadata = {
     title: "Rectronx Circuits — Engineering & Technology Company | FYP Projects & Commercial Software",
     description:
       "We build commercial software products and deliver custom Final Year Projects in IoT, Arduino, Raspberry Pi, and more. Based in Penang, Malaysia.",
-    images: [
-      {
-        url: "https://rectronx.com/og-image.png",
-        secureUrl: "https://rectronx.com/og-image.png",
-        width: 1200,
-        height: 630,
-        type: "image/png",
-        alt: "Rectronx Circuits — Penang Engineering & Technology Company for FYP & Commercial Software",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",

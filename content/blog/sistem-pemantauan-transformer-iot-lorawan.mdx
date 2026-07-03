@@ -16,7 +16,7 @@ Masalahnya, sebahagian besar transformer di Malaysia masih dipantau secara manua
 
 ## Kenapa Ini Adalah FYP Paling Impressive untuk Pelajar Kejuruteraan Elektrik Kuasa?
 
-Projek ini mempunyai komponen teknikal yang sangat kaya: **power systems knowledge** (transformer, CT clamp, current sensing), **IoT engineering** (ESP32, LoRa), dan **data analytics** (predictive maintenance algorithm). Ini adalah kombinasi yang panel dari industri TNB, Gamuda, atau firma konsultan elektrik akan langsung kenal nilai.
+Projek ini mempunyai komponen teknikal yang sangat kaya: **power systems knowledge** (transformer, CT clamp, current sensing), **IoT engineering** ([ESP32](/blog/esp32-getting-started), LoRa), dan **data analytics** (predictive maintenance algorithm). Ini adalah kombinasi yang panel dari industri TNB, Gamuda, atau firma konsultan elektrik akan langsung kenal nilai.
 
 **Kenapa LoRaWAN dan bukan WiFi biasa?** Transformer seringkali terletak di kawasan jauh atau substation yang tiada liputan WiFi. LoRa boleh hantar data sejauh 5–15 km dalam kawasan terbuka dengan hanya bateri kecil — ini menyelesaikan masalah connectivity yang realistik.
 
@@ -301,7 +301,7 @@ void loop() {
 ## Langkah Demi Langkah
 
 **Langkah 1 — Faham Asas LoRa**
-LoRa (Long Range) adalah teknologi radio modulasi yang membolehkan komunikasi jarak jauh dengan kuasa rendah. Test LoRa peer-to-peer dulu sebelum integrate sensor — upload contoh `LoRaSender` dan `LoRaReceiver` dari Arduino IDE Examples.
+LoRa (Long Range) adalah teknologi radio modulasi yang membolehkan komunikasi jarak jauh dengan kuasa rendah. Test LoRa peer-to-peer dulu sebelum integrate sensor — upload contoh `LoRaSender` dan `LoRaReceiver` dari [Arduino](/blog/arduino-project-ideas-malaysia) IDE Examples.
 
 **Langkah 2 — Bina Bias Circuit untuk CT Clamp**
 CT Clamp menghasilkan signal AC. Buat voltage divider (dua resistor 10kΩ) untuk hasilkan 1.65V reference, kemudian couple signal CT melalui kapasitor 10µF.
@@ -330,3 +330,5 @@ Ukur RSSI dan SNR pada jarak berbeza (10m, 50m, 100m, 200m). Plot graf distance 
 ## Penutup
 
 Sistem pemantauan transformer IoT dengan LoRaWAN adalah antara projek FYP paling sophisticated dan paling dihargai dalam bidang kejuruteraan elektrik di Malaysia. Ia menggabungkan power engineering dengan IoT dan wireless communication — bidang yang sangat dicari industri tenaga Malaysia. Untuk modul LoRa Ra-02, ESP32, CT Clamp SCT-013, dan semua sensor lain, lawati **Rectronx** di rectronx.com dan biarkan kami bantu kamu bina FYP yang cemerlang!
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

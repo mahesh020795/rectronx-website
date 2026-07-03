@@ -25,7 +25,7 @@ It's also a topic with genuine scope control. You can build a basic 2-device sys
 
 **Main controller:**
 
-ESP32 is the go-to choice here. It has built-in Wi-Fi and Bluetooth, runs on 3.3V (with 5V tolerant pins), is cheap (under RM 25 for a development board), and has excellent community support. The ESP32's dual-core processor also lets you handle communication and control logic without blocking each other.
+[ESP32](/blog/esp32-getting-started) is the go-to choice here. It has built-in Wi-Fi and Bluetooth, runs on 3.3V (with 5V tolerant pins), is cheap (under RM 25 for a development board), and has excellent community support. The ESP32's dual-core processor also lets you handle communication and control logic without blocking each other.
 
 **Relay modules:**
 
@@ -41,7 +41,7 @@ To control actual mains-voltage appliances (fans, lights, air conditioners), you
 
 **Communication protocol:**
 
-MQTT (Message Queuing Telemetry Transport) is the industry standard for IoT home automation. Run a local MQTT broker using Mosquitto on a Raspberry Pi or laptop. Each ESP32 subscribes and publishes to topics like `home/livingroom/light/set` and `home/livingroom/light/status`.
+MQTT (Message Queuing Telemetry Transport) is the industry standard for IoT home automation. Run a local MQTT broker using Mosquitto on a [Raspberry Pi](/blog/raspberry-pi-fyp-guide) or laptop. Each ESP32 subscribes and publishes to topics like `home/livingroom/light/set` and `home/livingroom/light/status`.
 
 Alternatively, use HTTP REST calls if MQTT feels too complex — but MQTT is worth learning. It looks much better in your technical report and shows you used a protocol designed for IoT, not just a workaround.
 
@@ -120,3 +120,5 @@ That's achievable in one semester without cutting corners on documentation. More
 Home automation done right is not a lazy FYP topic — it's a full-stack embedded systems project. Build it with depth, document your design decisions, and show real results. That's what separates a First Class submission from an average one.
 
 Reach out to Rectronx if you need help sourcing components in Penang or getting your ESP32-MQTT stack set up. We stock all the common home automation components and can advise on the best configuration for your specific scope.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.
