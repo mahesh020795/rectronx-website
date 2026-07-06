@@ -1,0 +1,41 @@
+---
+title: "What Malaysian FYP Examiners Actually Look For During Viva (And How to Prepare)"
+excerpt: "A practical look at how FYP viva panels in Malaysia actually evaluate students, based on patterns we've seen across hundreds of projects."
+category: "FYP Guide"
+date: "2026-07-07"
+readTime: "7 min read"
+---
+
+Most students prepare for their viva by rehearsing a script of what they'll say. Most vivas don't go according to script — the panel interrupts, asks about the one part of your system you didn't rehearse, and the whole thing feels like it derailed. It didn't. That's actually closer to how the process is designed to work.
+
+After sitting through the aftermath of hundreds of student vivas, a pattern shows up again and again: students who prepared to **explain their decisions** do noticeably better than students who prepared to **recite their project**. Those are different skills, and only one of them is what the panel is actually testing.
+
+## The Panel Isn't Testing What You Built — It's Testing Whether You Understand What You Built
+
+This is the single biggest mental shift that helps. An examiner already knows what an ESP32-based water level monitor looks like — they've seen dozens. What they don't know yet is whether you understand *why* you made the choices you made. Why an ultrasonic sensor and not a float switch? Why did you choose that specific alert threshold? What happens if the sensor loses power mid-reading?
+
+Questions like these aren't attempts to catch you out. They're the actual test. A student who can answer "I don't know, I copied that from a tutorial" honestly usually scores worse than one who says "I chose X because Y, and I did consider Z but ruled it out because—" even if the underlying project is simpler.
+
+## Common Question Categories You Can Actually Prepare For
+
+- **Justification questions** — "why this sensor/method and not an alternative?" Have a real reason for every major component choice, not just "it was cheap" (though cost can legitimately be part of the reason, if you frame it as a design trade-off).
+- **Edge case questions** — "what happens if the WiFi drops?", "what if two events happen at once?" If you haven't thought about this, say so honestly rather than making something up on the spot — a thoughtful "we didn't handle that case, here's how we would" often lands better than a confident wrong answer.
+- **Scope and limitation questions** — panels probe what your system *doesn't* do, partly to see if you're honest about limitations rather than overselling. Our guide on [common FYP mistakes](/blog/fyp-common-mistakes) covers how overselling scope tends to backfire specifically at this stage.
+- **Data and results questions** — "how many trials did you run?", "what's your accuracy based on?" A vague answer here is one of the fastest ways to lose marks, because it's the part of your report that's supposed to be verifiable.
+
+## Your Demo Is Part of the Evaluation, Not a Separate Event
+
+Some students treat the live demo as a formality that happens before "the real questions." In practice, how your demo goes (does it work, do you recover smoothly if it doesn't, do you explain what's happening while it runs) is itself being evaluated. If something fails during your demo, [walking through why it might be failing calmly](/blog/esp32-wifi-disconnect-fyp-demo-fix) is worth more marks than panicking and restarting five times.
+
+## Practical Preparation That Actually Helps
+
+- **Do a mock viva with someone who didn't help build the project.** They'll ask the naive questions your supervisor won't think to ask, and those are often the ones that trip students up.
+- **Write down every design decision as you make it**, not after. By the time you're preparing for viva, you'll have a running list of "why" answers instead of trying to reconstruct your reasoning from memory weeks later.
+- **Know your weakest section cold.** Panels often probe harder exactly where your report is thinnest — usually the results/discussion chapter. Shore that one up specifically rather than spreading revision evenly.
+- **Practice saying "I'm not sure, but here's my reasoning" out loud.** It sounds obvious, but under pressure most students default to guessing confidently instead, which reads worse to an examiner than an honest, reasoned uncertainty.
+
+## Need Help Getting Your Project Viva-Ready?
+
+Rectronx Circuits works with students on more than just the build — we help you prepare the technical reasoning behind every decision, so viva questions stop feeling like a minefield. WhatsApp us for a free consultation.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

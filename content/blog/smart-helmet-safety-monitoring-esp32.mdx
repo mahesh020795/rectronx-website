@@ -1,0 +1,115 @@
+---
+title: "Smart Helmet Safety Monitoring System Using ESP32: Complete FYP Build Guide"
+excerpt: "Build a crash-detection smart helmet with ESP32, MPU6050, and GPS that sends an SMS alert automatically. Full component list, wiring, and code."
+category: "Tutorial"
+date: "2026-07-07"
+readTime: "9 min read"
+---
+
+## Why This Is One of the Strongest Safety FYPs You Can Build
+
+Motorcycle accident statistics are the reason this topic exists in the first place, and any Malaysian panel understands the problem statement immediately — riders can crash in areas with no witnesses nearby, and the delay before help arrives is often the difference between a manageable injury and a fatal one. You don't need to invent a justification for this project; it's sitting in the news every week.
+
+Technically, it's also a genuinely well-rounded build: you're combining motion sensing, GPS positioning, and cellular communication in one embedded system — three subsystems that each teach you something different, which is exactly the kind of breadth that pushes a project from "pass" to "distinction."
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Main controller, handles logic and 2 UARTs | RM 20–30 |
+| MPU6050 Accelerometer/Gyroscope | Detects sudden impact and abnormal helmet motion | RM 8–15 |
+| NEO-6M GPS Module | Provides location for the alert | RM 25–40 |
+| SIM800L GSM Module | Sends SMS alert over the cellular network | RM 25–35 |
+| 3.7V LiPo Battery (1000–2000mAh) | Portable power for the helmet unit | RM 15–25 |
+| TP4056 Charging Module | Safe LiPo charging/protection | RM 3–5 |
+| Push Button | Manual SOS trigger + false-alarm cancel | RM 2–3 |
+| Buzzer | Local audible warning before SMS is sent | RM 2–4 |
+| Small project enclosure | Houses electronics on the helmet shell | RM 10–15 |
+
+**Total hardware cost: RM 110–170** (excluding the helmet itself — most students build into a helmet they already own)
+
+**Power note:** the SIM800L needs a stable 3.7–4.2V supply capable of delivering short current peaks during transmission. Powering it directly off the ESP32's 3.3V or 5V pin is a common cause of random resets — feed it from the LiPo battery directly (through the TP4056's output), not through the ESP32.
+
+## How It Works
+
+1. The MPU6050 continuously streams acceleration and rotation data to the ESP32 over I2C
+2. Software on the ESP32 watches for the signature of a crash — a sharp spike in total acceleration followed by an abrupt change in orientation. The exact threshold isn't a fixed industry number; you calibrate it yourself by testing controlled drops/impacts on padding, since it depends on where the sensor is mounted on the helmet
+3. When a likely crash is detected, a buzzer sounds and a countdown starts, giving the rider a window to cancel a false alarm (e.g. helmet dropped on the floor) via the push button
+4. If not cancelled, the NEO-6M's last known GPS coordinates are read and the SIM800L sends an SMS with a Google Maps link to a pre-set emergency contact number
+5. The push button can also be pressed manually as a direct SOS trigger, independent of the motion detection logic
+
+## Wiring Overview
+
+**MPU6050 (I2C):**
+- SDA → GPIO 21
+- SCL → GPIO 22
+- VCC → 3.3V, GND → GND
+
+**NEO-6M GPS (Hardware UART2):**
+- TX → GPIO 16 (ESP32 RX2)
+- RX → GPIO 17 (ESP32 TX2)
+
+**SIM800L (Hardware UART1, remapped to spare pins since UART0 handles USB and UART2 handles the GPS):**
+- TX → GPIO 18
+- RX → GPIO 19
+- Power → directly from LiPo/TP4056 output, not from ESP32
+
+**Push button:** GPIO 4 (INPUT_PULLUP)
+**Buzzer:** GPIO 25
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <Wire.h>
+#include <MPU6050.h>
+#include <TinyGPSPlus.h>
+
+MPU6050 mpu;
+TinyGPSPlus gps;
+HardwareSerial sim800(1); // ESP32 UART1, remapped to GPIO 18/19
+
+void setup() {
+  sim800.begin(9600, SERIAL_8N1, 18, 19);
+  Serial2.begin(9600); // GPS on hardware UART2 (GPIO16 RX2 / GPIO17 TX2)
+}
+
+void loop() {
+  int16_t ax, ay, az;
+  mpu.getAcceleration(&ax, &ay, &az);
+  float totalAccel = sqrt(sq(ax) + sq(ay) + sq(az));
+
+  if (totalAccel > CRASH_THRESHOLD) {
+    soundBuzzer();
+    if (!cancelledByButton(5000)) {  // 5-second cancel window
+      String location = getGPSCoordinates();
+      sendSMS(EMERGENCY_NUMBER, "Possible crash detected. Location: " + location);
+    }
+  }
+
+  if (digitalRead(SOS_BUTTON) == LOW) {
+    sendSMS(EMERGENCY_NUMBER, "Manual SOS: " + getGPSCoordinates());
+  }
+}
+```
+
+`CRASH_THRESHOLD` is something you determine experimentally and document — examiners will ask how you arrived at that number, and "we tested 20 controlled drops and found X" is a far stronger answer than a guessed figure.
+
+## Common Pitfalls
+
+- **GPS takes time to get a fix.** NEO-6M can take 30 seconds to a few minutes for a cold start outdoors, and won't get a reliable fix indoors at all — plan your demo location accordingly
+- **False positives from normal riding.** Potholes, kerbs, and sudden braking can spike acceleration too. Combining the acceleration spike with an orientation change (helmet ending up sideways/upside-down) cuts false triggers significantly
+- **SIM800L needs a local SIM with credit/an active plan** for the SMS to actually send during your demo
+
+## Scope by Level
+
+For a **Diploma FYP**: MPU6050 crash detection + buzzer alert + manual SOS button, no GPS/GSM required
+For a **Degree FYP**: Add GPS location and SMS alert as described above
+For **Merit/Distinction**: Add a companion app showing rider status, or an MQ-3 alcohol sensor as a secondary safety layer, and log incident data for a results chapter
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete smart safety systems like this one — sensor calibration, GSM setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+Related reading: check our guide on [getting started with ESP32](/blog/esp32-getting-started) if you're new to the platform, or browse more [mechatronics and robotics ideas](/blog/mechatronics-robotics-fyp-ideas-malaysia) for similar safety-focused builds.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

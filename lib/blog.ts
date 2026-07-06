@@ -39,6 +39,11 @@ export function getAllPosts(): Omit<BlogPost, "content">[] {
 // slug keywords. Descriptive, unique images improve image SEO and relevance.
 export function getPostImage(slug: string): { url: string; alt: string } {
   const map: { match: RegExp; url: string; alt: string }[] = [
+    { match: /helmet/, url: "https://images.unsplash.com/photo-1632278819098-51dfc937b5f3?w=1200&q=80", alt: "Motorcyclist wearing a helmet fitted with embedded crash-detection sensors" },
+    { match: /solar-panel|solar-panel-performance/, url: "https://images.unsplash.com/photo-1664828113992-8dd7a26275a0?w=1200&q=80", alt: "Close-up of a solar panel used for performance monitoring" },
+    { match: /inkubator|telur/, url: "https://images.unsplash.com/photo-1736994113278-857f11aa92ae?w=1200&q=80", alt: "Chicken eggs arranged in a tray for a smart egg incubator system" },
+    { match: /ditolak|proposal.*supervisor/, url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80", alt: "Engineering student reviewing feedback on a rejected FYP proposal" },
+    { match: /demo.*fail|fail-depan-panel|gagal.*demo/, url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80", alt: "Engineering student troubleshooting a failing FYP demo under pressure" },
     { match: /doorbell|face-recognition|pengecaman-wajah|pintu-pintar/, url: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1200&q=80", alt: "Smart doorbell camera with face recognition for home security" },
     { match: /energy-meter|pzem|power-monitoring/, url: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80", alt: "Smart energy meter monitoring real-time power usage" },
     { match: /weather-station|bme280/, url: "https://images.unsplash.com/photo-1592210454359-9043f067919b?w=1200&q=80", alt: "DIY IoT weather station sensor module outdoors" },

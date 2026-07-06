@@ -1,0 +1,73 @@
+---
+title: "20 Electrical Engineering FYP Ideas for Malaysian Students (Power, Control & Renewable Energy)"
+excerpt: "20 real Electrical Engineering FYP ideas covering power systems, control circuits, and renewable energy — picked for what Malaysian panels respond to."
+category: "Ideas"
+date: "2026-07-07"
+readTime: "9 min read"
+---
+
+Electrical Engineering students often get stuck between two extremes: an IoT project that's really more of a Computer Engineering build wearing an EE label, or a purely theoretical power systems topic that's impossible to demo live. This list sits in between — every idea here has a genuine electrical/power/control element, but can still be built and demonstrated on a table in front of your panel.
+
+---
+
+## Power Systems & Energy
+
+**1. Power Factor Correction (PFC) Demonstration Unit** — A circuit that detects a lagging power factor and automatically switches in capacitor banks to correct it, directly relevant to the power factor penalties industrial TNB customers actually face.
+
+**2. Solar Charge Controller Comparison Rig (PWM vs MPPT)** — Build both a basic PWM charge controller and an MPPT controller, then compare charging efficiency on the same panel under identical conditions. The comparison itself is your results chapter.
+
+**3. Automatic Transfer Switch (ATS) for Backup Power** — A relay-based system that detects mains failure and switches load to a backup source (battery/generator simulation) within seconds, with switchover time as your measured metric.
+
+**4. Three-Phase Load Balancing Monitor** — Measure current on each phase of a simulated three-phase supply and flag imbalance, a real issue in buildings with uneven single-phase loads distributed across phases.
+
+**5. [Smart Energy Meter](/blog/smart-energy-meter-esp32-pzem) with Load Prioritization** — Extend a basic energy meter to automatically shed low-priority loads (like a water heater) when total demand approaches a set limit, a simplified version of real demand-response systems.
+
+**6. Battery State-of-Charge Estimator** — Use voltage and coulomb-counting methods to estimate a lithium battery's remaining charge, and compare your estimate's accuracy against a full discharge test.
+
+**7. [ESP32-Based Solar Panel Performance Monitoring System](/blog/solar-panel-performance-monitoring-esp32)** — Real-time voltage, current, and efficiency tracking against light conditions.
+
+---
+
+## Control Systems
+
+**8. PID-Controlled DC Motor Speed Regulator** — Tune a PID loop to hold a DC motor at a target speed despite changing load, with your tuning process (Ziegler-Nichols or trial-and-error) documented as the technical depth of the project.
+
+**9. Ball-and-Beam Balancing System** — A classic control systems demo: a servo tilts a beam to keep a rolling ball at a target position using continuous position feedback, genuinely impressive live and a strong showcase of closed-loop control.
+
+**10. Temperature-Controlled Incubator with PID** — Maintain a stable internal temperature using a heating element and PID control instead of simple on/off relay switching, and compare overshoot/settling time between the two approaches.
+
+**11. Water Level Control System Using PLC** — If your lab has PLC access, a ladder-logic-based tank filling/draining system with multiple sensor setpoints is a strong industrial-automation-flavoured project.
+
+**12. Line-Following Robot with PID Steering** — A step up from basic on/off line following — using PID control for steering gives you real tuning data to present instead of "it just works."
+
+---
+
+## Renewable & Green Energy
+
+**13. Hybrid Solar-Wind Charging System** — Combine a small solar panel and a small DC wind generator to charge a shared battery, with a comparison of each source's contribution across different weather conditions.
+
+**14. MPPT Algorithm Comparison (Perturb & Observe vs Incremental Conductance)** — Implement both MPPT algorithms on the same hardware and compare tracking speed and accuracy — a project examiners recognise as genuinely technical rather than a listicle build.
+
+**15. Piezoelectric Energy Harvesting from Footsteps** — Use piezo discs under a walkway mat to harvest small amounts of energy from foot traffic, useful as a low-power sensor charging demo rather than a claim of large-scale power generation.
+
+**16. Rainwater-Powered Micro-Hydro Demo Rig** — A small water wheel or turbine driving a DC generator from a controlled water flow, good for showing basic hydro power conversion principles on a bench scale.
+
+---
+
+## Safety & Protection
+
+**17. Earth Leakage / Residual Current Detection Circuit** — Build a circuit that detects current imbalance between live and neutral (the same principle behind an RCD/ELCB) and trips a relay, a genuinely useful safety-systems project.
+
+**18. Overvoltage/Undervoltage Protection Relay** — A circuit that disconnects a load automatically when supply voltage goes outside a safe range, protecting equipment from voltage sags and surges.
+
+**19. [Arduino vs ESP32](/blog/arduino-vs-esp32-fyp-malaysia)-Based Circuit Breaker Trip Curve Tester** — Measure and plot how quickly a protection circuit trips at different overcurrent levels, comparing against expected inverse-time trip behaviour.
+
+**20. Transformer Health Monitoring (Simplified)** — A scaled-down version of industrial transformer condition monitoring using temperature and vibration sensors — see our [full transformer monitoring build guide](/blog/sistem-pemantauan-transformer-iot-lorawan) for the complete IoT version.
+
+---
+
+## Picking the Right One for Your Timeline
+
+Control systems projects (PID, ball-and-beam) tend to need more tuning time but less component cost. Power systems projects (PFC, ATS, load balancing) are often cheaper and faster to build but need more care in explaining the underlying theory correctly. If you're short on time, our guide on [choosing the right FYP topic](/blog/how-to-choose-fyp-topic) walks through how to weigh that trade-off properly.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

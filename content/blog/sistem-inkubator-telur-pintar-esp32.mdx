@@ -1,0 +1,138 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Inkubator Telur Pintar dengan Kawalan Suhu dan Kelembapan Automatik"
+excerpt: "Bina inkubator telur pintar guna ESP32 — suhu dan kelembapan automatik, servo pusing telur berkala. Tutorial lengkap dengan senarai komponen dan kod untuk FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-07"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "pertanian", "penternakan"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Inkubator Telur Pintar dengan Kawalan Suhu dan Kelembapan Automatik
+
+Penternakan ayam dan itik kampung memang popular kat Malaysia, tapi ramai penternakan kecil masih guna kaedah manual — pusing telur dengan tangan, agak-agak suhu bilik, dan harap yang terbaik. Kalau suhu tersasar sikit je dalam tempoh pengeraman, kadar tetas boleh jatuh dengan drastik. Sistem inkubator pintar ni selesaikan masalah tu dengan kawalan automatik yang lebih konsisten daripada tangan manusia.
+
+Projek ni sesuai untuk korang yang nak buat sesuatu dengan aplikasi pertanian sebenar, dan bukan sekadar konsep IoT generik. Ada elemen kawalan suhu (control system), automasi mekanikal (servo pusing telur), dan logik keselamatan — cukup untuk isi bab metodologi dengan substance.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+Ini adalah salah satu projek yang senang nak explain kat panel — semua orang faham konsep "telur perlukan suhu dan kelembapan yang tepat untuk tetas." Tapi bila korang gali dalam, ada banyak elemen teknikal:
+
+- Kawalan suhu tertutup (closed-loop) menggunakan relay atau PID, bukan sekadar on/off ringkas
+- Kawalan kelembapan berasingan daripada suhu — dua parameter yang perlu diselaraskan serentak
+- Automasi mekanikal (servo motor) untuk pusing telur setiap beberapa jam, meniru gerakan semulajadi ibu ayam
+- Logik keselamatan — apa jadi kalau sensor gagal atau elemen pemanas terlebih panas
+
+---
+
+## Senarai Komponen
+
+| Komponen | Fungsi | Anggaran Harga |
+|---|---|---|
+| [ESP32](/blog/esp32-getting-started) Development Board | Kawalan utama + dashboard WiFi | RM 20–30 |
+| Sensor DHT22 (AM2302) | Bacaan suhu dan kelembapan | RM 15–25 |
+| Modul Relay 5V (2 saluran) | Kawalan mentol pemanas + peranti kelembapan | RM 6–10 |
+| Mentol/Elemen Pemanas Kecil | Sumber haba dalam inkubator | RM 10–20 |
+| Servo SG90 + Motor Gear (untuk rak telur) | Pusing telur secara berkala | RM 10–15 |
+| Kipas DC Kecil (edaran udara) | Elakkan suhu tidak sekata dalam kotak | RM 8–12 |
+| Bekas/kotak inkubator (polystyrene atau kayu) | Struktur badan inkubator | RM 30–50 |
+
+**Jumlah anggaran: RM 100–160**
+
+**Nota keselamatan:** elemen pemanas dan mentol perlu dipasang dengan pengasingan yang selamat daripada bahagian elektronik dan wayar — libatkan penyelia korang untuk semak litar pendawaian sebelum ujian pertama.
+
+---
+
+## Cara Kerja Sistem
+
+1. DHT22 baca suhu dan kelembapan dalam inkubator setiap beberapa saat
+2. ESP32 bandingkan bacaan dengan julat sasaran — secara umum, pengeraman telur ayam biasanya disasarkan sekitar 37.5°C dengan kelembapan relatif sekitar 50–55% untuk sebahagian besar tempoh pengeraman, meningkat menjelang hari-hari akhir sebelum tetas. Angka tepat berbeza sedikit mengikut spesies dan rujukan yang korang guna — ini perlu didokumenkan sebagai sebahagian metodologi korang
+3. Kalau suhu di bawah sasaran, relay hidupkan mentol pemanas; kalau di atas, relay matikan
+4. Kalau kelembapan terlalu rendah, relay boleh hidupkan kipas kecil di atas bekas air untuk tingkatkan wap air dalam kotak
+5. Servo pusing rak telur secara automatik setiap beberapa jam (contohnya setiap 2-4 jam), meniru gerakan semulajadi
+6. Semua bacaan dan status direkod ke dashboard untuk pemantauan jarak jauh sepanjang tempoh pengeraman yang mengambil masa beberapa minggu
+
+---
+
+## Gambarajah Pendawaian
+
+**DHT22 (Digital):**
+- Data → GPIO 4 (dengan resistor pull-up 10kΩ)
+- VCC → 3.3V / GND → GND
+
+**Relay Pemanas:**
+- IN1 → GPIO 26
+
+**Relay Kelembapan/Kipas:**
+- IN2 → GPIO 27
+
+**Servo SG90:**
+- Signal → GPIO 13
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+#include <DHT.h>
+#include <ESP32Servo.h>
+
+DHT dht(4, DHT22);
+Servo eggTurner;
+
+void loop() {
+  float temp = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  if (temp < TARGET_TEMP_MIN) {
+    digitalWrite(HEATER_RELAY, HIGH);
+  } else if (temp > TARGET_TEMP_MAX) {
+    digitalWrite(HEATER_RELAY, LOW);
+  }
+
+  if (humidity < TARGET_HUMIDITY_MIN) {
+    digitalWrite(HUMIDITY_RELAY, HIGH);
+  } else {
+    digitalWrite(HUMIDITY_RELAY, LOW);
+  }
+
+  logToDashboard(temp, humidity);
+  delay(10000); // semak setiap 10 saat
+}
+
+void turnEggsPeriodically() {
+  eggTurner.write(45);
+  delay(1000);
+  eggTurner.write(135);
+  delay(1000);
+  eggTurner.write(90); // kedudukan neutral
+}
+```
+
+**Nota kalibrasi:** DHT22 lebih tepat berbanding DHT11 untuk aplikasi ni, tapi tetap perlu disahkan bacaannya berbanding termometer/higrometer rujukan sebelum korang mula ujian sebenar dengan telur — ralat suhu yang kecil pun boleh menjejaskan hasil kalau tak disahkan awal.
+
+---
+
+## Tips Pembentangan
+
+- Kalau tempoh pengeraman penuh (biasanya beberapa minggu) terlalu lama untuk demo langsung, tunjuk graf log suhu/kelembapan sepanjang beberapa hari sebagai bukti kestabilan sistem
+- Sedia jelaskan kenapa korang pisahkan kawalan suhu dan kelembapan secara berasingan, bukan gabungkan jadi satu logik — ini soalan biasa ditanya
+- Kalau ada akses kepada telur sebenar, rekod kadar tetas berbanding kaedah manual sebagai perbandingan — ini data yang sangat kukuh untuk bab keputusan
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Kawalan suhu asas (relay on/off) + paparan OLED
+Untuk **FYP Degree**: Tambah kawalan kelembapan berasingan + servo pusing telur automatik
+Untuk **Merit/Distinction**: Tambah kawalan PID untuk suhu (bukan sekadar on/off), dashboard log jangka panjang, dan analisis kadar tetas berbanding kaedah manual sebagai data perbandingan
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits sedia bina sistem inkubator pintar lengkap — kalibrasi sensor, kawalan automasi, dan dokumentasi FYP penuh. WhatsApp kami dan kami akan bagi sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek pertanian pintar? Lihat [sistem rumah hijau pintar](/blog/sistem-rumah-hijau-pintar-suhu-kelembapan) atau [sistem pertanian pintar dan pengairan automatik](/blog/sistem-pertanian-pintar-pengairan-automatik) untuk projek dalam kategori yang sama.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

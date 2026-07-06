@@ -1,0 +1,97 @@
+---
+title: "ESP32-Based Solar Panel Performance Monitoring System: Complete FYP Build Guide"
+excerpt: "Track a solar panel's voltage, current, power output, and efficiency in real time with ESP32 and INA219. Full component list, wiring, and code for your FYP."
+category: "Tutorial"
+date: "2026-07-07"
+readTime: "8 min read"
+---
+
+## Why This Project Has Real Staying Power
+
+Every renewable energy push in Malaysia — NEM (Net Energy Metering), solar incentive schemes, campus solar installations — needs one unglamorous thing to actually work: knowing whether the panel is performing as expected. That's the entire premise of this project, and it's a much easier problem statement to defend than a generic "green energy is important" opener, because you're solving something a real solar installer would care about.
+
+It's also a clean, well-scoped build. You're not fighting with unreliable sensors or fuzzy thresholds — you're measuring real electrical quantities (voltage, current, power) with an accurate sensor, logging them, and calculating efficiency against expected output. That precision is easy to defend under questioning.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Microcontroller + WiFi for dashboard push | RM 20–30 |
+| INA219 Current/Voltage Sensor Module | High-side voltage and current measurement | RM 15–25 |
+| Small Solar Panel (6V or 12V, 5–20W) | The panel being monitored | RM 30–60 |
+| BH1750 Digital Light Sensor | Ambient light (lux) reference reading | RM 8–15 |
+| Small 12V lead-acid or LiFePO4 battery (optional) | Load for charge/discharge testing | RM 40–80 |
+| OLED Display 0.96" | Local live readout | RM 10–15 |
+
+**Total hardware cost: RM 85–145** (excluding the optional battery)
+
+**Important sizing note:** the INA219 measures bus voltage up to 26V. Stick to a small 6V or 12V panel setup so your panel's open-circuit voltage stays comfortably within that range — don't wire a large panel directly into it.
+
+## How It Works
+
+1. The INA219 sits in series with the solar panel's output (via its shunt resistor) and measures bus voltage and current simultaneously
+2. The ESP32 reads voltage, current, and calculated power from the INA219 over I2C using the Adafruit_INA219 library
+3. The BH1750 gives a simultaneous lux reading, so your results chapter can plot power output against actual light conditions rather than just time of day
+4. Readings are shown locally on the OLED and pushed to a dashboard (ThingSpeak, Blynk, or a custom web app) at a regular interval
+5. The system calculates instantaneous efficiency by comparing measured output power against the panel's rated capacity under the current light level, which is the kind of derived metric that shows engineering judgement, not just data logging
+
+## Wiring Overview
+
+**INA219 (I2C):**
+- SDA → GPIO 21, SCL → GPIO 22
+- VIN+ and VIN- wired in series between the panel's positive terminal and the load/battery
+
+**BH1750 (I2C, shares the bus with INA219 — different I2C address):**
+- SDA → GPIO 21, SCL → GPIO 22
+
+**OLED (I2C, same bus):**
+- SDA → GPIO 21, SCL → GPIO 22
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_INA219.h>
+#include <BH1750.h>
+
+Adafruit_INA219 ina219;
+BH1750 lightMeter;
+
+void loop() {
+  float busVoltage = ina219.getBusVoltage_V();
+  float current_mA = ina219.getCurrent_mA();
+  float power_mW = ina219.getPower_mW();
+  float lux = lightMeter.readLightLevel();
+
+  displayOnOLED(busVoltage, current_mA, power_mW, lux);
+  pushToDashboard(busVoltage, current_mA, power_mW, lux);
+
+  delay(2000);
+}
+```
+
+## Dashboard and Results Chapter Ideas
+
+- **ThingSpeak** — free, simple, good for showing days/weeks of logged power-vs-time data
+- **Blynk** — faster to demo live with a gauge widget during your viva
+- Plot power output against lux readings across a full day to show the panel's real-world performance curve — this single graph does a lot of work in your results chapter
+
+## Presentation Tips
+
+- Demo with a desk lamp or by tilting the panel toward/away from a window — showing power output respond live to light changes is more convincing than a static number
+- Be ready to explain why you chose a shunt-based sensor (INA219) over a simple voltage divider — the answer is that current measurement needs a shunt, voltage alone doesn't tell you power
+- Have a few days of logged data ready; a single demo reading looks thin next to a proper dataset
+
+## Scope by Level
+
+For a **Diploma FYP**: Live voltage/current/power readings on OLED + basic dashboard
+For a **Degree FYP**: Add lux correlation and calculated efficiency against rated panel capacity
+For **Merit/Distinction**: Add a small battery charge/discharge cycle test and compare charging efficiency at different light levels, or extend to multiple panels for a comparison study
+
+## Need This Project Done?
+
+Rectronx Circuits builds complete solar monitoring systems — sensor calibration, dashboard setup, and full FYP documentation included. WhatsApp us for a free quote within 2 hours.
+
+If you're new to the platform, start with our [ESP32 getting started guide](/blog/esp32-getting-started), or browse more [electrical engineering FYP ideas](/blog/electrical-engineering-fyp-ideas-malaysia) if you want alternatives in the same space.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

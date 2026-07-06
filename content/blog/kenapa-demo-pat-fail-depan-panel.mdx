@@ -1,0 +1,51 @@
+---
+title: "Kenapa Demo Projek Akhir Tahun Kau Selalu Fail Depan Panel Walaupun Ok Time Praktis Sendiri"
+excerpt: "Sistem kau function elok time ujian sendiri tapi tiba-tiba fail depan panel? Ini sebab teknikal sebenar dan macam mana nak elak ia berulang."
+category: "FYP Guide"
+date: "2026-07-07"
+readTime: "6 min read"
+---
+
+Ni salah satu situasi paling frustrating dalam Projek Akhir Tahun — kau dah uji sistem berulang kali kat bilik lab atau rumah, semua jalan lancar, tapi bila tiba masa demo depan panel, tiba-tiba sensor tak baca, OLED blank, atau sistem freeze. Kau tak buat apa-apa berbeza pun. Jadi kenapa ia jadi macam ni?
+
+Jawapannya: kau memang buat sesuatu yang berbeza — cuma bukan dalam kod atau litar kau, tapi dalam **persekitaran** demo tu sendiri. Berikut sebab-sebab teknikal yang paling biasa.
+
+## Sebab 1: Bekalan Kuasa Berbeza Daripada Waktu Ujian
+
+Time praktis kat rumah, mungkin kau plug terus ke soket dinding atau laptop yang bateri penuh. Time demo, ramai pelajar guna power bank yang tak dicas penuh, USB port bilik seminar yang lemah, atau laptop dengan bateri rendah. Voltan yang tak stabil ni boleh punca ESP32 (atau mikrokontroler lain) reset secara rawak — nampak macam "sistem fail" tapi sebenarnya cuma isu bekalan kuasa.
+
+**Penyelesaian:** bawa power bank sendiri yang dicas penuh dan sudah diuji khusus dengan sistem kau, bukan power bank yang kau "rasa" cukup.
+
+## Sebab 2: Sensor Analog Sensitif Kepada Persekitaran Baru
+
+Sensor macam suhu, cahaya, atau kelembapan baca nilai berbeza bergantung kepada persekitaran sekeliling. Bilik seminar yang berhawa dingin, bercahaya lampu fluorescent, atau lantai berlainan boleh beri bacaan yang jauh berbeza daripada tempat kau kalibrasi asal. Kalau threshold amaran kau dikodkan keras berdasarkan persekitaran lab sahaja, ia mungkin tak trigger dengan betul di lokasi baru.
+
+**Penyelesaian:** uji sistem kau di lokasi sebenar demo (atau lokasi seakan-akan sama) sekurang-kurangnya sekali sebelum hari sebenar, dan dokumenkan sama ada threshold kau perlu dilaraskan.
+
+## Sebab 3: WiFi Venue Berbeza Sepenuhnya Daripada WiFi Rumah
+
+Kalau projek kau sambung ke dashboard atau hantar notifikasi, WiFi bilik seminar (dengan berpuluh peranti lain bersambung serentak) selalunya jauh lebih sesak berbanding WiFi rumah kau. ESP32 khususnya cuma sokong WiFi 2.4GHz — kalau venue cuma sediakan rangkaian 5GHz, sistem kau langsung tak boleh sambung tak kira betapa betul kod kau. [Baca penjelasan penuh tentang isu WiFi ESP32 ni](/blog/esp32-wifi-disconnect-fyp-demo-fix).
+
+**Penyelesaian:** guna hotspot mudah alih sendiri (phone) sebagai pilihan sandaran, dan uji sambungan tu khusus sebelum demo.
+
+## Sebab 4: Wayar Longgar Selepas Bawa Alat Bergerak
+
+Sistem yang dipasang atas breadboard sangat mudah wayar tercabut sikit semasa dibawa dari rumah/lab ke venue demo. Sambungan yang nampak elok kat meja lab boleh jadi longgar selepas beberapa kali handle, walaupun tak nampak jelas dengan mata.
+
+**Penyelesaian:** semak setiap sambungan wayar sejurus sebelum demo bermula, bukan cuma percaya ia okay sebab "tak ubah apa-apa." Kalau boleh, pateri sambungan penting pada PCB kecil dan bukan bergantung sepenuhnya pada breadboard untuk demo akhir.
+
+## Sebab 5: Gopoh dan Tergesa-gesa Semasa Setup
+
+Bila kau nervous dan kena setup dalam masa terhad depan orang ramai, kau lebih cenderung buat kesilapan kecil — tersalah sambung pin, terlupa hidupkan komponen tertentu, atau tersasar urutan langkah setup. Ni bukan masalah teknikal langsung, tapi kesannya sama — sistem nampak "fail."
+
+**Penyelesaian:** buat senarai semak (checklist) setup bertulis dan ikut step demi step, walaupun kau dah hafal — di bawah tekanan, memori kau tak boleh dipercayai macam biasa.
+
+## Kalau Ia Tetap Fail Depan Panel
+
+Jangan panik dan restart sistem berkali-kali — ini nampak macam kau tak faham sistem sendiri. Terangkan dengan tenang apa yang mungkin berlaku (macam sebab-sebab di atas), dan tunjukkan kau faham punca kemungkinan walaupun tak sempat betulkan waktu tu juga. Seperti yang dibincangkan dalam [panduan apa penguji sebenarnya nilai semasa viva](/blog/fyp-viva-examiner-expectations-malaysia), cara kau respons kepada kegagalan sebenarnya sebahagian daripada penilaian — bukan cuma sistem berfungsi atau tidak.
+
+## Perlukan Bantuan Pastikan Demo Kau Stabil?
+
+Rectronx Circuits bantu pelajar uji sistem dalam pelbagai keadaan sebelum viva sebenar, supaya demo tak jadi kejutan hari tu juga. WhatsApp kami untuk konsultasi percuma.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.
