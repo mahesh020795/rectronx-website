@@ -1,0 +1,87 @@
+---
+title: "15 AI & Machine Learning FYP Ideas That Will Impress Your Examiner in 2026"
+excerpt: "15 AI and Machine Learning final year project ideas for Malaysian students, each with a real-world angle examiners actually care about — plus honest notes on difficulty and data availability."
+date: "2026-07-06"
+category: "Ideas"
+readTime: "9 min read"
+---
+
+Every intake, half the AI/ML FYP proposals we see are "a chatbot" or "a recommendation system" with no clear problem behind them. Examiners notice — an AI project without a real problem statement just looks like a tutorial you followed once. The 15 ideas below all start from an actual pain point, which makes your literature review, methodology, and results chapters far easier to write, and gives you something concrete to defend in your viva.
+
+We've also flagged which ones have easily available datasets, since data availability is the single biggest reason AI/ML FYPs run late.
+
+---
+
+## 1. Fake News Detection for Malaysian Social Media
+NLP classifier trained on labelled Malaysian news headlines. Highly topical, and the "why this matters" section of your report writes itself.
+**Data availability:** Moderate — you'll need to build a small labelled dataset yourself, which is actually a strong methodology talking point.
+
+## 2. Crop Disease Detection From Leaf Images
+A CNN trained on plant disease image datasets (freely available on Kaggle), deployed as a simple mobile or web app for farmers to photograph and diagnose.
+**Data availability:** High — PlantVillage and similar datasets are ready to use.
+
+## 3. Drowsiness Detection for Drivers
+Eye-aspect-ratio monitoring via webcam using dlib, triggering an alert when eyes stay closed too long. Deployable on a Raspberry Pi with a camera for a hardware + AI combination.
+**Data availability:** High — pretrained facial landmark models exist; you're building the application logic on top.
+
+## 4. Speech-to-Text for Bahasa Malaysia
+Fine-tuning an open-source speech model on Malay audio data. Most commercial speech AI still handles Malay poorly, so this is a genuine research gap you can build a strong literature review around.
+**Data availability:** Low-moderate — this is the hardest one on the list, but also the most impressive if you pull it off.
+
+## 5. Sentiment Analysis on Malaysian E-Commerce Reviews
+Classifies product reviews as positive, negative, or neutral and surfaces the results on a seller dashboard.
+**Data availability:** High — Shopee/Lazada review data can be scraped for a labelled dataset (check platform terms before scraping).
+
+## 6. Resume Screening and Ranking System
+NLP-based matching between resumes and job descriptions, producing a ranked shortlist. A strong HR-tech angle that's easy to demo live.
+**Data availability:** High — you can generate synthetic resumes and job descriptions if you don't have access to real HR data.
+
+## 7. Deepfake Image Detection Tool
+Binary classifier trained to distinguish real photos from AI-generated ones. Extremely topical given how much AI-generated content circulates in 2026.
+**Data availability:** High — several public deepfake detection datasets exist (FaceForensics++ and similar).
+
+## 8. Malaysian License Plate Recognition (ANPR)
+OCR pipeline that detects and reads Malaysian vehicle plates from images or video, extendable into a smart parking or access-control system.
+**Data availability:** Moderate — you'll likely need to collect and annotate local plate images yourself, since most public ANPR datasets are for other countries' plate formats.
+
+## 9. Chatbot for University FAQ (Bilingual: Bahasa + English)
+Intent-classification-based chatbot answering common student queries in both languages — a good showcase of practical NLP rather than just calling an API.
+**Data availability:** High — FAQ data is easy to source from your own university's student portal or handbook.
+
+## 10. Traffic Congestion Prediction Using Historical Data
+Time-series forecasting model predicting peak-hour congestion on specific routes, using historical traffic data.
+**Data availability:** Moderate — Google Maps/Waze data isn't freely exportable at scale, so many students simulate or use smaller public traffic datasets.
+
+## 11. Recommendation System for Local E-Commerce
+Collaborative filtering model suggesting products based on browsing/purchase history. A well-understood, well-documented ML technique that's easy to explain under questioning.
+**Data availability:** High — public e-commerce datasets (MovieLens-style structure) adapt well to this use case.
+
+## 12. Speech Emotion Recognition System
+Classifies emotional tone (happy, angry, sad, neutral) from short voice recordings — useful for call-centre quality monitoring or wellbeing check-ins.
+**Data availability:** High — RAVDESS and similar public emotion-speech datasets are widely used and well-documented.
+
+## 13. Air Quality Prediction Using Historical Sensor Data
+Forecasts PM2.5 or AQI levels a few hours ahead based on historical readings, useful given Malaysia's annual haze season.
+**Data availability:** High — Malaysia's Department of Environment publishes historical air quality data.
+
+## 14. Fall Detection From Wearable Sensor Data
+Uses accelerometer/gyroscope data (rather than video) to classify a fall event, paired with an ESP32-based [wearable IoT device](/blog/sistem-pengesanan-jatuh-orang-tua-iot) for real-time alerts.
+**Data availability:** Moderate — public fall-detection sensor datasets exist, but tuning thresholds to your own device is expected work.
+
+## 15. Exam Timetable Generation Using Constraint Optimization
+Not deep learning, but a genuine AI technique (constraint satisfaction/genetic algorithms) that generates clash-free exam schedules — a favourite among examiners who want to see algorithmic thinking, not just a trained model.
+**Data availability:** High — you can generate your own constraint data from your faculty's course list.
+
+---
+
+## Choosing the Right Scope
+
+- **Pick based on data, not ambition.** An idea with a ready dataset (like #2, #7, or #12) will move faster than one where you spend six weeks just collecting data.
+- **You don't need deep learning for every project.** Ideas like #15 use classical algorithms and are just as respected — sometimes more, because they're easier for you to fully explain.
+- **Always report your model's limitations.** Panels trust a student who says "this model struggles with X" far more than one who claims perfect accuracy.
+
+## Need Help Building One of These?
+
+Rectronx Circuits has delivered AI/ML final year projects for students across Malaysian universities — model training, data pipeline setup, deployment, and full documentation. WhatsApp us with your chosen idea and we'll give you an honest assessment of scope and timeline.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.
