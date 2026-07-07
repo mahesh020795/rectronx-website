@@ -1,0 +1,47 @@
+---
+title: "Sensor PIR Projek FYP Kau Asyik False Alarm? Ini Punca Sebenar dan Cara Betulkan"
+excerpt: "Sensor PIR HC-SR501 dalam projek FYP kau trigger sendiri tanpa sebab? Ini punca teknikal sebenar dan cara betulkan sebelum demo di depan panel."
+category: "FYP Guide"
+date: "2026-07-08"
+readTime: "6 min read"
+---
+
+Kau dah pasang sensor PIR untuk sistem pengesanan kehadiran atau keselamatan, semua nampak ok time ujian awal, tapi lepas beberapa jam sensor tiba-tiba trigger sendiri tanpa ada sesiapa lalu — buzzer bunyi, lampu nyala, notification hantar, semua tanpa punca yang jelas. Kalau ni jadi masa demo depan panel, ia nampak macam sistem kau tak reliable, walaupun sebenarnya ada punca teknikal yang specific dan boleh dibetulkan.
+
+## Kenapa Ini Berlaku — Bukan Sensor Kau Rosak
+
+Sensor PIR (contohnya HC-SR501 yang biasa digunakan dalam projek FYP) mengesan perubahan radiasi infra-merah dalam medan pandangnya, bukan pergerakan secara literal. Ini bermakna apa-apa sumber yang sebabkan perubahan haba mendadak dalam julat pengesanannya boleh trigger sensor, walaupun tiada manusia atau haiwan yang bergerak betul-betul.
+
+**Cahaya matahari terus atau berubah-ubah adalah punca paling biasa.** Matahari adalah sumber infra-merah yang sangat kuat, dan kalau sensor kau diarahkan ke arah tingkap atau kawasan yang dapat cahaya matahari terus, perubahan cahaya (contohnya awan lalu, bayang pokok bergerak) boleh sebabkan bacaan infra-merah berubah cukup untuk trigger sensor — ini terutamanya releven untuk demo dalam dewan yang ada tingkap besar atau time petang bila cahaya matahari masuk pada sudut rendah.
+
+**Aliran udara panas dari HVAC atau kipas.** Sistem penghawa dingin atau kipas yang hidup/mati secara berkala boleh sebabkan turun naik suhu udara yang cukup untuk trigger sensor sensitiviti tinggi, walaupun tiada objek fizikal bergerak dalam medan pandang.
+
+**Sensitiviti yang diset terlalu tinggi.** HC-SR501 ada potentiometer sensitiviti yang, kalau diset ke maksimum, boleh trigger daripada haiwan kecil, aliran udara, atau bahkan turun naik suhu badan sendiri dari jarak yang agak jauh.
+
+## Cara Betulkan — Ikut Susunan Keutamaan
+
+**1. Elak arahkan sensor terus ke tingkap atau sumber cahaya matahari.** Kalau susun atur projek kau membenarkan, laraskan sudut pemasangan sensor supaya tak terus mengadap tingkap besar. Kalau tak boleh elak (contohnya sensor perlu pantau kawasan berdekatan tingkap), pertimbangkan letak penutup/shroud kecil untuk hadkan medan pandang sensor.
+
+**2. Laraskan potentiometer sensitiviti — kurangkan, bukan maksimumkan.** HC-SR501 biasanya ada dua potentiometer — satu untuk sensitiviti, satu untuk tempoh delay. Untuk demo dalam ruang tertutup dengan jarak pengesanan yang tak perlu jauh, kurangkan sensitiviti ke tahap sederhana dan uji semula — kebanyakan masalah false alarm hilang dengan langkah ni sahaja.
+
+**3. Jauhkan sensor daripada laluan aliran udara panas.** Kalau boleh, pasang sensor jauh dari alang penghawa dingin atau kipas siling secara terus. Kalau tak boleh elak dalam susun atur dewan demo, cuba jadualkan sesi ujian akhir kau semasa keadaan HVAC yang sama macam hari demo sebenar, supaya kau nampak isu ni awal-awal, bukan first-time hari genting.
+
+**4. Tambah masa "settle" selepas power-on sebelum baca sensor.** HC-SR501 ada tempoh warm-up (biasanya beberapa saat hingga seminit selepas power dihidupkan) di mana bacaan tak stabil. Kalau kod kau terus baca output sensor sejurus selepas power-on, ini boleh sebabkan trigger palsu pada permulaan. Tambah delay yang cukup dalam kod sebelum mula anggap bacaan sensor sah.
+
+**5. Guna logik pengesahan berganda (debouncing) dalam kod, bukan bergantung pada sensor sahaja.** Contohnya, perlukan sensor trigger secara konsisten untuk beberapa bacaan berturut-turut sebelum sistem anggap ia pengesanan sah, bukan terus bertindak pada bacaan HIGH pertama. Ini lapisan perlindungan tambahan yang senang implement dalam kod dan boleh kurangkan false alarm dengan ketara.
+
+## Kenapa Ini Patut Kau Sebut Dalam Laporan
+
+Kalau projek FYP kau guna sensor PIR untuk apa-apa aplikasi (keselamatan rumah, kehadiran, automasi lampu), panel yang berpengalaman mungkin tanya soalan spesifik tentang bagaimana sistem korang handle false trigger — ini bukan soalan untuk "gagalkan" korang, tapi untuk nilai sama ada korang faham had teknologi yang korang guna. Jawapan seperti "kami uji dan dapati sensitiviti maksimum sebabkan false trigger dari cahaya matahari, jadi kami laraskan sensitiviti dan tambah logik pengesahan berganda dalam kod" adalah jawapan yang jauh lebih kukuh berbanding tak sedar langsung isu ni wujud.
+
+## Kalau Demo Korang Ada Sensor PIR
+
+Uji sistem korang dalam persekitaran demo sebenar (bukan sekadar bilik makmal korang) sekurang-kurangnya sekali sebelum hari sebenar, terutamanya kalau lokasi demo ada susun atur cahaya atau HVAC yang berbeza daripada tempat korang biasa uji. Ini juga bagi korang peluang catat data perbandingan (kadar false alarm sebelum dan selepas pelarasan) sebagai data tambahan untuk bab keputusan — bukan sekadar langkah pencegahan semata.
+
+## Perlukan Bantuan Betulkan Isu Sensor Kau?
+
+Rectronx Circuits dah bantu 400+ pelajar selesaikan isu teknikal sensor macam ni sebelum demo dan viva. WhatsApp kami untuk konsultasi percuma.
+
+Baca juga panduan kami tentang [sensor projek FYP yang bagi reading merepek time musim hujan](/blog/sensor-fyp-reading-tak-tepat-time-hujan-monsun) untuk isu teknikal lain yang selalu muncul dengan sensor luaran.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

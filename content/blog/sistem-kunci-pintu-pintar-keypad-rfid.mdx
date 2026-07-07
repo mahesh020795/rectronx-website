@@ -1,0 +1,141 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Kunci Pintu Pintar Menggunakan Keypad dan RFID"
+excerpt: "Bina kunci pintu pintar guna Arduino, keypad 4x4 dan kad RFID MFRC522 dengan solenoid elektronik. Tutorial lengkap komponen, wiring dan kod FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-08"
+tags: ["projek akhir tahun", "iot", "arduino", "tutorial", "keselamatan"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Kunci Pintu Pintar Menggunakan Keypad dan RFID
+
+Kunci konvensional dengan anak kunci fizikal masih jadi standard kat kebanyakan bilik sewa dan pejabat kecil kat Malaysia, walaupun masalah dia dah lama — anak kunci hilang, senang di-duplicate tanpa kebenaran, dan tak ada rekod siapa masuk bila. Projek kunci pintu pintar ni selesaikan masalah tu dengan dua lapisan pengesahan: kad RFID dan kod PIN, jadi walaupun kad korang hilang, orang lain tetap kena tahu PIN untuk masuk.
+
+Untuk FYP, projek ni bagus sebab gabungkan dua kaedah input (RFID + keypad), logik keselamatan (berapa kali cuba gagal sebelum lockout), dan kawalan mekanikal (solenoid) — cukup substance untuk bab metodologi tanpa perlukan komponen mahal atau exotic.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP
+
+- Pengesahan dua faktor (2FA fizikal) — kad RFID sahaja tak cukup, perlu PIN sekali, konsep yang senang dijelaskan tapi ada kedalaman teknikal
+- Logik keselamatan lockout — sistem perlu handle percubaan gagal berulang tanpa jadi mudah "brute force"
+- Kawalan solenoid — pengenalan asas kepada kawalan aktuator dari logik digital
+- Boleh extend dengan logging (rekod siapa/bila masuk) untuk versi Degree/Merit
+
+---
+
+## Senarai Komponen
+
+| Komponen | Fungsi | Anggaran Harga |
+|---|---|---|
+| Arduino Uno (atau klon serasi) | Kawalan utama, baca RFID dan keypad | RM 15–40 (klon) / RM 60–120 (asli) |
+| Modul RFID MFRC522 + kad/tag | Pengesahan kad akses | RM 10–18 |
+| Keypad Membran 4x4 | Input PIN | RM 8–15 |
+| Kunci Solenoid Elektronik 12V | Kawalan buka/kunci pintu | RM 20–30 |
+| Modul Relay 5V | Kawalan solenoid dari Arduino | RM 5–8 |
+| LCD 16x2 dengan modul I2C | Paparan status/arahan kepada pengguna | RM 12–18 |
+| Buzzer | Bunyi pengesahan/amaran | RM 2–4 |
+| Bekalan Kuasa 12V 1A | Untuk solenoid | RM 15–20 |
+
+**Jumlah anggaran: RM 90–140**
+
+**Nota penting:** modul MFRC522 beroperasi pada voltan logik 3.3V sahaja — sambungan SPI (MOSI, SCK) terus ke Arduino Uno yang beroperasi 5V boleh rosakkan modul dari semasa ke semasa kalau tak ada level shifter. Sesetengah pelajar guna Arduino tanpa masalah dalam jangka pendek sebab toleransi voltan sebenar sedikit berbeza mengikut modul, tapi cara yang betul dan selamat adalah guna level shifter logik atau papan yang beroperasi 3.3V untuk elak risiko jangka panjang.
+
+---
+
+## Cara Kerja Sistem
+
+1. Pengguna imbas kad RFID pada modul MFRC522
+2. Arduino baca UID kad dan bandingkan dengan senarai UID yang dibenarkan tersimpan dalam kod
+3. Kalau UID sah, LCD papar "Masukkan PIN" dan sistem tunggu input dari keypad
+4. Pengguna masukkan PIN 4-digit; kalau PIN betul, relay aktifkan solenoid untuk buka kunci selama beberapa saat
+5. Kalau kad ATAU PIN salah, buzzer bunyi amaran dan sistem catat percubaan gagal — selepas 3 kali gagal berturut-turut, sistem lockout selama tempoh tertentu (contohnya 30 saat) sebelum terima percubaan baru
+
+---
+
+## Gambarajah Pendawaian
+
+**MFRC522 (SPI):**
+- SDA(SS) → Pin 10, SCK → Pin 13, MOSI → Pin 11, MISO → Pin 12, RST → Pin 9
+- VCC → 3.3V (BUKAN 5V), GND → GND
+
+**Keypad 4x4:**
+- 8 pin (4 baris + 4 lajur) → Pin digital 2 hingga 9 mengikut susunan library Keypad
+
+**Relay (Solenoid):**
+- IN → Pin A0
+
+**LCD I2C:**
+- SDA → A4, SCL → A5
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Keypad.h>
+#include <LiquidCrystal_I2C.h>
+
+MFRC522 rfid(10, 9); // SS_PIN, RST_PIN
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+int failedAttempts = 0;
+
+void loop() {
+  if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
+    if (isAuthorizedCard(rfid.uid.uidByte)) {
+      lcd.clear();
+      lcd.print("Masukkan PIN:");
+      String enteredPin = readPinFromKeypad();
+
+      if (enteredPin == CORRECT_PIN) {
+        digitalWrite(RELAY_PIN, HIGH);
+        delay(4000); // pintu buka 4 saat
+        digitalWrite(RELAY_PIN, LOW);
+        failedAttempts = 0;
+      } else {
+        failedAttempts++;
+        digitalWrite(BUZZER_PIN, HIGH);
+        delay(300);
+        digitalWrite(BUZZER_PIN, LOW);
+      }
+    }
+  }
+
+  if (failedAttempts >= 3) {
+    lcd.clear();
+    lcd.print("Sistem Lockout");
+    delay(30000); // lockout 30 saat
+    failedAttempts = 0;
+  }
+}
+```
+
+Library [MFRC522](/blog/rfid-attendance-system-fyp) yang paling biasa digunakan adalah versi oleh komuniti GitHub (miguelbalboa) — ini abstract semua komunikasi SPI peringkat rendah dan sediakan fungsi mudah untuk baca UID kad. Library Keypad pula tulisan Mark Stanley dan Alexander Brevig, dengan fungsi `getKey()` untuk baca input.
+
+---
+
+## Tips Pembentangan
+
+- Sedia jelaskan kenapa korang guna 2FA (kad + PIN) berbanding kad sahaja — ini soalan biasa panel tanya, dan jawapan "kad boleh dicuri/hilang, PIN tambah lapisan keselamatan" adalah jawapan yang kukuh
+- Tunjukkan demo lockout secara langsung (cuba PIN salah 3 kali) — ini bahagian yang selalu buat panel impressed sebab ia tunjuk korang fikir tentang serangan brute-force, bukan sekadar fungsi asas
+- Kalau ada masa, tambah logging (rekod UID dan masa akses ke kad SD atau EEPROM) sebagai bukti tambahan untuk bab keputusan
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: RFID sahaja + solenoid, tanpa keypad — versi paling ringkas
+Untuk **FYP Degree**: Tambah keypad untuk 2FA penuh seperti dijelaskan di atas
+Untuk **Merit/Distinction**: Tambah logging akses (masa + UID) ke kad SD, dan modul GSM untuk hantar SMS amaran bila lockout berlaku akibat percubaan gagal berulang
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits dah bantu 400+ pelajar siapkan sistem kawalan akses macam ni — kalibrasi RFID, wiring solenoid, dan dokumentasi FYP penuh. WhatsApp kami untuk sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek keselamatan? Lihat [sistem kehadiran pintar dengan kod QR](/blog/sistem-kehadiran-pintar-kod-qr) atau [sistem pintu pintar dengan pengecaman wajah](/blog/sistem-pintu-pintar-pengecaman-wajah) untuk pendekatan lain dalam kategori yang sama.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

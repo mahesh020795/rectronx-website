@@ -1,0 +1,98 @@
+---
+title: "GPS Vehicle Tracking System Using GSM Module: Complete FYP Build Guide"
+excerpt: "Build a low-cost GPS vehicle tracker with Arduino, NEO-6M and SIM800L that sends live location by SMS. Complete wiring, code and cost breakdown."
+category: "Tutorial"
+date: "2026-07-08"
+readTime: "8 min read"
+---
+
+## Why Panels Like This One
+
+Vehicle theft and fleet visibility are problems every panel member has an opinion on, which makes the pitch easy — you're not inventing a need, you're building a cheaper, transparent version of something commercial GPS trackers already do behind a monthly subscription. That "no recurring fees, just a SIM card" angle is a genuinely strong selling point for a Malaysian FYP audience that cares about cost-consciousness.
+
+The technical spread is good too: satellite positioning, serial communication with two separate modules, and cellular messaging — three distinct subsystems that give you real content for a methodology chapter.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| Arduino Uno (or compatible clone) | Reads GPS data and controls the GSM module | RM 15–40 (clone) / RM 60–120 (genuine) |
+| NEO-6M GPS Module | Acquires latitude/longitude from satellites | RM 25–40 |
+| SIM800L GSM Module | Sends location via SMS over the cellular network | RM 25–35 |
+| Prepaid SIM card (2G/GSM-capable) | Network connection for SMS | User-provided, ~RM 10–15 credit |
+| Step-down power supply / 3.7–4.2V Li-ion cell | Dedicated power for the SIM800L | RM 15–25 |
+| 1000µF capacitor | Absorbs current spikes during GSM transmission | RM 1–3 |
+| Jumper wires, enclosure | Wiring and housing | RM 10–15 |
+
+**Total hardware cost: RM 90–150.** Malaysia hasn't announced any 2G network shutdown as of 2026 (3G was already phased out by end of 2021), so a SIM800L on a prepaid SIM is a safe bet for now — but it's worth confirming with your telco before committing your whole project to it.
+
+## How It Works
+
+1. The [NEO-6M GPS module](/blog/smart-helmet-safety-monitoring-esp32) continuously listens for satellite signals and outputs raw NMEA sentences over serial, which the [TinyGPS++](/blog/esp32-getting-started) library parses into usable latitude/longitude values
+2. The Arduino checks GPS lock status in a loop; once a valid fix is acquired, it holds the last known coordinates in memory
+3. On a trigger — either a fixed interval, or an incoming "LOCATE" SMS from the owner's phone — the Arduino sends an AT command sequence to the SIM800L, instructing it to text the current coordinates (formatted as a Google Maps link) to a preset number
+4. Because GPS satellite acquisition can take anywhere from several seconds to a couple of minutes on a cold start (especially indoors or under heavy cloud cover), your report should account for this lag rather than assume instant lock every time
+5. The SIM800L's SMS delivery gives you a simple, infrastructure-free reporting channel — no data plan, no server, no app required, which is exactly the "cheap and robust" pitch that makes this project attractive
+
+## Wiring Overview
+
+**NEO-6M GPS Module (SoftwareSerial):**
+- TX → Pin 10, RX → Pin 11
+
+**SIM800L GSM Module (SoftwareSerial, separate pins):**
+- TX → Pin 2, RX → Pin 3
+- Power the SIM800L from its own regulated 3.7–4.2V supply, **not** the Arduino's 5V pin — its transmit bursts can pull current spikes reported to reach as high as 2A, which a USB port or the Arduino's onboard regulator cannot safely deliver
+
+**Important upload tip:** the GPS module streams data continuously, which can interfere with Pin 0 (RX) during sketch uploads on some wiring configurations. If your upload fails or hangs, temporarily disconnect the GPS TX line, upload, then reconnect.
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <SoftwareSerial.h>
+#include <TinyGPS++.h>
+
+SoftwareSerial gpsSerial(10, 11);
+SoftwareSerial gsmSerial(2, 3);
+TinyGPSPlus gps;
+
+void sendLocationSMS() {
+  gsmSerial.println("AT+CMGF=1");
+  delay(200);
+  gsmSerial.println("AT+CMGS=\"+60XXXXXXXXX\"");
+  delay(200);
+  gsmSerial.print("Location: https://maps.google.com/?q=");
+  gsmSerial.print(gps.location.lat(), 6);
+  gsmSerial.print(",");
+  gsmSerial.print(gps.location.lng(), 6);
+  gsmSerial.write(26); // Ctrl+Z sends the message
+}
+
+void loop() {
+  while (gpsSerial.available() > 0) {
+    gps.encode(gpsSerial.read());
+  }
+  if (gps.location.isValid() && triggerConditionMet()) {
+    sendLocationSMS();
+  }
+}
+```
+
+## Common Pitfalls
+
+- **Powering the SIM800L directly from the Arduino's 5V pin** is the single most common failure in this build — the module resets or fails to register on the network mid-transmission. A dedicated supply plus the bulk capacitor across VCC/GND fixes this in almost every case
+- **No GPS lock indoors** — always test outdoors or near a window with a clear sky view; a lab bench in the middle of a building will rarely get a fix
+- **Forgetting to check `AT` command responses** — the SIM800L needs a few seconds after power-up to register on the network before it will accept SMS commands; sending commands too early silently fails
+
+## Scope by Level
+
+For a **Diploma FYP**: On-demand location via incoming SMS request, single recipient number
+For a **Degree FYP**: Add periodic auto-reporting at fixed intervals, plus a basic geofence check that triggers an alert SMS if the vehicle leaves a defined radius
+For **Merit/Distinction**: Push coordinates to a simple web dashboard instead of (or alongside) SMS, and log historical routes as a results chapter comparing tracked distance against actual odometer readings
+
+## Need This Project Done?
+
+Rectronx Circuits has helped 400+ students wire up GPS and GSM builds like this without the brownout headaches. WhatsApp us for a free quote within 2 hours.
+
+Related reading: our [smart helmet safety monitoring](/blog/smart-helmet-safety-monitoring-esp32) guide uses the same NEO-6M and SIM800L combination in a different form factor, and our [Arduino vs ESP32](/blog/arduino-vs-esp32-fyp-malaysia) comparison can help you decide on a controller if you're still deciding.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

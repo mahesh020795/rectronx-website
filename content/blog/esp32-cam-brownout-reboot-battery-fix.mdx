@@ -1,0 +1,45 @@
+---
+title: "My ESP32-CAM Keeps Rebooting When Powered by Battery — Here's Why (And the Fix)"
+excerpt: "ESP32-CAM works fine on USB but reboots on battery power? Here's the real cause — brownout detection — and how to fix it before your FYP demo."
+category: "FYP Guide"
+date: "2026-07-08"
+readTime: "6 min read"
+---
+
+It works perfectly plugged into your laptop. You unplug it, switch to a battery pack for the portable demo, and within seconds the camera restarts, the WiFi drops, or the whole board loops endlessly. This is one of the most common ESP32-CAM complaints in FYP builds, and the cause is almost always the same: brownout detection, not a faulty board.
+
+## What's Actually Happening
+
+A brownout happens when the supply voltage dips below the minimum the chip needs to operate reliably, and the ESP32's built-in brownout detector resets the chip to prevent it running in an unstable state. On USB power from a laptop, you're getting a relatively clean, well-regulated 5V. On a battery pack — especially a cheap one, or one connected through a long thin cable — the supply is far less forgiving of sudden current demand.
+
+The ESP32-CAM is a particularly bad case for this because it draws noticeably more current than a plain ESP32: the camera sensor itself, plus WiFi transmission spikes, plus the onboard flash LED if you're using it, can all demand short current bursts of several hundred milliamps at once. If the battery pack's regulator or the board's own onboard AMS1117-style regulator can't supply that instantaneously, the voltage sags just long enough to trip the brownout detector — and from the outside, that looks exactly like a random reboot.
+
+## Fix 1: Check Your Regulator's Dropout Voltage
+
+Many ESP32-CAM boards use an onboard 3.3V regulator with a dropout voltage in the 4.3–4.5V range, meaning your input needs to stay comfortably above that for the regulator to hold a stable 3.3V output. If you're running the board from a battery that sags below this threshold under load (a common trait of cheap or partially discharged battery packs), the onboard regulator simply can't keep up, regardless of how strong your main battery's total capacity is.
+
+**The fix:** power from a source that can comfortably deliver 5V at 500mA continuous, with headroom for 600mA+ peaks during WiFi transmission — a decent quality power bank rated for at least 1A output is usually enough, but very cheap ones with weak internal regulation often aren't.
+
+## Fix 2: Add a Bulk Capacitor Across the Power Pins
+
+Soldering a 470–1000µF low-ESR electrolytic capacitor across the ESP32-CAM's VCC and GND pins, as close to the board as you can manage, helps absorb the short current spikes that trigger brownouts — this is especially effective for boards like the ESP32-CAM that don't have generous onboard capacitance already. Pairing it with a smaller 0.1µF ceramic capacitor for high-frequency noise is good practice, though the bulk capacitor does most of the work here.
+
+## Fix 3: Don't Power It Through a Breadboard If You Can Avoid It
+
+Breadboard contact resistance is a genuinely underrated cause of intermittent brownouts — it's small enough to not show up on a multimeter check but large enough to cause voltage sag under the ESP32-CAM's current spikes. If you're seeing brownouts that seem to come and go unpredictably even with a good power source, try powering directly through soldered wires instead of breadboard jumpers as a diagnostic step.
+
+## Fix 4: Disable the Brownout Detector Only for Debugging, Never for Your Final Demo
+
+You can disable the ESP32's brownout detector in software using its RTC control registers, and some tutorials suggest this as a "fix." Don't ship this in your final project — disabling the detector doesn't fix the underlying power instability, it just hides the symptom, and you risk the chip actually running in a genuinely unstable state, which can produce corrupted flash writes or unpredictable camera behaviour instead of a clean reset. Use it only as a temporary diagnostic to confirm brownout is really your cause, then re-enable it once you've applied a real power fix.
+
+## Putting It Together for Your Demo
+
+For a portable FYP demo, the combination that solves this reliably in almost every case is: a name-brand power bank rated for at least 1A output (not the cheapest one available), a 1000µF capacitor across VCC/GND soldered directly to the board, and wiring that avoids breadboard contact points wherever possible. Test this exact setup for at least 20–30 minutes of continuous operation before your actual demo day — brownouts caused by battery sag often only appear once the battery has partially discharged, not in the first five minutes on a full charge.
+
+If you're also fighting WiFi stability on top of power issues, our guide on [why ESP32 disconnects from WiFi during a demo](/blog/esp32-wifi-disconnect-fyp-demo-fix) covers the other major failure mode that gets confused with this one, and our [ESP32 getting started guide](/blog/esp32-getting-started) covers the fundamentals if you're still early in your build.
+
+## Need Help Debugging Your Build?
+
+Rectronx Circuits has helped 400+ students fix exactly this kind of power and stability issue before their demo, not after. WhatsApp us for a free quote within 2 hours.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

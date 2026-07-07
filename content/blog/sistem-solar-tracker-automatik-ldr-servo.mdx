@@ -1,0 +1,116 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Solar Tracker Automatik Menggunakan LDR dan Servo Motor"
+excerpt: "Bina solar tracker automatik guna sensor LDR dan servo motor untuk ikut arah matahari sepanjang hari. Tutorial lengkap komponen, wiring dan kod."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-08"
+tags: ["projek akhir tahun", "tenaga solar", "arduino", "tutorial", "tenaga boleh diperbaharui"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Solar Tracker Automatik Menggunakan LDR dan Servo Motor
+
+Panel solar yang dipasang statik (tak bergerak) cuma optimum bila matahari betul-betul tegak dengannya — sepanjang hari yang lain, sudut matahari berubah dan efisiensi panel jatuh. Malaysia sebagai negara khatulistiwa dapat cahaya matahari agak konsisten sepanjang tahun, tapi sudut matahari tetap berubah dari pagi ke petang macam mana-mana lokasi lain. Solar tracker selesaikan masalah ni dengan pusingkan panel secara automatik mengikut arah cahaya paling terang.
+
+Untuk FYP, projek ni sesuai sebab ia gabungkan sensor cahaya, logik perbandingan, dan kawalan servo motor — dan bab keputusan korang boleh ada data sebenar (perbandingan output voltan/arus antara panel statik dan panel bergerak) yang genuinely berguna, bukan sekadar simulasi.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP
+
+- Konsep senang faham untuk panel — "panel ikut matahari, hasilkan lebih tenaga" — tapi ada logik perbandingan sensor yang perlu dijelaskan dengan teliti
+- Boleh ukur prestasi sebenar (bukan simulasi) dengan bandingkan output panel bergerak vs panel statik dalam keadaan cuaca sama
+- Relevan dengan topik tenaga boleh diperbaharui yang semakin popular untuk FYP kejuruteraan elektrik dan mekatronik
+- Skop boleh besar atau kecil — dari single-axis mudah untuk Diploma sampai dual-axis dengan data logging untuk Degree/Merit
+
+---
+
+## Senarai Komponen
+
+| Komponen | Fungsi | Anggaran Harga |
+|---|---|---|
+| Arduino Uno (atau klon serasi) | Kawalan utama, baca LDR dan gerakkan servo | RM 15–40 (klon) / RM 60–120 (asli) |
+| Sensor LDR ×2 (single-axis) atau ×4 (dual-axis) | Kesan arah cahaya paling terang | RM 2–4 setiap satu |
+| Servo Motor SG90 ×1 (single-axis) atau ×2 (dual-axis) | Pusingkan panel mengikut arah cahaya | RM 8–12 setiap satu |
+| Panel Solar Mini (5V-6V) | Panel ujian untuk sistem tracker | RM 15–30 |
+| Resistor 10kΩ (untuk voltage divider LDR) | Litar pembahagi voltan untuk bacaan LDR | RM 1–2 setiap satu |
+| Struktur/rangka mounting (kayu/akrilik) | Badan struktur untuk pasang panel dan servo | RM 20–35 |
+| Bekalan kuasa luaran 5V untuk servo | Servo perlukan arus lebih daripada Arduino boleh bekalkan dengan selamat | RM 10–15 |
+
+**Jumlah anggaran: RM 80–140** untuk versi single-axis; tambah RM 20–30 untuk versi dual-axis dengan servo dan LDR tambahan.
+
+**Nota penting:** servo motor perlukan bekalan arus yang lebih tinggi daripada apa yang pin Arduino boleh bekalkan dengan selamat — guna bekalan kuasa luaran 5V yang berasingan untuk servo, jangan sambung terus ke pin 5V Arduino, ini boleh sebabkan Arduino reset atau rosak dalam jangka panjang.
+
+---
+
+## Cara Kerja Sistem
+
+1. Untuk versi single-axis: dua sensor LDR dipasang bersebelahan di atas panel solar, dipisahkan oleh penghadang kecil (contohnya sekeping kad tebal) supaya masing-masing terima cahaya dari sudut berbeza
+2. Arduino baca nilai analog dari kedua-dua LDR secara berterusan
+3. Kalau LDR sebelah kiri baca nilai lebih terang berbanding LDR kanan (atau sebaliknya), Arduino gerakkan servo sedikit ke arah LDR yang lebih terang
+4. Proses ni berulang setiap beberapa saat, jadi panel "kejar" arah matahari secara beransur-ansur sepanjang hari
+5. Untuk versi dual-axis, empat LDR (atas-kiri, atas-kanan, bawah-kiri, bawah-kanan) dan dua servo bagi kawalan pada paksi mendatar dan menegak — ini yang membolehkan panel ikut pergerakan matahari secara lebih tepat dari pagi ke petang
+
+---
+
+## Gambarajah Pendawaian (Single-Axis)
+
+**LDR Kiri:** Pembahagi voltan dengan resistor 10kΩ → Pin Analog A0
+**LDR Kanan:** Pembahagi voltan dengan resistor 10kΩ → Pin Analog A1
+**Servo Motor:** Signal → Pin 9 (PWM), Kuasa → bekalan luaran 5V berasingan (bukan dari Arduino)
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+#include <Servo.h>
+
+Servo trackerServo;
+int ldrLeft = A0;
+int ldrRight = A1;
+int currentAngle = 90; // kedudukan neutral
+
+void loop() {
+  int leftValue = analogRead(ldrLeft);
+  int rightValue = analogRead(ldrRight);
+  int difference = leftValue - rightValue;
+
+  if (abs(difference) > TOLERANCE) {
+    if (difference > 0 && currentAngle < 180) {
+      currentAngle++;
+    } else if (difference < 0 && currentAngle > 0) {
+      currentAngle--;
+    }
+    trackerServo.write(currentAngle);
+  }
+
+  delay(100); // elak servo bergerak terlalu laju/jerky
+}
+```
+
+**Nota kalibrasi:** nilai `TOLERANCE` (julat perbezaan minimum sebelum servo bergerak) perlu dikalibrasi secara eksperimen — terlalu rendah, servo akan asyik bergerak-gerak (jitter) walaupun perubahan cahaya kecil sahaja; terlalu tinggi, sistem lambat respon kepada perubahan sudut matahari sebenar.
+
+---
+
+## Cabaran Biasa
+
+- **Bayang-bayang dari struktur sekeliling** boleh sebabkan satu LDR baca gelap secara tak konsisten walaupun bukan waktu mendung — pastikan lokasi ujian bebas dari halangan struktur berdekatan
+- **Servo jitter** bila TOLERANCE terlalu rendah — ini kelihatan tak profesional semasa demo, jadi luangkan masa kalibrasi sebelum hari pembentangan
+- **Cuaca mendung/hujan** akan buat kedua-dua LDR baca nilai rendah dan seimbang — sistem sepatutnya kembali ke kedudukan neutral atau kedudukan terakhir yang stabil dalam keadaan ni, bukan bergerak rawak
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Single-axis dengan 2 LDR dan 1 servo, demo perbandingan mudah dengan panel statik
+Untuk **FYP Degree**: Dual-axis dengan 4 LDR dan 2 servo untuk ketepatan lebih tinggi
+Untuk **Merit/Distinction**: Tambah data logging (voltan/arus output panel setiap jam) berbanding panel statik sebagai kawalan (control), dan kira peratus peningkatan tenaga sebagai data keputusan utama
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits dah bantu 400+ pelajar siapkan projek tenaga boleh diperbaharui macam ni — kalibrasi sensor, struktur mounting, dan dokumentasi FYP penuh. WhatsApp kami untuk sebut harga percuma dalam masa 2 jam.
+
+Cari lagi idea projek tenaga? Lihat [sistem rumah hijau pintar](/blog/sistem-rumah-hijau-pintar-suhu-kelembapan) untuk projek automasi berkaitan dalam kategori yang sama.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

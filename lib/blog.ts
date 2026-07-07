@@ -39,6 +39,11 @@ export function getAllPosts(): Omit<BlogPost, "content">[] {
 // slug keywords. Descriptive, unique images improve image SEO and relevance.
 export function getPostImage(slug: string): { url: string; alt: string } {
   const map: { match: RegExp; url: string; alt: string }[] = [
+    { match: /blind-stick|smart-blind-stick/, url: "https://images.unsplash.com/photo-1511744285922-246fc68b2177?w=1200&q=80", alt: "Person holding a wooden walking cane, representing an ultrasonic smart blind stick FYP for the visually impaired" },
+    { match: /gps-vehicle-tracking|gps-tracker/, url: "https://images.unsplash.com/photo-1634743556192-d19f0c69ff3a?w=1200&q=80", alt: "Car dashboard with a GPS device mounted, representing a GPS and GSM based vehicle tracking FYP" },
+    { match: /kunci-pintu|keypad.*rfid|door-lock.*keypad/, url: "https://images.unsplash.com/photo-1654781393914-108d9a93e0a5?w=1200&q=80", alt: "Person pressing a button on an electronic access control panel, representing a keypad and RFID smart door lock FYP" },
+    { match: /solar-tracker/, url: "https://images.unsplash.com/photo-1677273459827-e212995b079d?w=1200&q=80", alt: "Aerial view of a solar panel field, representing an LDR and servo based automatic solar tracker FYP" },
+    { match: /pir-false-alarm|sensor-pir/, url: "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=1200&q=80", alt: "Flat lay of an electronic circuit board, representing a PIR motion sensor troubleshooting guide" },
     { match: /wheelchair/, url: "https://images.unsplash.com/photo-1565615833231-e8c91a38a012?w=1200&q=80", alt: "Wheelchair user navigating indoors, representing an obstacle-avoidance assistive tech FYP" },
     { match: /kebakaran-ladang|hutan/, url: "https://images.unsplash.com/photo-1726004522548-2883314a4e2d?w=1200&q=80", alt: "Smoke rising from a forest, representing an early forest and plantation fire detection system" },
     { match: /chemical-engineering/, url: "https://images.unsplash.com/photo-1581093577421-f561a654a353?w=1200&q=80", alt: "Chemical engineering student working in a laboratory setting" },

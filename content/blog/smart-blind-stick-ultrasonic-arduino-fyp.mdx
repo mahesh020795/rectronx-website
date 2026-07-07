@@ -1,0 +1,98 @@
+---
+title: "Ultrasonic Sensor Based Smart Blind Stick System: Complete FYP Build Guide"
+excerpt: "Build a smart cane that detects obstacles using ultrasonic sensors and alerts the user with buzzer and vibration feedback. Full parts list and code."
+category: "Tutorial"
+date: "2026-07-08"
+readTime: "8 min read"
+---
+
+## Why This Project Keeps Getting Approved
+
+Malaysia has close to half a million people registered with the Department of Social Welfare as having visual impairments, and most still navigate with a plain cane that tells them nothing beyond "something is touching the tip." That gap between a passive mobility tool and one that actively senses the environment is an easy, honest problem statement — you don't need to dress it up, and panels rarely push back on the social relevance.
+
+Technically, it's a forgiving build too. You're combining distance sensing, threshold-based decision logic, and dual-mode feedback (audio plus haptic) — enough for a real methodology chapter, without needing a camera, machine learning, or anything that eats your semester in debugging.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| Arduino Uno (or compatible clone) | Reads sensors, drives the buzzer and vibration motor | RM 15–40 (clone) / RM 60–120 (genuine) |
+| HC-SR04 Ultrasonic Sensor ×2 | Front (chest-height obstacles) and lower-angled (steps, potholes) | RM 5–8 each |
+| Buzzer | Audible proximity alert | RM 2–4 |
+| Vibration Motor (coin type) | Haptic alert on the handle | RM 3–6 |
+| 9V battery + clip (or 18650 cell + holder) | Portable power source | RM 10–20 |
+| PVC pipe or existing cane body | Housing for the electronics | RM 15–30 |
+| Jumper wires, small enclosure, mounting tape | Wiring and assembly | RM 10–15 |
+
+**Total hardware cost: RM 60–120.** Most FYP builds retrofit the electronics onto a standard folding cane rather than manufacturing a cane from scratch — that's both the realistic approach and the one examiners expect.
+
+## How It Works
+
+1. The front-facing [HC-SR04](/blog/arduino-vs-esp32-fyp-malaysia) sensor scans directly ahead at roughly chest/head height, since that's the zone a cane's tip physically can't cover
+2. A second sensor, angled slightly downward, catches lower obstacles a cane tip would normally find by touch — kerbs, steps, potholes — giving the user advance warning instead of a last-second bump
+3. The Arduino reads both sensors in a loop and compares each distance reading against a safe threshold (commonly tuned in the 60–100cm range for a walking pace, though this should be calibrated to the user's actual walking speed)
+4. When an object crosses the threshold, the buzzer sounds and the vibration motor pulses — the closer the object, the faster the pulse rate, so distance is communicated intuitively rather than as a flat on/off alert
+5. Because two independent sensors are reporting, the system can differentiate "obstacle ahead" from "drop-off below" with two distinct alert patterns, which is a detail examiners notice and appreciate
+
+## Wiring Overview
+
+**HC-SR04 #1 (Front, chest height):**
+- Trig → Pin 9, Echo → Pin 10
+
+**HC-SR04 #2 (Lower, angled down):**
+- Trig → Pin 7, Echo → Pin 8
+
+**Buzzer:** Pin 6
+**Vibration motor:** Pin 5 (PWM, driven through a small NPN transistor — do not wire it directly to the digital pin, the motor's stall current can damage the Arduino's output driver)
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <NewPing.h>
+
+#define TRIG_FRONT 9
+#define ECHO_FRONT 10
+#define TRIG_LOWER 7
+#define ECHO_LOWER 8
+#define MAX_DISTANCE 200
+#define SAFE_THRESHOLD_CM 80
+
+NewPing sonarFront(TRIG_FRONT, ECHO_FRONT, MAX_DISTANCE);
+NewPing sonarLower(TRIG_LOWER, ECHO_LOWER, MAX_DISTANCE);
+
+void loop() {
+  unsigned int distFront = sonarFront.ping_cm();
+  delay(30); // short gap so the two sensors don't cross-interfere
+  unsigned int distLower = sonarLower.ping_cm();
+
+  if (distFront > 0 && distFront < SAFE_THRESHOLD_CM) {
+    int pulseSpeed = map(distFront, 0, SAFE_THRESHOLD_CM, 60, 400);
+    alertPattern(pulseSpeed, 1); // one buzzer pulse per cycle = "ahead"
+  } else if (distLower > 0 && distLower < SAFE_THRESHOLD_CM) {
+    int pulseSpeed = map(distLower, 0, SAFE_THRESHOLD_CM, 60, 400);
+    alertPattern(pulseSpeed, 2); // two quick pulses = "drop-off/step"
+  }
+}
+```
+
+The [NewPing](/blog/smart-wheelchair-obstacle-avoidance-arduino-fyp) library handles HC-SR04 timing reliably and includes a built-in median filter, which matters here — a single noisy ultrasonic bounce triggering a false alert on a demo table is one of the more common embarrassments with this build.
+
+## Common Pitfalls
+
+- **Ultrasonic sensors struggle with soft, angled, or glass surfaces** — a person's trousers, foliage, or a glass door panel can scatter the echo and give an inconsistent reading. State this limitation upfront in your report rather than let the panel find it during your demo
+- **Two sensors firing back-to-back can cross-interfere**, with one sensor picking up the other's echo. A short stagger delay between pings (as in the pseudocode above) or NewPing's timer-based multi-sensor mode avoids this
+- **Mounting angle on the lower sensor is fiddly** — too flat and it reads the ground as a constant "obstacle," too steep and it misses actual kerbs. Budget real bench time to tune this before your final demo
+
+## Scope by Level
+
+For a **Diploma FYP**: Single front sensor, buzzer alert only — clean, demonstrable, and easy to defend
+For a **Degree FYP**: Add the lower sensor and vibration feedback as described above, with distinct alert patterns for each
+For **Merit/Distinction**: Add a [SIM800L GSM module](/blog/gps-vehicle-tracking-system-fyp) so the cane can send an SOS SMS with GPS location if the user stays stationary for an unusually long time (a simple fall/distress heuristic), and log obstacle-encounter frequency over multiple test walks as a results chapter
+
+## Need This Project Done?
+
+Rectronx Circuits has helped 400+ students turn assistive-tech builds like this into fully documented FYPs — sensor calibration, enclosure design, and the write-up included. WhatsApp us for a free quote within 2 hours.
+
+Related reading: see our guide on the [obstacle-avoiding smart wheelchair](/blog/smart-wheelchair-obstacle-avoidance-arduino-fyp) for a similar sensing approach, or browse more [mechatronics and robotics ideas](/blog/mechatronics-robotics-fyp-ideas-malaysia) in the same category.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.
