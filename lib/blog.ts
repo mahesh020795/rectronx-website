@@ -39,6 +39,15 @@ export function getAllPosts(): Omit<BlogPost, "content">[] {
 // slug keywords. Descriptive, unique images improve image SEO and relevance.
 export function getPostImage(slug: string): { url: string; alt: string } {
   const map: { match: RegExp; url: string; alt: string }[] = [
+    { match: /wheelchair/, url: "https://images.unsplash.com/photo-1565615833231-e8c91a38a012?w=1200&q=80", alt: "Wheelchair user navigating indoors, representing an obstacle-avoidance assistive tech FYP" },
+    { match: /kebakaran-ladang|hutan/, url: "https://images.unsplash.com/photo-1726004522548-2883314a4e2d?w=1200&q=80", alt: "Smoke rising from a forest, representing an early forest and plantation fire detection system" },
+    { match: /chemical-engineering/, url: "https://images.unsplash.com/photo-1581093577421-f561a654a353?w=1200&q=80", alt: "Chemical engineering student working in a laboratory setting" },
+    { match: /keselamatan-siber|cybersecurity/, url: "https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=1200&q=80", alt: "Student working on laptop computers for a cybersecurity FYP project" },
+    { match: /bajet-rendah|bajet/, url: "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=1200&q=80", alt: "Coins being stacked on a table, representing a low-budget FYP project list" },
+    { match: /fyp-supervisor/, url: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=1200&q=80", alt: "Student and supervisor discussing a project together at a laptop" },
+    { match: /kajian-literatur/, url: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&q=80", alt: "Books on a wooden shelf, representing academic literature review research" },
+    { match: /turnitin|similarity/, url: "https://images.unsplash.com/photo-1716253728936-0303d113577b?w=1200&q=80", alt: "University academic building representing report originality and similarity checks" },
+    { match: /hujan-monsun|monsun/, url: "https://images.unsplash.com/photo-1620385019253-b051a26048ce?w=1200&q=80", alt: "Water droplets on a window during monsoon rain, affecting outdoor sensor reliability" },
     { match: /helmet/, url: "https://images.unsplash.com/photo-1632278819098-51dfc937b5f3?w=1200&q=80", alt: "Motorcyclist wearing a helmet fitted with embedded crash-detection sensors" },
     { match: /solar-panel|solar-panel-performance/, url: "https://images.unsplash.com/photo-1664828113992-8dd7a26275a0?w=1200&q=80", alt: "Close-up of a solar panel used for performance monitoring" },
     { match: /inkubator|telur/, url: "https://images.unsplash.com/photo-1736994113278-857f11aa92ae?w=1200&q=80", alt: "Chicken eggs arranged in a tray for a smart egg incubator system" },

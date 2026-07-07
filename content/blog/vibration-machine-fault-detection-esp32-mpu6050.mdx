@@ -1,0 +1,106 @@
+---
+title: "Vibration-Based Machine Fault Detection System Using ESP32 and MPU6050: Complete FYP Build Guide"
+excerpt: "Detect motor imbalance and bearing wear early using an ESP32, MPU6050, and frequency analysis. Component list, wiring, code, and viva-ready explanations."
+category: "Tutorial"
+date: "2026-07-07"
+readTime: "9 min read"
+---
+
+## The Problem This Solves, in One Sentence
+
+Most industrial motors don't fail suddenly — they vibrate wrong for weeks before they actually break, and by the time someone notices by ear or by touch, the bearing is often already damaged. This project builds a low-cost early-warning system for exactly that pattern, which is why it reads as a genuine predictive-maintenance build rather than a generic "IoT sensor box."
+
+For Mechanical, Mechatronics, and Electrical students, this is also one of the few FYP topics that lets you cite real industrial practice — vibration monitoring is a standard condition-monitoring technique in manufacturing plants, so your literature review has actual engineering ground to stand on.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| [ESP32](/blog/esp32-getting-started) Development Board | Reads sensor data and runs frequency analysis | RM 20–30 |
+| MPU6050 Accelerometer/Gyroscope | Captures vibration as acceleration data on 3 axes | RM 8–15 |
+| Small 12V DC motor + mounting rig | The test motor you deliberately induce faults in | RM 20–40 |
+| Adjustable unbalance mass (bolt + washers on motor shaft) | Simulates real imbalance conditions for testing | RM 5–10 |
+| OLED Display 0.96" | Shows live status / dominant frequency | RM 10–15 |
+| Buzzer / LED indicator | Local alert when vibration exceeds threshold | RM 2–4 |
+| Rigid mounting base (wood or acrylic) | Keeps the motor and sensor mechanically stable | RM 15–25 |
+
+**Total hardware cost: RM 80–140**
+
+**Why a test motor, not a real industrial one:** you can't ethically or practically induce a bearing fault in a real factory motor for a student project. Building a small test rig where you can deliberately add an unbalance mass or loosen a mount gives you controlled, repeatable fault conditions to test against — and that controlled comparison is exactly what your results chapter needs.
+
+## How It Works
+
+1. The MPU6050 sits rigidly mounted on the motor housing and streams acceleration data over I2C
+2. The ESP32 samples this data at a fixed rate and buffers a window of readings
+3. Using the [arduinoFFT library](https://github.com/kosme/arduinoFFT), the buffered samples are converted from the time domain to the frequency domain — this is the core technique of vibration analysis: a healthy motor has a fairly clean vibration signature, while imbalance, misalignment, or bearing wear each show up as extra energy at specific frequencies related to the motor's rotation speed
+4. The system compares the dominant frequency and amplitude against a baseline recorded from the motor running normally
+5. When vibration amplitude at the fault-relevant frequency exceeds a threshold you calibrate experimentally, the buzzer/LED alert triggers and the OLED shows the fault status
+
+## Wiring Overview
+
+**MPU6050 (I2C):**
+- SDA → GPIO 21
+- SCL → GPIO 22
+- VCC → 3.3V, GND → GND
+- Mount rigidly to the motor housing — a loose sensor mount will drown your real vibration signal in mounting noise
+
+**OLED Display (I2C, shares the same bus):**
+- SDA → GPIO 21, SCL → GPIO 22 (different I2C address from the MPU6050, so both can share the bus)
+
+**Buzzer/LED:** GPIO 25
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_MPU6050.h>
+#include <arduinoFFT.h>
+
+Adafruit_MPU6050 mpu;
+#define SAMPLES 128
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+
+void loop() {
+  for (int i = 0; i < SAMPLES; i++) {
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+    vReal[i] = a.acceleration.x; // sample the axis with the strongest vibration signal
+    vImag[i] = 0;
+    delayMicroseconds(SAMPLE_INTERVAL_US);
+  }
+
+  FFT.windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+  FFT.compute(vReal, vImag, SAMPLES, FFT_FORWARD);
+  FFT.complexToMagnitude(vReal, vImag, SAMPLES);
+
+  double peakFrequency = FFT.majorPeak(vReal, SAMPLES, SAMPLE_RATE_HZ);
+
+  if (peakFrequency > FAULT_FREQ_MIN && peakFrequency < FAULT_FREQ_MAX
+      && vReal[peakBin] > AMPLITUDE_THRESHOLD) {
+    triggerAlert();
+  }
+}
+```
+
+`AMPLITUDE_THRESHOLD` and the fault frequency band are not universal constants — they depend on your specific motor's rotation speed and how you've mounted the sensor. You determine these experimentally by recording a healthy baseline first, then a deliberately unbalanced run, and comparing the two. That comparison is your core result.
+
+## Common Pitfalls
+
+- **Sensor mounting rigidity matters more than sensor quality.** A well-calibrated MPU6050 loosely taped to a motor will produce noisier, less useful data than a cheaper sensor bolted down properly
+- **Sampling rate must be high enough to capture the frequencies you care about** — under-sampling will alias higher frequencies into false low-frequency readings, so pick your sample rate with the motor's actual RPM in mind
+- **Electrical noise from the motor driver can couple into the I2C lines** if wiring is run too close together — keep sensor wiring separated from motor power wiring where possible
+
+## Scope by Level
+
+For a **Diploma FYP**: Raw acceleration monitoring with a simple amplitude threshold (no FFT), buzzer alert
+For a **Degree FYP**: Full FFT-based frequency analysis as described above, comparing healthy vs. faulty baselines
+For **Merit/Distinction**: Add a WiFi dashboard logging vibration trends over time, and test multiple fault types (imbalance vs. loose mounting) to show your system can distinguish between them — a genuinely strong results chapter
+
+## Need This Project Done?
+
+Rectronx Circuits has built predictive-maintenance projects like this for 400+ students — sensor calibration, FFT tuning, and full documentation included. WhatsApp us for a free quote within 2 hours.
+
+Related reading: check our guide on [getting started with ESP32](/blog/esp32-getting-started) if you're new to the platform, or see the full [Smart Energy Meter build](/blog/smart-energy-meter-esp32-pzem) for another Electrical-adjacent monitoring project.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.

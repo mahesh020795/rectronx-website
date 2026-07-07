@@ -1,0 +1,124 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Awal Kebakaran Ladang dan Hutan Menggunakan ESP32"
+excerpt: "Bina sistem amaran awal kebakaran ladang/hutan guna ESP32, sensor asap dan nyalaan, dengan SMS amaran automatik. Tutorial lengkap komponen dan kod untuk FYP."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-07"
+tags: ["projek akhir tahun", "iot", "esp32", "tutorial", "kebakaran", "alam sekitar"]
+---
+
+# Tutorial Projek Akhir Tahun: Cara Bina Sistem Pengesanan Awal Kebakaran Ladang dan Hutan Menggunakan ESP32
+
+Musim kemarau dan musim jerebu di Malaysia selalu bawa risiko kebakaran terbuka — sama ada di ladang kelapa sawit, kawasan pembalakan, atau tanah gambut. Masalah besarnya bukan kebakaran itu sendiri, tapi masa yang diambil untuk sesiapa perasan sebelum ia merebak jadi lebih besar. Kawasan-kawasan ni biasanya luas dan tak berpenghuni tetap, jadi takkan ada orang nampak asap awal-awal.
+
+Projek ni bina prototaip sistem pengesanan awal — bukan untuk gantikan bomba atau satelit pemantauan haze rasmi, tapi sebagai konsep sistem amaran tempatan berskala kecil yang boleh dipasang di titik-titik strategik dalam ladang atau kawasan hutan simpanan. Untuk FYP, ni cukup bagus sebab gabungkan sensor persekitaran, logik keputusan, dan komunikasi kecemasan dalam satu sistem yang padu.
+
+---
+
+## Kenapa Projek Ni Sesuai untuk FYP?
+
+- Masalah sebenar dengan hook Malaysia yang jelas — musim kemarau, jerebu, ladang sawit, kawasan Sabah/Sarawak/Johor yang terdedah kepada kebakaran terbuka
+- Gabungan pelbagai jenis sensor (asap, nyalaan, suhu/kelembapan) untuk kurangkan positif palsu — ini beri kau bahan perbincangan teknikal yang kukuh
+- Logik amaran berperingkat (bukan sekadar on/off) yang boleh kau justifikasi dengan alasan kejuruteraan sebenar
+
+---
+
+## Senarai Komponen
+
+| Komponen | Fungsi | Anggaran Harga |
+|---|---|---|
+| [ESP32](/blog/esp32-getting-started) Development Board | Kawalan utama + sambungan WiFi/GSM | RM 20–30 |
+| Sensor Asap MQ-2 | Kesan asap dan gas mudah terbakar di udara | RM 8–12 |
+| Sensor Nyalaan (Flame Sensor, contoh KY-026) | Kesan cahaya inframerah dari nyalaan api secara langsung | RM 5–10 |
+| Sensor DHT22 | Suhu dan kelembapan persekitaran sebagai data sokongan | RM 10–18 |
+| Modul GSM SIM800L | Hantar SMS amaran ke nombor kecemasan | RM 25–35 |
+| Panel solar kecil + bateri (pilihan, untuk lokasi terpencil) | Bekalan kuasa berterusan tanpa punca elektrik tetap | RM 30–60 |
+| Bekas kalis air/debu (IP54 atau lebih tinggi) | Lindungi litar daripada cuaca luar | RM 15–30 |
+
+**Jumlah anggaran: RM 113–195** (tanpa panel solar) atau **RM 143–255** (dengan panel solar untuk lokasi terpencil)
+
+**Nota kejujuran skop:** sistem ni direka sebagai prototaip pengesanan berskala kecil untuk satu titik pemantauan — bukan rangkaian sensor merentasi ratusan hektar ladang sebenar. Untuk FYP, ini cukup untuk tunjukkan konsep dan buktikan logik sistem berfungsi.
+
+---
+
+## Cara Kerja Sistem
+
+1. Sensor MQ-2 baca tahap asap/gas mudah terbakar secara berterusan
+2. Sensor nyalaan kesan kehadiran cahaya inframerah yang konsisten dengan nyalaan api sebenar (ini penting untuk kurangkan positif palsu daripada asap sahaja, contohnya asap daripada sumber lain yang tidak berbahaya)
+3. DHT22 rekod suhu dan kelembapan sebagai konteks tambahan — suhu ambien yang tinggi dan kelembapan rendah adalah keadaan berisiko tinggi untuk kebakaran terbuka, walaupun ia bukan pengesan kebakaran secara langsung
+4. ESP32 gabungkan ketiga-tiga bacaan ini menggunakan logik berperingkat: kalau MQ-2 sahaja naik, sistem tandakan status "amaran rendah"; kalau MQ-2 DAN sensor nyalaan sama-sama trigger, sistem tandakan "amaran tinggi" dan hantar SMS serta-merta melalui SIM800L
+5. Setiap bacaan dan status boleh dilog untuk analisis corak — berguna untuk bab keputusan FYP kau
+
+---
+
+## Gambarajah Pendawaian
+
+**MQ-2 (Analog):**
+- AO → GPIO 34 (pin analog input)
+- VCC → 5V, GND → GND
+
+**Sensor Nyalaan (Digital):**
+- DO → GPIO 27
+
+**DHT22:**
+- Data → GPIO 4 (dengan resistor pull-up 10kΩ)
+
+**SIM800L (UART, dipasang pada pin bebas):**
+- TX → GPIO 17
+- RX → GPIO 16
+- Kuasa → terus daripada bateri/regulator berasingan, bukan daripada pin ESP32 (SIM800L perlukan arus puncak yang tinggi semasa hantar SMS)
+
+---
+
+## Kod Logik Utama (Pseudocode)
+
+```cpp
+#include <DHT.h>
+
+#define MQ2_PIN 34
+#define FLAME_PIN 27
+DHT dht(4, DHT22);
+
+void loop() {
+  int smokeLevel = analogRead(MQ2_PIN);
+  bool flameDetected = (digitalRead(FLAME_PIN) == LOW); // LOW biasanya bermakna nyalaan dikesan pada kebanyakan modul
+  float temp = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  if (smokeLevel > SMOKE_THRESHOLD && flameDetected) {
+    sendSMS(EMERGENCY_NUMBER, "AMARAN TINGGI: Asap dan nyalaan dikesan di Zon 1");
+  } else if (smokeLevel > SMOKE_THRESHOLD) {
+    logStatus("Amaran rendah: asap dikesan, nyalaan belum disahkan");
+  }
+
+  logToStorage(smokeLevel, flameDetected, temp, humidity);
+  delay(5000);
+}
+```
+
+**Nota kalibrasi:** MQ-2 perlukan masa pemanasan (preheat) sekitar 20 saat sebelum bacaan stabil — pastikan kau uji dan dokumenkan tempoh pemanasan sebenar sensor kau sebelum ambil bacaan rasmi untuk keputusan FYP.
+
+---
+
+## Kesilapan Biasa
+
+- **Guna satu sensor sahaja untuk keputusan kebakaran** — ini punca utama positif palsu. Sebab tu sistem ni gabungkan asap DAN nyalaan sebelum trigger amaran tinggi
+- **Letak sensor terlalu jauh daripada sumber ujian semasa demo** — sensor nyalaan ada had jarak pengesanan yang terhad (biasanya kurang daripada semeter untuk nyalaan kecil), jadi rancang jarak demo kau dengan teliti
+- **Lupa nota keselamatan semasa demo** — guna sumber nyalaan kecil terkawal (contohnya mancis atau lilin dalam bekas selamat), bukan apa-apa yang boleh merebak tanpa kawalan
+
+---
+
+## Cadangan Skop Mengikut Peringkat
+
+Untuk **FYP Diploma**: Sensor asap MQ-2 sahaja + buzzer amaran tempatan
+Untuk **FYP Degree**: Tambah sensor nyalaan dan logik amaran berperingkat seperti di atas, serta SMS amaran melalui SIM800L
+Untuk **Merit/Distinction**: Tambah kuasa solar untuk lokasi terpencil, dashboard log jangka panjang untuk corak risiko mengikut masa/musim, dan ujian perbandingan kadar positif palsu antara satu sensor berbanding gabungan sensor
+
+---
+
+## Perlukan Bantuan Siapkan Projek Ni?
+
+Rectronx Circuits dah bantu 400+ pelajar siapkan sistem pengesanan dan amaran berasaskan IoT — kalibrasi sensor, integrasi GSM, dan dokumentasi FYP penuh. WhatsApp kami untuk sebut harga percuma dalam masa 2 jam.
+
+Cari lagi projek berkaitan alam sekitar? Lihat [sistem pemantauan kualiti udara](/blog/sistem-kualiti-udara-pencemaran-iot) atau [sistem pengesanan gas LPG dan kebakaran](/blog/sistem-pengesanan-gas-lpg-kebakaran) untuk projek dalam kategori keselamatan yang sama.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

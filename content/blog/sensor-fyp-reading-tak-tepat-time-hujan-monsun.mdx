@@ -1,0 +1,49 @@
+---
+title: "Sensor Projek FYP Kau Bagi Reading Merepek Time Musim Hujan? Ini Punca dan Cara Betulkan"
+excerpt: "Sensor FYP kau okay time kering tapi reading jadi tak konsisten time musim tengkujuh? Ini sebab teknikal sebenar dan cara betulkan sebelum viva."
+category: "FYP Guide"
+date: "2026-07-07"
+readTime: "6 min read"
+---
+
+Projek kau dah jalan lancar berbulan-bulan, semua ujian ok, tapi bila masuk musim hujan lebat, sensor tiba-tiba bagi reading yang tak masuk akal — bacaan melompat-lompat, kadang-kadang mati terus, atau data yang tak konsisten dengan keadaan sebenar. Kalau projek kau dijadualkan demo semasa musim monsun (musim monsun timur laut Malaysia biasanya berlaku sekitar November hingga Mac, dengan negeri pantai timur macam Kelantan, Terengganu, Pahang dan Johor Timur paling terjejas), ini masalah yang genuinely relevan untuk difikirkan awal-awal, bukan lepas ia dah jadi masalah semasa demo.
+
+## Kenapa Ini Berlaku — Bukan Sensor Kau Rosak
+
+Kebanyakan pelajar terus fikir sensor mereka defect bila reading jadi pelik, tapi dalam banyak kes, punca sebenar adalah interaksi antara kelembapan tinggi/air dan komponen elektronik kau, bukan kerosakan sensor itu sendiri.
+
+**Kelembapan tinggi menjejaskan litar terbuka (open circuit).** Kalau litar kau tak terlindung dengan baik, kelembapan udara yang tinggi (yang memang tinggi secara konsisten semasa musim hujan di Malaysia) boleh sebabkan sedikit kebocoran arus (leakage current) pada litar terbuka atau sambungan yang tak disolder dengan kemas. Ini boleh sebabkan bacaan sensor analog "melayang" walaupun tiada perubahan sebenar pada apa yang cuba diukur.
+
+**Air masuk ke dalam enclosure yang tak kalis air sepenuhnya.** Kalau projek kau letak di luar atau berdekatan sumber air (contohnya untuk sistem pemantauan tangki air atau kualiti udara luar), walaupun setitik air yang masuk melalui celah kecil enclosure boleh sebabkan litar short atau kakisan pada litar bercetak (PCB) dari semasa ke semasa.
+
+**Sensor tertentu memang sensitif kepada kelembapan sebagai bahagian cara ia berfungsi.** Sensor seperti MQ-2 atau MQ-135 (sensor gas/asap) memang secara semulajadi terjejas oleh kelembapan relatif yang tinggi — ini bukan kerosakan, tapi sifat teknologi sensor semikonduktor logam-oksida (metal-oxide semiconductor) yang digunakan dalam sensor jenis ni. Kelembapan tinggi boleh sebabkan bacaan asas (baseline) sensor berubah berbanding kalibrasi asal korang.
+
+**Sambungan wayar yang longgar jadi lebih ketara bila suhu turun mendadak.** Perubahan suhu time hujan (dari panas ke sejuk secara tiba-tiba) boleh sebabkan pengecutan kecil pada sambungan solder yang dah longgar, walaupun ia nampak elok time cuaca kering.
+
+## Cara Betulkan — Ikut Susunan Keutamaan
+
+**1. Semak dan naik taraf enclosure kau dulu.** Kalau sensor korang terdedah kepada persekitaran luar atau lembap, pastikan enclosure sekurang-kurangnya rating IP54 (kalis debu dan percikan air) — untuk lokasi yang lebih terdedah, pertimbangkan IP65 atau lebih tinggi. Guna gasket getah pada mana-mana bukaan enclosure, dan pastikan kabel masuk melalui gland kabel yang kalis air, bukan lubang terbuka biasa.
+
+**2. Tambah silica gel atau desiccant kecil dalam enclosure.** Kalau enclosure korang tak sepenuhnya kalis udara, sedikit desiccant boleh bantu kurangkan kelembapan dalaman antara satu tahap dengan tahap lain.
+
+**3. Kalibrasi semula sensor selepas pendedahan kepada kelembapan tinggi.** Untuk sensor MOS seperti MQ-2/MQ-135, ambil bacaan baseline baru semasa kelembapan tinggi dan bandingkan dengan baseline asal korang time kering — kalau ada perbezaan konsisten, korang boleh compensate dalam kod dengan faktor pembetulan berdasarkan bacaan kelembapan (kalau korang ada sensor DHT22 sekali untuk rujukan silang).
+
+**4. Periksa semua sambungan solder secara fizikal, bukan sekadar functional test.** Solder semula mana-mana sambungan yang nampak "dingin" (cold joint — nampak kusam atau retak halus) sebelum masalah tu jadi lebih teruk time cuaca lembap berterusan.
+
+**5. Guna penapis perisian (software filtering) sebagai lapisan perlindungan tambahan, bukan penyelesaian utama.** Purata bergerak (moving average) atau penapis median boleh kurangkan kesan "lonjakan" bacaan rawak, tapi ini patut jadi lapisan kedua selepas korang betulkan punca fizikal — bukan cara untuk sorok masalah litar yang sebenar.
+
+## Kenapa Ini Patut Kau Sebut Dalam Laporan, Bukan Sorok
+
+Kalau projek kau ada elemen luar atau bersentuhan dengan kelembapan (sistem pertanian, kualiti air, kualiti udara luar), panel FYP yang berpengalaman mungkin akan tanya soalan spesifik tentang bagaimana sistem korang handle keadaan cuaca sebenar di Malaysia — ini bukan soalan untuk "gagalkan" korang, tapi untuk nilai sama ada korang faham had sistem korang sendiri. Jawapan seperti "kami uji dan dapati kelembapan tinggi menjejaskan bacaan sensor sebanyak X%, jadi kami tambah [langkah pembetulan]" adalah jawapan yang jauh lebih kukuh berbanding tak sedar langsung isu ni wujud.
+
+## Kalau Demo Korang Dijadualkan Time Musim Hujan
+
+Kalau projek korang jenis [sistem amaran banjir dan pemantauan paras air](/blog/sistem-amaran-banjir-paras-air) atau apa-apa sistem luar lain, isu ni lagi releven sebab sensor terdedah sepanjang masa. Kalau boleh, uji sistem korang dalam keadaan simulasi kelembapan tinggi beberapa minggu sebelum demo sebenar (contohnya letak dalam bilik lembap atau berdekatan sumber wap air terkawal) supaya korang tak first-time nampak masalah ni pada hari genting. Ini juga bagi korang data tambahan untuk bab keputusan — perbandingan prestasi sensor antara keadaan kering dan lembap adalah data yang genuinely berguna, bukan sekadar langkah pencegahan.
+
+## Perlukan Bantuan Betulkan Isu Sensor Kau?
+
+Rectronx Circuits dah bantu 400+ pelajar selesaikan isu teknikal macam ni sebelum demo dan viva — kalibrasi sensor, reka bentuk enclosure kalis air, dan penyelesaian masalah litar. WhatsApp kami untuk konsultasi percuma.
+
+Baca juga panduan kami tentang [sebab demo ESP32 selalu gagal semasa WiFi disconnect](/blog/esp32-wifi-disconnect-fyp-demo-fix) untuk isu teknikal lain yang selalu muncul time demo langsung.
+
+Cari lagi idea projek yang sesuai? [Semak lebih 500+ tajuk projek FYP](/catalog) mengikut kategori dan dapatkan sebut harga percuma.

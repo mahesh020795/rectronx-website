@@ -1,0 +1,107 @@
+---
+title: "Obstacle-Avoiding Smart Wheelchair System Using Arduino: Complete FYP Build Guide"
+excerpt: "Build an assistive wheelchair add-on that detects obstacles and warns or slows the chair using Arduino and ultrasonic sensors. Full parts list and code."
+category: "Tutorial"
+date: "2026-07-07"
+readTime: "8 min read"
+---
+
+## Why Panels Respond Well to Assistive Tech Projects
+
+Malaysia's population is ageing, and manual wheelchair users navigating crowded shopping malls, hospital corridors, or uneven kerbs are a problem every panel member has actually seen in person. You don't need to manufacture a justification — the problem statement writes itself, and it's the kind of topic that reads as socially useful rather than "another IoT box that blinks."
+
+Technically, this build sits in a sweet spot: it combines distance sensing, real-time decision logic, and (depending on scope) motor control — enough breadth to fill a proper methodology chapter without needing exotic components.
+
+## Hardware Components
+
+| Component | Purpose | Cost (RM) |
+|-----------|---------|-----------|
+| Arduino Uno (or compatible clone) | Main controller reading sensors and driving alerts | RM 15–40 (clone) / RM 60–120 (genuine) |
+| HC-SR04 Ultrasonic Sensor ×3 | Front and side obstacle distance detection | RM 5–8 each |
+| Buzzer | Audible proximity warning | RM 2–4 |
+| Vibration Motor (small DC coin motor) | Optional haptic alert on the armrest | RM 3–6 |
+| L298N Motor Driver Module | Only needed if you're adding automatic speed-limiting on the wheel motors | RM 8–15 |
+| LCD 16x2 with I2C backpack | Displays distance readings / status during demo | RM 12–18 |
+| Jumper wires, mounting brackets, small enclosure | Wiring and housing | RM 15–25 |
+
+**Total hardware cost: RM 60–130** for the sensing-and-alert version; add the motor driver and a matched geared motor (priced separately based on the wheelchair's existing motor spec, if motorised) for the automatic speed-limiting version.
+
+**Scope note:** most FYP builds in this space are retrofitted onto an existing manual wheelchair frame (borrowed for testing, or a scaled-down demo chair), not a purpose-bought unit — that's the realistic and budget-appropriate approach examiners expect to see.
+
+## How It Works
+
+1. Three [HC-SR04](/blog/arduino-vs-raspberry-pi) ultrasonic sensors mounted at the front and two front-side corners continuously measure distance to the nearest object
+2. The Arduino reads all three sensors in a loop and compares each distance against a safe threshold (commonly tuned somewhere in the 30–50cm range for indoor use, but this should be calibrated experimentally for your specific chair speed and demo environment)
+3. If an object crosses the threshold, the buzzer sounds and the vibration motor pulses — the closer the object, the faster the pulse rate, giving the user an intuitive sense of "how close is close"
+4. If you extend to motorised speed-limiting, the L298N reduces PWM duty cycle to the drive motors proportionally as an obstacle gets closer, rather than a hard stop, which is both safer to demo and easier to justify technically
+5. The LCD shows live distance readings for each sensor — useful for your demo, since the panel can watch the numbers change as you move an object toward the chair
+
+## Wiring Overview
+
+**HC-SR04 #1 (Front):**
+- Trig → Pin 9, Echo → Pin 10
+
+**HC-SR04 #2 (Front-left):**
+- Trig → Pin 11, Echo → Pin 12
+
+**HC-SR04 #3 (Front-right):**
+- Trig → Pin 7, Echo → Pin 8
+
+**Buzzer:** Pin 6
+**Vibration motor:** Pin 5 (PWM, via a small transistor — do not drive it directly off the digital pin)
+**LCD (I2C):** SDA → A4, SCL → A5
+
+## Core Logic (Pseudocode)
+
+```cpp
+#include <NewPing.h>
+#include <LiquidCrystal_I2C.h>
+
+#define TRIG_FRONT 9
+#define ECHO_FRONT 10
+#define MAX_DISTANCE 200
+
+NewPing sonarFront(TRIG_FRONT, ECHO_FRONT, MAX_DISTANCE);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void loop() {
+  unsigned int distFront = sonarFront.ping_cm();
+
+  lcd.setCursor(0, 0);
+  lcd.print("Front: ");
+  lcd.print(distFront);
+  lcd.print("cm  ");
+
+  if (distFront > 0 && distFront < SAFE_THRESHOLD_CM) {
+    int pulseSpeed = map(distFront, 0, SAFE_THRESHOLD_CM, 50, 400);
+    digitalWrite(BUZZER_PIN, HIGH);
+    analogWrite(VIBRATION_PIN, 200);
+    delay(pulseSpeed);
+    digitalWrite(BUZZER_PIN, LOW);
+    analogWrite(VIBRATION_PIN, 0);
+    delay(pulseSpeed);
+  }
+}
+```
+
+The NewPing library handles the HC-SR04 timing reliably and includes a built-in median filter, which matters here — a single noisy ultrasonic reading falsely triggering an alert is one of the more common demo-day embarrassments with this build.
+
+## Common Pitfalls
+
+- **Ultrasonic sensors struggle with soft or angled surfaces** — a person's clothing or a glass door can scatter the echo. Mention this limitation upfront in your report rather than let the panel discover it during your demo
+- **Three sensors firing in rapid succession can cross-interfere** (one sensor picking up another's echo). Stagger the pings with a short delay between each sensor read, or use the NewPing library's timer-based multi-sensor mode
+- **Mounting height matters** — sensors placed too low will pick up the floor as a constant "obstacle." Test your mounting position before finalising your enclosure design
+
+## Scope by Level
+
+For a **Diploma FYP**: Single front sensor, buzzer alert, LCD readout — clean and demonstrable
+For a **Degree FYP**: Add the two side sensors and vibration feedback as described above
+For **Merit/Distinction**: Add the L298N-based automatic speed-limiting, and log obstacle-encounter data over multiple test runs as a results chapter — comparing reaction distance against a fixed baseline gives you real numbers to present
+
+## Need This Project Done?
+
+Rectronx Circuits has helped 400+ students turn assistive-tech ideas like this into fully documented FYPs — sensor calibration, wiring, and the write-up included. WhatsApp us for a free quote within 2 hours.
+
+Related reading: see our comparison of [Arduino vs Raspberry Pi](/blog/arduino-vs-raspberry-pi) if you're deciding on a controller, or browse more [mechatronics and robotics ideas](/blog/mechatronics-robotics-fyp-ideas-malaysia) in the same category.
+
+Looking for more inspiration? [Browse 500+ FYP project titles](/catalog) by category and get a free quote.
