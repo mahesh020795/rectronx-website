@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">DHT22 temperature and humidity sensor illustration</title>
+  <desc id="desc">Clean vector illustration of a white DHT22 sensor with vent slots and pins.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="232" y="70" width="176" height="242" rx="18" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="8"/>
+  <text x="320" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="800" fill="#334155">DHT22</text>
+  <g fill="#94a3b8">
+    <rect x="270" y="150" width="24" height="92" rx="8"/><rect x="308" y="150" width="24" height="92" rx="8"/><rect x="346" y="150" width="24" height="92" rx="8"/>
+  </g>
+  <g stroke="#64748b" stroke-width="12" stroke-linecap="round">
+    <path d="M272 314v48M304 314v48M336 314v48M368 314v48"/>
+  </g>
+  <circle cx="236" cy="92" r="18" fill="#38bdf8"/>
+  <circle cx="404" cy="288" r="18" fill="#2dd4bf"/>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">Temperature + Humidity</text>
+</svg>

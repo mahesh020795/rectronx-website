@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">BME280 environmental sensor illustration</title>
+  <desc id="desc">Clean vector illustration of a BME280 temperature humidity pressure sensor module.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="188" y="82" width="264" height="230" rx="22" fill="#2563eb"/>
+  <rect x="258" y="138" width="124" height="86" rx="12" fill="#0f172a"/>
+  <text x="320" y="188" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="900" fill="#dbeafe">BME280</text>
+  <circle cx="226" cy="116" r="18" fill="#38bdf8"/><circle cx="414" cy="278" r="18" fill="#2dd4bf"/>
+  <path d="M236 260h168" stroke="#93c5fd" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#94a3b8"><rect x="224" y="312" width="18" height="42" rx="3"/><rect x="288" y="312" width="18" height="42" rx="3"/><rect x="352" y="312" width="18" height="42" rx="3"/><rect x="416" y="312" width="18" height="42" rx="3"/></g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">Temperature Humidity Pressure</text>
+</svg>

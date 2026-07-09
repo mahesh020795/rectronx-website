@@ -270,7 +270,7 @@ export default function BlogPostPage({
               <div className="bg-[#0F1C2E] rounded-xl p-5 text-center">
                 <p className="text-white font-bold text-base mb-2">Need Help With Your FYP?</p>
                 <p className="text-slate-400 text-xs mb-4 leading-relaxed">
-                  We've helped hundreds of students finish on time. Get a free quote now.
+                  We&apos;ve helped hundreds of students finish on time. Get a free quote now.
                 </p>
                 <WhatsAppButton
                   label="Chat with Rectronx"
@@ -286,7 +286,7 @@ export default function BlogPostPage({
         <div className="mt-12 lg:hidden bg-slate-100 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-[#0F1C2E] mb-2">Need Help With Your FYP?</h2>
           <p className="text-slate-500 text-sm mb-5 max-w-md mx-auto">
-            We've helped hundreds of students complete their projects on time. Get a free quote today.
+            We&apos;ve helped hundreds of students complete their projects on time. Get a free quote today.
           </p>
           <WhatsAppButton
             label="Chat with Rectronx"

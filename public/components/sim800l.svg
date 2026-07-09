@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">SIM800L GSM module illustration</title>
+  <desc id="desc">Clean vector illustration of a SIM800L GSM module with antenna connector.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="178" y="92" width="284" height="210" rx="20" fill="#dc2626"/>
+  <rect x="222" y="132" width="196" height="112" rx="12" fill="#fca5a5"/>
+  <text x="320" y="196" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#7f1d1d">SIM800L</text>
+  <circle cx="440" cy="116" r="26" fill="#e2e8f0"/>
+  <circle cx="440" cy="116" r="12" fill="#64748b"/>
+  <path d="M466 104c54-28 96 26 62 70" fill="none" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#94a3b8"><rect x="204" y="302" width="16" height="42" rx="3"/><rect x="242" y="302" width="16" height="42" rx="3"/><rect x="280" y="302" width="16" height="42" rx="3"/><rect x="318" y="302" width="16" height="42" rx="3"/><rect x="356" y="302" width="16" height="42" rx="3"/><rect x="394" y="302" width="16" height="42" rx="3"/></g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">GSM SMS / Call Module</text>
+</svg>

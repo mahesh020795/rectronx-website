@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
+import { getAllComponents } from "@/lib/components";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://rectronx.com";
@@ -7,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 1 },
     { url: `${base}/catalog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/components`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/projects`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/products`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/blog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.8 },
@@ -22,5 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...blogPages];
+  const componentPages: MetadataRoute.Sitemap = getAllComponents().map((component) => ({
+    url: `${base}/components/${component.slug}`,
+    lastModified: new Date(component.updatedAt),
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
+  return [...staticPages, ...blogPages, ...componentPages];
 }

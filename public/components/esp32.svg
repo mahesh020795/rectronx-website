@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">ESP32 development board illustration</title>
+  <desc id="desc">Clean vector illustration of an ESP32 board with USB connector, module shield and GPIO pins.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="145" y="58" width="350" height="304" rx="24" fill="#123a63"/>
+  <rect x="188" y="96" width="264" height="128" rx="14" fill="#dbeafe"/>
+  <rect x="220" y="124" width="200" height="72" rx="8" fill="#94a3b8"/>
+  <text x="320" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">ESP32</text>
+  <rect x="276" y="24" width="88" height="52" rx="8" fill="#cbd5e1"/>
+  <rect x="292" y="34" width="56" height="24" rx="4" fill="#64748b"/>
+  <circle cx="196" cy="276" r="22" fill="#38bdf8"/>
+  <circle cx="444" cy="276" r="22" fill="#38bdf8"/>
+  <path d="M180 252h280" stroke="#60a5fa" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#e2e8f0">
+    <rect x="120" y="86" width="18" height="24" rx="3"/><rect x="120" y="124" width="18" height="24" rx="3"/><rect x="120" y="162" width="18" height="24" rx="3"/><rect x="120" y="200" width="18" height="24" rx="3"/><rect x="120" y="238" width="18" height="24" rx="3"/><rect x="120" y="276" width="18" height="24" rx="3"/>
+    <rect x="502" y="86" width="18" height="24" rx="3"/><rect x="502" y="124" width="18" height="24" rx="3"/><rect x="502" y="162" width="18" height="24" rx="3"/><rect x="502" y="200" width="18" height="24" rx="3"/><rect x="502" y="238" width="18" height="24" rx="3"/><rect x="502" y="276" width="18" height="24" rx="3"/>
+  </g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">WiFi + Bluetooth IoT Board</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">HC-SR04 ultrasonic sensor illustration</title>
+  <desc id="desc">Clean vector illustration of an HC-SR04 ultrasonic distance sensor with two transducers.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="130" y="104" width="380" height="190" rx="22" fill="#2563eb"/>
+  <circle cx="236" cy="198" r="58" fill="#e2e8f0"/>
+  <circle cx="236" cy="198" r="36" fill="#94a3b8"/>
+  <circle cx="404" cy="198" r="58" fill="#e2e8f0"/>
+  <circle cx="404" cy="198" r="36" fill="#94a3b8"/>
+  <text x="320" y="126" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="900" fill="#dbeafe">HC-SR04</text>
+  <g fill="#94a3b8"><rect x="238" y="294" width="18" height="46" rx="3"/><rect x="294" y="294" width="18" height="46" rx="3"/><rect x="350" y="294" width="18" height="46" rx="3"/><rect x="406" y="294" width="18" height="46" rx="3"/></g>
+  <path d="M198 78c-26 28-26 212 0 240M442 78c26 28 26 212 0 240" fill="none" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">Ultrasonic Distance Sensor</text>
+</svg>

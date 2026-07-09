@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">MPU6050 motion sensor illustration</title>
+  <desc id="desc">Clean vector illustration of an MPU6050 accelerometer gyroscope breakout board.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="194" y="78" width="252" height="242" rx="22" fill="#1d4ed8"/>
+  <rect x="260" y="136" width="120" height="98" rx="14" fill="#0f172a"/>
+  <text x="320" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="900" fill="#e0f2fe">MPU</text>
+  <path d="M232 274h176" stroke="#93c5fd" stroke-width="10" stroke-linecap="round"/>
+  <path d="M320 112v150M246 188h148" stroke="#60a5fa" stroke-width="6" stroke-linecap="round"/>
+  <g fill="#94a3b8"><rect x="218" y="320" width="16" height="42" rx="3"/><rect x="260" y="320" width="16" height="42" rx="3"/><rect x="302" y="320" width="16" height="42" rx="3"/><rect x="344" y="320" width="16" height="42" rx="3"/><rect x="386" y="320" width="16" height="42" rx="3"/></g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">Accelerometer + Gyroscope</text>
+</svg>

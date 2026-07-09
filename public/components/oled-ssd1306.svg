@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">SSD1306 OLED display illustration</title>
+  <desc id="desc">Clean vector illustration of a small SSD1306 OLED display module.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="142" y="94" width="356" height="206" rx="22" fill="#1e3a8a"/>
+  <rect x="186" y="128" width="268" height="126" rx="12" fill="#020617"/>
+  <text x="320" y="178" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="900" fill="#38bdf8">OLED</text>
+  <text x="320" y="214" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#7dd3fc">SSD1306</text>
+  <g fill="#94a3b8"><rect x="220" y="300" width="18" height="42" rx="3"/><rect x="286" y="300" width="18" height="42" rx="3"/><rect x="352" y="300" width="18" height="42" rx="3"/><rect x="418" y="300" width="18" height="42" rx="3"/></g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">I2C Display Module</text>
+</svg>

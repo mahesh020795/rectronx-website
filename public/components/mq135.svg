@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">MQ135 air quality sensor illustration</title>
+  <desc id="desc">Clean vector illustration of an MQ135 gas sensor module with metal sensor can and four pins.</desc>
+  <rect width="640" height="420" rx="32" fill="#f8fafc"/>
+  <rect x="172" y="84" width="296" height="232" rx="22" fill="#2563eb"/>
+  <circle cx="320" cy="186" r="78" fill="#cbd5e1"/>
+  <circle cx="320" cy="186" r="58" fill="#94a3b8"/>
+  <g stroke="#e2e8f0" stroke-width="6">
+    <path d="M278 150h84M268 186h104M278 222h84"/>
+    <path d="M286 132l68 108M354 132l-68 108"/>
+  </g>
+  <rect x="210" y="270" width="220" height="22" rx="11" fill="#1e40af"/>
+  <g fill="#f8fafc" font-family="Arial, sans-serif" font-size="14" font-weight="700">
+    <text x="222" y="286">VCC</text><text x="278" y="286">GND</text><text x="336" y="286">A0</text><text x="386" y="286">D0</text>
+  </g>
+  <g fill="#94a3b8"><rect x="226" y="316" width="16" height="40" rx="3"/><rect x="286" y="316" width="16" height="40" rx="3"/><rect x="346" y="316" width="16" height="40" rx="3"/><rect x="406" y="316" width="16" height="40" rx="3"/></g>
+  <text x="320" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#1e293b">Air Quality / Gas Sensor</text>
+</svg>

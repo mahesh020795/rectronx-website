@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { Search, MessageCircle } from "lucide-react";
 import { allCatalogProjects, totalCount } from "@/data/projects";
 import { trackWhatsAppLead } from "@/lib/analytics";
+import { getComponentByTag } from "@/lib/components";
 
 type Category = "all" | "iot" | "software";
 
@@ -212,14 +214,25 @@ export default function CatalogClient() {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1.5">
-                  {project.tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {project.tags.slice(0, 3).map((tag) => {
+                    const component = getComponentByTag(tag);
+                    const className =
+                      "text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full";
+
+                    return component ? (
+                      <Link
+                        key={tag}
+                        href={`/components/${component.slug}`}
+                        className={`${className} hover:bg-blue-100 hover:text-brand-blue`}
+                      >
+                        {tag}
+                      </Link>
+                    ) : (
+                      <span key={tag} className={className}>
+                        {tag}
+                      </span>
+                    );
+                  })}
                 </div>
 
                 {/* CTA */}
