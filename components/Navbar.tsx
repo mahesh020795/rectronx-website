@@ -12,10 +12,12 @@ const links = [
   { href: "/catalog", label: "Projects" },
   { href: "/services", label: "Services" },
   { href: "/components", label: "Components" },
-  { href: "/topics", label: "Topics" },
   { href: "/products", label: "Products" },
-  { href: "/blog", label: "Blog" },
-  { href: "/about", label: "About" },
+];
+
+const resourceLinks = [
+  { href: "/topics", label: "Topics", description: "Engineering hubs" },
+  { href: "/blog", label: "Blog", description: "Guides and tutorials" },
 ];
 
 export default function Navbar() {
@@ -70,6 +72,48 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <div className="group relative">
+              <button
+                type="button"
+                className={clsx(
+                  "px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] rounded-lg transition-colors duration-200",
+                  pathname.startsWith("/topics") || pathname.startsWith("/blog")
+                    ? "text-brand-blue"
+                    : "text-white/50 hover:text-white"
+                )}
+                aria-haspopup="true"
+              >
+                Resources
+              </button>
+              <div className="invisible absolute left-0 top-full z-50 w-56 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="rounded-xl border border-white/10 bg-[#080E1A]/98 p-2 shadow-2xl backdrop-blur-xl">
+                  {resourceLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/8"
+                    >
+                      <span className="block text-xs font-bold uppercase tracking-[0.12em] text-white">
+                        {item.label}
+                      </span>
+                      <span className="mt-1 block text-xs text-white/40">{item.description}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <Link
+              href="/about"
+              className={clsx(
+                "px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] rounded-lg transition-colors duration-200",
+                isActive("/about")
+                  ? "text-brand-blue"
+                  : "text-white/50 hover:text-white"
+              )}
+              aria-current={isActive("/about") ? "page" : undefined}
+            >
+              About
+            </Link>
           </nav>
 
           {/* Desktop CTA */}
@@ -116,6 +160,23 @@ export default function Navbar() {
                   {l.label}
                 </Link>
               ))}
+              <div className="px-3 pt-3 pb-1 text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-white/25">
+                Resources
+              </div>
+              {resourceLinks.map((l) => (
+                <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+                  className={clsx("block px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] rounded-xl transition-colors",
+                    isActive(l.href) ? "text-brand-blue" : "text-white/60 hover:text-white")}
+                  aria-current={isActive(l.href) ? "page" : undefined}>
+                  {l.label}
+                </Link>
+              ))}
+              <Link href="/about" onClick={() => setOpen(false)}
+                className={clsx("block px-3 py-3 text-xs font-bold uppercase tracking-[0.12em] rounded-xl transition-colors",
+                  isActive("/about") ? "text-brand-blue" : "text-white/60 hover:text-white")}
+                aria-current={isActive("/about") ? "page" : undefined}>
+                About
+              </Link>
             </nav>
             <a href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote."
               target="_blank" rel="noopener noreferrer"
