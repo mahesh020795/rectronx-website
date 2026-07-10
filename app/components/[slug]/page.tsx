@@ -25,6 +25,7 @@ import {
   getRelatedProjects,
 } from "@/lib/components";
 import { getCatalogProjectSlug } from "@/lib/catalog";
+import { getRelatedTopicHubsForComponent } from "@/lib/topics";
 
 type PageProps = {
   params: { slug: string };
@@ -103,6 +104,7 @@ export default function ComponentDetailPage({ params }: PageProps) {
 
   const relatedProjects = getRelatedProjects(component);
   const alternatives = getAlternativeComponents(component);
+  const relatedTopics = getRelatedTopicHubsForComponent(component);
   const waHref = componentWhatsAppLink(component);
 
   return (
@@ -399,6 +401,24 @@ export default function ComponentDetailPage({ params }: PageProps) {
                       className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-brand-blue"
                     >
                       <span>{slug.replace(/-/g, " ")}</span>
+                      <ArrowUpRight size={14} />
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {relatedTopics.length > 0 && (
+              <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 className="mb-4 text-lg font-extrabold text-brand-navy">Topic Hubs</h2>
+                <div className="space-y-2">
+                  {relatedTopics.map((topic) => (
+                    <Link
+                      key={topic.slug}
+                      href={`/topics/${topic.slug}`}
+                      className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-brand-blue"
+                    >
+                      <span>{topic.title}</span>
                       <ArrowUpRight size={14} />
                     </Link>
                   ))}

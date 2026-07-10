@@ -30,6 +30,7 @@ import {
   catalogProjectTechArticleSchema,
   faqSchema,
 } from "@/lib/schema";
+import { getRelatedTopicHubsForProject } from "@/lib/topics";
 
 const BASE = "https://rectronx.com";
 
@@ -83,6 +84,7 @@ export default function CatalogProjectPage({
   const seo = getCatalogProjectSeo(project);
   const technologies = getProjectTechnologies(project);
   const related = getRelatedCatalogProjects(project);
+  const relatedTopics = getRelatedTopicHubsForProject(project);
   const whatsappUrl = catalogWhatsAppLink(project);
 
   return (
@@ -369,6 +371,25 @@ export default function CatalogProjectPage({
                     <p className="text-xs text-slate-500 mt-1">
                       {item.tags.slice(0, 3).join(", ")}
                     </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {relatedTopics.length > 0 && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-5">
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                Topic Hubs
+              </p>
+              <div className="space-y-2">
+                {relatedTopics.map((topic) => (
+                  <Link
+                    key={topic.slug}
+                    href={`/topics/${topic.slug}`}
+                    className="block rounded-lg bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-brand-blue"
+                  >
+                    {topic.title}
                   </Link>
                 ))}
               </div>

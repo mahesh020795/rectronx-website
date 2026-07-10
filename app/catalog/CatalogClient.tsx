@@ -7,6 +7,7 @@ import { allCatalogProjects, totalCount } from "@/data/projects";
 import { trackWhatsAppLead } from "@/lib/analytics";
 import { getComponentByTag } from "@/lib/components";
 import { getCatalogProjectSlug } from "@/lib/catalog";
+import { topicHubs } from "@/data/topics";
 
 type Category = "all" | "iot" | "software";
 
@@ -168,6 +169,18 @@ export default function CatalogClient() {
               >
                 {tech}
               </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {topicHubs.slice(0, 8).map((topic) => (
+              <Link
+                key={topic.slug}
+                href={`/topics/${topic.slug}`}
+                className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500 hover:border-brand-blue hover:text-brand-blue"
+              >
+                {topic.title.replace(" Malaysia", "")}
+              </Link>
             ))}
           </div>
         </div>
