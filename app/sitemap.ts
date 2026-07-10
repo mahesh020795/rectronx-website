@@ -4,6 +4,7 @@ import { getAllComponents } from "@/lib/components";
 import { allCatalogProjects } from "@/data/projects";
 import { getCatalogProjectSlug } from "@/lib/catalog";
 import { getAllTopicHubs } from "@/lib/topics";
+import { getAllServicePages } from "@/lib/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://rectronx.com";
@@ -13,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/catalog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/components`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/topics`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.86 },
+    { url: `${base}/services`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.88 },
     { url: `${base}/projects`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/products`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/blog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.8 },
@@ -49,5 +51,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.82,
   }));
 
-  return [...staticPages, ...blogPages, ...componentPages, ...catalogProjectPages, ...topicPages];
+  const servicePages: MetadataRoute.Sitemap = getAllServicePages().map((page) => ({
+    url: `${base}/services/${page.slug}`,
+    lastModified: new Date("2026-07-10"),
+    changeFrequency: "monthly",
+    priority: 0.78,
+  }));
+
+  return [...staticPages, ...blogPages, ...componentPages, ...catalogProjectPages, ...topicPages, ...servicePages];
 }

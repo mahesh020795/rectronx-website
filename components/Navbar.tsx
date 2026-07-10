@@ -9,8 +9,8 @@ import clsx from "clsx";
 import { trackWhatsAppLead } from "@/lib/analytics";
 
 const links = [
-  { href: "/projects", label: "Projects" },
-  { href: "/catalog", label: "Catalog" },
+  { href: "/catalog", label: "Projects" },
+  { href: "/services", label: "Services" },
   { href: "/components", label: "Components" },
   { href: "/topics", label: "Topics" },
   { href: "/products", label: "Products" },

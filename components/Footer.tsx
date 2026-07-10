@@ -4,13 +4,18 @@ import Logo from "@/components/Logo";
 
 const nav = {
   Services: [
-    { label: "Final year projects", href: "/projects" },
-    { label: "IoT solutions", href: "/projects#iot" },
-    { label: "Software projects", href: "/projects#software" },
-    { label: "Electronics & PCB", href: "/projects#electronics" },
-    { label: "Project catalog", href: "/catalog" },
+    { label: "All services", href: "/services" },
+    { label: "FYP project Malaysia", href: "/services/fyp-project-malaysia" },
+    { label: "FYP project Penang", href: "/services/fyp-project-penang" },
+    { label: "IoT project Malaysia", href: "/services/iot-project-malaysia" },
+    { label: "ESP32 project Malaysia", href: "/services/esp32-project-malaysia" },
+    { label: "Arduino project Malaysia", href: "/services/arduino-project-malaysia" },
+    { label: "Software FYP Malaysia", href: "/services/software-fyp-malaysia" },
   ],
   Company: [
+    { label: "Projects", href: "/catalog" },
+    { label: "Components", href: "/components" },
+    { label: "Topics", href: "/topics" },
     { label: "About", href: "/about" },
     { label: "Blog", href: "/blog" },
     { label: "Products", href: "/products" },

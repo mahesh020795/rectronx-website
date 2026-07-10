@@ -242,14 +242,20 @@ export function catalogProjectTechArticleSchema(project: {
 export function serviceSchema(service: {
   name: string;
   description: string;
+  url?: string;
+  areaServed?: string[];
 }) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: service.name,
+    name: service.name,
+    url: service.url,
     description: service.description,
     provider: { "@id": `${BASE}/#organization` },
-    areaServed: { "@type": "Country", name: "Malaysia" },
+    areaServed: service.areaServed
+      ? service.areaServed.map((area) => ({ "@type": "Place", name: area }))
+      : { "@type": "Country", name: "Malaysia" },
     audience: { "@type": "Audience", audienceType: "University Students" },
   };
 }
