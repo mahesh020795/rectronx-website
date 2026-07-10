@@ -22,6 +22,11 @@ const techFilters: Record<Category, string[]> = {
   software: ["Python", "PHP", "AI/ML"],
 };
 
+const techFilterAliases: Record<string, string[]> = {
+  "AI/ML": ["AI", "ML", "NLP", "OpenCV", "Chatbot", "Machine Learning"],
+  "Raspberry Pi": ["Raspberry Pi", "Raspberry"],
+};
+
 const categoryColors: Record<string, string> = {
   iot: "bg-blue-100 text-blue-700",
   software: "bg-violet-100 text-violet-700",
@@ -51,9 +56,12 @@ export default function CatalogClient() {
 
     // Filter by tech pill
     if (activeTech) {
-      const tech = activeTech.toLowerCase();
+      const techTerms = (techFilterAliases[activeTech] ?? [activeTech]).map((term) =>
+        term.toLowerCase()
+      );
       results = results.filter((p) =>
-        p.tags.some((t) => t.toLowerCase().includes(tech))
+        p.tags.some((t) => techTerms.some((term) => t.toLowerCase().includes(term))) ||
+        techTerms.some((term) => p.title.toLowerCase().includes(term))
       );
     }
 
