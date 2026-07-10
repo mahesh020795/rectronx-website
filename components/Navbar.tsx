@@ -83,7 +83,7 @@ export default function Navbar() {
                 )}
                 aria-haspopup="true"
               >
-                Knowledge
+                Tools & Learning
               </button>
               <div className="invisible absolute left-0 top-full z-50 w-60 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                 <div className="rounded-xl border border-brand-blue/25 bg-[#050A14] p-2 shadow-[0_24px_70px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)]">
@@ -161,7 +161,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="px-3 pt-3 pb-1 text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-white/25">
-                Knowledge
+                Tools & Learning
               </div>
               {resourceLinks.map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
