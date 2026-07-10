@@ -206,6 +206,39 @@ export function componentTechArticleSchema(component: {
   };
 }
 
+export function catalogProjectTechArticleSchema(project: {
+  title: string;
+  slug: string;
+  description: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: project.title,
+    description: project.description,
+    datePublished: "2026-07-10",
+    dateModified: "2026-07-10",
+    author: { "@type": "Organization", name: "Rectronx Circuits", url: BASE },
+    publisher: {
+      "@type": "Organization",
+      name: "Rectronx Circuits",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE}/images/logo-transparent.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${BASE}/catalog/${project.slug}`,
+    },
+    inLanguage: "en-MY",
+    audience: {
+      "@type": "EducationalAudience",
+      educationalRole: "student",
+    },
+  };
+}
+
 export function serviceSchema(service: {
   name: string;
   description: string;

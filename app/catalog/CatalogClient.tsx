@@ -6,6 +6,7 @@ import { Search, MessageCircle } from "lucide-react";
 import { allCatalogProjects, totalCount } from "@/data/projects";
 import { trackWhatsAppLead } from "@/lib/analytics";
 import { getComponentByTag } from "@/lib/components";
+import { getCatalogProjectSlug } from "@/lib/catalog";
 
 type Category = "all" | "iot" | "software";
 
@@ -236,16 +237,24 @@ export default function CatalogClient() {
                 </div>
 
                 {/* CTA */}
-                <a
-                  href={waLink(project.title)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackWhatsAppLead("catalog_project_card")}
-                  className="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-[#25D366] hover:text-[#1ebe5d] transition-colors"
-                >
-                  <MessageCircle size={14} />
-                  Get This Project →
-                </a>
+                <div className="mt-auto flex items-center justify-between gap-3 pt-1">
+                  <Link
+                    href={`/catalog/${getCatalogProjectSlug(project)}`}
+                    className="text-sm font-semibold text-brand-blue hover:text-brand-navy transition-colors"
+                  >
+                    View Details
+                  </Link>
+                  <a
+                    href={waLink(project.title)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppLead("catalog_project_card")}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#25D366] hover:text-[#1ebe5d] transition-colors"
+                  >
+                    <MessageCircle size={14} />
+                    Get This
+                  </a>
+                </div>
               </div>
             ))}
           </div>

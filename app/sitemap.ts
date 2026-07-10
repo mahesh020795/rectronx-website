@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { getAllComponents } from "@/lib/components";
+import { allCatalogProjects } from "@/data/projects";
+import { getCatalogProjectSlug } from "@/lib/catalog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://rectronx.com";
@@ -31,5 +33,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticPages, ...blogPages, ...componentPages];
+  const catalogProjectPages: MetadataRoute.Sitemap = allCatalogProjects.map((project) => ({
+    url: `${base}/catalog/${getCatalogProjectSlug(project)}`,
+    lastModified: new Date("2026-07-10"),
+    changeFrequency: "monthly",
+    priority: 0.72,
+  }));
+
+  return [...staticPages, ...blogPages, ...componentPages, ...catalogProjectPages];
 }
