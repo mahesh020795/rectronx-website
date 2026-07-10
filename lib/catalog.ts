@@ -6,10 +6,14 @@ export type CatalogSeo = {
   metaDescription: string;
   categoryLabel: string;
   difficulty: "Beginner" | "Intermediate" | "Advanced";
+  quickSummary: string;
+  timeRequired: string;
+  costGuidance: string;
   outcome: string;
   howItWorks: string[];
   demoOutcomes: string[];
   testingPlan: string[];
+  troubleshooting: string[];
   buildLevels: { level: string; description: string }[];
   limitations: string[];
   commonMistakes: string[];
@@ -91,10 +95,14 @@ export function getCatalogProjectSeo(project: CatalogProject): CatalogSeo {
     metaDescription: `${title} guide for Malaysian FYP students: realistic scope, suggested technologies, demo outcome, testing plan, limitations and report sections.`,
     categoryLabel,
     difficulty,
+    quickSummary: getQuickSummary(project, profile),
+    timeRequired: getTimeRequired(difficulty, project.category),
+    costGuidance: getCostGuidance(project.category),
     outcome: getOutcome(project, profile),
     howItWorks: getHowItWorks(project, profile),
     demoOutcomes: getDemoOutcomes(profile),
     testingPlan: getTestingPlan(project, profile),
+    troubleshooting: getTroubleshooting(project, profile),
     buildLevels: getBuildLevels(project, profile),
     limitations: getLimitations(tags, project.category, profile),
     commonMistakes: getCommonMistakes(tags, project.category, profile),
@@ -102,6 +110,35 @@ export function getCatalogProjectSeo(project: CatalogProject): CatalogSeo {
     upgrades: getUpgrades(tags, project.category, profile),
     faqs: getFaqs(project, difficulty, profile),
   };
+}
+
+function getQuickSummary(project: CatalogProject, profile: ProjectProfile) {
+  const stack = profile.coreModules.slice(0, 3).join(", ");
+  return `${project.title} is a ${profile.domain} idea for students who need a working demo with ${profile.input}. A good version focuses on ${profile.output} using ${stack}, with testing evidence for ${profile.testFocus}.`;
+}
+
+function getTimeRequired(difficulty: CatalogSeo["difficulty"], category: CatalogProject["category"]) {
+  if (difficulty === "Advanced") {
+    return category === "software"
+      ? "8-12 weeks for planning, development, testing and report evidence"
+      : "8-12 weeks including component testing, integration, calibration and demo preparation";
+  }
+
+  if (difficulty === "Intermediate") {
+    return category === "software"
+      ? "4-8 weeks for core workflow, database, testing and presentation screens"
+      : "4-8 weeks for wiring, coding, dashboard/app integration and repeated testing";
+  }
+
+  return category === "software"
+    ? "2-4 weeks for a focused prototype with simple database workflow"
+    : "2-4 weeks for a basic prototype with one reliable input-output workflow";
+}
+
+function getCostGuidance(category: CatalogProject["category"]) {
+  return category === "software"
+    ? "No fixed price. Cost depends on screens, database complexity, user roles, AI/API use, deployment and documentation scope."
+    : "No fixed price. Cost depends on selected controller, sensors, communication modules, casing, dashboard/app features and documentation scope.";
 }
 
 function getDifficulty(project: CatalogProject): CatalogSeo["difficulty"] {
@@ -346,6 +383,24 @@ function getTestingPlan(project: CatalogProject, profile: ProjectProfile) {
     `Verify ${profile.testFocus} before adding extra features.`,
     "Capture photos, dashboard screenshots, serial logs, or database entries as testing evidence.",
     "Document sensor/module limits honestly so the report does not overclaim industrial accuracy.",
+  ];
+}
+
+function getTroubleshooting(project: CatalogProject, profile: ProjectProfile) {
+  if (project.category === "software") {
+    return [
+      "If login or role access fails, test with one admin account and one normal user before adding more roles.",
+      "If records do not appear correctly, check form validation, database table relationships, and status update logic.",
+      "If the demo feels weak, reduce extra features and make the main user-to-admin workflow complete and testable.",
+      `If results are inconsistent, prepare clearer sample data for ${profile.testFocus}.`,
+    ];
+  }
+
+  return [
+    "If readings are unstable, test the sensor separately before connecting the dashboard or app.",
+    "If the module resets, check power supply, common ground, loose jumper wires, and current requirements.",
+    "If alerts or cloud updates fail, test WiFi, hotspot, SIM balance, API token, and internet connection early.",
+    `If the demo is hard to explain, focus on one repeatable workflow for ${profile.output}.`,
   ];
 }
 

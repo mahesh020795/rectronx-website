@@ -174,10 +174,11 @@ export default function CatalogProjectPage({
               <div className="space-y-4">
                 <SnapshotRow label="Category" value={seo.categoryLabel} />
                 <SnapshotRow label="Difficulty" value={seo.difficulty} />
+                <SnapshotRow label="Time Required" value={seo.timeRequired} />
+                <SnapshotRow label="Cost" value={seo.costGuidance} />
                 <SnapshotRow label="Suitable for" value="Diploma, Degree, FYP, Projek Akhir Tahun" />
-                <SnapshotRow label="Budget guidance" value="Depends on selected scope" />
                 <SnapshotRow
-                  label="Main technologies"
+                  label="Components"
                   value={project.tags.slice(0, 4).join(", ")}
                 />
                 <SnapshotRow
@@ -196,6 +197,18 @@ export default function CatalogProjectPage({
 
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid lg:grid-cols-[1fr_320px] gap-8 items-start">
         <div className="space-y-8">
+          <Section title="Quick Summary" icon={<FileText size={20} />}>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5">
+              <p className="text-base leading-8 text-slate-600">{seo.quickSummary}</p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <AiSummaryCard label="Difficulty" value={seo.difficulty} />
+                <AiSummaryCard label="Time Required" value={seo.timeRequired} />
+                <AiSummaryCard label="Cost" value={seo.costGuidance} />
+                <AiSummaryCard label="Components" value={project.tags.slice(0, 4).join(", ")} />
+              </div>
+            </div>
+          </Section>
+
           <Section title="How This Project Works" icon={<Cpu size={20} />}>
             <div className="grid gap-3">
               {seo.howItWorks.map((step, index) => (
@@ -212,7 +225,7 @@ export default function CatalogProjectPage({
             </div>
           </Section>
 
-          <Section title="Components & Technologies" icon={<Package size={20} />}>
+          <Section title="Components" icon={<Package size={20} />}>
             <div className="grid sm:grid-cols-2 gap-3">
               {technologies.map(({ tag, component }) =>
                 component ? (
@@ -282,6 +295,16 @@ export default function CatalogProjectPage({
             </div>
           </Section>
 
+          <Section title="Troubleshooting" icon={<AlertTriangle size={20} />}>
+            <div className="grid gap-3">
+              {seo.troubleshooting.map((item) => (
+                <div key={item} className="rounded-xl border border-slate-200 bg-white p-4">
+                  <p className="text-sm leading-relaxed text-slate-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+
           <Section title="Common Mistakes" icon={<AlertTriangle size={20} />}>
             <div className="rounded-2xl border border-amber-100 bg-amber-50 p-5">
               <ul className="space-y-3 text-sm text-slate-700">
@@ -305,7 +328,7 @@ export default function CatalogProjectPage({
             </div>
           </Section>
 
-          <Section title="Possible Upgrades" icon={<Star size={20} />}>
+          <Section title="Alternatives" icon={<Star size={20} />}>
             <div className="flex flex-wrap gap-2">
               {seo.upgrades.map((item) => (
                 <span
@@ -317,6 +340,23 @@ export default function CatalogProjectPage({
               ))}
             </div>
           </Section>
+
+          {related.length > 0 && (
+            <Section title="Related Projects" icon={<Cpu size={20} />}>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {related.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/catalog/${getCatalogProjectSlug(item)}`}
+                    className="rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-blue hover:shadow-sm transition-all"
+                  >
+                    <p className="text-sm font-bold leading-6 text-brand-navy">{item.title}</p>
+                    <p className="mt-2 text-xs text-slate-500">{item.tags.slice(0, 3).join(", ")}</p>
+                  </Link>
+                ))}
+              </div>
+            </Section>
+          )}
 
           <Section title="FAQ" icon={<MessageCircle size={20} />}>
             <div className="space-y-3">
@@ -405,9 +445,18 @@ function SnapshotRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-3 last:border-b-0 last:pb-0">
       <span className="text-sm text-slate-500">{label}</span>
-      <span className="max-w-[58%] text-right text-sm font-semibold text-brand-navy">
+      <span className="max-w-[64%] text-right text-sm font-semibold text-brand-navy">
         {value}
       </span>
+    </div>
+  );
+}
+
+function AiSummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+      <p className="text-xs font-bold uppercase tracking-widest text-slate-400">{label}</p>
+      <p className="mt-2 text-sm font-semibold leading-6 text-brand-navy">{value}</p>
     </div>
   );
 }

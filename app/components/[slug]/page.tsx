@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
+import type { ComponentGuide, Difficulty } from "@/data/components";
 import { breadcrumbSchema, componentTechArticleSchema, faqSchema } from "@/lib/schema";
 import {
   componentMetaDescription,
@@ -95,6 +96,60 @@ function Section({
   );
 }
 
+function SummaryItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-400">{label}</p>
+      <p className="mt-2 text-sm font-bold leading-6 text-brand-navy">{value}</p>
+    </div>
+  );
+}
+
+function getComponentTimeRequired(difficulty: Difficulty) {
+  if (difficulty === "Advanced") {
+    return "2-4 weeks for wiring, library setup, calibration, integration and reliable demo testing";
+  }
+
+  if (difficulty === "Intermediate") {
+    return "1-2 weeks for wiring, basic code, platform integration and repeated test readings";
+  }
+
+  return "1-3 days for basic wiring and sample code; 1 week if used inside a complete FYP prototype";
+}
+
+function getComponentTroubleshooting(component: ComponentGuide) {
+  const text = `${component.name} ${component.shortName} ${component.category} ${component.interfaces.join(" ")} ${component.compatibleWith.join(" ")}`.toLowerCase();
+  const items = new Set<string>();
+
+  items.add("Check wiring against the pinout before debugging code.");
+  items.add("Use a stable power supply and common ground between modules.");
+  items.add("Test the component with a simple example sketch before adding dashboard, app or database features.");
+
+  if (/gas|mq|air/.test(text)) {
+    items.add("Allow warm-up time and treat low-cost gas readings as relative detection, not laboratory ppm accuracy.");
+  }
+  if (/gps/.test(text)) {
+    items.add("Test outdoors or near a window because GPS lock is often weak indoors.");
+  }
+  if (/gsm|sim/.test(text)) {
+    items.add("Check SIM balance, antenna, network coverage and module current draw before testing SMS or data.");
+  }
+  if (/rfid|fingerprint/.test(text)) {
+    items.add("Confirm registered IDs first, then test authorised, unauthorised and repeated scans.");
+  }
+  if (/relay|motor|driver|pump/.test(text)) {
+    items.add("Do not power motors, pumps or heavy loads directly from a microcontroller pin.");
+  }
+  if (/ph|tds|water|turbidity/.test(text)) {
+    items.add("Calibrate probes and protect electronics from wet-area splashes before final demo.");
+  }
+  if (/camera|opencv|esp32-cam/.test(text)) {
+    items.add("Check lighting, camera angle and memory limits before adding image recognition or uploads.");
+  }
+
+  return Array.from(items).slice(0, 6);
+}
+
 export default function ComponentDetailPage({ params }: PageProps) {
   const component = getComponentBySlug(params.slug);
 
@@ -106,6 +161,8 @@ export default function ComponentDetailPage({ params }: PageProps) {
   const alternatives = getAlternativeComponents(component);
   const relatedTopics = getRelatedTopicHubsForComponent(component);
   const waHref = componentWhatsAppLink(component);
+  const timeRequired = getComponentTimeRequired(component.difficulty);
+  const troubleshooting = getComponentTroubleshooting(component);
 
   return (
     <main className="min-h-screen bg-slate-50 pt-16 text-slate-900">
@@ -189,6 +246,20 @@ export default function ComponentDetailPage({ params }: PageProps) {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[0.8fr_0.4fr]">
         <div className="space-y-6">
+          <Section title="Quick Summary" eyebrow="AI Ready Overview">
+            <p className="text-base leading-8 text-slate-600">
+              {component.shortName} is a {component.categoryLabel.toLowerCase()} commonly used in FYP and
+              embedded projects. It is best for {component.suitableFor.slice(0, 2).join(" and ").toLowerCase()},
+              with wiring and testing planned around {component.compatibleWith.slice(0, 3).join(", ")}.
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <SummaryItem label="Difficulty" value={component.difficulty} />
+              <SummaryItem label="Time Required" value={timeRequired} />
+              <SummaryItem label="Cost" value={`${component.priceRange} module range in Malaysia; full project cost depends on scope.`} />
+              <SummaryItem label="Components" value={[component.shortName, ...component.compatibleWith.slice(0, 3)].join(", ")} />
+            </div>
+          </Section>
+
           <Section title={`What is ${component.shortName}?`} eyebrow="Overview">
             <p className="text-base leading-8 text-slate-600">{component.description}</p>
           </Section>
@@ -233,6 +304,24 @@ export default function ComponentDetailPage({ params }: PageProps) {
                 </ul>
               </div>
             </div>
+          </Section>
+
+          <Section title="Difficulty" eyebrow="Build Planning">
+            <p className="text-base leading-8 text-slate-600">
+              {component.shortName} is rated {component.difficulty}. Plan around {timeRequired.toLowerCase()}
+              depending on wiring, libraries, calibration, dashboard/app integration and testing evidence.
+            </p>
+          </Section>
+
+          <Section title="Time Required" eyebrow="Build Planning">
+            <p className="text-base leading-8 text-slate-600">{timeRequired}</p>
+          </Section>
+
+          <Section title="Cost" eyebrow="Malaysia Price Guidance">
+            <p className="text-base leading-8 text-slate-600">
+              Typical module price range: <strong>{component.priceRange}</strong>. This is component guidance only;
+              a complete FYP cost depends on controller, sensors, casing, display, app/dashboard, documentation and timeline.
+            </p>
           </Section>
 
           <Section title="Pinout" eyebrow="Connections">
@@ -280,6 +369,16 @@ export default function ComponentDetailPage({ params }: PageProps) {
             </div>
           </Section>
 
+          <Section title="Troubleshooting" eyebrow="Fix Common Problems">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {troubleshooting.map((item) => (
+                <div key={item} className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </Section>
+
           <Section title="Common Mistakes" eyebrow="Troubleshooting">
             <div className="grid gap-3 sm:grid-cols-2">
               {component.commonMistakes.map((mistake) => (
@@ -291,7 +390,7 @@ export default function ComponentDetailPage({ params }: PageProps) {
             </div>
           </Section>
 
-          <Section title={`Projects Using ${component.shortName}`} eyebrow="FYP Ideas">
+          <Section title="Related Projects" eyebrow={`FYP Ideas Using ${component.shortName}`}>
             <div className="grid gap-3 sm:grid-cols-2">
               {relatedProjects.map((project) => (
                 <div key={project.id} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
