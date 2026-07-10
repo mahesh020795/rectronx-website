@@ -85,18 +85,18 @@ export default function Navbar() {
               >
                 Resources
               </button>
-              <div className="invisible absolute left-0 top-full z-50 w-56 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                <div className="rounded-xl border border-white/10 bg-[#080E1A]/98 p-2 shadow-2xl backdrop-blur-xl">
+              <div className="invisible absolute left-0 top-full z-50 w-60 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="rounded-xl border border-brand-blue/25 bg-[#050A14] p-2 shadow-[0_24px_70px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04)]">
                   {resourceLinks.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block rounded-lg px-3 py-3 transition-colors hover:bg-white/8"
+                      className="block rounded-lg px-3 py-3 transition-colors hover:bg-brand-blue/12"
                     >
                       <span className="block text-xs font-bold uppercase tracking-[0.12em] text-white">
                         {item.label}
                       </span>
-                      <span className="mt-1 block text-xs text-white/40">{item.description}</span>
+                      <span className="mt-1 block text-xs text-white/60">{item.description}</span>
                     </Link>
                   ))}
                 </div>
