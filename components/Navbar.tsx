@@ -91,12 +91,12 @@ export default function Navbar() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block rounded-lg px-3 py-3 transition-colors hover:bg-brand-blue/12"
+                      className="group/item block rounded-lg px-3 py-3 transition-colors hover:bg-brand-blue"
                     >
                       <span className="block text-xs font-bold uppercase tracking-[0.12em] text-white">
                         {item.label}
                       </span>
-                      <span className="mt-1 block text-xs text-white/60">{item.description}</span>
+                      <span className="mt-1 block text-xs text-white/60 transition-colors group-hover/item:text-white/85">{item.description}</span>
                     </Link>
                   ))}
                 </div>
