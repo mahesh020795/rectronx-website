@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FYP Project Services Malaysia | Rectronx",
     description:
-      "Clean service hub for Rectronx FYP support: Malaysia, Penang, IoT, ESP32, Arduino, software, website, app and AI/ML projects.",
+      "Rectronx support for FYP, IoT, ESP32, Arduino, software, website, app and AI/ML projects in Malaysia and Penang.",
     url: `${BASE}/services`,
     type: "website",
     images: [{ url: `${BASE}/og-image.png`, width: 1200, height: 630, alt: "Rectronx FYP Project Services" }],
@@ -148,12 +148,12 @@ export default function ServicesPage() {
             Services
           </p>
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Project Services Without the Confusing Scope
+            Engineering & FYP Project Support
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-slate-300">
-            Choose the type of help you need first. If location matters, use the
-            local support section below. The project catalog, components and resources
-            stay separate so the site remains easy to understand.
+            Get help choosing, planning and building practical final year projects,
+            IoT systems, embedded prototypes, websites, mobile apps and AI/ML demos.
+            Start with the service that matches your project direction.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/catalog" className="btn-primary">
@@ -169,12 +169,12 @@ export default function ServicesPage() {
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="mb-8 max-w-2xl">
           <p className="mb-2 text-xs font-bold uppercase tracking-widest text-brand-blue">
-            Main Services
+            How Rectronx Can Help
           </p>
-          <h2 className="text-3xl font-bold text-brand-navy">Start with what you want to build</h2>
+          <h2 className="text-3xl font-bold text-brand-navy">Choose the support you need</h2>
           <p className="mt-3 text-sm leading-6 text-slate-600">
-            These are grouped by user intent, not by repeated location keywords. That makes
-            the page easier to scan while still keeping the SEO landing pages connected.
+            Whether you already have a title or are still deciding, these service areas
+            help you move from idea to working demo with a clearer scope.
           </p>
         </div>
 
@@ -218,10 +218,10 @@ export default function ServicesPage() {
             <p className="mb-2 text-xs font-bold uppercase tracking-widest text-brand-blue">
               Local Support
             </p>
-            <h2 className="text-3xl font-bold text-brand-navy">Malaysia and Penang pages stay separate</h2>
+            <h2 className="text-3xl font-bold text-brand-navy">Support for students in Malaysia and Penang</h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Location pages are useful for local SEO, but they should not make the main
-              Services page feel repetitive. Here they sit in their own small section.
+              Rectronx is based in Penang and supports students across Malaysia with
+              practical project planning, prototype direction and presentation preparation.
             </p>
           </div>
 
@@ -235,7 +235,7 @@ export default function ServicesPage() {
                 <h3 className="text-xl font-bold text-brand-navy">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">{item.description}</p>
                 <div className="mt-5 flex items-center gap-2 text-sm font-bold text-brand-blue">
-                  View local page
+                  View support page
                   <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </Link>
@@ -253,8 +253,8 @@ export default function ServicesPage() {
               </p>
               <h2 className="text-2xl font-bold text-brand-navy">Already know your platform?</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Jump directly into the platform-specific service pages when you already
-                know the project should use ESP32, Arduino, IoT or software.
+                If your lecturer has already approved the technology, jump straight to
+                the project support page that matches your platform.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -275,12 +275,12 @@ export default function ServicesPage() {
       <section className="mx-auto max-w-6xl px-4 pb-10 sm:px-6">
         <div className="mb-6 max-w-2xl">
           <p className="mb-2 text-xs font-bold uppercase tracking-widest text-brand-blue">
-            SEO Landing Pages
+            Popular Project Support
           </p>
-          <h2 className="text-2xl font-bold text-brand-navy">All service pages remain crawlable</h2>
+          <h2 className="text-2xl font-bold text-brand-navy">Explore common project directions</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            This compact list keeps Google discovery clear without making the top of the
-            page feel like the same service repeated several times.
+            Not sure which service fits yet? These pages explain common project paths
+            students ask for most often.
           </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -293,7 +293,7 @@ export default function ServicesPage() {
               <h3 className="text-sm font-bold text-brand-navy">{service.shortTitle}</h3>
               <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500">{service.description}</p>
               <div className="mt-3 flex items-center gap-2 text-xs font-bold text-brand-blue">
-                Open page
+                Learn more
                 <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
             </Link>
@@ -304,9 +304,9 @@ export default function ServicesPage() {
       <section className="border-y border-slate-200 bg-white px-4 py-12 sm:px-6">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {[
-            "Services explains how Rectronx can help, while Projects remains the 500+ title database.",
-            "Local pages are separated from main services, so the page does not feel repetitive.",
-            "Focused platform pages still link into topics, components and project ideas for SEO.",
+            "Clear project scope before building, so your demo is realistic and easier to explain.",
+            "Support for both hardware and software projects, from sensors to dashboards and apps.",
+            "Useful direction for proposal, prototype, testing, report writing and presentation.",
           ].map((item) => (
             <div key={item} className="flex gap-3">
               <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-blue" />
