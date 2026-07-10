@@ -24,6 +24,7 @@ import {
   getComponentBySlug,
   getRelatedProjects,
 } from "@/lib/components";
+import { getCatalogProjectSlug } from "@/lib/catalog";
 
 type PageProps = {
   params: { slug: string };
@@ -292,7 +293,12 @@ export default function ComponentDetailPage({ params }: PageProps) {
             <div className="grid gap-3 sm:grid-cols-2">
               {relatedProjects.map((project) => (
                 <div key={project.id} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-bold leading-6 text-brand-navy">{project.title}</p>
+                  <Link
+                    href={`/catalog/${getCatalogProjectSlug(project)}`}
+                    className="text-sm font-bold leading-6 text-brand-navy hover:text-brand-blue"
+                  >
+                    {project.title}
+                  </Link>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {project.tags.slice(0, 3).map((tag) => (
                       <span key={tag} className="rounded-full bg-white px-2 py-1 text-xs text-slate-500">
