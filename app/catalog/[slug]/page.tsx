@@ -250,12 +250,7 @@ export default function CatalogProjectPage({
           <Section title="Expected Demo Outcome" icon={<CheckCircle2 size={20} />}>
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-5">
               <ul className="grid sm:grid-cols-2 gap-3 text-sm text-slate-700">
-                {[
-                  "The main project workflow can be demonstrated clearly.",
-                  "Inputs, records, or readings produce visible output.",
-                  "Testing evidence can be captured for the report.",
-                  "The system flow can be explained during viva.",
-                ].map((item) => (
+                {seo.demoOutcomes.map((item) => (
                   <li key={item} className="flex gap-2">
                     <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600" />
                     <span>{item}</span>
@@ -268,6 +263,16 @@ export default function CatalogProjectPage({
           <Section title="Accuracy & Limitations" icon={<Shield size={20} />}>
             <div className="grid gap-3">
               {seo.limitations.map((item) => (
+                <div key={item} className="rounded-xl border border-slate-200 bg-white p-4">
+                  <p className="text-sm leading-relaxed text-slate-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="Validation & Testing Plan" icon={<CheckCircle2 size={20} />}>
+            <div className="grid gap-3">
+              {seo.testingPlan.map((item) => (
                 <div key={item} className="rounded-xl border border-slate-200 bg-white p-4">
                   <p className="text-sm leading-relaxed text-slate-600">{item}</p>
                 </div>
