@@ -209,8 +209,13 @@ export default function CatalogClient() {
                 </span>
 
                 {/* Title */}
-                <h3 className="text-sm font-semibold text-brand-navy leading-snug line-clamp-2 flex-1">
-                  {project.title}
+                <h3 className="text-sm font-semibold leading-snug line-clamp-2 flex-1">
+                  <Link
+                    href={`/catalog/${getCatalogProjectSlug(project)}`}
+                    className="text-brand-navy hover:text-brand-blue transition-colors"
+                  >
+                    {project.title}
+                  </Link>
                 </h3>
 
                 {/* Tags */}
