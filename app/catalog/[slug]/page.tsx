@@ -133,7 +133,7 @@ export default function CatalogProjectPage({
                     {seo.difficulty}
                   </span>
                   <span className="inline-flex items-center rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
-                    FYP / PAT Ready
+                    FYP / Projek Akhir Tahun Ready
                   </span>
                 </div>
 
@@ -172,7 +172,7 @@ export default function CatalogProjectPage({
               <div className="space-y-4">
                 <SnapshotRow label="Category" value={seo.categoryLabel} />
                 <SnapshotRow label="Difficulty" value={seo.difficulty} />
-                <SnapshotRow label="Suitable for" value="Diploma, Degree, FYP, PAT" />
+                <SnapshotRow label="Suitable for" value="Diploma, Degree, FYP, Projek Akhir Tahun" />
                 <SnapshotRow label="Budget guidance" value="Depends on selected scope" />
                 <SnapshotRow
                   label="Main technologies"

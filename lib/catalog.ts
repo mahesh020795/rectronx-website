@@ -237,7 +237,7 @@ function getFaqs(project: CatalogProject, difficulty: CatalogSeo["difficulty"]) 
   return [
     {
       q: `Is "${project.title}" suitable for FYP?`,
-      a: `Yes. This title can be suitable for FYP or PAT when the scope is controlled, the objectives are clear, and the demo proves the main workflow.`,
+      a: `Yes. This title can be suitable for FYP or Projek Akhir Tahun when the scope is controlled, the objectives are clear, and the demo proves the main workflow.`,
     },
     {
       q: "What difficulty level is this project?",
