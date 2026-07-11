@@ -44,10 +44,10 @@ export async function generateMetadata({
 }
 
 const categoryColors: Record<string, string> = {
-  "FYP Guide": "bg-blue-50 text-blue-700",
-  Tutorial: "bg-violet-50 text-violet-700",
-  "Tutorial Projek Akhir Tahun": "bg-emerald-50 text-emerald-700",
-  Ideas: "bg-amber-50 text-amber-700",
+  "Project Ideas": "bg-amber-50 text-amber-700",
+  "Build Guides": "bg-emerald-50 text-emerald-700",
+  Components: "bg-violet-50 text-violet-700",
+  "FYP Guidance": "bg-blue-50 text-blue-700",
 };
 
 // Related posts shown at the bottom (static stubs)
@@ -55,14 +55,14 @@ const relatedStubs = [
   {
     slug: "arduino-vs-raspberry-pi",
     title: "Arduino vs Raspberry Pi: Which Should You Use for Your FYP?",
-    category: "Tutorial",
+    category: "Components",
     readTime: "7 min read",
     date: "Coming Soon",
   },
   {
     slug: "fyp-documentation-guide",
     title: "The Complete FYP Documentation Guide: What to Write and How",
-    category: "FYP Guide",
+    category: "FYP Guidance",
     readTime: "10 min read",
     date: "Coming Soon",
   },
