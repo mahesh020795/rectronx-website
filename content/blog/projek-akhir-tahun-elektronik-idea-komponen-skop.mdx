@@ -1,0 +1,116 @@
+---
+title: "Projek Akhir Tahun Elektronik: Idea, Komponen dan Cara Pilih Skop"
+excerpt: "Panduan Projek Akhir Tahun Elektronik untuk pelajar Malaysia: idea projek, komponen biasa, skop demo, testing dan kesilapan yang perlu dielakkan."
+category: "Panduan Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Projek Akhir Tahun Elektronik sesuai untuk pelajar yang mahu bina prototype fizikal: sensor membaca data, controller memproses input, dan output seperti LED, buzzer, relay, motor, display atau dashboard menunjukkan keputusan.
+
+Kekuatan projek elektronik ialah panel boleh nampak sesuatu bergerak, berbunyi, menyala atau menghantar data. Tetapi projek ini juga mudah gagal jika wiring, power supply dan skop tidak dikawal.
+
+## Quick Summary
+
+Projek Akhir Tahun Elektronik yang baik perlu ada input, proses, output dan testing. Jangan hanya pasang sensor dan tunjuk bacaan. Pastikan ada sebab kenapa sensor dipilih, bagaimana threshold ditentukan, dan apa bukti projek berfungsi.
+
+Jika projek melibatkan WiFi, gunakan ESP32. Jika projek offline dan beginner, Arduino masih sesuai.
+
+## Idea Projek Elektronik yang Sesuai
+
+Contoh idea yang realistik:
+
+- Sistem locker pintar menggunakan RFID dan OTP
+- Sistem amaran suhu cold storage
+- Sistem pengesanan gas LPG dengan buzzer dan alert
+- Sistem monitoring paras air tangki
+- Sistem smart irrigation dengan soil moisture sensor
+- Sistem kehadiran RFID atau QR
+- Sistem kawalan kipas automatik berdasarkan suhu
+- Sistem keselamatan pintu menggunakan keypad dan RFID
+
+Untuk pilihan tajuk yang lebih banyak, rujuk [Catalog Projek Rectronx](/catalog).
+
+## Komponen Biasa untuk Projek Elektronik
+
+Komponen yang sering digunakan:
+
+- [ESP32](/components/esp32) untuk IoT, WiFi dan dashboard
+- [Arduino Uno](/components/arduino-uno) untuk kawalan asas
+- [RC522 RFID](/components/rc522) untuk access control
+- [DHT22](/components/dht22) untuk suhu dan kelembapan
+- [BME280](/components/bme280) untuk suhu, kelembapan dan tekanan
+- [HC-SR04](/components/hc-sr04) untuk jarak
+- [Relay Module](/components/relay-module) untuk kawalan beban
+- [SIM800L](/components/sim800l) untuk SMS
+
+Pilih komponen ikut fungsi, bukan ikut nama yang nampak canggih.
+
+## Arduino atau ESP32?
+
+Arduino sesuai jika:
+
+- projek tidak perlukan WiFi
+- output hanya LED, buzzer, relay atau LCD
+- pelajar masih beginner
+- skop perlu mudah diterangkan
+
+ESP32 sesuai jika:
+
+- projek perlu Blynk, Firebase, MQTT atau web dashboard
+- perlu WiFi/Bluetooth
+- banyak sensor dan output
+- mahu demo IoT yang lebih moden
+
+Baca juga [Arduino vs ESP32 untuk FYP](/blog/arduino-vs-esp32-fyp-malaysia).
+
+## Cara Pilih Skop
+
+Bahagikan projek kepada tiga tahap:
+
+**Basic:** sensor baca data dan output dipaparkan.
+
+**Intermediate:** tambah alert, dashboard atau database.
+
+**Advanced:** tambah app, notification, casing, multi-user atau analytics.
+
+Jangan bina advanced version dahulu. Pastikan basic workflow stabil sebelum tambah ciri lain.
+
+## Testing yang Perlu Ada
+
+Untuk projek elektronik, rekod:
+
+- bacaan sensor dalam beberapa keadaan
+- response output
+- masa delay alert
+- kestabilan power
+- keadaan gagal seperti WiFi putus atau sensor tercabut
+- gambar wiring dan screenshot dashboard
+
+Testing ini penting untuk laporan dan viva.
+
+## Kesilapan Biasa
+
+- Power supply lemah
+- Relay/motor dipower terus dari microcontroller
+- Sensor tidak dikalibrasi
+- Wiring longgar semasa demo
+- Tiada casing atau susunan komponen kemas
+- Projek terlalu banyak feature tetapi fungsi utama tidak stabil
+
+## FAQ
+
+### Projek elektronik wajib ada IoT?
+
+Tidak. Tetapi IoT boleh tambah nilai jika data perlu dipantau atau dikawal jauh.
+
+### Komponen paling selamat untuk beginner?
+
+Arduino Uno, DHT22, LCD I2C, buzzer, LED dan relay module ialah kombinasi yang mudah dimulakan.
+
+### Boleh guna ESP32 untuk semua projek elektronik?
+
+Boleh, tetapi pastikan anda faham pin, voltage dan power supply. ESP32 menggunakan logik 3.3 V.
+
+## Dapatkan Bantuan
+
+Jika anda mahu pilih komponen dan skop elektronik yang sesuai, lihat [Components](/components), [ESP32 topic hub](/topics/esp32), atau [Services Rectronx](/services).
