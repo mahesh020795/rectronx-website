@@ -17,16 +17,34 @@ const categoryColors: Record<string, { pill: string; bar: string }> = {
   "FYP Guide": { pill: "bg-blue-50 text-blue-700", bar: "bg-[#2B7FD4]" },
   Tutorial: { pill: "bg-violet-50 text-violet-700", bar: "bg-violet-500" },
   "Tutorial Projek Akhir Tahun": { pill: "bg-emerald-50 text-emerald-700", bar: "bg-emerald-500" },
+  "Panduan Projek Akhir Tahun": { pill: "bg-cyan-50 text-cyan-700", bar: "bg-cyan-500" },
   Ideas: { pill: "bg-amber-50 text-amber-700", bar: "bg-amber-500" },
 };
 
-const FILTER_TABS = ["All", "FYP Guide", "Tutorial Projek Akhir Tahun", "Tutorial", "Ideas"];
+const CATEGORY_ORDER = [
+  "FYP Guide",
+  "Panduan Projek Akhir Tahun",
+  "Tutorial Projek Akhir Tahun",
+  "Tutorial",
+  "Ideas",
+];
 
 export default function BlogClient({ posts }: { posts: Post[] }) {
   const [active, setActive] = useState("All");
 
   const featured = posts[0];
   const rest = posts.slice(1);
+  const filterTabs = [
+    "All",
+    ...Array.from(new Set(posts.map((post) => post.category))).sort((a, b) => {
+      const aIndex = CATEGORY_ORDER.indexOf(a);
+      const bIndex = CATEGORY_ORDER.indexOf(b);
+      if (aIndex === -1 && bIndex === -1) return a.localeCompare(b);
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
+    }),
+  ];
   const gridPosts = rest.filter(
     (p) => active === "All" || p.category === active
   );
@@ -101,7 +119,7 @@ export default function BlogClient({ posts }: { posts: Post[] }) {
 
         {/* Filter bar */}
         <div className="flex overflow-x-auto gap-2 mb-8 pb-2 flex-nowrap sm:flex-wrap">
-          {FILTER_TABS.map((tab) => (
+          {filterTabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActive(tab)}
