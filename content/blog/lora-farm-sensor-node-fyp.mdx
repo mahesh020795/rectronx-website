@@ -1,0 +1,66 @@
+---
+title: "LoRa-Based Farm Sensor Node: Complete FYP Build Guide"
+excerpt: "Build a LoRa farm sensor node for soil moisture, temperature and long-range low-data monitoring in an FYP prototype."
+category: "Tutorial"
+date: "2026-07-11"
+---
+
+A LoRa farm sensor node is a good FYP when the project needs longer range than normal WiFi. It is suitable for agriculture monitoring, greenhouse areas, remote sensors and low-data telemetry.
+
+LoRa is not the same as WiFi. It is designed for small data packets over longer range, not video streaming or high-speed internet.
+
+## Quick Summary
+
+The sensor node reads farm conditions, sends small packets through a LoRa module to a receiver node, and the receiver displays or uploads the data to a dashboard.
+
+## Recommended Components
+
+- ESP32 or Arduino for sensor node
+- SX1278 or compatible LoRa module
+- Soil moisture sensor
+- BME280 or DHT22
+- Battery pack
+- Receiver ESP32 with LoRa module
+- Optional dashboard using MQTT, Firebase or local web server
+
+## System Workflow
+
+1. Sensor node wakes up and reads values.
+2. Node sends a small LoRa packet.
+3. Receiver node receives and validates packet.
+4. Data is shown on display or uploaded to dashboard.
+5. System records signal reliability and sensor trends.
+
+## Build Scope
+
+Basic version: one sender and one receiver.
+
+Intermediate version: two or three sensor nodes with node ID.
+
+Advanced version: sleep mode, battery estimation and dashboard history.
+
+## Testing Plan
+
+Test short range first, then increase distance gradually. Record packet success rate, RSSI if available, sensor value and environment condition.
+
+## Common Mistakes
+
+- Expecting LoRa to behave like WiFi
+- Sending too much data too often
+- Poor antenna placement
+- No packet ID or node ID
+- No range test evidence
+
+## Report Sections
+
+Include communication architecture, packet format, sensor calibration, range testing and power limitation.
+
+## References Checked
+
+- Semtech LoRa overview: https://www.semtech.com/lora
+
+## Related Rectronx Pages
+
+- [LoRa topic hub](/topics/lora)
+- [LoRa SX1278 component guide](/components/lora-sx1278)
+- [Browse agriculture FYP titles](/catalog)

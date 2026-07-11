@@ -1,0 +1,81 @@
+---
+title: "Raspberry Pi Camera vs ESP32-CAM untuk Projek Akhir Tahun"
+excerpt: "Panduan Bahasa Malaysia untuk memilih Raspberry Pi Camera atau ESP32-CAM bagi projek kamera, monitoring dan computer vision."
+category: "Tutorial BM"
+date: "2026-07-11"
+---
+
+Projek kamera nampak menarik semasa presentation kerana panel boleh lihat hasil secara visual. Tetapi platform yang salah boleh menyebabkan projek menjadi terlalu susah atau terlalu terhad.
+
+Dua pilihan popular ialah ESP32-CAM dan Raspberry Pi Camera.
+
+## Ringkasan Pantas
+
+Guna **ESP32-CAM** untuk snapshot mudah, monitoring asas, kamera WiFi kos rendah dan bukti gambar ringkas.
+
+Guna **Raspberry Pi Camera** jika projek perlukan OpenCV, image processing, face detection, object detection atau sistem Linux yang lebih fleksibel.
+
+## Kekuatan ESP32-CAM
+
+ESP32-CAM kecil, murah dan ada WiFi. Ia sesuai untuk:
+
+- smart door snapshot
+- kamera keselamatan ringkas
+- upload gambar ke server
+- monitoring asas
+- alert dengan bukti gambar
+
+Untuk PAT, ESP32-CAM sesuai jika kamera hanya satu bahagian kecil dalam sistem.
+
+## Limitasi ESP32-CAM
+
+ESP32-CAM bukan komputer vision yang kuat. Isu biasa:
+
+- bekalan kuasa tidak stabil
+- memory terhad
+- debugging lebih susah
+- banyak board perlukan FTDI programmer
+- image processing local terhad
+
+Jika tajuk anda ada AI, OpenCV atau face recognition yang serius, ESP32-CAM sahaja mungkin tidak cukup.
+
+## Kekuatan Raspberry Pi Camera
+
+Raspberry Pi memberi Linux, Python, storage dan processing lebih baik. Dokumentasi rasmi Raspberry Pi menerangkan camera software moden dan penggunaan libcamera.
+
+Sesuai untuk:
+
+- OpenCV
+- face detection experiment
+- object detection demo
+- number plate recognition experiment
+- local web dashboard dengan gambar
+- sistem kiosk atau monitor
+
+## Limitasi Raspberry Pi
+
+Raspberry Pi lebih mahal dan perlukan power supply, SD card dan OS setup. Boot time juga lebih lama berbanding microcontroller.
+
+Jangan guna Raspberry Pi jika projek hanya baca satu sensor dan kawal satu relay. Untuk IoT kawalan ringkas, ESP32 biasanya lebih sesuai.
+
+## Jadual Keputusan
+
+| Keperluan | Pilihan sesuai |
+|---|---|
+| Snapshot WiFi mudah | ESP32-CAM |
+| OpenCV processing | Raspberry Pi |
+| Kos rendah | ESP32-CAM |
+| Local database dan dashboard | Raspberry Pi |
+| AI atau image recognition | Raspberry Pi |
+
+## Rujukan Disemak
+
+- Raspberry Pi camera software documentation: https://www.raspberrypi.com/documentation/computers/camera_software.html
+- Raspberry Pi camera documentation: https://www.raspberrypi.com/documentation/accessories/camera.html
+- Espressif ESP32 hardware design guidance: https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html
+
+## Halaman Berkaitan
+
+- [Hub Raspberry Pi](/topics/raspberry-pi)
+- [Panduan ESP32-CAM](/components/esp32-cam)
+- [Senarai tajuk projek kamera](/catalog)

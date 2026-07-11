@@ -1,0 +1,64 @@
+---
+title: "Smart Locker System with RFID and OTP: Complete FYP Build Guide"
+excerpt: "Build a smart locker prototype using RFID access, OTP verification, keypad input and access logging for FYP."
+category: "Tutorial"
+date: "2026-07-11"
+---
+
+A smart locker system is a good FYP because it combines access control, identity verification and event logging. The idea is simple: only an authorised user should open the locker, and every access attempt should be recorded.
+
+This guide focuses on a safe prototype using low-voltage locking hardware. Avoid unsafe mains wiring and use a demo lock or solenoid with a suitable driver.
+
+## Quick Summary
+
+The user scans an RFID card, enters an OTP or PIN, and the controller unlocks the locker only if both checks are valid. The system records user ID, time and access result.
+
+## Recommended Components
+
+- ESP32 or Arduino Mega
+- RC522 RFID reader
+- Keypad module
+- OLED or LCD display
+- Buzzer
+- Relay or MOSFET driver
+- Solenoid lock or servo lock for prototype
+- Optional Firebase database
+
+## System Workflow
+
+1. User scans RFID card.
+2. System checks card ID against registered users.
+3. System requests OTP or PIN.
+4. If correct, the lock opens for a short time.
+5. Access event is saved locally or in a database.
+6. Failed attempts trigger buzzer or warning message.
+
+## Build Scope
+
+Basic version: one locker, RFID plus keypad PIN, LCD feedback.
+
+Intermediate version: multiple users, access logs and admin reset.
+
+Advanced version: OTP generated from web dashboard or Firebase, with remote monitoring.
+
+## Testing Plan
+
+Test authorised card, unauthorised card, correct OTP, wrong OTP, repeated wrong attempts, power restart and lock timing.
+
+## Common Mistakes
+
+- Using RFID only and calling it secure
+- No failed-access logging
+- Weak lock driver wiring
+- No timeout after failed attempts
+- No explanation of OTP generation
+
+## Report Sections
+
+Include access-control flowchart, database/user table, lock driver circuit, test cases and limitations.
+
+## Related Rectronx Pages
+
+- [RC522 component guide](/components/rc522)
+- [ESP32 component guide](/components/esp32)
+- [Browse access-control project titles](/catalog)

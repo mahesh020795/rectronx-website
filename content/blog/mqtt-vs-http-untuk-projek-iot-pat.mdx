@@ -1,0 +1,89 @@
+---
+title: "MQTT vs HTTP untuk Projek IoT Projek Akhir Tahun"
+excerpt: "Perbandingan MQTT dan HTTP dalam Bahasa Malaysia untuk ESP32, dashboard, sensor dan kawalan IoT."
+category: "Tutorial BM"
+date: "2026-07-11"
+---
+
+Dalam projek IoT, pelajar selalu tanya: patut guna MQTT atau HTTP? Jawapannya bergantung pada cara data dihantar, kekerapan update dan sama ada device perlu terima arahan.
+
+Kedua-duanya boleh digunakan untuk Projek Akhir Tahun. Yang penting ialah pilihan itu boleh diterangkan dengan jelas.
+
+## Ringkasan Pantas
+
+Guna **HTTP** jika ESP32 hanya hantar data sekali-sekala ke server, API, Firebase function atau web dashboard.
+
+Guna **MQTT** jika projek perlukan update sensor yang kerap, kawalan dua hala, banyak device, atau architecture IoT yang lebih profesional.
+
+MQTT ialah standard OASIS untuk messaging ringan berdasarkan konsep publish dan subscribe, sesuai untuk IoT dan machine-to-machine communication.
+
+## Cara HTTP Berfungsi
+
+Dengan HTTP, ESP32 membuat request ke server:
+
+```text
+ESP32 -> POST /sensor-reading -> Server
+```
+
+Ini mudah untuk diterangkan. Jika projek ada satu ESP32 yang hantar bacaan suhu setiap 30 saat, HTTP sudah memadai.
+
+Sesuai untuk:
+
+- dashboard mudah
+- upload data ke database
+- REST API
+- projek beginner
+- aplikasi web biasa
+
+Kelemahan:
+
+- kurang sesuai untuk update sangat kerap
+- kawalan dua hala boleh jadi tidak kemas
+- overhead lebih besar untuk mesej kecil yang berulang
+
+## Cara MQTT Berfungsi
+
+Dengan MQTT, device publish mesej ke topic melalui broker:
+
+```text
+ESP32 publish ke room1/temp
+Dashboard subscribe room1/temp
+App publish command ke room1/fan
+ESP32 subscribe room1/fan
+```
+
+Ini nampak lebih seperti sistem IoT sebenar kerana sensor, app dan dashboard tidak perlu panggil satu sama lain secara terus.
+
+Sesuai untuk:
+
+- live dashboard
+- banyak ESP32 node
+- relay control jarak jauh
+- smart building
+- LoRa gateway
+- projek IoT intermediate atau advanced
+
+## Pilihan Untuk PAT
+
+Jika masa pendek dan sistem hanya ada satu device, HTTP lebih selamat.
+
+Jika mahu tunjuk architecture IoT yang lebih kuat, MQTT lebih sesuai.
+
+| Situasi projek | Pilihan sesuai |
+|---|---|
+| Satu device, update perlahan | HTTP |
+| Banyak device | MQTT |
+| Live dashboard | MQTT |
+| Upload database mudah | HTTP |
+| Kawalan relay dua hala | MQTT |
+
+## Rujukan Disemak
+
+- OASIS MQTT v5.0 standard: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+- OASIS MQTT overview: https://www.oasis-open.org/standard/mqtt-v5-0-os/
+
+## Halaman Berkaitan
+
+- [Hub topik MQTT](/topics/mqtt)
+- [Sokongan projek IoT](/services/iot-project-malaysia)
+- [Panduan ESP32](/components/esp32)

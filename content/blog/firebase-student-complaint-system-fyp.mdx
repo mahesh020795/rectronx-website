@@ -1,0 +1,71 @@
+---
+title: "Firebase Student Complaint Management System: Complete FYP Build Guide"
+excerpt: "Build a student complaint management system with Firebase Authentication, database records, admin dashboard and status tracking."
+category: "Software"
+date: "2026-07-11"
+---
+
+A student complaint management system is a realistic software FYP because it has clear users, roles, database records and workflow status. It can be built as a web app or mobile app using Firebase.
+
+This guide focuses on a prototype suitable for university or hostel complaint tracking.
+
+## Quick Summary
+
+Students submit complaints, admins review them, status is updated, and users can track progress. Firebase handles authentication and database storage, while the app handles user interface and workflow.
+
+## Main Modules
+
+- Student registration and login
+- Complaint submission form
+- Category selection
+- Admin dashboard
+- Status update: submitted, in review, resolved
+- Complaint history
+- Optional image upload
+
+## Suggested Database Structure
+
+Use collections or paths for:
+
+- users
+- complaints
+- categories
+- statusHistory
+- adminProfiles
+
+Each complaint should store user ID, category, description, status, timestamps and optional attachment URL.
+
+## Build Scope
+
+Basic version: student submits complaint and admin updates status.
+
+Intermediate version: categories, search, filtering and history.
+
+Advanced version: notification, image upload and analytics dashboard.
+
+## Security Rules
+
+Do not leave the database public. Students should only read their own complaints. Admin users should access dashboard records. Use Firebase Security Rules and test denied cases.
+
+## Testing Plan
+
+Test student login, complaint submission, invalid form, admin status update, user history and unauthorised access.
+
+## Common Mistakes
+
+- No role separation
+- No status history
+- Public database rules
+- Weak form validation
+- Admin screen with no search or filtering
+
+## References Checked
+
+- Firebase Security Rules: https://firebase.google.com/docs/rules
+- Firebase Authentication: https://firebase.google.com/docs/auth
+
+## Related Rectronx Pages
+
+- [Software FYP support](/services/software-fyp-malaysia)
+- [Firebase topic hub](/topics/firebase)
+- [Browse software project titles](/catalog)

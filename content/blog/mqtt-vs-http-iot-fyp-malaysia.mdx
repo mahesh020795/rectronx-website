@@ -1,0 +1,112 @@
+---
+title: "MQTT vs HTTP for IoT FYP Projects: Which Should You Use?"
+excerpt: "Compare MQTT and HTTP for ESP32 and IoT final year projects, with practical guidance for dashboards, alerts and sensor data."
+category: "IoT"
+date: "2026-07-11"
+---
+
+Students often ask whether an IoT FYP should use MQTT or HTTP. Both can work. The right choice depends on how often data is sent, whether the device must receive commands, and how professional the system architecture needs to look.
+
+This guide keeps the comparison practical for ESP32, Arduino plus WiFi module, Raspberry Pi, dashboards and mobile apps.
+
+## Quick Summary
+
+Use **HTTP** when your device sends occasional readings to an API, Google Sheets, Firebase function, or simple web backend.
+
+Use **MQTT** when your project needs frequent sensor updates, device commands, multiple devices, or a cleaner publish-subscribe architecture.
+
+MQTT is an OASIS standard designed as a lightweight publish/subscribe messaging transport protocol for IoT and machine-to-machine communication.
+
+## How HTTP Works in an IoT Project
+
+With HTTP, the device makes a request to a server:
+
+```text
+ESP32 -> POST /sensor-reading -> Server
+```
+
+This is easy to understand and easy to demonstrate. If your FYP has one ESP32 sending temperature every 30 seconds, HTTP may be enough.
+
+Good for:
+
+- Simple dashboards
+- Form-like data upload
+- REST API projects
+- Firebase or web backend integration
+- Students who need a simpler explanation
+
+Weaknesses:
+
+- Not ideal for very frequent updates
+- Device command flow can become messy
+- More overhead than MQTT for small repeated messages
+
+## How MQTT Works in an IoT Project
+
+With MQTT, devices publish messages to topics through a broker:
+
+```text
+ESP32 publishes to building/room1/temp
+Dashboard subscribes to building/room1/temp
+App publishes command to building/room1/fan
+ESP32 subscribes to building/room1/fan
+```
+
+This is excellent for IoT because sensors, dashboards and controllers do not need to call each other directly.
+
+Good for:
+
+- Live sensor dashboards
+- Multiple ESP32 nodes
+- Remote relay control
+- Smart building projects
+- LoRa gateway to cloud projects
+- More professional IoT architecture
+
+Weaknesses:
+
+- Requires broker setup
+- Topic naming must be planned
+- Security configuration must be explained
+
+## Which Looks Better for FYP?
+
+MQTT often looks stronger for an engineering IoT FYP because it shows proper IoT architecture. However, HTTP is not wrong. A complete, stable HTTP system is better than an unfinished MQTT system.
+
+Use this decision:
+
+| Project situation | Better choice |
+|---|---|
+| One device, slow updates | HTTP |
+| Many devices | MQTT |
+| Live dashboard | MQTT |
+| Simple API/database upload | HTTP |
+| Two-way control | MQTT |
+| Beginner timeline | HTTP |
+
+## Testing Plan
+
+For HTTP:
+
+- Test response codes
+- Handle failed internet
+- Store or retry failed readings
+- Record request time and server response
+
+For MQTT:
+
+- Test publish and subscribe separately
+- Check broker connection loss
+- Use clear topic names
+- Test command delivery and device response
+
+## References Checked
+
+- OASIS MQTT v5.0 standard: https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+- MQTT overview by OASIS Open: https://www.oasis-open.org/standard/mqtt-v5-0-os/
+
+## Related Rectronx Pages
+
+- [MQTT topic hub](/topics/mqtt)
+- [IoT project support](/services/iot-project-malaysia)
+- [ESP32 component guide](/components/esp32)

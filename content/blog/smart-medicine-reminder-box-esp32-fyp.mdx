@@ -1,0 +1,64 @@
+---
+title: "Smart Medicine Reminder Box with ESP32: Complete FYP Build Guide"
+excerpt: "Build an ESP32 medicine reminder box with scheduled alerts, buzzer, display, compartments and optional Firebase or Blynk logging."
+category: "Tutorial"
+date: "2026-07-11"
+---
+
+A smart medicine reminder box is a strong FYP because the problem is easy to understand: patients, elderly users and busy adults may forget medication times. The project can be demonstrated clearly with time schedules, buzzer alerts, LED indicators and simple user acknowledgement.
+
+This guide keeps the scope realistic for a student prototype. It is not a medical-certified device. It is an educational reminder system that helps users follow a schedule.
+
+## Quick Summary
+
+The system stores medicine times, checks the current time using an RTC or internet time, alerts the user when it is time to take medicine, and records whether the reminder was acknowledged.
+
+## Recommended Components
+
+- ESP32 DevKit
+- DS3231 RTC module, or NTP time if WiFi is reliable
+- Buzzer
+- LEDs for each compartment
+- Push button for acknowledgement
+- OLED or LCD display
+- Optional servo or magnetic switch for compartment state
+- Optional Firebase or Blynk dashboard
+
+## System Workflow
+
+1. User or admin sets medicine times.
+2. ESP32 checks current time.
+3. When the schedule matches, buzzer and LED activate.
+4. User presses a button after taking medicine.
+5. System records time, status and missed reminders.
+6. Optional dashboard shows reminder history.
+
+## Build Scope
+
+For a basic FYP, use three fixed reminder times and one acknowledgement button.
+
+For an intermediate version, add multiple compartments with separate LEDs.
+
+For an advanced version, add Firebase history, caregiver notification and missed-dose reporting.
+
+## Testing Plan
+
+Test normal reminder, missed reminder, wrong time, power restart and WiFi failure. If using RTC, compare time drift over several hours. If using cloud time, prepare an offline fallback explanation.
+
+## Common Mistakes
+
+- Claiming it is a medical device
+- No acknowledgement logging
+- Relying only on WiFi time without fallback
+- Using a weak buzzer that cannot be heard
+- No test cases for missed reminders
+
+## Report Sections
+
+Include problem statement, target users, system block diagram, schedule logic, hardware wiring, test results and limitations.
+
+## Related Rectronx Pages
+
+- [ESP32 component guide](/components/esp32)
+- [Software FYP support](/services/software-fyp-malaysia)
+- [Browse FYP project titles](/catalog)

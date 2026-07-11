@@ -1,0 +1,72 @@
+---
+title: "Semak Bekalan Kuasa ESP32 Sebelum Demo Projek Akhir Tahun"
+excerpt: "Panduan Bahasa Malaysia untuk elak ESP32 reboot, brownout dan WiFi putus semasa demo PAT."
+category: "Tutorial BM"
+date: "2026-07-11"
+---
+
+Ramai pelajar sangka masalah ESP32 ialah masalah coding. Sebenarnya, banyak demo Projek Akhir Tahun gagal kerana bekalan kuasa tidak stabil.
+
+ESP32 mungkin hidup apabila disambung USB, tetapi mula reboot apabila WiFi aktif, relay berbunyi, kamera ambil gambar, atau sensor tambahan disambung.
+
+## Ringkasan Pantas
+
+Jangan uji ESP32 dalam keadaan kosong sahaja. Uji semasa sistem sebenar berjalan:
+
+- WiFi sudah connect
+- sensor sedang membaca data
+- paparan OLED/LCD hidup
+- relay atau buzzer aktif
+- dashboard atau aplikasi menerima data
+
+Panduan rasmi Espressif menyatakan reka bentuk bekalan tunggal ESP32 menggunakan 3.3 V dengan arus keluaran tidak kurang daripada 500 mA. Untuk development board, semak label board kerana banyak board menggunakan input USB atau 5 V melalui regulator onboard.
+
+## Tanda Bekalan Kuasa Lemah
+
+- ESP32 restart sendiri
+- Serial Monitor tunjuk mesej brownout atau reset
+- sensor boleh jalan seorang diri tetapi gagal selepas tambah module lain
+- WiFi connect sekejap kemudian terputus
+- ESP32-CAM ambil gambar sekali kemudian reboot
+- relay aktif menyebabkan board freeze
+
+Jika tanda ini berlaku, jangan terus ubah semua code. Semak power dahulu.
+
+## Checklist Sebelum Demo
+
+1. Gunakan kabel USB yang elok, bukan kabel charging murah yang longgar.
+2. Cuba power adapter yang stabil.
+3. Jangan kuasakan motor, pump, solenoid atau relay terus daripada pin ESP32.
+4. Sambungkan common ground jika guna bekalan kuasa berasingan.
+5. Uji sistem dengan WiFi sebenar, bukan hanya Serial Monitor.
+6. Kemas wiring supaya jumper tidak longgar.
+7. Catat masalah dan penyelesaian untuk laporan.
+
+## Untuk Projek Relay
+
+Jika projek anda melibatkan lampu, kipas, pump atau kunci pintu, relay perlu bekalan kuasa yang sesuai. Pin ESP32 hanya bagi signal kawalan, bukan kuasa untuk beban besar.
+
+Untuk demo kelas, lebih selamat guna beban voltan rendah seperti LED, kipas DC kecil atau lampu demo. Elakkan sambungan AC mains jika tiada pengawasan dan kelulusan pensyarah.
+
+## Apa Perlu Tulis Dalam Laporan
+
+Masukkan:
+
+- jenis bekalan kuasa
+- module yang disambung
+- bilangan ujian berulang
+- masalah reboot jika ada
+- penyelesaian seperti kabel lebih baik, supply berasingan atau capacitor
+
+Ini menunjukkan anda faham proses troubleshooting, bukan sekadar siap pasang.
+
+## Rujukan Disemak
+
+- Espressif ESP32 Hardware Design Guidelines: https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html
+- Panduan komponen ESP32 Rectronx: /components/esp32
+
+## Halaman Berkaitan
+
+- [Sokongan projek ESP32](/services/esp32-project-malaysia)
+- [Senarai tajuk projek ESP32](/catalog)
+- [Hub topik ESP32](/topics/esp32)

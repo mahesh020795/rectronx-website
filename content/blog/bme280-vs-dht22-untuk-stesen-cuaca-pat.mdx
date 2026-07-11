@@ -1,0 +1,75 @@
+---
+title: "BME280 vs DHT22 untuk Stesen Cuaca Projek Akhir Tahun"
+excerpt: "Perbandingan BME280 dan DHT22 dalam Bahasa Malaysia untuk projek stesen cuaca, suhu dan kelembapan."
+category: "Tutorial BM"
+date: "2026-07-11"
+---
+
+BME280 dan DHT22 selalu digunakan dalam projek cuaca dan monitoring persekitaran. Tetapi fungsi kedua-dua sensor ini tidak sama.
+
+Jika tajuk anda ialah stesen cuaca, pemilihan sensor sangat penting kerana ia mempengaruhi data, dashboard dan laporan.
+
+## Ringkasan Pantas
+
+Guna **DHT22** jika projek hanya perlukan suhu dan kelembapan.
+
+Guna **BME280** jika projek perlukan suhu, kelembapan dan tekanan udara. Untuk stesen cuaca, BME280 biasanya lebih sesuai kerana ada data pressure.
+
+## Apa Yang Diukur
+
+| Sensor | Suhu | Kelembapan | Tekanan udara |
+|---|---|---|---|
+| DHT22 | Ya | Ya | Tidak |
+| BME280 | Ya | Ya | Ya |
+
+Bosch Sensortec menerangkan BME280 sebagai sensor digital gabungan untuk humidity, pressure dan temperature. Ini menjadikan BME280 lebih lengkap untuk stesen cuaca.
+
+## Interface
+
+DHT22 menggunakan signal digital satu data pin. Ia mudah, tetapi bacaan boleh terganggu jika wiring tidak baik atau library tidak sesuai.
+
+BME280 biasanya menggunakan I2C atau SPI. Untuk projek ESP32 dan Arduino, I2C mudah kerana hanya perlukan SDA dan SCL.
+
+## Mana Lebih Mudah?
+
+DHT22 lebih mudah untuk beginner.
+
+BME280 masih mudah, tetapi pelajar perlu semak alamat I2C seperti `0x76` atau `0x77` bergantung pada breakout board.
+
+## Mana Lebih Baik Untuk Laporan?
+
+BME280 memberi lebih banyak bahan untuk dibincangkan:
+
+- trend suhu
+- trend kelembapan
+- trend tekanan udara
+- kedudukan sensor
+- limitasi enclosure
+- dashboard stesen cuaca
+
+DHT22 masih sesuai untuk projek seperti greenhouse, incubator, room humidity controller atau monitoring suhu bilik.
+
+## Kesilapan Biasa
+
+- Anggap DHT22 sebagai sensor cuaca lengkap walaupun tiada pressure
+- Letak sensor terlalu dekat dengan haba ESP32
+- Letak sensor bawah cahaya matahari terus
+- Tidak buat bacaan berulang
+- Keliru antara BME280 dan BMP280
+
+## Cadangan
+
+Untuk stesen cuaca PAT, pilih BME280 jika bajet dan stok mencukupi.
+
+Untuk projek kawalan suhu dan kelembapan yang ringkas, DHT22 masih boleh digunakan.
+
+## Rujukan Disemak
+
+- Bosch Sensortec BME280 datasheet: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
+- Bosch BME280 SensorAPI: https://github.com/boschsensortec/BME280_SensorAPI
+
+## Halaman Berkaitan
+
+- [Panduan BME280](/components/bme280)
+- [Panduan DHT22](/components/dht22)
+- [Senarai tajuk projek cuaca](/catalog)

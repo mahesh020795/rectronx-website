@@ -1,0 +1,58 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Locker Pintar dengan RFID dan OTP"
+excerpt: "Panduan membina sistem locker pintar menggunakan RFID, OTP atau PIN, keypad, paparan dan log akses."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Sistem locker pintar sesuai untuk Projek Akhir Tahun kerana ia menggabungkan access control, identity verification dan data logging. Demo juga jelas: pengguna sah boleh buka locker, pengguna tidak sah ditolak.
+
+## Ringkasan Pantas
+
+Pengguna scan RFID, masukkan OTP atau PIN, dan sistem membuka locker hanya jika kedua-dua semakan betul. Setiap cubaan akses direkodkan.
+
+## Komponen Dicadangkan
+
+- ESP32 atau Arduino Mega
+- RC522 RFID reader
+- Keypad
+- LCD atau OLED
+- Buzzer
+- Relay atau MOSFET driver
+- Solenoid lock atau servo lock untuk prototype
+- Optional Firebase
+
+## Cara Sistem Berfungsi
+
+1. Pengguna scan kad RFID.
+2. Sistem semak ID kad.
+3. Sistem minta OTP atau PIN.
+4. Jika betul, lock dibuka untuk beberapa saat.
+5. Log akses disimpan.
+6. Cubaan gagal beri amaran.
+
+## Skop Projek
+
+Versi basic: satu locker, RFID dan PIN.
+
+Versi intermediate: banyak user dan access log.
+
+Versi advanced: OTP dari web dashboard atau Firebase.
+
+## Ujian Yang Perlu Dibuat
+
+Uji kad sah, kad tidak sah, OTP betul, OTP salah, cubaan berulang dan masa buka lock.
+
+## Kesilapan Biasa
+
+- Guna RFID sahaja tetapi dakwa sangat secure
+- Tiada log cubaan gagal
+- Wiring lock tidak selamat
+- Tiada timeout selepas cubaan salah
+- Tiada penerangan cara OTP dijana
+
+## Halaman Berkaitan
+
+- [Panduan RC522](/components/rc522)
+- [Panduan ESP32](/components/esp32)
+- [Senarai tajuk access control](/catalog)

@@ -1,0 +1,61 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Aduan Pelajar Menggunakan Firebase"
+excerpt: "Panduan membina sistem aduan pelajar dengan Firebase Authentication, database, dashboard admin dan tracking status."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Sistem aduan pelajar ialah projek software FYP yang realistik kerana workflow jelas: pelajar hantar aduan, admin semak, status dikemaskini dan pelajar boleh lihat perkembangan.
+
+## Ringkasan Pantas
+
+Firebase digunakan untuk login dan database. Aplikasi mengurus borang aduan, status, dashboard admin dan sejarah aduan.
+
+## Modul Utama
+
+- Login pelajar
+- Borang aduan
+- Kategori aduan
+- Dashboard admin
+- Status submitted, in review, resolved
+- Sejarah aduan
+- Optional upload gambar
+
+## Struktur Database
+
+Gunakan collection atau path seperti:
+
+- users
+- complaints
+- categories
+- statusHistory
+- adminProfiles
+
+Setiap aduan perlu ada user ID, kategori, penerangan, status, timestamp dan optional attachment.
+
+## Skop Projek
+
+Versi basic: pelajar hantar aduan dan admin tukar status.
+
+Versi intermediate: kategori, search, filter dan sejarah status.
+
+Versi advanced: notification, upload gambar dan analytics dashboard.
+
+## Security Rules
+
+Jangan biarkan database public. Pelajar hanya boleh lihat aduan sendiri. Admin boleh akses dashboard. Uji rules untuk kes allowed dan denied.
+
+## Ujian Yang Perlu Dibuat
+
+Uji login, hantar aduan, form tidak sah, admin update status, user history dan cubaan akses tanpa kebenaran.
+
+## Rujukan Disemak
+
+- Firebase Security Rules: https://firebase.google.com/docs/rules
+- Firebase Authentication: https://firebase.google.com/docs/auth
+
+## Halaman Berkaitan
+
+- [Sokongan software FYP](/services/software-fyp-malaysia)
+- [Hub Firebase](/topics/firebase)
+- [Senarai tajuk software](/catalog)

@@ -1,0 +1,56 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Sistem Amaran Suhu Cold Storage Berasaskan IoT"
+excerpt: "Panduan membina sistem pemantauan suhu cold storage dengan ESP32, sensor suhu, buzzer, dashboard dan notifikasi."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Sistem amaran suhu cold storage ialah projek IoT yang praktikal kerana suhu yang tidak stabil boleh memberi kesan kepada makanan, ubat atau sampel makmal. Untuk FYP, skop yang sesuai ialah prototype pemantauan dan amaran.
+
+## Ringkasan Pantas
+
+ESP32 membaca suhu, membandingkan dengan threshold, memaparkan status, menghantar amaran apabila suhu tidak normal dan menyimpan sejarah bacaan.
+
+## Komponen Dicadangkan
+
+- ESP32 DevKit
+- DS18B20 waterproof temperature sensor atau DHT22 untuk demo bilik
+- OLED atau LCD
+- Buzzer dan LED amaran
+- Firebase, Blynk atau MQTT
+- Optional door magnetic switch
+- Optional RTC atau SD card
+
+## Cara Sistem Berfungsi
+
+1. Sensor membaca suhu.
+2. ESP32 mengambil bacaan berulang.
+3. Bacaan dibandingkan dengan threshold.
+4. Jika suhu tidak selamat, buzzer dan alert aktif.
+5. Data dihantar ke dashboard.
+
+## Skop Projek
+
+Versi basic: paparan suhu dan buzzer.
+
+Versi intermediate: dashboard dan mobile alert.
+
+Versi advanced: door-open detection dan offline logging.
+
+## Ujian Yang Perlu Dibuat
+
+Uji suhu normal, suhu melebihi threshold, sensor tercabut, WiFi gagal dan bacaan berulang. Gunakan perubahan suhu terkawal seperti ice pack untuk demo.
+
+## Kesilapan Biasa
+
+- Threshold tidak dijustifikasi
+- Tiada sejarah bacaan
+- Tiada mode offline
+- Sensor tidak dikalibrasi
+- Dashboard hanya cantik tetapi tidak membantu analisis
+
+## Halaman Berkaitan
+
+- [Panduan ESP32](/components/esp32)
+- [Panduan DHT22](/components/dht22)
+- [Sokongan projek IoT](/services/iot-project-malaysia)

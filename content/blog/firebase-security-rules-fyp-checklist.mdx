@@ -1,0 +1,98 @@
+---
+title: "Firebase Security Rules Checklist for FYP Apps"
+excerpt: "A practical Firebase Security Rules checklist for final year project apps using Firestore, Realtime Database or Storage."
+category: "Software"
+date: "2026-07-11"
+---
+
+Firebase is popular for FYP apps because it helps students build login, database, hosting and realtime features quickly. The risky part is security. Many student projects work during demo but leave the database open to anyone.
+
+This checklist is for web apps, mobile apps, IoT dashboards and admin systems that use Firebase. It keeps the advice practical and aligned with official Firebase documentation.
+
+## Quick Summary
+
+Firebase Security Rules control who can read and write data in Cloud Firestore, Realtime Database and Cloud Storage. Your app code alone is not enough. Rules are enforced on Firebase servers, so every request must be allowed by your rules.
+
+For an FYP, your minimum goal is simple: normal users should only access their own data, admins should access admin functions, and unauthenticated visitors should not read or write private records.
+
+## Basic Rule Planning
+
+Before writing rules, list your users:
+
+- Guest visitor
+- Registered student or customer
+- Admin
+- Device or IoT node, if applicable
+
+Then list each collection or database path:
+
+- Users
+- Sensor readings
+- Bookings
+- Attendance records
+- Uploaded files
+- Admin settings
+
+For each path, decide who can read, create, update and delete. This becomes your rule table.
+
+## Common Unsafe Patterns
+
+Avoid these in final demo:
+
+```js
+allow read, write: if true;
+```
+
+This makes the database public.
+
+Also avoid leaving temporary test mode active. Test rules are useful during development, but your final report should explain how access is restricted.
+
+## Better FYP Rule Logic
+
+For user-owned data, the logic should usually be:
+
+- user must be logged in
+- requested user ID must match the logged-in user ID
+- only required fields can be written
+- admin-only records require an admin claim or admin profile check
+
+The exact syntax depends on Firestore or Realtime Database, but the security idea is the same.
+
+## Testing Rules
+
+Firebase provides a rules simulator for Cloud Firestore in the Firebase console. Use it before your presentation.
+
+Test these cases:
+
+1. Logged-out user tries to read private data
+2. User A tries to read User B records
+3. Normal user tries to write admin data
+4. Admin reads dashboard records
+5. Invalid form data is rejected
+
+Screenshot your simulator tests or record them as evidence for your report. This is a strong software engineering point.
+
+## For IoT Projects
+
+If an ESP32 sends readings to Firebase, do not put powerful admin credentials directly into code that will be shared publicly. For a student prototype, explain the limitation honestly and keep the database path narrow. For a stronger architecture, use an API layer or carefully scoped authentication.
+
+## What to Include in Your Report
+
+- Firebase services used
+- Database structure
+- User roles
+- Security rule screenshots
+- Test cases for allowed and denied access
+- Limitations of the prototype
+
+## References Checked
+
+- Firebase Security Rules overview: https://firebase.google.com/docs/rules
+- Cloud Firestore rule testing: https://firebase.google.com/docs/firestore/security/get-started
+- Realtime Database Security Rules: https://firebase.google.com/docs/database/security
+
+## Related Rectronx Pages
+
+- [Software FYP support](/services/software-fyp-malaysia)
+- [Firebase topic hub](/topics/firebase)
+- [Browse software project titles](/catalog)

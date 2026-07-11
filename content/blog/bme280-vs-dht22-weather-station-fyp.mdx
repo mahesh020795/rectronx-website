@@ -1,0 +1,76 @@
+---
+title: "BME280 vs DHT22 for Weather Station FYP Projects"
+excerpt: "A practical comparison of BME280 and DHT22 for temperature, humidity and weather station projects."
+category: "Components"
+date: "2026-07-11"
+---
+
+BME280 and DHT22 are both common in student weather station projects, but they are not the same. Choosing the wrong sensor can limit your report, dashboard and demo quality.
+
+This guide compares them for FYP use, especially ESP32 and Arduino weather station projects.
+
+## Quick Summary
+
+Use **DHT22** when you only need temperature and humidity for a simple project.
+
+Use **BME280** when you want temperature, humidity and barometric pressure in one digital sensor. BME280 is usually the better choice for a weather station because pressure data makes the project more complete.
+
+## What Each Sensor Measures
+
+| Sensor | Temperature | Humidity | Pressure |
+|---|---|---|---|
+| DHT22 | Yes | Yes | No |
+| BME280 | Yes | Yes | Yes |
+
+The Bosch BME280 is officially described as a combined digital humidity, pressure and temperature sensor. This matters because weather station projects usually benefit from pressure readings.
+
+## Interface Difference
+
+DHT22 uses a single-wire style digital signal. It is simple, but timing can be sensitive depending on library and wiring.
+
+BME280 commonly uses I2C or SPI breakout boards. For most ESP32 and Arduino FYP projects, I2C is easier because it uses SDA and SCL and can share the bus with other I2C modules.
+
+## Which Is Easier?
+
+DHT22 is easier for a beginner temperature/humidity demo.
+
+BME280 is still beginner-friendly, but it requires installing the right library and checking the I2C address. Most breakout boards use either `0x76` or `0x77`.
+
+## Which Is Better for Report Writing?
+
+BME280 gives you more to discuss:
+
+- temperature trend
+- humidity trend
+- pressure trend
+- sensor placement
+- calibration limitation
+- weather station dashboard
+
+DHT22 is fine if your project is not actually a weather station, such as room humidity control, incubator monitoring or greenhouse monitoring.
+
+## Common Mistakes
+
+- Calling DHT22 a weather sensor without pressure data
+- Placing the sensor near heat from the ESP32 board
+- Putting the sensor in direct sunlight
+- Ignoring enclosure airflow
+- Not recording repeated readings for testing
+- Mixing up BME280 with BMP280, which measures pressure and temperature but not humidity
+
+## Recommendation
+
+For a weather station FYP, choose BME280 unless your supervisor specifically wants a low-cost humidity-only setup.
+
+For a basic temperature and humidity control project, DHT22 is still acceptable.
+
+## References Checked
+
+- Bosch Sensortec BME280 datasheet: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
+- Bosch BME280 SensorAPI overview: https://github.com/boschsensortec/BME280_SensorAPI
+
+## Related Rectronx Pages
+
+- [BME280 component guide](/components/bme280)
+- [DHT22 component guide](/components/dht22)
+- [Browse weather and environment project titles](/catalog)

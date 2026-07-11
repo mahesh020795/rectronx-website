@@ -1,0 +1,63 @@
+---
+title: "IoT Cold Storage Temperature Alert System: Complete FYP Build Guide"
+excerpt: "Build an IoT cold storage monitoring prototype with ESP32, temperature sensor, alerts and dashboard logging."
+category: "Tutorial"
+date: "2026-07-11"
+---
+
+Cold storage monitoring is a practical IoT FYP because temperature changes can affect food, medicine and laboratory samples. A student prototype can demonstrate live temperature monitoring, threshold alerts and history logging.
+
+This project should be presented as an educational prototype, not an industrial certified monitoring system.
+
+## Quick Summary
+
+The ESP32 reads cold storage temperature, compares it with a safe threshold, shows status locally, sends alerts when temperature is out of range and logs data to a dashboard.
+
+## Recommended Components
+
+- ESP32 DevKit
+- DS18B20 waterproof temperature sensor or DHT22 for room demo
+- OLED or LCD display
+- Buzzer and warning LED
+- Firebase, Blynk or MQTT dashboard
+- Optional door magnetic switch
+- Optional RTC or SD card backup logging
+
+## System Workflow
+
+1. Sensor reads temperature.
+2. ESP32 filters repeated readings.
+3. System compares value with threshold.
+4. If temperature is unsafe, buzzer and alert activate.
+5. Data is uploaded to dashboard.
+6. Report uses history graph and test scenarios as evidence.
+
+## Build Scope
+
+Basic version: temperature display and buzzer.
+
+Intermediate version: WiFi dashboard and mobile alert.
+
+Advanced version: door-open detection, offline logging and trend graph.
+
+## Testing Plan
+
+Test normal temperature, threshold crossing, sensor disconnection, WiFi failure and repeated readings. Use controlled temperature changes such as ice pack tests instead of claiming industrial calibration.
+
+## Common Mistakes
+
+- No sensor calibration note
+- Threshold chosen without explanation
+- No offline behaviour
+- Weak WiFi testing
+- Dashboard only shows current value, not history
+
+## Report Sections
+
+Include cold-chain problem background, sensor selection, threshold logic, dashboard screenshots, test table and limitations.
+
+## Related Rectronx Pages
+
+- [ESP32 component guide](/components/esp32)
+- [DHT22 component guide](/components/dht22)
+- [IoT project support](/services/iot-project-malaysia)

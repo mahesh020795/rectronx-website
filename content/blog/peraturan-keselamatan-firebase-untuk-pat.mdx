@@ -1,0 +1,88 @@
+---
+title: "Peraturan Keselamatan Firebase untuk Projek Akhir Tahun"
+excerpt: "Panduan Bahasa Malaysia untuk Firebase Security Rules bagi aplikasi web, mobile app dan dashboard PAT."
+category: "Tutorial BM"
+date: "2026-07-11"
+---
+
+Firebase memudahkan pelajar bina aplikasi dengan login, database dan dashboard. Tetapi jika security rules salah, database boleh terbuka kepada orang lain.
+
+Untuk Projek Akhir Tahun, aplikasi bukan sahaja perlu berfungsi. Ia juga perlu menunjukkan kawalan akses yang munasabah.
+
+## Ringkasan Pantas
+
+Firebase Security Rules menentukan siapa boleh baca dan tulis data dalam Cloud Firestore, Realtime Database dan Cloud Storage. Rules ini dikuatkuasakan di server Firebase, bukan hanya dalam code aplikasi.
+
+Matlamat minimum untuk PAT:
+
+- pengguna biasa hanya akses data sendiri
+- admin akses fungsi admin
+- pelawat tanpa login tidak boleh ubah data penting
+- data sensitif tidak dibiarkan public
+
+## Senaraikan Role Pengguna
+
+Sebelum tulis rules, senaraikan role:
+
+- guest
+- user berdaftar
+- admin
+- device IoT jika ada
+
+Kemudian senaraikan data:
+
+- users
+- bookings
+- attendance
+- sensor readings
+- uploaded files
+- admin settings
+
+Untuk setiap data, tentukan siapa boleh read, create, update dan delete.
+
+## Kesilapan Biasa
+
+Elakkan rules seperti ini untuk demo akhir:
+
+```js
+allow read, write: if true;
+```
+
+Ini menjadikan database terbuka. Ia mungkin senang semasa development, tetapi tidak sesuai untuk laporan akhir.
+
+## Ujian Yang Perlu Dibuat
+
+Uji sekurang-kurangnya:
+
+1. user belum login cuba baca data private
+2. User A cuba baca data User B
+3. user biasa cuba akses admin record
+4. admin baca dashboard record
+5. input tidak sah ditolak
+
+Firebase menyediakan rules simulator untuk Cloud Firestore dalam Firebase console. Simpan screenshot ujian ini sebagai bukti laporan.
+
+## Untuk Projek IoT
+
+Jika ESP32 menghantar data ke Firebase, jangan letak akses admin yang terlalu luas dalam code yang boleh dikongsi. Untuk prototype, hadkan path database dan terangkan limitasi. Untuk sistem lebih kuat, gunakan API layer atau authentication yang lebih terkawal.
+
+## Apa Perlu Masuk Dalam Laporan
+
+- jenis Firebase service yang digunakan
+- struktur database
+- role pengguna
+- contoh rules
+- ujian akses dibenarkan dan ditolak
+- limitasi prototype
+
+## Rujukan Disemak
+
+- Firebase Security Rules: https://firebase.google.com/docs/rules
+- Firestore Security Rules testing: https://firebase.google.com/docs/firestore/security/get-started
+- Realtime Database Security Rules: https://firebase.google.com/docs/database/security
+
+## Halaman Berkaitan
+
+- [Sokongan software FYP](/services/software-fyp-malaysia)
+- [Hub topik Firebase](/topics/firebase)
+- [Senarai tajuk projek software](/catalog)

@@ -1,0 +1,82 @@
+---
+title: "Raspberry Pi Camera vs ESP32-CAM for FYP Projects"
+excerpt: "Choose between Raspberry Pi Camera and ESP32-CAM for image capture, monitoring and computer vision final year projects."
+category: "Components"
+date: "2026-07-11"
+---
+
+Camera projects can score well in FYP because they are easy for panels to understand visually. The hard part is choosing the right platform. Many students jump to ESP32-CAM because it is cheap, then later discover that their project actually needs Raspberry Pi.
+
+This guide compares Raspberry Pi Camera and ESP32-CAM for realistic student projects.
+
+## Quick Summary
+
+Use **ESP32-CAM** for simple image capture, basic monitoring, low-cost WiFi camera ideas and lightweight evidence capture.
+
+Use **Raspberry Pi Camera** when the project needs OpenCV, local image processing, face detection, object detection, number plate experiments or a more flexible Linux environment.
+
+## ESP32-CAM Strengths
+
+ESP32-CAM is compact and low-cost. It can connect to WiFi and capture images. It is suitable for:
+
+- smart door image capture
+- simple security snapshot
+- low-cost monitoring
+- image upload to a server
+- basic camera-triggered alert
+
+For a student demo, ESP32-CAM is useful when the camera is only one part of the system.
+
+## ESP32-CAM Limitations
+
+ESP32-CAM is not a full computer vision workstation. Common issues include:
+
+- unstable power during WiFi and capture
+- limited memory
+- harder debugging
+- no built-in USB programmer on many boards
+- limited local image processing capability
+
+If your title includes heavy AI, OpenCV or face recognition, ESP32-CAM alone may be too limited.
+
+## Raspberry Pi Camera Strengths
+
+Raspberry Pi gives you Linux, Python, storage and stronger processing. Raspberry Pi's official camera software documentation covers the modern camera stack and tuning behaviour.
+
+It is suitable for:
+
+- OpenCV projects
+- image classification demos
+- face detection experiments
+- number plate recognition experiments
+- local web dashboard with images
+- kiosk or screen-based monitoring
+
+## Raspberry Pi Limitations
+
+Raspberry Pi costs more and needs a proper power supply, SD card and operating system setup. It also has longer boot time than a microcontroller.
+
+Do not use Raspberry Pi just to read one sensor or switch one relay. For simple IoT control, ESP32 is usually better.
+
+## Decision Table
+
+| Requirement | Better platform |
+|---|---|
+| Simple WiFi snapshot | ESP32-CAM |
+| OpenCV processing | Raspberry Pi |
+| Very low cost | ESP32-CAM |
+| Local database and dashboard | Raspberry Pi |
+| Battery-friendly sensor node | ESP32-CAM or ESP32 |
+| AI or image recognition demo | Raspberry Pi |
+
+## References Checked
+
+- Raspberry Pi camera software documentation: https://www.raspberrypi.com/documentation/computers/camera_software.html
+- Raspberry Pi camera accessory documentation: https://www.raspberrypi.com/documentation/accessories/camera.html
+- Espressif ESP32 hardware design guidance: https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html
+
+## Related Rectronx Pages
+
+- [Raspberry Pi topic hub](/topics/raspberry-pi)
+- [ESP32-CAM component guide](/components/esp32-cam)
+- [Browse camera project titles](/catalog)

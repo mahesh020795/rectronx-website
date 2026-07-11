@@ -1,0 +1,60 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Node Sensor Ladang Menggunakan LoRa"
+excerpt: "Panduan membina node sensor ladang menggunakan LoRa untuk bacaan soil moisture, suhu dan kelembapan jarak jauh."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Node sensor ladang menggunakan LoRa sesuai untuk FYP pertanian pintar kerana kawasan ladang kadang-kadang jauh daripada WiFi. LoRa sesuai untuk data kecil jarak jauh, bukan untuk internet laju atau video.
+
+## Ringkasan Pantas
+
+Node sensor membaca keadaan ladang, menghantar data kecil melalui LoRa kepada receiver, dan receiver memaparkan atau upload data ke dashboard.
+
+## Komponen Dicadangkan
+
+- ESP32 atau Arduino
+- LoRa SX1278 atau module serasi
+- Soil moisture sensor
+- BME280 atau DHT22
+- Battery pack
+- Receiver ESP32 dengan LoRa
+- Optional dashboard MQTT atau Firebase
+
+## Cara Sistem Berfungsi
+
+1. Node sensor membaca data.
+2. Node menghantar packet LoRa.
+3. Receiver menerima packet.
+4. Data dipaparkan atau dihantar ke dashboard.
+5. Sistem merekod trend bacaan dan kejayaan packet.
+
+## Skop Projek
+
+Versi basic: satu sender dan satu receiver.
+
+Versi intermediate: beberapa node dengan ID berbeza.
+
+Versi advanced: sleep mode, jangka hayat battery dan sejarah dashboard.
+
+## Ujian Yang Perlu Dibuat
+
+Uji jarak dekat dahulu. Kemudian tambah jarak dan rekod packet berjaya, packet gagal, RSSI jika ada dan keadaan persekitaran.
+
+## Kesilapan Biasa
+
+- Anggap LoRa seperti WiFi
+- Hantar data terlalu banyak
+- Antenna tidak sesuai
+- Tiada node ID
+- Tiada bukti ujian range
+
+## Rujukan Disemak
+
+- Semtech LoRa overview: https://www.semtech.com/lora
+
+## Halaman Berkaitan
+
+- [Hub LoRa](/topics/lora)
+- [Panduan LoRa SX1278](/components/lora-sx1278)
+- [Senarai tajuk pertanian pintar](/catalog)

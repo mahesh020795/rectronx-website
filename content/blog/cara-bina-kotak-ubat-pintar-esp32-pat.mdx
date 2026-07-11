@@ -1,0 +1,56 @@
+---
+title: "Tutorial Projek Akhir Tahun: Cara Bina Kotak Ubat Pintar dengan ESP32"
+excerpt: "Panduan membina kotak ubat pintar menggunakan ESP32, RTC, buzzer, LED, paparan dan log pengambilan ubat."
+category: "Tutorial Projek Akhir Tahun"
+date: "2026-07-11"
+---
+
+Kotak ubat pintar ialah projek yang mudah difahami oleh panel kerana masalahnya jelas: pengguna boleh terlupa waktu makan ubat. Projek ini sesuai untuk FYP jika skopnya dikawal sebagai sistem peringatan pendidikan, bukan alat perubatan bertauliah.
+
+## Ringkasan Pantas
+
+Sistem menyimpan jadual ubat, menyemak masa semasa, memberi amaran menggunakan buzzer dan LED, kemudian merekod sama ada pengguna menekan butang pengesahan.
+
+## Komponen Dicadangkan
+
+- ESP32 DevKit
+- DS3231 RTC module atau NTP time
+- Buzzer
+- LED untuk compartment
+- Push button
+- OLED atau LCD
+- Optional Firebase atau Blynk
+
+## Cara Sistem Berfungsi
+
+1. Jadual ubat ditetapkan.
+2. ESP32 menyemak masa.
+3. Apabila masa sepadan, buzzer dan LED aktif.
+4. Pengguna tekan butang selepas mengambil ubat.
+5. Sistem menyimpan status taken atau missed.
+
+## Skop Projek
+
+Versi basic: tiga masa peringatan dan satu butang pengesahan.
+
+Versi intermediate: beberapa compartment dengan LED berbeza.
+
+Versi advanced: dashboard Firebase dan notifikasi penjaga.
+
+## Ujian Yang Perlu Dibuat
+
+Uji reminder normal, reminder terlepas, power restart, masa salah dan WiFi gagal jika guna internet time.
+
+## Kesilapan Biasa
+
+- Mengaku sebagai medical device
+- Tiada log pengesahan
+- Bergantung sepenuhnya pada WiFi
+- Buzzer terlalu perlahan
+- Tiada test case missed reminder
+
+## Halaman Berkaitan
+
+- [Panduan ESP32](/components/esp32)
+- [Sokongan software FYP](/services/software-fyp-malaysia)
+- [Senarai tajuk projek](/catalog)
