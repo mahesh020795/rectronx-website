@@ -1,0 +1,53 @@
+---
+title: "Student Complaint Management System FYP: Workflow, Roles and Database Design"
+excerpt: "Build a stronger complaint system FYP with ticket status, department routing, evidence upload, and response tracking."
+category: "Build Guides"
+date: "2026-07-12"
+---
+
+## Quick Summary
+
+This guide helps students build a realistic student complaint management final year project with a clear scope, common components, safe assumptions, and demo evidence that examiners can understand. The goal is not to promise an industrial product. The goal is a stable academic prototype with measurable behavior.
+
+## Project Scope
+
+A strong FYP scope should include input, processing, output, data record, and a clear user workflow. For this project, the expected outcome is submit complaint, assign department, update status, response history, and monthly issue summary.
+
+Keep the first version small. A project with fewer features but repeatable test results usually scores better than a large system that only works once during demonstration.
+
+## Suggested Components
+
+A practical component stack is: web app, login roles, complaint category table, ticket status table, file upload storage, and admin dashboard. You can replace parts depending on budget and availability, but keep the same system roles: sensor or input, controller, output, storage, and user interface.
+
+## Build Steps
+
+1. Test every sensor or input module alone before combining the system.
+2. Confirm the controller power supply is stable under real load.
+3. Add the decision logic, thresholds, or prediction workflow.
+4. Add the dashboard, display, or report page.
+5. Record repeated tests for normal cases and failure cases.
+
+## Accuracy and Safety Notes
+
+protect student privacy; do not expose complaint details publicly and use sample data for demonstrations. Include this limitation in your report because honest technical boundaries make the project look more professional, not weaker.
+
+## Common Mistakes
+
+- Combining all modules before testing each one separately.
+- Powering motors, relays, GSM modules, or cameras from weak controller pins.
+- Building only a nice interface without real workflow validation.
+- No fallback method when a sensor, network, or login fails.
+- Claiming high accuracy without a reference instrument or proper dataset split.
+
+## What to Show During Demo
+
+Show the input changing, the system decision, the stored record, and the final output. For your report, include wiring photos, screenshots, test tables, and a short limitation section.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [Electronics components database](/components)
+- [ESP32 topic hub](/topics/esp32)
+- [Raspberry Pi topic hub](/topics/raspberry-pi)
+- [IoT topic hub](/topics/iot)
+- [Contact Rectronx](/contact)
