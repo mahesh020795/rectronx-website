@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/catalog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/components`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/topics`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.86 },
+    { url: `${base}/tools/esp32-pinout`, lastModified: new Date("2026-07-11"), changeFrequency: "monthly", priority: 0.84 },
     { url: `${base}/services`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.88 },
     { url: `${base}/projects`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/products`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.8 },

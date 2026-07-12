@@ -18,6 +18,7 @@ const links = [
 const resourceLinks = [
   { href: "/topics", label: "Topics", description: "Engineering hubs" },
   { href: "/blog", label: "Blog", description: "Guides and tutorials" },
+  { href: "/tools/esp32-pinout", label: "ESP32 Pinout Tool", description: "Interactive GPIO reference" },
 ];
 
 export default function Navbar() {
@@ -77,7 +78,7 @@ export default function Navbar() {
                 type="button"
                 className={clsx(
                   "px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] rounded-lg transition-colors duration-200",
-                  pathname.startsWith("/topics") || pathname.startsWith("/blog")
+                  pathname.startsWith("/topics") || pathname.startsWith("/blog") || pathname.startsWith("/tools")
                     ? "text-brand-blue"
                     : "text-white/50 hover:text-white"
                 )}
