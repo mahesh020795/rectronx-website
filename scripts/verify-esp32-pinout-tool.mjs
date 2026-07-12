@@ -9,6 +9,7 @@ const clientPath = path.join(routeDir, "Esp32PinoutTool.tsx");
 const dataPath = path.join(root, "data", "esp32-pinout.json");
 const navPath = path.join(root, "components", "Navbar.tsx");
 const sitemapPath = path.join(root, "app", "sitemap.ts");
+const layoutPath = path.join(root, "app", "layout.tsx");
 
 assert.ok(existsSync(pagePath), "ESP32 pinout page route is missing");
 assert.ok(existsSync(clientPath), "ESP32 pinout client component is missing");
@@ -39,6 +40,11 @@ assert.match(nav, /ESP32 Pinout Tool/, "Navbar dropdown should label the ESP32 t
 const sitemap = readFileSync(sitemapPath, "utf8");
 assert.match(sitemap, /\/tools\/esp32-pinout/, "Sitemap should include ESP32 pinout tool URL");
 
+const layout = readFileSync(layoutPath, "utf8");
+assert.match(layout, /Viewport/, "Root layout should import Next viewport metadata type");
+assert.match(layout, /width:\s*"device-width"/, "Root layout should define a mobile device-width viewport");
+assert.match(layout, /initialScale:\s*1/, "Root layout should set initial mobile scale");
+
 const page = readFileSync(pagePath, "utf8");
 assert.match(page, /WebApplication/, "Page should include WebApplication structured data");
 assert.match(page, /faqSchema/, "Page should include FAQ structured data");
@@ -57,6 +63,10 @@ for (const boardLabel of ["1 VCC", "2 GND", "EN", "3.3V", "ONBOARD LED: GPIO 2"]
 }
 assert.match(client, /fitBoard\s*\?\s*"min-w-0"\s*:\s*"min-w-\[760px\]"/, "Board SVG should support mobile fit and readable scroll modes");
 assert.match(client, /xl:min-w-\[680px\]/, "Board SVG should keep a desktop-friendly minimum width");
+assert.match(client, /function MobileBoardSvg/, "Tool should include a dedicated mobile board SVG instead of only shrinking the desktop board");
+assert.match(client, /viewBox="0 0 390 575"/, "Mobile board SVG should use a compact phone-sized viewBox");
+assert.match(client, /Mobile full ESP32 DevKit V1 GPIO pinout/, "Mobile board SVG should have an accessible label");
+assert.match(client, /Full mobile board view\. Tap any pin label or pad to open its details below\./, "Mobile UI should explain the full-board tap behavior");
 assert.match(client, /xl:overflow-x-visible/, "Desktop board container should show the full pinout without forced horizontal scrolling");
 assert.match(client, /-webkit-overflow-scrolling:touch/, "Mobile board container should use smooth touch horizontal scrolling");
 assert.match(client, /Fit view shows the whole board/, "Mobile controls should explain fit mode");

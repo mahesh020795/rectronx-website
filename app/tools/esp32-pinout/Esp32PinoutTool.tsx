@@ -288,6 +288,171 @@ function BoardSvg({
   );
 }
 
+function MobilePinRow({
+  pin,
+  index,
+  selectedId,
+  visible,
+  onSelect,
+}: {
+  pin: Pin;
+  index: number;
+  selectedId: string;
+  visible: boolean;
+  onSelect: (pin: Pin) => void;
+}) {
+  const id = pinId(pin);
+  const active = selectedId === id;
+  const isLeft = pin.side === "left";
+  const y = 56 + index * 31;
+  const opacity = visible ? 1 : 0.22;
+  const edgeX = isLeft ? 137 : 237;
+  const physX = isLeft ? 110 : 240;
+  const gpioX = isLeft ? 52 : 266;
+  const adcX = isLeft ? 0 : 324;
+  const powerLabel =
+    pin.side === "left" && pin.label === "EN"
+      ? { text: "EN", className: "fill-[#6D1B86]" }
+      : pin.side === "left" && pin.label === "GND"
+        ? { text: "2 GND", className: "fill-amber-800" }
+        : pin.side === "left" && pin.label === "VIN"
+          ? { text: "1 VCC", className: "fill-red-500" }
+          : pin.side === "right" && pin.label === "GND"
+            ? { text: "GND", className: "fill-amber-800" }
+            : pin.side === "right" && pin.label === "3V3"
+              ? { text: "3.3V", className: "fill-red-500" }
+              : null;
+
+  return (
+    <g
+      role="button"
+      tabIndex={0}
+      aria-label={`${pin.label}${pin.gpio !== null ? ` GPIO ${pin.gpio}` : ""}`}
+      className="cursor-pointer outline-none transition-opacity"
+      style={{ opacity }}
+      onClick={() => onSelect(pin)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onSelect(pin);
+      }}
+    >
+      {isLeft ? (
+        <>
+          {pin.adc && (
+            <>
+              <rect x={adcX} y={y - 12} width="50" height="24" rx="5" className={pin.adc.startsWith("ADC1") ? "fill-emerald-500" : "fill-orange-500"} />
+              <text x={adcX + 25} y={y + 4} textAnchor="middle" className="fill-white text-[7.5px] font-black">{pin.adc.replace("_CH", "_")}</text>
+            </>
+          )}
+          {(pin.gpio !== null || powerLabel) && (
+            <>
+              <rect x={gpioX} y={y - 12} width="58" height="24" rx="5" className={powerLabel?.className ?? clsx(active ? "fill-brand-blue" : "fill-[#6D1B86]")} />
+              <text x={gpioX + 29} y={y + 4} textAnchor="middle" className="fill-white text-[8.5px] font-black">{powerLabel?.text ?? `GPIO ${pin.gpio}`}</text>
+            </>
+          )}
+          <line x1={gpioX + 58} y1={y} x2={physX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.1 : 1.1} />
+          <rect x={physX} y={y - 12} width="24" height="24" rx="5" className={clsx(active ? "fill-brand-blue" : "fill-[#101A2A]", "stroke-brand-blue")} />
+          <text x={physX + 12} y={y + 4} textAnchor="middle" className="fill-white text-[9px] font-black">{pin.phys}</text>
+          <line x1={physX + 24} y1={y} x2={edgeX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.1 : 1.1} />
+        </>
+      ) : (
+        <>
+          <line x1={edgeX} y1={y} x2={physX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.1 : 1.1} />
+          <rect x={physX} y={y - 12} width="24" height="24" rx="5" className={clsx(active ? "fill-brand-blue" : "fill-[#101A2A]", "stroke-brand-blue")} />
+          <text x={physX + 12} y={y + 4} textAnchor="middle" className="fill-white text-[9px] font-black">{pin.phys}</text>
+          {(pin.gpio !== null || powerLabel) && (
+            <>
+              <line x1={physX + 24} y1={y} x2={gpioX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.1 : 1.1} />
+              <rect x={gpioX} y={y - 12} width="56" height="24" rx="5" className={powerLabel?.className ?? clsx(active ? "fill-brand-blue" : "fill-[#6D1B86]")} />
+              <text x={gpioX + 28} y={y + 4} textAnchor="middle" className="fill-white text-[8.5px] font-black">{powerLabel?.text ?? `GPIO ${pin.gpio}`}</text>
+            </>
+          )}
+          {pin.adc && (
+            <>
+              <line x1={gpioX + 56} y1={y} x2={adcX} y2={y} className="stroke-orange-300" strokeWidth={active ? 2.1 : 1.1} />
+              <rect x={adcX} y={y - 12} width="50" height="24" rx="5" className="fill-orange-500" />
+              <text x={adcX + 25} y={y + 4} textAnchor="middle" className="fill-white text-[7.5px] font-black">{pin.adc.replace("_CH", "_")}</text>
+            </>
+          )}
+        </>
+      )}
+      <circle cx={edgeX} cy={y} r={active ? 7 : 5.8} className={clsx(active ? "fill-orange-400" : "fill-slate-300")} />
+      <circle cx={edgeX} cy={y} r="2.6" className="fill-[#08111F]" />
+    </g>
+  );
+}
+
+function MobileBoardSvg({
+  selected,
+  setSelected,
+  activeFilter,
+  query,
+}: {
+  selected: Pin;
+  setSelected: (pin: Pin) => void;
+  activeFilter: FilterKey;
+  query: string;
+}) {
+  const selectedId = pinId(selected);
+  const leftPins = pinData.filter((pin) => pin.side === "left");
+  const rightPins = pinData.filter((pin) => pin.side === "right");
+
+  return (
+    <svg viewBox="0 0 390 575" role="img" aria-label="Mobile full ESP32 DevKit V1 GPIO pinout" className="h-auto w-full max-w-[430px] select-none">
+      <defs>
+        <linearGradient id="espMobileBoardGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#4B5563" />
+          <stop offset="0.55" stopColor="#1F2937" />
+          <stop offset="1" stopColor="#374151" />
+        </linearGradient>
+      </defs>
+      <rect width="390" height="575" rx="18" className="fill-transparent" />
+      {leftPins.map((pin, index) => (
+        <MobilePinRow
+          key={pinId(pin)}
+          pin={pin}
+          index={index}
+          selectedId={selectedId}
+          visible={pinMatchesFilter(pin, activeFilter) && pinMatchesSearch(pin, query)}
+          onSelect={setSelected}
+        />
+      ))}
+      {rightPins.map((pin, index) => (
+        <MobilePinRow
+          key={pinId(pin)}
+          pin={pin}
+          index={index}
+          selectedId={selectedId}
+          visible={pinMatchesFilter(pin, activeFilter) && pinMatchesSearch(pin, query)}
+          onSelect={setSelected}
+        />
+      ))}
+      <g transform="translate(137 25)">
+        <rect width="100" height="520" rx="16" fill="url(#espMobileBoardGrad)" className="stroke-white/40" />
+        <circle cx="16" cy="19" r="8" className="fill-slate-200" />
+        <circle cx="84" cy="19" r="8" className="fill-slate-200" />
+        <circle cx="16" cy="502" r="8" className="fill-slate-200" />
+        <circle cx="84" cy="502" r="8" className="fill-slate-200" />
+        <rect x="18" y="20" width="64" height="58" className="fill-[#111827] stroke-white/15" />
+        <path d="M24 63 V32 H37 V63 H50 V32 H63 V63 H76" fill="none" className="stroke-slate-500" strokeWidth="2.8" />
+        <rect x="18" y="98" width="64" height="152" rx="3" className="fill-slate-300 stroke-white" />
+        <text x="50" y="132" textAnchor="middle" className="fill-slate-900 text-[8.5px] font-black">ESP-WROOM</text>
+        <text x="50" y="147" textAnchor="middle" className="fill-slate-900 text-[8.5px] font-black">32</text>
+        <text x="50" y="170" textAnchor="middle" className="fill-slate-700 text-[7.5px] font-bold">WiFi + BT</text>
+        <text x="50" y="215" textAnchor="middle" className="fill-slate-700 text-[9px] font-bold">ESP32</text>
+        <rect x="18" y="318" width="64" height="24" rx="4" className="fill-red-500" />
+        <text x="50" y="334" textAnchor="middle" className="fill-white text-[9px] font-black">POWER</text>
+        <rect x="18" y="358" width="64" height="24" rx="4" className="fill-brand-blue" />
+        <text x="50" y="374" textAnchor="middle" className="fill-white text-[9px] font-black">GPIO 2</text>
+        <text x="50" y="397" textAnchor="middle" className="fill-brand-blue-light text-[7.5px] font-black">LED: GPIO 2</text>
+        <rect x="27" y="458" width="46" height="32" rx="4" className="fill-slate-200" />
+        <rect x="10" y="459" width="20" height="30" rx="5" className="fill-[#111827] stroke-slate-300" />
+        <rect x="70" y="459" width="20" height="30" rx="5" className="fill-[#111827] stroke-slate-300" />
+        <text x="50" y="515" textAnchor="middle" className="fill-white text-[8px] font-black">ESP32 DEVKIT V1</text>
+      </g>
+    </svg>
+  );
+}
+
 export default function Esp32PinoutTool() {
   const [selected, setSelected] = useState<Pin>(defaultPin);
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
@@ -301,24 +466,24 @@ export default function Esp32PinoutTool() {
   );
 
   return (
-    <section className="relative overflow-hidden bg-[#080E1A] pt-28">
+    <section className="relative w-full max-w-full overflow-hidden bg-[#080E1A] pt-28">
       <div className="absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(circle_at_50%_0%,rgba(43,127,212,0.24),transparent_58%)]" />
-      <div className="relative mx-auto max-w-7xl px-5 pb-16 sm:px-8">
-        <div className="mb-8 max-w-4xl">
+      <div className="relative mx-auto w-full max-w-7xl overflow-hidden px-5 pb-16 sm:px-8">
+        <div className="mb-8 max-w-4xl min-w-0">
           <p className="eyebrow mb-4">Engineering tool</p>
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
             ESP32 Pinout Tool
           </h1>
-          <p className="mt-5 max-w-3xl text-base leading-8 text-white/70">
+          <p className="mt-5 max-w-3xl break-words text-base leading-8 text-white/70">
             Search ESP32 DevKit V1 pins, inspect GPIO capabilities, and avoid common boot, ADC, and input-only mistakes before building your IoT or Projek Akhir Tahun prototype.
           </p>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[210px_minmax(720px,1fr)_300px] xl:gap-5">
-          <aside className="order-1 space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+        <div className="grid min-w-0 gap-4 xl:grid-cols-[210px_minmax(720px,1fr)_300px] xl:gap-5">
+          <aside className="order-1 min-w-0 space-y-4">
+            <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
               <h2 className="mb-3 text-sm font-extrabold uppercase tracking-[0.14em] text-white/80">Quick filter</h2>
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 xl:mx-0 xl:grid xl:grid-cols-1 xl:overflow-visible xl:px-0 xl:pb-0">
+              <div className="-mx-1 flex max-w-full gap-2 overflow-x-auto px-1 pb-1 [-webkit-overflow-scrolling:touch] xl:mx-0 xl:grid xl:grid-cols-1 xl:overflow-visible xl:px-0 xl:pb-0">
                 {filters.map((filter) => (
                   <button
                     key={filter.key}
@@ -355,7 +520,7 @@ export default function Esp32PinoutTool() {
             </div>
           </aside>
 
-          <div className="order-2 rounded-2xl border border-white/10 bg-[#050A14]/95 p-3 shadow-glow-lg sm:p-4">
+          <div className="order-2 min-w-0 rounded-2xl border border-white/10 bg-[#050A14]/95 p-3 shadow-glow-lg sm:p-4">
             <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 className="flex items-center gap-2 text-xl font-extrabold text-white">
@@ -364,7 +529,7 @@ export default function Esp32PinoutTool() {
                 </h2>
                 <p className="mt-1 text-sm text-white/55">Click a pin, label, or pad to open its details.</p>
               </div>
-              <label className="relative block lg:w-72">
+              <label className="relative block min-w-0 lg:w-72">
                 <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/35" />
                 <input
                   value={search}
@@ -384,7 +549,10 @@ export default function Esp32PinoutTool() {
                 )}
               </label>
             </div>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-2 xl:hidden">
+            <div className="mb-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-xs font-semibold leading-5 text-white/60 md:hidden">
+              Full mobile board view. Tap any pin label or pad to open its details below.
+            </div>
+            <div className="mb-3 hidden flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-2 md:flex xl:hidden">
               <p className="text-xs font-semibold text-white/55">
                 {fitBoard ? "Fit view shows the whole board." : "Readable view lets you scroll the labels."}
               </p>
@@ -411,7 +579,10 @@ export default function Esp32PinoutTool() {
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] [-webkit-overflow-scrolling:touch] xl:overflow-x-visible">
+            <div className="min-w-0 overflow-hidden rounded-xl border border-white/8 bg-[#07101D] p-1 md:hidden">
+              <MobileBoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} />
+            </div>
+            <div className="hidden overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] [-webkit-overflow-scrolling:touch] md:block xl:overflow-x-visible">
               <BoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} fitBoard={fitBoard} />
             </div>
             <div className="mt-4 flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-white/65">
@@ -420,7 +591,7 @@ export default function Esp32PinoutTool() {
             </div>
           </div>
 
-          <aside className="order-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 xl:sticky xl:top-24 xl:h-fit">
+          <aside className="order-3 min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 xl:sticky xl:top-24 xl:h-fit">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-white/80">Pin information</h2>
               <button
