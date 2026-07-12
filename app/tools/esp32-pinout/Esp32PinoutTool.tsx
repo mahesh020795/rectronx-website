@@ -260,7 +260,7 @@ function BoardSvg({
         <rect x="34" y="18" width="122" height="74" className="fill-[#111827] stroke-white/15" />
         <path d="M44 72 V32 H70 V72 H96 V32 H122 V72 H148" fill="none" className="stroke-slate-500" strokeWidth="4" />
         <rect x="43" y="104" width="104" height="162" rx="3" className="fill-slate-300 stroke-white" />
-        <text x="95" y="140" textAnchor="middle" className="fill-slate-900 text-[14px] font-black">ESP-WROOM-32</text>
+        <text x="95" y="140" textAnchor="middle" className="fill-slate-900 text-[11px] font-black tracking-tight">ESP-WROOM-32</text>
         <text x="95" y="164" textAnchor="middle" className="fill-slate-700 text-[10px] font-bold">WiFi + Bluetooth</text>
         <text x="95" y="216" textAnchor="middle" className="fill-slate-700 text-[12px] font-bold">ESP32</text>
         <rect x="54" y="365" width="82" height="26" rx="4" className="fill-red-500" />
