@@ -112,6 +112,18 @@ function PinRow({
   const gpioX = isLeft ? 116 : 594;
   const physX = isLeft ? 232 : 552;
   const boardX = isLeft ? 335 : 525;
+  const powerLabel =
+    pin.side === "left" && pin.label === "EN"
+      ? { text: "EN", className: "fill-[#6D1B86]" }
+      : pin.side === "left" && pin.label === "GND"
+        ? { text: "2 GND", className: "fill-amber-800" }
+        : pin.side === "left" && pin.label === "VIN"
+          ? { text: "1 VCC", className: "fill-red-500" }
+          : pin.side === "right" && pin.label === "GND"
+            ? { text: "GND", className: "fill-amber-800" }
+            : pin.side === "right" && pin.label === "3V3"
+              ? { text: "3.3V", className: "fill-red-500" }
+              : null;
 
   return (
     <g
@@ -142,6 +154,12 @@ function PinRow({
               <text x={gpioX + 41} y={y + 5} textAnchor="middle" className="fill-white text-[13px] font-extrabold">GPIO {pin.gpio}</text>
             </>
           )}
+          {powerLabel && (
+            <>
+              <rect x={gpioX} y={y - 13} width="82" height="26" rx="5" className={powerLabel.className} />
+              <text x={gpioX + 41} y={y + 5} textAnchor="middle" className="fill-white text-[13px] font-extrabold">{powerLabel.text}</text>
+            </>
+          )}
           <line x1="198" y1={y} x2={physX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.2 : 1.1} />
           <rect x={physX} y={y - 13} width="34" height="26" rx="5" className={clsx(active ? "fill-brand-blue" : "fill-[#101A2A]", "stroke-brand-blue")} />
           <text x={physX + 17} y={y + 5} textAnchor="middle" className="fill-white text-[13px] font-extrabold">{pin.phys}</text>
@@ -157,6 +175,13 @@ function PinRow({
               <line x1={physX + 34} y1={y} x2={gpioX} y2={y} className="stroke-orange-300" strokeWidth={active ? 2.2 : 1.1} />
               <rect x={gpioX} y={y - 13} width="82" height="26" rx="5" className={clsx(active ? "fill-brand-blue" : "fill-[#6D1B86]")} />
               <text x={gpioX + 41} y={y + 5} textAnchor="middle" className="fill-white text-[13px] font-extrabold">GPIO {pin.gpio}</text>
+            </>
+          )}
+          {powerLabel && (
+            <>
+              <line x1={physX + 34} y1={y} x2={gpioX} y2={y} className="stroke-brand-blue" strokeWidth={active ? 2.2 : 1.1} />
+              <rect x={gpioX} y={y - 13} width="82" height="26" rx="5" className={powerLabel.className} />
+              <text x={gpioX + 41} y={y + 5} textAnchor="middle" className="fill-white text-[13px] font-extrabold">{powerLabel.text}</text>
             </>
           )}
           {pin.adc && (
@@ -232,18 +257,6 @@ function BoardSvg({
         <circle cx="162" cy="28" r="11" className="fill-slate-200" />
         <circle cx="28" cy="582" r="11" className="fill-slate-200" />
         <circle cx="162" cy="582" r="11" className="fill-slate-200" />
-        <g aria-label="Power and control header labels">
-          <rect x="-128" y="538" width="62" height="26" rx="6" className="fill-red-500" />
-          <text x="-97" y="556" textAnchor="middle" className="fill-white text-[12px] font-black">1 VCC</text>
-          <rect x="-128" y="570" width="62" height="26" rx="6" className="fill-amber-800" />
-          <text x="-97" y="588" textAnchor="middle" className="fill-white text-[12px] font-black">2 GND</text>
-          <rect x="-128" y="18" width="62" height="26" rx="6" className="fill-[#6D1B86]" />
-          <text x="-97" y="36" textAnchor="middle" className="fill-white text-[12px] font-black">EN</text>
-          <rect x="256" y="538" width="62" height="26" rx="6" className="fill-red-500" />
-          <text x="287" y="556" textAnchor="middle" className="fill-white text-[12px] font-black">3.3V</text>
-          <rect x="256" y="570" width="62" height="26" rx="6" className="fill-amber-800" />
-          <text x="287" y="588" textAnchor="middle" className="fill-white text-[12px] font-black">GND</text>
-        </g>
         <rect x="34" y="18" width="122" height="74" className="fill-[#111827] stroke-white/15" />
         <path d="M44 72 V32 H70 V72 H96 V32 H122 V72 H148" fill="none" className="stroke-slate-500" strokeWidth="4" />
         <rect x="43" y="104" width="104" height="162" rx="3" className="fill-slate-300 stroke-white" />
