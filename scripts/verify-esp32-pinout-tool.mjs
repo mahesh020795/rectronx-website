@@ -52,5 +52,7 @@ for (const label of ["All Pins", "GPIO", "ADC", "DAC", "Touch", "PWM", "Boot"]) 
 for (const section of ["Quick summary", "Common mistakes", "Related resources"]) {
   assert.ok(client.includes(section), `Client tool should include ${section} SEO/supporting section`);
 }
+assert.match(client, /className="h-auto w-full min-w-\[680px\]"/, "Board SVG should scale to the available desktop panel");
+assert.match(client, /xl:overflow-x-visible/, "Desktop board container should show the full pinout without forced horizontal scrolling");
 
 console.log("ESP32 pinout tool verification passed.");

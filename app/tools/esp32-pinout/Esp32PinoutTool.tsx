@@ -191,7 +191,7 @@ function BoardSvg({
   const rightPins = pinData.filter((pin) => pin.side === "right");
 
   return (
-    <svg viewBox="0 0 860 720" role="img" aria-label="Interactive ESP32 DevKit V1 GPIO pinout" className="min-w-[820px]">
+    <svg viewBox="0 0 860 720" role="img" aria-label="Interactive ESP32 DevKit V1 GPIO pinout" className="h-auto w-full min-w-[680px]">
       <defs>
         <linearGradient id="espBoardGrad" x1="0" y1="0" x2="1" y2="1">
           <stop stopColor="#4B5563" />
@@ -276,7 +276,7 @@ export default function Esp32PinoutTool() {
           </p>
         </div>
 
-        <div className="grid gap-5 xl:grid-cols-[230px_minmax(0,1fr)_340px]">
+        <div className="grid gap-5 xl:grid-cols-[210px_minmax(720px,1fr)_300px]">
           <aside className="space-y-4">
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
               <h2 className="mb-3 text-sm font-extrabold uppercase tracking-[0.14em] text-white/80">Quick filter</h2>
@@ -346,7 +346,7 @@ export default function Esp32PinoutTool() {
                 )}
               </label>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-white/8 bg-[#07101D]">
+            <div className="overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] xl:overflow-x-visible">
               <BoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} />
             </div>
             <div className="mt-4 flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-white/65">
