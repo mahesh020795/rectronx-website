@@ -52,6 +52,9 @@ for (const label of ["All Pins", "GPIO", "ADC", "DAC", "Touch", "PWM", "Boot"]) 
 for (const section of ["Quick summary", "Common mistakes", "Related resources"]) {
   assert.ok(client.includes(section), `Client tool should include ${section} SEO/supporting section`);
 }
+for (const boardLabel of ["1 VCC", "2 GND", "EN", "3.3V", "ONBOARD LED: GPIO 2"]) {
+  assert.ok(client.includes(boardLabel), `Board SVG should include ${boardLabel} label`);
+}
 assert.match(client, /className="h-auto w-full min-w-\[680px\]"/, "Board SVG should scale to the available desktop panel");
 assert.match(client, /xl:overflow-x-visible/, "Desktop board container should show the full pinout without forced horizontal scrolling");
 

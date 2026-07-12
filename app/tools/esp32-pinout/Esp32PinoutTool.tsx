@@ -232,6 +232,18 @@ function BoardSvg({
         <circle cx="162" cy="28" r="11" className="fill-slate-200" />
         <circle cx="28" cy="582" r="11" className="fill-slate-200" />
         <circle cx="162" cy="582" r="11" className="fill-slate-200" />
+        <g aria-label="Power and control header labels">
+          <rect x="-128" y="538" width="62" height="26" rx="6" className="fill-red-500" />
+          <text x="-97" y="556" textAnchor="middle" className="fill-white text-[12px] font-black">1 VCC</text>
+          <rect x="-128" y="570" width="62" height="26" rx="6" className="fill-amber-800" />
+          <text x="-97" y="588" textAnchor="middle" className="fill-white text-[12px] font-black">2 GND</text>
+          <rect x="-128" y="18" width="62" height="26" rx="6" className="fill-[#6D1B86]" />
+          <text x="-97" y="36" textAnchor="middle" className="fill-white text-[12px] font-black">EN</text>
+          <rect x="256" y="538" width="62" height="26" rx="6" className="fill-red-500" />
+          <text x="287" y="556" textAnchor="middle" className="fill-white text-[12px] font-black">3.3V</text>
+          <rect x="256" y="570" width="62" height="26" rx="6" className="fill-amber-800" />
+          <text x="287" y="588" textAnchor="middle" className="fill-white text-[12px] font-black">GND</text>
+        </g>
         <rect x="34" y="18" width="122" height="74" className="fill-[#111827] stroke-white/15" />
         <path d="M44 72 V32 H70 V72 H96 V32 H122 V72 H148" fill="none" className="stroke-slate-500" strokeWidth="4" />
         <rect x="43" y="104" width="104" height="162" rx="3" className="fill-slate-300 stroke-white" />
@@ -242,6 +254,7 @@ function BoardSvg({
         <text x="95" y="383" textAnchor="middle" className="fill-white text-[13px] font-black">POWER</text>
         <rect x="54" y="410" width="82" height="26" rx="4" className="fill-brand-blue" />
         <text x="95" y="428" textAnchor="middle" className="fill-white text-[13px] font-black">GPIO 2</text>
+        <text x="95" y="451" textAnchor="middle" className="fill-brand-blue-light text-[10px] font-black">ONBOARD LED: GPIO 2</text>
         <rect x="52" y="520" width="86" height="44" rx="4" className="fill-slate-200" />
         <rect x="22" y="522" width="32" height="38" rx="6" className="fill-[#111827] stroke-slate-300" />
         <rect x="138" y="522" width="32" height="38" rx="6" className="fill-[#111827] stroke-slate-300" />
