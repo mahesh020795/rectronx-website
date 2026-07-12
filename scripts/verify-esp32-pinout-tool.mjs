@@ -55,8 +55,13 @@ for (const section of ["Quick summary", "Common mistakes", "Related resources"])
 for (const boardLabel of ["1 VCC", "2 GND", "EN", "3.3V", "ONBOARD LED: GPIO 2"]) {
   assert.ok(client.includes(boardLabel), `Board SVG should include ${boardLabel} label`);
 }
-assert.match(client, /className="h-auto w-full min-w-\[680px\]"/, "Board SVG should scale to the available desktop panel");
+assert.match(client, /fitBoard\s*\?\s*"min-w-0"\s*:\s*"min-w-\[760px\]"/, "Board SVG should support mobile fit and readable scroll modes");
+assert.match(client, /xl:min-w-\[680px\]/, "Board SVG should keep a desktop-friendly minimum width");
 assert.match(client, /xl:overflow-x-visible/, "Desktop board container should show the full pinout without forced horizontal scrolling");
+assert.match(client, /-webkit-overflow-scrolling:touch/, "Mobile board container should use smooth touch horizontal scrolling");
+assert.match(client, /Fit view shows the whole board/, "Mobile controls should explain fit mode");
+assert.match(client, /Readable view lets you scroll the labels/, "Mobile controls should explain readable mode");
+assert.match(client, /esp32_pinout_tool_quote_mobile/, "Mobile CTA should have its own tracking source");
 assert.match(client, /className="[^"]*text-\[11px\][^"]*"[^>]*>ESP-WROOM-32<\/text>/, "ESP-WROOM-32 module label should be small enough to fit inside the grey module");
 
 console.log("ESP32 pinout tool verification passed.");

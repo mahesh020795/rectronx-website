@@ -204,11 +204,13 @@ function BoardSvg({
   setSelected,
   activeFilter,
   query,
+  fitBoard,
 }: {
   selected: Pin;
   setSelected: (pin: Pin) => void;
   activeFilter: FilterKey;
   query: string;
+  fitBoard: boolean;
 }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const selectedId = pinId(selected);
@@ -216,7 +218,16 @@ function BoardSvg({
   const rightPins = pinData.filter((pin) => pin.side === "right");
 
   return (
-    <svg viewBox="0 0 860 720" role="img" aria-label="Interactive ESP32 DevKit V1 GPIO pinout" className="h-auto w-full min-w-[680px]">
+    <svg
+      viewBox="0 0 860 720"
+      role="img"
+      aria-label="Interactive ESP32 DevKit V1 GPIO pinout"
+      className={clsx(
+        "h-auto w-full select-none",
+        fitBoard ? "min-w-0" : "min-w-[760px]",
+        "xl:min-w-[680px]"
+      )}
+    >
       <defs>
         <linearGradient id="espBoardGrad" x1="0" y1="0" x2="1" y2="1">
           <stop stopColor="#4B5563" />
@@ -281,6 +292,7 @@ export default function Esp32PinoutTool() {
   const [selected, setSelected] = useState<Pin>(defaultPin);
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
+  const [fitBoard, setFitBoard] = useState(true);
   const query = search.trim().toLowerCase();
 
   const matchingPins = useMemo(
@@ -302,18 +314,18 @@ export default function Esp32PinoutTool() {
           </p>
         </div>
 
-        <div className="grid gap-5 xl:grid-cols-[210px_minmax(720px,1fr)_300px]">
-          <aside className="space-y-4">
+        <div className="grid gap-4 xl:grid-cols-[210px_minmax(720px,1fr)_300px] xl:gap-5">
+          <aside className="order-1 space-y-4">
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
               <h2 className="mb-3 text-sm font-extrabold uppercase tracking-[0.14em] text-white/80">Quick filter</h2>
-              <div className="grid grid-cols-2 gap-2 xl:grid-cols-1">
+              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 xl:mx-0 xl:grid xl:grid-cols-1 xl:overflow-visible xl:px-0 xl:pb-0">
                 {filters.map((filter) => (
                   <button
                     key={filter.key}
                     type="button"
                     onClick={() => setActiveFilter(filter.key)}
                     className={clsx(
-                      "rounded-lg border px-3 py-2 text-left text-xs font-bold uppercase tracking-[0.1em] transition",
+                      "min-h-11 shrink-0 rounded-lg border px-3 py-2 text-left text-xs font-bold uppercase tracking-[0.1em] transition xl:w-full",
                       activeFilter === filter.key
                         ? "border-brand-blue bg-brand-blue text-white"
                         : "border-white/10 bg-[#050A14] text-white/60 hover:border-brand-blue/60 hover:text-white"
@@ -326,7 +338,7 @@ export default function Esp32PinoutTool() {
               <p className="mt-4 text-xs leading-6 text-white/45">{matchingPins.length} pins match the current view.</p>
             </div>
 
-            <div className="rounded-2xl border border-brand-blue/30 bg-brand-blue/10 p-4">
+            <div className="hidden rounded-2xl border border-brand-blue/30 bg-brand-blue/10 p-4 xl:block">
               <h2 className="text-sm font-extrabold text-white">Need help choosing pins?</h2>
               <p className="mt-2 text-sm leading-6 text-white/65">
                 Rectronx can review your ESP32 wiring before demo day.
@@ -343,7 +355,7 @@ export default function Esp32PinoutTool() {
             </div>
           </aside>
 
-          <div className="rounded-2xl border border-white/10 bg-[#050A14]/95 p-4 shadow-glow-lg">
+          <div className="order-2 rounded-2xl border border-white/10 bg-[#050A14]/95 p-3 shadow-glow-lg sm:p-4">
             <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 className="flex items-center gap-2 text-xl font-extrabold text-white">
@@ -372,8 +384,35 @@ export default function Esp32PinoutTool() {
                 )}
               </label>
             </div>
-            <div className="overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] xl:overflow-x-visible">
-              <BoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} />
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-2 xl:hidden">
+              <p className="text-xs font-semibold text-white/55">
+                {fitBoard ? "Fit view shows the whole board." : "Readable view lets you scroll the labels."}
+              </p>
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-white/10 bg-[#050A14] p-1">
+                <button
+                  type="button"
+                  onClick={() => setFitBoard(true)}
+                  className={clsx(
+                    "min-h-10 rounded-md px-3 text-xs font-extrabold uppercase tracking-[0.1em] transition",
+                    fitBoard ? "bg-brand-blue text-white" : "text-white/55 hover:text-white"
+                  )}
+                >
+                  Fit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFitBoard(false)}
+                  className={clsx(
+                    "min-h-10 rounded-md px-3 text-xs font-extrabold uppercase tracking-[0.1em] transition",
+                    !fitBoard ? "bg-brand-blue text-white" : "text-white/55 hover:text-white"
+                  )}
+                >
+                  Read
+                </button>
+              </div>
+            </div>
+            <div className="overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] [-webkit-overflow-scrolling:touch] xl:overflow-x-visible">
+              <BoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} fitBoard={fitBoard} />
             </div>
             <div className="mt-4 flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-white/65">
               <AlertTriangle size={18} className="mt-1 shrink-0 text-brand-blue" />
@@ -381,7 +420,7 @@ export default function Esp32PinoutTool() {
             </div>
           </div>
 
-          <aside className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 xl:sticky xl:top-24 xl:h-fit">
+          <aside className="order-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 xl:sticky xl:top-24 xl:h-fit">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-sm font-extrabold uppercase tracking-[0.14em] text-white/80">Pin information</h2>
               <button
@@ -391,7 +430,7 @@ export default function Esp32PinoutTool() {
                   setSearch("");
                   setActiveFilter("all");
                 }}
-                className="rounded-full border border-white/10 px-3 py-1.5 text-xs font-bold text-white/55 transition hover:border-brand-blue hover:text-white"
+                className="min-h-10 rounded-full border border-white/10 px-4 py-1.5 text-xs font-bold text-white/55 transition hover:border-brand-blue hover:text-white"
               >
                 Clear
               </button>
@@ -406,7 +445,7 @@ export default function Esp32PinoutTool() {
                 {selected.strap && <Capability tone="orange">Boot pin</Capability>}
               </div>
               <div className="border-b border-white/10 pb-4">
-                <p className="text-4xl font-black text-white">{selected.gpio === null ? selected.label : `GPIO ${selected.gpio}`}</p>
+                <p className="break-words text-3xl font-black text-white sm:text-4xl">{selected.gpio === null ? selected.label : `GPIO ${selected.gpio}`}</p>
                 <p className="mt-2 text-sm text-white/55">{selected.label} - physical pin {selected.phys}</p>
               </div>
               <dl className="mt-4 space-y-3 text-sm">
@@ -438,6 +477,22 @@ export default function Esp32PinoutTool() {
               )}
             </div>
           </aside>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-brand-blue/30 bg-brand-blue/10 p-4 xl:hidden">
+          <h2 className="text-sm font-extrabold text-white">Need help choosing pins?</h2>
+          <p className="mt-2 text-sm leading-6 text-white/65">
+            Rectronx can review your ESP32 wiring before demo day.
+          </p>
+          <a
+            href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%20need%20help%20with%20ESP32%20pinout%20and%20wiring."
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackWhatsAppLead("esp32_pinout_tool_quote_mobile")}
+            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-brand-blue px-4 py-3 text-xs font-extrabold uppercase tracking-[0.12em] text-white transition hover:bg-brand-blue-dark"
+          >
+            Get wiring help
+          </a>
         </div>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
