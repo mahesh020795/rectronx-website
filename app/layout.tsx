@@ -23,6 +23,7 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rectronx.com"),
+  applicationName: "Rectronx Circuits",
   title: {
     default: "Rectronx Circuits — Engineering & Technology Company | FYP Projects & Commercial Software",
     template: "%s | Rectronx Circuits",
@@ -57,6 +58,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rectronx Circuits — Engineering & Technology Company",
     description: "FYP Projects & Commercial Software from Penang, Malaysia",
+  },
+  appleWebApp: {
+    title: "Rectronx Circuits",
+    capable: true,
+    statusBarStyle: "black-translucent",
   },
   alternates: {
     canonical: "https://rectronx.com",

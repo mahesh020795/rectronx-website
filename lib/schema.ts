@@ -9,6 +9,7 @@ export const organizationSchema = {
   "@type": "Organization",
   "@id": `${BASE}/#organization`,
   name: "Rectronx Circuits",
+  alternateName: ["Rectronx", "rectronx.com"],
   url: BASE,
   logo: `${BASE}/images/logo-transparent.png`,
   image: `${BASE}/og-image.png`,
@@ -53,6 +54,7 @@ export const localBusinessSchema = {
   "@type": "ProfessionalService",
   "@id": `${BASE}/#localbusiness`,
   name: "Rectronx Circuits",
+  alternateName: ["Rectronx", "rectronx.com"],
   image: `${BASE}/og-image.png`,
   url: BASE,
   telephone: "+60-11-72792500",
@@ -107,6 +109,7 @@ export const websiteSchema = {
   "@id": `${BASE}/#website`,
   url: BASE,
   name: "Rectronx Circuits",
+  alternateName: ["Rectronx", "rectronx.com"],
   description:
     "Final Year Projects & commercial software from Penang, Malaysia — IoT, Arduino, ESP32, Raspberry Pi.",
   publisher: { "@id": `${BASE}/#organization` },

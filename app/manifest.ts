@@ -3,7 +3,7 @@ import { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Rectronx Circuits — FYP Projects & Commercial Software",
-    short_name: "Rectronx",
+    short_name: "Rectronx Circuits",
     description:
       "Malaysia's engineering & technology company for Final Year Projects and commercial software. IoT, Arduino, ESP32, Raspberry Pi.",
     start_url: "/",
