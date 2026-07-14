@@ -1,0 +1,48 @@
+---
+title: "TinyML Vibration Monitoring FYP: Predictive Maintenance Demo with ESP32"
+excerpt: "Create a TinyML vibration monitoring FYP using accelerometer data, feature extraction, simple classification, and honest model evaluation."
+category: "AI & Embedded"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+TinyML vibration monitoring is a strong FYP when it focuses on classifying simple machine states such as normal, loose, imbalance, or high vibration. It combines sensors, embedded systems, and machine learning without needing a huge cloud system.
+
+## Project Scope
+
+Use an accelerometer to collect vibration data from a small DC motor or fan. Train a lightweight model or threshold-based classifier, then deploy the result to ESP32 where possible.
+
+Keep the claim narrow: the prototype detects selected vibration patterns in a controlled demo.
+
+## Suggested Components
+
+Use ESP32, MPU6050 or ADXL345 accelerometer, small DC motor, adjustable load, microSD card or serial logging, Edge Impulse or Python training workflow, and dashboard or display.
+
+## Build Steps
+
+1. Collect labeled vibration data for each condition.
+2. Clean the dataset and split training and testing data.
+3. Extract features such as RMS, peak, or frequency-related values.
+4. Train a simple model or rule-based classifier.
+5. Test the model on new data not used during training.
+
+## Accuracy and Safety Notes
+
+Predictive maintenance is a serious engineering field. For FYP, say "vibration state classification" unless you have long-term failure data. A controlled prototype is still valuable when the evaluation is honest.
+
+## Common Mistakes
+
+- Training and testing on the same samples.
+- No labels or unclear class definitions.
+- Claiming failure prediction without failure data.
+- Mounting the sensor loosely.
+- Ignoring motor speed changes.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [AI topic hub](/topics/ai)
+- [ESP32 topic hub](/topics/esp32)
+- [Components database](/components)
+- [Contact Rectronx](/contact)

@@ -1,0 +1,47 @@
+---
+title: "Raspberry Pi Number Plate Recognition FYP: Practical Scope and Demo Plan"
+excerpt: "Build a realistic number plate recognition FYP with Raspberry Pi, camera capture, OCR workflow, dataset limits, and demo validation."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+Number plate recognition is possible as a student prototype when the scope is controlled. The goal is to capture a plate image, process it, extract characters, and store the result with confidence notes.
+
+## Project Scope
+
+Use Raspberry Pi with a camera in a fixed position. The system captures vehicles or printed plate samples, runs image preprocessing and OCR, then stores detected text in a log.
+
+The project should be presented as a controlled environment prototype, not a law enforcement-grade recognition system.
+
+## Suggested Components
+
+Use Raspberry Pi 4 or Raspberry Pi 5, Pi Camera or USB camera, stable lighting, OpenCV, OCR library, local database, and web dashboard. Add an LED or display for status if needed.
+
+## Build Steps
+
+1. Capture plate images under consistent lighting.
+2. Crop or detect the plate region.
+3. Apply grayscale, thresholding, and noise reduction.
+4. Run OCR and store detected text.
+5. Test with different angles, fonts, and lighting conditions.
+
+## Accuracy and Safety Notes
+
+Recognition accuracy depends heavily on camera angle, lighting, plate style, motion blur, and dataset quality. Use your own test images and avoid collecting private vehicle data without permission.
+
+## Common Mistakes
+
+- Testing only one printed plate.
+- No failed-case examples.
+- Camera mounted too low or too far.
+- Treating OCR output as always correct.
+- Ignoring privacy in screenshots and reports.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [Raspberry Pi topic hub](/topics/raspberry-pi)
+- [AI topic hub](/topics/ai)
+- [Contact Rectronx](/contact)

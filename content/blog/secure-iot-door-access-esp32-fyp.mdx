@@ -1,0 +1,47 @@
+---
+title: "Secure IoT Door Access FYP with ESP32, Keypad and Audit Logs"
+excerpt: "Build an ESP32 door access FYP with keypad, RFID option, relay control, user roles, logs, and safer demo boundaries."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+A door access system is popular because the demo is clear: authenticate user, unlock output, record the event, and alert on failed attempts. The project becomes stronger when it includes audit logs and admin management, not just a relay opening a lock.
+
+## Project Scope
+
+Use ESP32 with keypad, RFID, or both. The system validates access, controls a low-voltage lock or demo relay, stores logs, and gives admin control for allowed users.
+
+For safety, demonstrate with a small solenoid lock or LED load unless your lab approves the door hardware.
+
+## Suggested Components
+
+Use ESP32, 4x4 keypad, RC522 RFID reader, relay or MOSFET driver, buzzer, OLED, Firebase or local web dashboard, and 12V supply for lock hardware if used.
+
+## Build Steps
+
+1. Test keypad input and RFID scan separately.
+2. Build user validation logic.
+3. Add relay or lock output with proper driver circuit.
+4. Store successful and failed access logs.
+5. Add admin page to add, disable, or review users.
+
+## Accuracy and Safety Notes
+
+Do not power a lock directly from ESP32 pins. Door access also involves physical security, enclosure quality, and fail-safe behavior. Present the system as an academic prototype.
+
+## Common Mistakes
+
+- Hardcoding all passwords in the code.
+- No failed attempt log.
+- Weak power supply for lock hardware.
+- Relay wiring without isolation awareness.
+- No manual override or safe demo mode.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [ESP32 topic hub](/topics/esp32)
+- [Components database](/components)
+- [Contact Rectronx](/contact)

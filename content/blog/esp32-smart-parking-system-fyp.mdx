@@ -1,0 +1,48 @@
+---
+title: "ESP32 Smart Parking System FYP with IR Sensors and Web Dashboard"
+excerpt: "Build a smart parking FYP using ESP32, slot sensors, display indicators, dashboard updates, and clear validation tests."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+A smart parking system is a familiar but still useful FYP when the scope is clear. The system detects available slots, updates a dashboard, and shows indicators for drivers or administrators.
+
+## Project Scope
+
+Build a scaled parking model with several parking slots. Each slot has an IR obstacle sensor, ultrasonic sensor, or magnetic sensor. The ESP32 updates slot status, counts available spaces, and sends data to a dashboard.
+
+The project should demonstrate detection logic and user flow, not claim perfect real-world vehicle detection.
+
+## Suggested Components
+
+Use ESP32, IR sensors or ultrasonic sensors, LEDs, OLED or LCD display, buzzer, web dashboard, and a model parking layout. If possible, add admin history for entry and exit changes.
+
+## Build Steps
+
+1. Test one slot sensor and define occupied/empty threshold.
+2. Add multiple slot inputs with labels.
+3. Build dashboard status cards for each slot.
+4. Add local display or LED guidance.
+5. Test false readings with different object positions.
+
+## Accuracy and Safety Notes
+
+IR sensors can be affected by surface color, alignment, and ambient light. Ultrasonic sensors need stable mounting and enough distance. Include these limitations and show repeated detection tests.
+
+## Common Mistakes
+
+- No debounce or confirmation delay.
+- Sensors placed too close to reflective surfaces.
+- Dashboard updates but local indicators do not match.
+- No test table for each parking slot.
+- Claiming city-wide parking management from a small model.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [ESP32 topic hub](/topics/esp32)
+- [IoT topic hub](/topics/iot)
+- [Components database](/components)
+- [Contact Rectronx](/contact)

@@ -1,0 +1,48 @@
+---
+title: "Tutorial Projek Akhir Tahun: Sistem Parking Pintar ESP32 dengan Dashboard"
+excerpt: "Panduan bina sistem parking pintar menggunakan ESP32, sensor slot, paparan status dan dashboard untuk Projek Akhir Tahun."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Ringkasan Cepat
+
+Sistem parking pintar sesuai untuk Projek Akhir Tahun kerana aliran demo mudah difahami: sensor kesan slot kosong atau penuh, sistem kira jumlah tempat kosong, dan dashboard paparkan status.
+
+## Skop Projek
+
+Bina model parking berskala kecil dengan beberapa slot. Setiap slot menggunakan sensor IR, ultrasonik atau sensor lain yang sesuai. ESP32 menghantar status ke paparan tempatan dan dashboard.
+
+Jangan dakwa sistem ini terus sesuai untuk parking bandar sebenar. Untuk PAT, fokus pada prototaip stabil dan ujian sensor yang jelas.
+
+## Komponen Dicadangkan
+
+Gunakan ESP32, sensor IR atau ultrasonik, LED indikator, OLED atau LCD, buzzer, platform dashboard dan model parking. Tambah rekod masa masuk/keluar jika mahu skop lebih kuat.
+
+## Langkah Bina
+
+1. Uji satu sensor slot dahulu.
+2. Tetapkan ambang kosong dan penuh.
+3. Tambah semua slot satu demi satu.
+4. Bina dashboard status slot.
+5. Uji bacaan salah dengan objek berbeza.
+
+## Nota Ketepatan
+
+Sensor IR boleh dipengaruhi warna permukaan, cahaya dan jarak. Sensor ultrasonik pula perlukan kedudukan stabil. Masukkan batasan ini dalam laporan.
+
+## Kesilapan Biasa
+
+- Tiada delay atau debounce untuk bacaan sensor.
+- Sensor terlalu dekat dengan permukaan pantulan.
+- Dashboard dan LED tidak sama status.
+- Tiada jadual ujian untuk setiap slot.
+- Skop terlalu besar tanpa bukti demo.
+
+## Pautan Berkaitan
+
+- [Lihat idea projek lain](/catalog)
+- [Hub ESP32](/topics/esp32)
+- [Hub IoT](/topics/iot)
+- [Komponen elektronik](/components)
+- [Hub Projek Akhir Tahun](/topics/projek-akhir-tahun)

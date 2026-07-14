@@ -1,0 +1,48 @@
+---
+title: "LoRa Farm Sensor Network FYP: Soil Moisture and Long-Range Sensor Nodes"
+excerpt: "Design a practical LoRa farm monitoring FYP with sensor nodes, gateway data collection, soil moisture readings, and realistic range testing."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+This FYP uses LoRa sensor nodes to send soil moisture, temperature, and battery readings to a gateway. It is suitable for students who want an IoT project beyond WiFi because LoRa is useful where long range and low data rate matter.
+
+## Project Scope
+
+The expected outcome is a small network with one gateway and two or more sensor nodes. Each node reads sensor data, sends packets at intervals, and the gateway stores or displays the readings.
+
+Do not promise farm automation at commercial scale. For FYP, a clear prototype with repeatable range tests is enough.
+
+## Suggested Components
+
+Use ESP32 or Arduino-compatible boards, LoRa modules such as SX1276 or RA-02, capacitive soil moisture sensors, DHT22 or BME280, battery pack, voltage regulator, gateway ESP32, and dashboard storage.
+
+## Build Steps
+
+1. Test one LoRa transmitter and receiver pair indoors.
+2. Add sensor readings into the LoRa packet.
+3. Build simple packet validation with node ID and timestamp.
+4. Add dashboard logging at the gateway.
+5. Test range at several distances and record packet success rate.
+
+## Accuracy and Safety Notes
+
+Soil moisture sensors need calibration with dry and wet reference samples. LoRa range depends on antenna, obstacles, height, frequency settings, and local regulations. Keep the demo data honest and show the test environment.
+
+## Common Mistakes
+
+- Using poor antenna placement.
+- Sending data too frequently without reason.
+- No node ID in packets.
+- Treating raw soil moisture values as universal percentages.
+- No battery voltage monitoring.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [IoT topic hub](/topics/iot)
+- [ESP32 topic hub](/topics/esp32)
+- [Components database](/components)
+- [Contact Rectronx](/contact)

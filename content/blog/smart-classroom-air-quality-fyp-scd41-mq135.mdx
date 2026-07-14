@@ -1,0 +1,48 @@
+---
+title: "Smart Classroom Air Quality FYP: SCD41, BME280 and MQ135 Practical Guide"
+excerpt: "Plan a realistic classroom air quality FYP with ESP32, proper CO2 sensing, temperature, humidity, alerts, and honest sensor limitations."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+A smart classroom air quality project can be strong when it separates real CO2 measurement from general gas sensing. Use SCD41 or a similar NDIR/photoacoustic CO2 sensor for CO2 trends, BME280 for temperature and humidity, and MQ135 only for relative gas or smoke trend experiments.
+
+## Project Scope
+
+The system should monitor classroom conditions, display readings, trigger ventilation suggestions, and store data for reports. A good demo shows how readings change when occupancy or airflow changes.
+
+Keep the claim practical: the prototype supports awareness and ventilation decisions. It does not certify indoor air quality for health compliance.
+
+## Suggested Components
+
+Use ESP32, SCD41 or SCD30 for CO2, BME280 for temperature and humidity, OLED display, buzzer or LED indicator, and a dashboard. MQ135 can be included as a comparison sensor, but not as a precise CO2 sensor.
+
+## Build Steps
+
+1. Read each sensor separately using known libraries.
+2. Log readings with timestamps.
+3. Build threshold levels for normal, warning, and poor ventilation.
+4. Add a dashboard with historical charts.
+5. Compare readings near a window, closed room, and ventilated area.
+
+## Accuracy and Safety Notes
+
+CO2 readings should come from a sensor designed for CO2. MQ135 output is affected by many gases, warm-up time, airflow, humidity, and calibration. Write this limitation clearly because it shows engineering maturity.
+
+## Common Mistakes
+
+- Calling MQ135 a reliable CO2 sensor.
+- Skipping warm-up and calibration notes.
+- Placing sensors near fans or direct sunlight.
+- No timestamped data for evaluation.
+- Using only one short test period.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [Components database](/components)
+- [ESP32 topic hub](/topics/esp32)
+- [IoT topic hub](/topics/iot)
+- [Contact Rectronx](/contact)

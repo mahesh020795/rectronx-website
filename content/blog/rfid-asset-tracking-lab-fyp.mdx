@@ -1,0 +1,45 @@
+---
+title: "NFC/RFID Asset Tracking FYP for Labs and Workshops"
+excerpt: "Plan an RFID asset tracking FYP with tagged equipment, scan logs, user roles, reports, and realistic limitations."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+An asset tracking FYP helps labs or workshops record equipment movement using RFID or NFC tags. It is useful because the workflow is clear: scan item, assign user, record time, and generate reports.
+
+## Project Scope
+
+The system should manage asset records, user records, check-in/check-out logs, overdue status, and admin reports. Hardware can be a simple RFID reader connected to ESP32, Arduino, or a USB reader connected to a web app.
+
+## Suggested Components
+
+Use RC522 RFID reader or PN532 NFC module, RFID tags or cards, ESP32 or Arduino, web dashboard, database, and optional buzzer or OLED. For a software-focused version, use a USB RFID reader with a web application.
+
+## Build Steps
+
+1. Register tag IDs to asset records.
+2. Create user roles for admin and borrower.
+3. Record check-in and check-out transactions.
+4. Add search, filter, and report export.
+5. Test duplicate scans and missing asset cases.
+
+## Accuracy and Safety Notes
+
+RFID does not automatically prove the physical condition of an item. It records scan events. For a stronger system, include manual condition notes and admin approval.
+
+## Common Mistakes
+
+- Storing only tag ID without asset details.
+- No duplicate scan prevention.
+- No user accountability.
+- Weak database structure for logs.
+- Claiming GPS-like tracking from RFID.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [Components database](/components)
+- [ESP32 topic hub](/topics/esp32)
+- [Contact Rectronx](/contact)

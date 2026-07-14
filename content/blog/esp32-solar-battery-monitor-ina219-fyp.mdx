@@ -1,0 +1,48 @@
+---
+title: "ESP32 Solar Battery Monitor FYP with INA219 and Blynk"
+excerpt: "Build a practical solar battery monitoring FYP using ESP32, INA219 current sensing, voltage measurement, alerts, and a dashboard."
+category: "Build Guides"
+date: "2026-07-14"
+---
+
+## Quick Summary
+
+This project monitors a small solar battery system and shows voltage, current, estimated power, charging status, and low-battery alerts. It is a good FYP because students can demonstrate real measurements, data logging, and dashboard behavior without claiming to build a full commercial solar charge controller.
+
+## Project Scope
+
+The realistic outcome is a monitoring and alert system. The ESP32 reads voltage and current, calculates power, stores readings, and displays them on Blynk, Firebase, or a web dashboard.
+
+Do not claim the prototype controls a high-power solar installation unless the power electronics and safety design are properly validated. A small 6V or 12V demo setup is safer for academic presentation.
+
+## Suggested Components
+
+Use ESP32, INA219 current sensor, voltage divider, small solar panel, rechargeable battery pack, charge module suitable for the battery type, OLED display, buzzer, and dashboard platform. Add a fuse or current limit for safer testing.
+
+## Build Steps
+
+1. Test voltage measurement with a known multimeter reading.
+2. Test INA219 current reading with a small load.
+3. Add calculated power and battery status logic.
+4. Send readings to a dashboard at a fixed interval.
+5. Record test cases for charging, normal load, and low-battery warning.
+
+## Accuracy and Safety Notes
+
+INA219 is useful for low-voltage current monitoring, but the final accuracy depends on wiring, calibration, shunt range, and reference measurements. For lithium batteries, charging must use a proper battery charging module; the ESP32 should not directly manage charging safety.
+
+## Common Mistakes
+
+- Measuring battery voltage without a proper voltage divider range.
+- Ignoring common ground between modules.
+- Powering the ESP32 from an unstable solar source.
+- Claiming battery percentage without calibration.
+- Testing only one condition before the demo.
+
+## Related Rectronx Pages
+
+- [Browse FYP project titles](/catalog)
+- [ESP32 topic hub](/topics/esp32)
+- [IoT topic hub](/topics/iot)
+- [Electronics components database](/components)
+- [Contact Rectronx](/contact)

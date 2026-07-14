@@ -1,0 +1,47 @@
+---
+title: "Projek Akhir Tahun TinyML: Pemantauan Getaran Motor"
+excerpt: "Bina projek TinyML untuk klasifikasi getaran motor menggunakan sensor accelerometer, dataset kecil dan penilaian model yang jujur."
+category: "AI & Embedded"
+date: "2026-07-14"
+---
+
+## Ringkasan Cepat
+
+Projek TinyML getaran motor menggabungkan embedded system dan AI secara praktikal. Sistem membaca getaran motor dan cuba mengelaskan keadaan seperti normal, longgar atau getaran tinggi.
+
+## Skop Projek
+
+Gunakan accelerometer untuk kumpul data daripada motor kecil. Latih model ringan atau classifier ringkas, kemudian jalankan keputusan pada ESP32 jika sesuai.
+
+Gunakan istilah "klasifikasi keadaan getaran" jika tiada data kegagalan jangka panjang. Ini lebih tepat daripada mendakwa sistem boleh meramal kerosakan sebenar.
+
+## Komponen Dicadangkan
+
+Gunakan ESP32, MPU6050 atau ADXL345, motor DC kecil, beban boleh ubah, microSD atau serial logging, Edge Impulse atau Python, dan paparan keputusan.
+
+## Langkah Bina
+
+1. Kumpul data berlabel untuk setiap keadaan.
+2. Pisahkan data latihan dan ujian.
+3. Ambil ciri seperti RMS, peak atau bacaan paksi.
+4. Latih model atau logik threshold.
+5. Uji dengan data baru yang tidak digunakan semasa latihan.
+
+## Nota Ketepatan
+
+Predictive maintenance sebenar memerlukan data operasi dan kegagalan yang panjang. Untuk PAT, prototaip klasifikasi terkawal tetap bernilai jika laporan jujur.
+
+## Kesilapan Biasa
+
+- Data latihan dan ujian bercampur.
+- Label data tidak jelas.
+- Sensor dipasang longgar.
+- Kelajuan motor berubah tanpa direkod.
+- Dakwa ramalan kerosakan tanpa bukti.
+
+## Pautan Berkaitan
+
+- [Lihat idea projek lain](/catalog)
+- [Hub AI](/topics/ai)
+- [Hub ESP32](/topics/esp32)
+- [Hub Projek Akhir Tahun](/topics/projek-akhir-tahun)
