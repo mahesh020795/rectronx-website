@@ -11,14 +11,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/catalog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/catalog`, lastModified: new Date("2026-07-15"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/components`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${base}/topics`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.86 },
+    { url: `${base}/topics`, lastModified: new Date("2026-07-15"), changeFrequency: "weekly", priority: 0.86 },
     { url: `${base}/tools/esp32-pinout`, lastModified: new Date("2026-07-11"), changeFrequency: "monthly", priority: 0.84 },
     { url: `${base}/services`, lastModified: new Date("2026-07-10"), changeFrequency: "weekly", priority: 0.88 },
     { url: `${base}/projects`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/products`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/blog`, lastModified: new Date("2026-06-18"), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${base}/blog`, lastModified: new Date("2026-07-15"), changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/about`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/contact`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.7 },
   ];
@@ -40,14 +40,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const catalogProjectPages: MetadataRoute.Sitemap = allCatalogProjects.map((project) => ({
     url: `${base}/catalog/${getCatalogProjectSlug(project)}`,
-    lastModified: new Date("2026-07-10"),
+    lastModified: new Date("2026-07-15"),
     changeFrequency: "monthly",
     priority: 0.72,
   }));
 
   const topicPages: MetadataRoute.Sitemap = getAllTopicHubs().map((topic) => ({
     url: `${base}/topics/${topic.slug}`,
-    lastModified: new Date("2026-07-10"),
+    lastModified: new Date("2026-07-15"),
     changeFrequency: "weekly",
     priority: 0.82,
   }));

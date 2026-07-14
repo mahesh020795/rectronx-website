@@ -1,0 +1,112 @@
+---
+title: "Projek IoT: Idea, Komponen dan Cara Bina Dashboard untuk FYP"
+excerpt: "Panduan projek IoT untuk pelajar Malaysia: pilih tajuk, komponen ESP32, sensor, dashboard, notifikasi dan cara uji projek."
+category: "IoT"
+date: "2026-07-15"
+---
+
+## Ringkasan Cepat
+
+**Projek IoT** ialah projek yang menghubungkan sensor, controller dan output kepada dashboard, aplikasi atau sistem notifikasi. Untuk Projek Akhir Tahun, IoT sangat sesuai kerana pelajar boleh tunjuk demo fizikal dan data digital pada masa yang sama.
+
+Formula mudah projek IoT:
+
+> Sensor -> ESP32/Arduino/Raspberry Pi -> Internet atau local dashboard -> Alert, graph, database atau automation.
+
+## Contoh Projek IoT yang Sesuai untuk FYP
+
+### 1. Projek IoT Banjir
+
+Sistem membaca paras air dan menghantar amaran apabila paras melepasi threshold. Projek ini sesuai untuk masalah tempatan di Malaysia.
+
+**Komponen:** ESP32, sensor paras air atau ultrasonic, buzzer, Telegram atau GSM.
+
+### 2. Projek IoT Pertanian Pintar
+
+Sistem membaca kelembapan tanah dan mengawal pam air. Tambah dashboard untuk rekod bacaan.
+
+**Komponen:** ESP32, soil moisture sensor, relay, pam DC, dashboard.
+
+### 3. Projek IoT Kualiti Udara
+
+Sistem membaca CO2, suhu dan kelembapan untuk bilik darjah atau makmal. Gunakan sensor CO2 yang sesuai jika mahu bincang CO2.
+
+**Komponen:** ESP32, SCD41/SCD30, BME280, OLED, dashboard.
+
+### 4. Projek IoT Parking Pintar
+
+Sistem mengesan slot parking kosong atau penuh menggunakan sensor IR atau ultrasonic.
+
+**Komponen:** ESP32, IR sensor, LED, display, optional web dashboard.
+
+### 5. Projek IoT Tenaga
+
+Sistem memantau penggunaan elektrik, runtime mesin atau status bateri solar.
+
+**Komponen:** ESP32, current sensor, voltage sensor atau PZEM, display, dashboard.
+
+## Komponen Asas Projek IoT
+
+Kebanyakan projek IoT boleh dimulakan dengan:
+
+- ESP32 sebagai controller utama.
+- Sensor mengikut masalah projek.
+- Relay, buzzer, LED atau display sebagai output.
+- Power supply yang stabil.
+- Dashboard seperti Blynk, Firebase, ThingSpeak, MQTT dashboard atau web app.
+
+Untuk rujukan komponen, buka [Components Database](/components). Untuk ESP32 pin, guna [ESP32 Pinout Tool](/tools/esp32-pinout).
+
+## Cara Bina Dashboard Projek IoT
+
+Dashboard tidak perlu terlalu kompleks pada awal. Minimum dashboard yang baik perlu ada:
+
+- Bacaan sensor terkini.
+- Status sistem seperti normal, warning atau danger.
+- Masa bacaan.
+- Sejarah bacaan atau jadual log.
+- Butang manual override jika projek ada actuator.
+
+Jika guna Firebase, pastikan data structure kemas. Jika guna Blynk, pastikan widget tidak sekadar cantik tetapi benar-benar menunjukkan status projek.
+
+## Cara Uji Projek IoT
+
+Sediakan sekurang-kurangnya tiga situasi:
+
+1. Keadaan normal.
+2. Keadaan amaran.
+3. Keadaan ralat atau sensor tidak stabil.
+
+Untuk laporan, masukkan gambar setup, screenshot dashboard, jadual bacaan dan penerangan batasan sensor.
+
+## Kesilapan Biasa Projek IoT
+
+- ESP32 reset sebab power supply tidak cukup.
+- Sambung sensor terus tanpa uji satu per satu.
+- Dashboard siap tetapi sensor reading tidak stabil.
+- Tiada data log untuk laporan.
+- Dakwa sensor terlalu tepat tanpa kalibrasi.
+- Bergantung pada WiFi tanpa backup demo.
+
+## Pautan Berkaitan
+
+- [Senarai Projek Akhir Tahun](/blog/senarai-projek-akhir-tahun-malaysia-iot-software-ai)
+- [Catalog Projek Rectronx](/catalog)
+- [Hub Projek IoT](/topics/iot)
+- [Hub ESP32](/topics/esp32)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Hub Projek Akhir Tahun](/topics/projek-akhir-tahun)
+
+## FAQ
+
+### Apa itu projek IoT?
+
+Projek IoT ialah sistem yang membaca data daripada sensor atau device, menghantar data kepada dashboard atau aplikasi, dan memberi output seperti notifikasi, kawalan relay atau laporan.
+
+### Projek IoT apa yang paling mudah?
+
+Smart parking, water level alert, RFID attendance dan smart irrigation biasanya lebih mudah kerana komponen biasa dan demo jelas.
+
+### Perlu guna ESP32 untuk projek IoT?
+
+Tidak wajib, tetapi ESP32 sangat sesuai kerana ada WiFi terbina dalam dan banyak contoh library untuk pelajar.

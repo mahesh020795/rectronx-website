@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, MessageCircle } from "lucide-react";
-import { allCatalogProjects, totalCount } from "@/data/projects";
+import { allCatalogProjects, iotProjects, softwareProjects, totalCount } from "@/data/projects";
 import { trackWhatsAppLead } from "@/lib/analytics";
 import { getComponentByTag } from "@/lib/components";
 import { getCatalogProjectSlug } from "@/lib/catalog";
@@ -111,12 +111,12 @@ export default function CatalogClient() {
             </div>
             <div className="w-px bg-white/10 hidden sm:block" />
             <div className="text-center">
-              <span className="block text-2xl font-bold text-white">101</span>
+              <span className="block text-2xl font-bold text-white">{iotProjects.length}</span>
               <span className="text-slate-400">IoT &amp; Embedded</span>
             </div>
             <div className="w-px bg-white/10 hidden sm:block" />
             <div className="text-center">
-              <span className="block text-2xl font-bold text-white">30</span>
+              <span className="block text-2xl font-bold text-white">{softwareProjects.length}</span>
               <span className="text-slate-400">Software &amp; AI</span>
             </div>
           </div>

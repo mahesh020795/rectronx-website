@@ -10,6 +10,23 @@ export interface TopicHub {
 
 export const topicHubs: TopicHub[] = [
   {
+    slug: "projek-akhir-tahun",
+    title: "Projek Akhir Tahun Malaysia",
+    eyebrow: "FYP Planning Cluster",
+    description:
+      "Panduan Projek Akhir Tahun untuk pelajar Malaysia: senarai tajuk, idea IoT, projek elektronik, software, AI/ML, skop demo, komponen dan laporan.",
+    keywords: [
+      "projek akhir tahun",
+      "senarai projek akhir tahun",
+      "projek akhir tahun Malaysia",
+      "tajuk projek akhir tahun",
+      "idea projek akhir tahun",
+      "FYP Malaysia",
+    ],
+    tags: ["Projek Akhir Tahun", "FYP", "IoT", "Software", "AI"],
+    searchTerms: ["projek akhir tahun", "fyp", "final year project", "tajuk", "senarai projek", "iot", "software", "ai"],
+  },
+  {
     slug: "esp32",
     title: "ESP32 FYP Projects Malaysia",
     eyebrow: "Microcontroller Cluster",
