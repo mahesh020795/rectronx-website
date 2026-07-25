@@ -67,7 +67,7 @@ export default function ServiceDetailPage({
   const projects = getRelatedServiceProjects(page);
   const topics = getRelatedServiceTopics(page);
   const components = getRelatedServiceComponents(page);
-  const whatsappUrl = `https://wa.me/601172792500?text=${encodeURIComponent(page.whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/60148600454?text=${encodeURIComponent(page.whatsappMessage)}`;
 
   return (
     <main className="min-h-screen bg-slate-50 pt-24">

@@ -31,7 +31,7 @@ export async function POST(req: Request) {
               <tr><td style="padding:8px 0;color:#64748b;font-size:13px;vertical-align:top">Message</td><td style="padding:8px 0;color:#0F1C2E;line-height:1.6">${message.replace(/\n/g, "<br>")}</td></tr>
             </table>
             <div style="margin-top:20px;padding-top:16px;border-top:1px solid #f1f5f9">
-              <a href="https://wa.me/601172792500?text=Hi%20${encodeURIComponent(name)}%2C%20thanks%20for%20reaching%20out!" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600">Reply via WhatsApp</a>
+              <a href="https://wa.me/60148600454?text=Hi%20${encodeURIComponent(name)}%2C%20thanks%20for%20reaching%20out!" style="background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600">Reply via WhatsApp</a>
             </div>
           </div>
         </div>
@@ -53,10 +53,10 @@ export async function POST(req: Request) {
             <p style="color:#374151;line-height:1.7">We've received your message and will get back to you within <strong>2 hours</strong> (Mon–Fri, 9am–10pm MYT).</p>
             <p style="color:#374151;line-height:1.7">For faster response, you can also reach us directly on WhatsApp:</p>
             <div style="margin:20px 0">
-              <a href="https://wa.me/601172792500" style="background:#25D366;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600">Chat on WhatsApp →</a>
+              <a href="https://wa.me/60148600454" style="background:#25D366;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600">Chat on WhatsApp →</a>
             </div>
             <hr style="border:none;border-top:1px solid #f1f5f9;margin:20px 0">
-            <p style="color:#94a3b8;font-size:12px;margin:0">Rectronx Circuits<br>1-3-8, BL Business Centre, Solok Thean Tek, 11500 Ayer Itam, Pulau Pinang<br>+60 11-7279 2500 · rectronx@gmail.com</p>
+            <p style="color:#94a3b8;font-size:12px;margin:0">Rectronx Circuits<br>1-3-8, BL Business Centre, Solok Thean Tek, 11500 Ayer Itam, Pulau Pinang<br>+60 14-860 0454 · rectronx@gmail.com</p>
           </div>
         </div>
       `,

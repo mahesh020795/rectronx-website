@@ -128,7 +128,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <dt className="text-slate-400 text-xs uppercase tracking-wider mb-1">WhatsApp</dt>
-                  <dd className="text-slate-700 font-medium">+60 11-7279 2500</dd>
+                  <dd className="text-slate-700 font-medium">+60 14-860 0454</dd>
                 </div>
                 <div>
                   <dt className="text-slate-400 text-xs uppercase tracking-wider mb-1">Based In</dt>

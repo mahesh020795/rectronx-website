@@ -5,7 +5,7 @@ import { trackWhatsAppLead } from "@/lib/analytics";
 
 export default function WhatsAppFloat() {
   const [showTooltip, setShowTooltip] = useState(false);
-  const number = "601172792500";
+  const number = "60148600454";
   const message = encodeURIComponent("Hi Rectronx! I'd like to know more about your services.");
   const url = `https://wa.me/${number}?text=${message}`;
 

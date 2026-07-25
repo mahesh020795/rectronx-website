@@ -33,7 +33,7 @@ const categoryColors: Record<string, string> = {
   software: "bg-violet-100 text-violet-700",
 };
 
-const WA_NUMBER = "601172792500";
+const WA_NUMBER = "60148600454";
 
 function waLink(title: string) {
   const msg = encodeURIComponent(

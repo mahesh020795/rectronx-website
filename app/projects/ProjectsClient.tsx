@@ -168,7 +168,7 @@ export default function ProjectsClient() {
 
                 {/* CTA link */}
                 <a
-                  href={`https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27m%20interested%20in%20a%20project%20similar%20to%20${encodeURIComponent(p.title)}`}
+                  href={`https://wa.me/60148600454?text=Hi%20Rectronx!%20I%27m%20interested%20in%20a%20project%20similar%20to%20${encodeURIComponent(p.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackWhatsAppLead("projects_card")}

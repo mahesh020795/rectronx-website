@@ -179,7 +179,7 @@ export default function Navbar() {
                 About
               </Link>
             </nav>
-            <a href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote."
+            <a href="https://wa.me/60148600454?text=Hi%20Rectronx!%20I%27d%20like%20a%20quote."
               target="_blank" rel="noopener noreferrer"
               onClick={() => trackWhatsAppLead("mobile_nav_quote")}
               className="block w-full text-center bg-brand-blue text-white text-xs font-extrabold uppercase tracking-wider px-5 py-3.5 rounded-full hover:bg-brand-blue-dark transition-colors">

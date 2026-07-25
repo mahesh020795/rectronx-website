@@ -94,7 +94,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/6 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/20 text-xs">© {new Date().getFullYear()} Rectronx Circuits. All rights reserved.</p>
-          <p className="text-white/20 text-xs">+60 11-7279 2500 · rectronx@gmail.com · Penang, Malaysia</p>
+          <p className="text-white/20 text-xs">+60 14-860 0454 · rectronx@gmail.com · Penang, Malaysia</p>
         </div>
       </div>
     </footer>

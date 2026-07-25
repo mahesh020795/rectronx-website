@@ -33,7 +33,7 @@ type ProjectProfile = {
   coreModules: string[];
 };
 
-const WA_NUMBER = "601172792500";
+const WA_NUMBER = "60148600454";
 
 export function getCatalogProjectSlug(project: CatalogProject) {
   return project.title

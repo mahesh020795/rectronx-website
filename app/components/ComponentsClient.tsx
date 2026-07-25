@@ -33,7 +33,7 @@ function waLink() {
   const msg = encodeURIComponent(
     "Hi Rectronx! I found the Components section and need help choosing parts for my FYP."
   );
-  return `https://wa.me/601172792500?text=${msg}`;
+  return `https://wa.me/60148600454?text=${msg}`;
 }
 
 export default function ComponentsClient({ components }: { components: ComponentGuide[] }) {

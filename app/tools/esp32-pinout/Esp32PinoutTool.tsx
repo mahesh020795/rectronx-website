@@ -509,7 +509,7 @@ export default function Esp32PinoutTool() {
                 Rectronx can review your ESP32 wiring before demo day.
               </p>
               <a
-                href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%20need%20help%20with%20ESP32%20pinout%20and%20wiring."
+                href="https://wa.me/60148600454?text=Hi%20Rectronx!%20I%20need%20help%20with%20ESP32%20pinout%20and%20wiring."
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppLead("esp32_pinout_tool_quote")}
@@ -656,7 +656,7 @@ export default function Esp32PinoutTool() {
             Rectronx can review your ESP32 wiring before demo day.
           </p>
           <a
-            href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%20need%20help%20with%20ESP32%20pinout%20and%20wiring."
+            href="https://wa.me/60148600454?text=Hi%20Rectronx!%20I%20need%20help%20with%20ESP32%20pinout%20and%20wiring."
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackWhatsAppLead("esp32_pinout_tool_quote_mobile")}

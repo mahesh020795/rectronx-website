@@ -45,7 +45,7 @@ export default function CallToAction() {
 
             <div className="flex flex-col gap-3 shrink-0">
               <a
-                href="https://wa.me/601172792500?text=Hi%20Rectronx!%20I%27d%20like%20to%20discuss%20my%20project%20requirements."
+                href="https://wa.me/60148600454?text=Hi%20Rectronx!%20I%27d%20like%20to%20discuss%20my%20project%20requirements."
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppLead("home_bottom_cta")}

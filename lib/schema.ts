@@ -16,11 +16,11 @@ export const organizationSchema = {
   description:
     "Malaysia's engineering & technology company for Final Year Projects and commercial software products. Custom IoT, Arduino, ESP32, Raspberry Pi FYP solutions in Penang.",
   email: "rectronx@gmail.com",
-  telephone: "+60-11-72792500",
+  telephone: "+60-14-8600454",
   contactPoint: [
     {
       "@type": "ContactPoint",
-      telephone: "+60-11-72792500",
+      telephone: "+60-14-8600454",
       contactType: "customer support",
       contactOption: "TollFree",
       areaServed: "MY",
@@ -57,7 +57,7 @@ export const localBusinessSchema = {
   alternateName: ["Rectronx", "rectronx.com"],
   image: `${BASE}/og-image.png`,
   url: BASE,
-  telephone: "+60-11-72792500",
+  telephone: "+60-14-8600454",
   email: "rectronx@gmail.com",
   priceRange: "RM",
   address: {

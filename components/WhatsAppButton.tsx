@@ -16,7 +16,7 @@ export default function WhatsAppButton({
   className = "",
   trackingSource = "whatsapp_button",
 }: Props) {
-  const number = "601172792500";
+  const number = "60148600454";
   const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 
   return (

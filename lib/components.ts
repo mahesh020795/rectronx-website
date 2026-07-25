@@ -147,7 +147,7 @@ export function componentWhatsAppLink(component: ComponentGuide, source = "compo
   const text = encodeURIComponent(
     `Hi Rectronx! I need help using ${component.shortName} in my FYP. Can you advise me?`
   );
-  return `https://wa.me/601172792500?text=${text}&utm_source=${source}`;
+  return `https://wa.me/60148600454?text=${text}&utm_source=${source}`;
 }
 
 export function componentMetaTitle(component: ComponentGuide) {
