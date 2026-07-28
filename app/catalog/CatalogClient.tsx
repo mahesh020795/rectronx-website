@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Search, MessageCircle } from "lucide-react";
 import { allCatalogProjects, iotProjects, softwareProjects, totalCount } from "@/data/projects";
@@ -46,6 +46,31 @@ export default function CatalogClient() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<Category>("all");
   const [activeTech, setActiveTech] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(true);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
+    function handleScroll() {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY.current;
+
+      if (currentScrollY < 140 || isSearchFocused) {
+        setShowFilters(true);
+      } else if (delta > 8) {
+        setShowFilters(false);
+      } else if (delta < -8) {
+        setShowFilters(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isSearchFocused]);
 
   const filtered = useMemo(() => {
     let results = allCatalogProjects;
@@ -124,7 +149,11 @@ export default function CatalogClient() {
       </section>
 
       {/* Filters & Search */}
-      <section className="sticky top-16 z-30 bg-white border-b border-slate-200 shadow-sm">
+      <section
+        className={`sticky top-16 z-30 bg-white border-b border-slate-200 shadow-sm transition-transform duration-300 ease-out ${
+          showFilters ? "translate-y-0" : "-translate-y-[calc(100%+4rem)]"
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 space-y-3">
           {/* Search */}
           <div className="relative">
@@ -133,6 +162,8 @@ export default function CatalogClient() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
               placeholder="Search by title, technology, or keyword..."
               className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent"
             />
