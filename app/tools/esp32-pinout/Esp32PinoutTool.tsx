@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Cpu, Search, X } from "lucide-react";
+import { AlertTriangle, Copy, Cpu, Download, Link2, Search, Share2, X } from "lucide-react";
 import pins from "@/data/esp32-pinout.json";
 import { trackWhatsAppLead } from "@/lib/analytics";
 import clsx from "clsx";
@@ -38,6 +38,10 @@ const filters: { key: FilterKey; label: string }[] = [
   { key: "pwm", label: "PWM" },
   { key: "strap", label: "Boot" },
 ];
+
+const safePins = pinData.filter(
+  (pin) => pin.gpio !== null && !pin.strap && !pin.inputOnly && !pin.wifiAdcCaution && pin.label !== "TX0" && pin.label !== "RX0"
+);
 
 function pinId(pin: Pin) {
   return pin.gpio === null ? `${pin.side}-${pin.label}-${pin.phys}` : `gpio-${pin.gpio}`;
@@ -219,6 +223,7 @@ function BoardSvg({
 
   return (
     <svg
+      id="esp32-desktop-pinout-svg"
       viewBox="0 0 860 720"
       role="img"
       aria-label="Interactive ESP32 DevKit V1 GPIO pinout"
@@ -458,12 +463,100 @@ export default function Esp32PinoutTool() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
   const [fitBoard, setFitBoard] = useState(true);
+  const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const query = search.trim().toLowerCase();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pinParam = params.get("pin")?.toLowerCase().replace(/\s+/g, "");
+    if (!pinParam) return;
+    const requestedPin = pinData.find((pin) => {
+      if (pin.gpio === null) return pin.label.toLowerCase() === pinParam;
+      return `gpio${pin.gpio}` === pinParam || String(pin.gpio) === pinParam;
+    });
+    if (requestedPin) setSelected(requestedPin);
+  }, []);
+
+  useEffect(() => {
+    if (!copyStatus) return;
+    const timer = window.setTimeout(() => setCopyStatus(null), 2200);
+    return () => window.clearTimeout(timer);
+  }, [copyStatus]);
 
   const matchingPins = useMemo(
     () => pinData.filter((pin) => pinMatchesFilter(pin, activeFilter) && pinMatchesSearch(pin, query)),
     [activeFilter, query]
   );
+
+  function buildSelectedPinUrl(pin: Pin) {
+    const pinParam = pin.gpio === null ? pin.label.toLowerCase() : `gpio${pin.gpio}`;
+    const url = new URL(window.location.href);
+    url.pathname = "/tools/esp32-pinout";
+    url.search = `?pin=${encodeURIComponent(pinParam)}`;
+    return url.toString();
+  }
+
+  async function copyText(text: string, status: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyStatus(status);
+    } catch {
+      setCopyStatus("Copy failed. Please copy from the address bar.");
+    }
+  }
+
+  function selectPin(pin: Pin) {
+    setSelected(pin);
+    if (typeof window === "undefined") return;
+    const url = buildSelectedPinUrl(pin);
+    window.history.replaceState(null, "", url);
+  }
+
+  function copySelectedPinLink() {
+    copyText(buildSelectedPinUrl(selected), `Link copied for ${selected.gpio === null ? selected.label : `GPIO ${selected.gpio}`}.`);
+  }
+
+  function copySafePins() {
+    const text = `ESP32 safer general-purpose pins: ${safePins.map((pin) => `GPIO${pin.gpio}`).join(", ")}. Notes: prefer ADC1 pins for WiFi analog projects; avoid strapping pins during boot; GPIO34-GPIO39 are input-only. Source: Rectronx ESP32 Pinout Tool https://rectronx.com/tools/esp32-pinout`;
+    copyText(text, "Safe ESP32 pin list copied.");
+  }
+
+  async function shareTool() {
+    const shareData = {
+      title: "ESP32 Pinout Tool",
+      text: "Free ESP32 pinout tool with ADC2 WiFi, strapping pin, and input-only pin warnings.",
+      url: "https://rectronx.com/tools/esp32-pinout",
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        setCopyStatus("Share sheet opened.");
+        return;
+      } catch {
+        return;
+      }
+    }
+    await copyText(shareData.url, "Tool link copied.");
+  }
+
+  function downloadPinoutSvg() {
+    const svg = document.getElementById("esp32-desktop-pinout-svg");
+    if (!svg) {
+      setCopyStatus("Download failed. Please try on desktop view.");
+      return;
+    }
+    const clonedSvg = svg.cloneNode(true) as SVGElement;
+    clonedSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    const blob = new Blob([new XMLSerializer().serializeToString(clonedSvg)], { type: "image/svg+xml;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "rectronx-esp32-devkit-v1-pinout.svg";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(link.href);
+    setCopyStatus("ESP32 pinout SVG downloaded.");
+  }
 
   return (
     <section className="relative w-full max-w-full overflow-hidden bg-[#080E1A] pt-28">
@@ -477,6 +570,37 @@ export default function Esp32PinoutTool() {
           <p className="mt-5 max-w-3xl break-words text-base leading-8 text-white/70">
             Search ESP32 DevKit V1 pins, inspect GPIO capabilities, and avoid common boot, ADC, and input-only mistakes before building your IoT or Projek Akhir Tahun prototype.
           </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={shareTool}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-blue px-5 py-3 text-xs font-extrabold uppercase tracking-[0.12em] text-white transition hover:bg-brand-blue-dark"
+            >
+              <Share2 size={16} />
+              Share tool
+            </button>
+            <button
+              type="button"
+              onClick={copySafePins}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-xs font-extrabold uppercase tracking-[0.12em] text-white/80 transition hover:border-brand-blue hover:text-white"
+            >
+              <Copy size={16} />
+              Copy safe pins
+            </button>
+            <button
+              type="button"
+              onClick={downloadPinoutSvg}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-5 py-3 text-xs font-extrabold uppercase tracking-[0.12em] text-white/80 transition hover:border-brand-blue hover:text-white"
+            >
+              <Download size={16} />
+              Download SVG
+            </button>
+          </div>
+          {copyStatus && (
+            <p className="mt-3 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-100">
+              {copyStatus}
+            </p>
+          )}
         </div>
 
         <div className="grid min-w-0 gap-4 xl:grid-cols-[210px_minmax(720px,1fr)_300px] xl:gap-5">
@@ -580,10 +704,10 @@ export default function Esp32PinoutTool() {
               </div>
             </div>
             <div className="min-w-0 overflow-hidden rounded-xl border border-white/8 bg-[#07101D] p-1 md:hidden">
-              <MobileBoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} />
+              <MobileBoardSvg selected={selected} setSelected={selectPin} activeFilter={activeFilter} query={query} />
             </div>
             <div className="hidden overflow-x-auto rounded-xl border border-white/8 bg-[#07101D] [-webkit-overflow-scrolling:touch] md:block xl:overflow-x-visible">
-              <BoardSvg selected={selected} setSelected={setSelected} activeFilter={activeFilter} query={query} fitBoard={fitBoard} />
+              <BoardSvg selected={selected} setSelected={selectPin} activeFilter={activeFilter} query={query} fitBoard={fitBoard} />
             </div>
             <div className="mt-4 flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-white/65">
               <AlertTriangle size={18} className="mt-1 shrink-0 text-brand-blue" />
@@ -635,6 +759,14 @@ export default function Esp32PinoutTool() {
                 ))}
               </dl>
               <p className="mt-4 text-sm leading-7 text-white/70">{selected.note}</p>
+              <button
+                type="button"
+                onClick={copySelectedPinLink}
+                className="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-full border border-brand-blue/40 bg-brand-blue/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-brand-blue-light transition hover:bg-brand-blue hover:text-white"
+              >
+                <Link2 size={15} />
+                Copy this pin link
+              </button>
               {(selected.strap || selected.inputOnly || selected.wifiAdcCaution) && (
                 <div className="mt-4 rounded-xl border border-orange-400/35 bg-orange-400/10 p-4 text-sm leading-6 text-orange-100">
                   <div className="mb-1 flex items-center gap-2 font-extrabold">

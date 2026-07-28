@@ -7,6 +7,8 @@ date: "2026-06-14"
 
 If you are serious about IoT, the [ESP32](/blog/esp32-getting-started) should be your default board. It has built-in WiFi and Bluetooth, a dual-core processor, plenty of GPIO pins, and costs barely more than an [Arduino](/blog/arduino-project-ideas-malaysia) Uno. That combination makes **esp32 project ideas** some of the most rewarding projects you can build today. In this guide we cover why the ESP32 wins, and the best **esp32 project ideas** across WiFi, Bluetooth, and cloud-connected categories.
 
+For wiring, keep the [ESP32 Pinout Tool](/tools/esp32-pinout) open so you can avoid ADC2 WiFi conflicts, input-only GPIO pins and boot strapping pin mistakes.
+
 ## Why Choose the ESP32 Over Arduino?
 
 The classic Arduino Uno is great for learning, but it has no wireless connectivity and a slow 8-bit processor. The ESP32 fixes all of that:
@@ -68,7 +70,7 @@ A few practical tips before you start any **esp32 project idea**:
 1. **Install the ESP32 board package** in the Arduino IDE or use PlatformIO.
 2. **Mind the 3.3V logic** — the ESP32 is not 5V tolerant on its GPIO pins. Use level shifters where needed.
 3. **Power it properly** — WiFi draws current spikes; a weak USB port can cause random resets. Use a stable 5V/1A supply.
-4. **Not all pins are equal** — some GPIOs are input-only or used during boot. Check a pinout diagram.
+4. **Not all pins are equal** — some GPIOs are input-only or used during boot. Check the [ESP32 pinout tool](/tools/esp32-pinout) before wiring.
 
 ## Turning an ESP32 Idea Into an FYP
 

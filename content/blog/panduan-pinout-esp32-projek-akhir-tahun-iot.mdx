@@ -1,0 +1,60 @@
+---
+title: "Panduan Pinout ESP32 untuk Projek Akhir Tahun IoT"
+excerpt: "Panduan ringkas memilih pin ESP32 yang lebih selamat untuk projek IoT, sensor analog, OLED, relay, GPS dan demo Projek Akhir Tahun."
+category: "Projek Akhir Tahun"
+date: "2026-07-28"
+---
+
+Ramai pelajar pilih ESP32 untuk Projek Akhir Tahun sebab ada WiFi, Bluetooth, banyak GPIO dan harga masih mampu milik. Tetapi masalah biasa berlaku bila pin dipilih tanpa semak fungsi sebenar. Projek boleh gagal boot, bacaan sensor jadi pelik, atau relay tidak bergerak.
+
+Sebelum wiring, buka [ESP32 Pinout Tool Rectronx](/tools/esp32-pinout). Tool ini boleh cari GPIO, ADC, PWM, DAC, touch dan boot pin dalam satu paparan.
+
+## Pin Yang Biasanya Lebih Selamat
+
+Untuk projek pelajar, mula dengan pin yang senang diterangkan dan senang debug:
+
+| Kegunaan | Pin cadangan |
+|---|---|
+| Digital input/output | GPIO16, GPIO17, GPIO18, GPIO19, GPIO21, GPIO22, GPIO23, GPIO25, GPIO26, GPIO27, GPIO32, GPIO33 |
+| OLED I2C | GPIO21 SDA, GPIO22 SCL |
+| GPS UART | GPIO16 RX2, GPIO17 TX2 |
+| Sensor analog dengan WiFi | GPIO32 atau GPIO33 |
+
+Pin ini bukan wajib untuk semua projek, tetapi ia lebih mudah untuk demo berbanding pin yang ada fungsi boot atau input-only.
+
+## Hati-Hati Dengan Boot Pin
+
+ESP32 ada strapping pins iaitu GPIO0, GPIO2, GPIO5, GPIO12 dan GPIO15. Pin ini dibaca semasa board reset atau mula hidup. Kalau litar luar tarik pin ke level yang salah, ESP32 mungkin susah boot atau susah upload code.
+
+Untuk projek yang perlu stabil semasa viva, elakkan relay, button atau module yang tidak pasti pada boot pin. Kalau perlu guna, test reset berkali-kali.
+
+## GPIO34 hingga GPIO39 Input Sahaja
+
+GPIO34, GPIO35, GPIO36 dan GPIO39 ialah input-only. Maksudnya boleh guna untuk baca sensor atau button, tetapi tidak boleh hidupkan LED, relay, buzzer atau motor driver.
+
+Ini kesilapan yang selalu berlaku sebab pelajar nampak label GPIO dan anggap semua pin sama.
+
+## ADC2 dan WiFi
+
+Kalau projek guna Blynk, Firebase, MQTT, HTTP atau dashboard online, projek itu guna WiFi. Untuk bacaan analog, elakkan ADC2 kerana ia boleh konflik dengan WiFi.
+
+Guna ADC1 seperti GPIO32 atau GPIO33 untuk sensor analog. Contoh sensor analog termasuk MQ gas sensor, soil moisture sensor dan voltage divider.
+
+## Contoh Wiring Modul Popular
+
+| Modul | ESP32 pin yang sesuai |
+|---|---|
+| DHT11/DHT22 | GPIO4, GPIO16, GPIO17 atau GPIO23 |
+| OLED SSD1306 | GPIO21 SDA, GPIO22 SCL |
+| GPS NEO-6M | GPIO16 RX2, GPIO17 TX2 |
+| Relay | GPIO18, GPIO19, GPIO23, GPIO25 atau GPIO26 |
+| MQ sensor analog | GPIO32 atau GPIO33 |
+
+## Nasihat Untuk Viva
+
+Dalam laporan, jangan tulis pin secara rawak. Tulis kenapa pin itu dipilih. Contoh: "GPIO32 dipilih kerana ia ADC1 dan lebih sesuai untuk bacaan analog semasa WiFi aktif."
+
+Ayat seperti ini nampak lebih engineering dan membantu panel faham keputusan teknikal anda.
+
+Gunakan [ESP32 Pinout Tool](/tools/esp32-pinout) untuk semak pin sebelum wiring dan simpan link pin yang dipilih dalam nota projek.
+

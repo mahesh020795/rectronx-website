@@ -1,0 +1,90 @@
+---
+title: "Best ESP32 Pins for DHT11, OLED, Relay, GPS and Common FYP Modules"
+excerpt: "Practical ESP32 pin choices for DHT11, OLED SSD1306, relay modules, GPS NEO-6M, MQ sensors and Blynk or Firebase IoT projects."
+category: "Components"
+date: "2026-07-28"
+---
+
+Most ESP32 student projects use the same few modules: DHT11 or DHT22, OLED display, relay, GPS, MQ gas sensor and cloud dashboard. The project becomes easier when the pin choices are predictable.
+
+Use the [Rectronx ESP32 Pinout Tool](/tools/esp32-pinout) beside this guide. You can search a GPIO, click the pin and copy a direct pin link for your wiring plan.
+
+## DHT11 or DHT22 Sensor
+
+For DHT11 or DHT22, use a normal digital GPIO. Good choices include:
+
+- GPIO4
+- GPIO16
+- GPIO17
+- GPIO23
+
+Many examples use GPIO4, and it usually works. If your project has boot problems or many modules, GPIO16, GPIO17 or GPIO23 are also clean choices.
+
+Basic wiring:
+
+| DHT pin | ESP32 |
+|---|---|
+| VCC | 3.3V |
+| GND | GND |
+| DATA | GPIO4 or another selected GPIO |
+
+Some bare DHT sensors need a pull-up resistor on the data line. Many DHT modules already include it.
+
+## OLED SSD1306 Display
+
+Most 0.96 inch OLED SSD1306 modules use I2C. The common ESP32 I2C pins are:
+
+| OLED pin | ESP32 |
+|---|---|
+| SDA | GPIO21 |
+| SCL | GPIO22 |
+| VCC | 3.3V |
+| GND | GND |
+
+ESP32 can route I2C to other pins, but GPIO21 and GPIO22 match many examples, so debugging is easier.
+
+## Relay Module
+
+For a relay input signal, use a stable output-capable GPIO such as:
+
+- GPIO18
+- GPIO19
+- GPIO23
+- GPIO25
+- GPIO26
+- GPIO27
+
+Do not use GPIO34 to GPIO39 because they are input-only. Do not drive a relay coil directly from a GPIO pin. Use a relay module with proper transistor/driver circuitry and power the load safely.
+
+## GPS NEO-6M
+
+GPS modules use UART. A practical ESP32 choice is UART2:
+
+| GPS pin | ESP32 |
+|---|---|
+| GPS TX | GPIO16 RX2 |
+| GPS RX | GPIO17 TX2 |
+| VCC | Check module requirement |
+| GND | GND |
+
+This keeps GPS away from GPIO1 and GPIO3, which are used by USB serial programming and logs.
+
+## MQ Gas Sensor Analog Output
+
+If your MQ sensor module gives analog output and the ESP32 also uses WiFi, choose ADC1:
+
+- GPIO32
+- GPIO33
+- GPIO34
+- GPIO35
+- GPIO36
+- GPIO39
+
+GPIO32 and GPIO33 are easier because they are not input-only. Avoid ADC2 analog readings when WiFi is active.
+
+## Blynk, Firebase, MQTT or HTTP Projects
+
+Any online ESP32 project uses WiFi. That means analog sensor pins need extra care. Use ADC1 for analog readings and keep boot pins clear where possible.
+
+For fast checking, use the [ESP32 Pinout Tool](/tools/esp32-pinout) and copy the safe pin list before you wire the prototype.
+
