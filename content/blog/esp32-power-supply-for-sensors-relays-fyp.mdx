@@ -1,0 +1,68 @@
+---
+title: "ESP32 Power Supply for Sensors and Relays in FYP Projects"
+excerpt: "How to avoid random ESP32 resets by planning power supply, relay isolation and sensor current properly."
+category: "Components"
+date: "2026-07-29"
+---
+
+How to avoid random ESP32 resets by planning power supply, relay isolation and sensor current properly.
+
+## Quick Summary
+
+This guide focuses on **ESP32 power supply planning**. The goal is to help students choose a clear scope, build a working prototype and explain the result confidently during proposal, demo or viva.
+
+The expected outcome is a stable ESP32 circuit that does not reset when WiFi or relay switching starts. This is a realistic student-project target because it can be demonstrated, measured and documented without pretending the prototype is an industrial product.
+
+## Recommended Scope
+
+Start with one clear problem, one main input and one useful output. A strong FYP is not the project with the most modules. It is the project where every module has a reason.
+
+Recommended build flow:
+
+- Define the user problem in one paragraph.
+- Draw the input, controller, cloud or database, and output flow.
+- Test the sensor or software module alone first.
+- Add the dashboard, alert or report only after the core function works.
+- Keep a test table for normal, error and recovery cases.
+
+## Components and Tools
+
+- ESP32
+- 5V adapter
+- relay module
+- sensor modules
+- common ground
+
+These items are common in student projects, but the exact choice should follow the final title, budget and demo environment.
+
+## Important Accuracy Note
+
+USB ports and weak breadboard wires may not provide enough current for motors, relays or GSM modules.
+
+This note matters because panel members often ask about limitations. A mature answer is better than a marketing answer. Say what the system can do, what it cannot do and how you tested it.
+
+## Testing Plan
+
+measure voltage during relay switching and WiFi connection, then separate high-current loads if needed.
+
+Also prepare screenshots, serial monitor logs, database records or dashboard images. These become evidence for Chapter 4 and help you answer viva questions without guessing.
+
+## Common Mistakes
+
+- Choosing a title before checking component availability.
+- Connecting everything at once before testing each module.
+- Ignoring power supply, wiring and environmental limits.
+- Making claims that are not supported by test results.
+- Preparing a demo but not preparing error-case explanation.
+
+## Final Advice
+
+Use this topic as a focused project, not just a nice title. The strongest version has a clear problem statement, a small but reliable prototype, and honest testing results.
+
+For more title ideas, browse the [Rectronx Project Catalog](/catalog).
+
+If the project uses ESP32, check the [ESP32 Pinout Tool](/tools/esp32-pinout) before wiring.
+
+For related modules, use the [Component Database](/components).
+
+To discuss scope, parts and timeline, [contact Rectronx](/contact).

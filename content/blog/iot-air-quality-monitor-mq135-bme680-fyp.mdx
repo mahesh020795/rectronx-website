@@ -1,0 +1,68 @@
+---
+title: "IoT Air Quality Monitor with MQ135 or BME680: FYP Reality Check"
+excerpt: "A practical explanation of what MQ135 and BME680 air quality projects can and cannot claim."
+category: "Components"
+date: "2026-07-29"
+---
+
+A practical explanation of what MQ135 and BME680 air quality projects can and cannot claim.
+
+## Quick Summary
+
+This guide focuses on **IoT air quality monitoring**. The goal is to help students choose a clear scope, build a working prototype and explain the result confidently during proposal, demo or viva.
+
+The expected outcome is a relative air quality monitoring prototype with trend display and alerts. This is a realistic student-project target because it can be demonstrated, measured and documented without pretending the prototype is an industrial product.
+
+## Recommended Scope
+
+Start with one clear problem, one main input and one useful output. A strong FYP is not the project with the most modules. It is the project where every module has a reason.
+
+Recommended build flow:
+
+- Define the user problem in one paragraph.
+- Draw the input, controller, cloud or database, and output flow.
+- Test the sensor or software module alone first.
+- Add the dashboard, alert or report only after the core function works.
+- Keep a test table for normal, error and recovery cases.
+
+## Components and Tools
+
+- ESP32
+- MQ135 or BME680
+- OLED display
+- Firebase dashboard
+- alert threshold
+
+These items are common in student projects, but the exact choice should follow the final title, budget and demo environment.
+
+## Important Accuracy Note
+
+MQ135 is not a true CO2 sensor. Treat it as relative gas/air quality indication unless calibrated properly.
+
+This note matters because panel members often ask about limitations. A mature answer is better than a marketing answer. Say what the system can do, what it cannot do and how you tested it.
+
+## Testing Plan
+
+record baseline, test in different airflow conditions and avoid claiming certified ppm accuracy.
+
+Also prepare screenshots, serial monitor logs, database records or dashboard images. These become evidence for Chapter 4 and help you answer viva questions without guessing.
+
+## Common Mistakes
+
+- Choosing a title before checking component availability.
+- Connecting everything at once before testing each module.
+- Ignoring power supply, wiring and environmental limits.
+- Making claims that are not supported by test results.
+- Preparing a demo but not preparing error-case explanation.
+
+## Final Advice
+
+Use this topic as a focused project, not just a nice title. The strongest version has a clear problem statement, a small but reliable prototype, and honest testing results.
+
+For more title ideas, browse the [Rectronx Project Catalog](/catalog).
+
+If the project uses ESP32, check the [ESP32 Pinout Tool](/tools/esp32-pinout) before wiring.
+
+For related modules, use the [Component Database](/components).
+
+To discuss scope, parts and timeline, [contact Rectronx](/contact).
