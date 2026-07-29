@@ -1687,5 +1687,1366 @@ export const components: ComponentGuide[] = [
       alternatives: [{ slug: "hx711", name: "HX711", reason: "Required amplifier/interface for most load cells." }],
       buyNotes: "Match the load range to your actual object weight for better accuracy.",
     },
+    {
+          "slug": "a4988-stepper-driver",
+          "name": "A4988 Stepper Motor Driver",
+          "shortName": "A4988",
+          "category": "drivers",
+          "categoryLabel": "Stepper Driver",
+          "tagline": "Compact stepper driver for NEMA17 motion and positioning projects.",
+          "description": "A4988 is a stepper motor driver module used to control bipolar stepper motors through STEP and DIR pins. It is common in plotters, dispensers, sliders, small CNC-style demos and automated mechanisms.",
+          "priceRange": "RM5-RM15",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "STEP/DIR",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V logic",
+                "5V logic",
+                "8V-35V motor supply"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "NEMA17 Stepper"
+          ],
+          "suitableFor": [
+                "NEMA17 control",
+                "Linear motion prototype",
+                "Dispenser mechanism"
+          ],
+          "notSuitableFor": [
+                "Driving motors without current limit setup",
+                "DC motors",
+                "High-current industrial motion"
+          ],
+          "commonMistakes": [
+                "Not setting current limit",
+                "No motor power supply",
+                "Disconnecting motor while powered"
+          ],
+          "projectIdeas": [
+                "Smart Conveyor Quality Reject Prototype with Load Cell Check",
+                "Automatic Bottle Filling Prototype with Flow Sensor and Level Stop"
+          ],
+          "alternatives": [
+                {
+                      "slug": "drv8825-stepper-driver",
+                      "name": "DRV8825",
+                      "reason": "Higher current option with similar step/dir control."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "fyp-electronics-troubleshooting-checklist",
+                "esp32-power-supply-for-sensors-relays-fyp"
+          ],
+          "buyNotes": "Buy heatsinks and set the current limit before running a NEMA17 motor."
+    },
+    {
+          "slug": "drv8825-stepper-driver",
+          "name": "DRV8825 Stepper Motor Driver",
+          "shortName": "DRV8825",
+          "category": "drivers",
+          "categoryLabel": "Stepper Driver",
+          "tagline": "Higher-current stepper driver for stronger motion prototypes.",
+          "description": "DRV8825 is a stepper driver module for bipolar stepper motors. It supports STEP/DIR control and is often used when a project needs more current margin than low-cost A4988 boards.",
+          "priceRange": "RM8-RM22",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "STEP/DIR",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V logic",
+                "5V logic",
+                "8.2V-45V motor supply"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "NEMA17 Stepper"
+          ],
+          "suitableFor": [
+                "Stepper motion",
+                "Robot mechanism",
+                "Positioning system"
+          ],
+          "notSuitableFor": [
+                "No-current-limit operation",
+                "Small servo replacement",
+                "Direct GPIO motor drive"
+          ],
+          "commonMistakes": [
+                "Wrong current limit",
+                "No cooling under load",
+                "Poor motor supply wiring"
+          ],
+          "projectIdeas": [
+                "Mini AGV Path Tracking Robot with Station Check-In Display",
+                "Smart Mini Lift Model with Floor Display and Overload Alert"
+          ],
+          "alternatives": [
+                {
+                      "slug": "a4988-stepper-driver",
+                      "name": "A4988",
+                      "reason": "Cheaper option for lighter current needs."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "fyp-electronics-troubleshooting-checklist",
+                "esp32-power-supply-for-sensors-relays-fyp"
+          ],
+          "buyNotes": "Check the motor current rating and tune the driver before full-speed testing."
+    },
+    {
+          "slug": "uln2003-stepper-driver",
+          "name": "ULN2003 Stepper Driver Board",
+          "shortName": "ULN2003",
+          "category": "drivers",
+          "categoryLabel": "Stepper Driver",
+          "tagline": "Simple driver board commonly paired with 28BYJ-48 steppers.",
+          "description": "ULN2003 driver boards are used to drive 28BYJ-48 geared stepper motors from microcontroller GPIO pins. They are beginner-friendly for low-speed positioning demos.",
+          "priceRange": "RM3-RM10",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "GPIO"
+          ],
+          "voltage": [
+                "5V motor supply",
+                "3.3V/5V logic"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "28BYJ-48 Stepper"
+          ],
+          "suitableFor": [
+                "Small stepper demo",
+                "Mini turntable",
+                "Flap or valve prototype"
+          ],
+          "notSuitableFor": [
+                "NEMA17 motors",
+                "High torque",
+                "Fast motion"
+          ],
+          "commonMistakes": [
+                "Using it for NEMA17 motors",
+                "No external 5V supply",
+                "Wrong coil sequence"
+          ],
+          "projectIdeas": [
+                "Automatic Greenhouse Shading System with IoT Temperature Control",
+                "Smart Food Storage System with Temperature and Humidity Control via IoT"
+          ],
+          "alternatives": [
+                {
+                      "slug": "28byj-48-stepper",
+                      "name": "28BYJ-48 Stepper",
+                      "reason": "The common motor paired with this driver."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "arduino-uno-vs-esp32-for-electronics-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Most student kits include ULN2003 together with the 28BYJ-48 motor."
+    },
+    {
+          "slug": "tb6612fng-motor-driver",
+          "name": "TB6612FNG Dual Motor Driver",
+          "shortName": "TB6612FNG",
+          "category": "drivers",
+          "categoryLabel": "DC Motor Driver",
+          "tagline": "Efficient dual H-bridge driver for small robot cars and DC motors.",
+          "description": "TB6612FNG is a compact dual motor driver for small DC motors. It is usually more efficient and smaller than older L298N boards for lightweight robot projects.",
+          "priceRange": "RM8-RM25",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "PWM",
+                "GPIO"
+          ],
+          "voltage": [
+                "2.7V-5.5V logic",
+                "4.5V-13.5V motor supply"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi Pico"
+          ],
+          "suitableFor": [
+                "Robot car",
+                "Small DC motor control",
+                "PWM speed control"
+          ],
+          "notSuitableFor": [
+                "High-current motors",
+                "Stepper motor control",
+                "No motor power planning"
+          ],
+          "commonMistakes": [
+                "No standby pin control",
+                "Underrated motor supply",
+                "No common ground"
+          ],
+          "projectIdeas": [
+                "Line Following Delivery Robot with RFID Drop-Off Verification",
+                "Voice-Controlled Classroom Demonstration Robot with Obstacle Avoidance"
+          ],
+          "alternatives": [
+                {
+                      "slug": "l298n",
+                      "name": "L298N",
+                      "reason": "Older but common driver for beginner robot kits."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "arduino-uno-vs-esp32-for-electronics-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Choose TB6612FNG for small efficient robots, not heavy motors."
+    },
+    {
+          "slug": "bts7960-motor-driver",
+          "name": "BTS7960 High Current Motor Driver",
+          "shortName": "BTS7960",
+          "category": "drivers",
+          "categoryLabel": "High Current Driver",
+          "tagline": "High-current H-bridge module for stronger DC motor prototypes.",
+          "description": "BTS7960 modules drive larger brushed DC motors compared with small robot drivers. They are useful in heavier automation demos, but need careful power and fuse planning.",
+          "priceRange": "RM18-RM45",
+          "difficulty": "Advanced",
+          "interfaces": [
+                "PWM",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V/5V logic",
+                "6V-27V motor supply"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32"
+          ],
+          "suitableFor": [
+                "High-current DC motor",
+                "Linear actuator",
+                "Heavy robot prototype"
+          ],
+          "notSuitableFor": [
+                "Tiny battery projects",
+                "Stepper motors",
+                "Unsafe unfused power wiring"
+          ],
+          "commonMistakes": [
+                "No fuse or current planning",
+                "Weak battery wiring",
+                "Undersized motor supply"
+          ],
+          "projectIdeas": [
+                "Smart Compressor Runtime and Overheat Alert System",
+                "Smart Vehicle Workshop Job Bay Occupancy Monitor"
+          ],
+          "alternatives": [
+                {
+                      "slug": "tb6612fng-motor-driver",
+                      "name": "TB6612FNG",
+                      "reason": "Better for smaller low-current robots."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-power-supply-for-sensors-relays-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Use thick wires, correct motor supply and protection for high-current loads."
+    },
+    {
+          "slug": "mosfet-trigger-module",
+          "name": "MOSFET Trigger Switch Module",
+          "shortName": "MOSFET Module",
+          "category": "drivers",
+          "categoryLabel": "Load Driver",
+          "tagline": "Low-side switching module for LED strips, pumps and DC loads.",
+          "description": "MOSFET trigger modules switch DC loads using a microcontroller signal. They are useful when a relay is too slow or noisy for PWM-style control.",
+          "priceRange": "RM5-RM18",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "PWM",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V/5V input",
+                "DC load supply"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "LED strips",
+                "DC pumps"
+          ],
+          "suitableFor": [
+                "LED dimming",
+                "Small DC pump",
+                "Fan speed control"
+          ],
+          "notSuitableFor": [
+                "AC mains loads",
+                "Inductive loads without protection",
+                "Unknown high-current loads"
+          ],
+          "commonMistakes": [
+                "No flyback diode for inductive loads",
+                "Wrong load polarity",
+                "No common ground"
+          ],
+          "projectIdeas": [
+                "Smart Home Water Leak Detection with Solenoid Valve Shutdown",
+                "Smart Greenhouse Ventilation Control with CO2 and Temperature Feedback"
+          ],
+          "alternatives": [
+                {
+                      "slug": "relay-module",
+                      "name": "Relay Module",
+                      "reason": "Better for simple on/off isolation where PWM is not needed."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-relay-module-wiring-fyp-safety-guide",
+                "esp32-power-supply-for-sensors-relays-fyp"
+          ],
+          "buyNotes": "Check whether the module is logic-level and rated for the actual load current."
+    },
+    {
+          "slug": "logic-level-converter",
+          "name": "4-Channel Logic Level Converter",
+          "shortName": "Level Shifter",
+          "category": "power",
+          "categoryLabel": "Interface Support",
+          "tagline": "Bidirectional level shifting for 3.3V and 5V signal compatibility.",
+          "description": "Logic level converters translate signal voltage between 3.3V controllers and 5V modules. They help protect ESP32, Raspberry Pi and other 3.3V boards from 5V logic.",
+          "priceRange": "RM3-RM10",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "I2C",
+                "UART",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V side",
+                "5V side"
+          ],
+          "compatibleWith": [
+                "ESP32",
+                "Arduino",
+                "Raspberry Pi",
+                "I2C modules"
+          ],
+          "suitableFor": [
+                "3.3V to 5V interface",
+                "I2C level shifting",
+                "Safer mixed-voltage prototypes"
+          ],
+          "notSuitableFor": [
+                "Power conversion",
+                "High-speed unknown buses",
+                "Motor current control"
+          ],
+          "commonMistakes": [
+                "Using it as a power regulator",
+                "Missing low-voltage reference",
+                "Connecting HV and LV sides backwards"
+          ],
+          "projectIdeas": [
+                "ESP32-Based MQTT Sensor Gateway for Multiple Arduino Nodes",
+                "IoT-Based Classroom Asset Checkout System with RFID and Dashboard"
+          ],
+          "alternatives": [
+                {
+                      "slug": "buck-converter-lm2596",
+                      "name": "LM2596",
+                      "reason": "Use for power voltage conversion, not signal shifting."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-pinout-tool-how-to-use-for-fyp",
+                "common-esp32-wiring-mistakes-fyp-demo"
+          ],
+          "buyNotes": "Use level shifters for signals; use regulators for power rails."
+    },
+    {
+          "slug": "breadboard-power-supply",
+          "name": "MB102 Breadboard Power Supply",
+          "shortName": "MB102 Power",
+          "category": "power",
+          "categoryLabel": "Power Module",
+          "tagline": "Breadboard power module for quick 3.3V and 5V prototype rails.",
+          "description": "MB102-style breadboard power modules provide selectable 3.3V and 5V rails for quick prototyping. They are useful for demos but should not be pushed beyond their regulator limits.",
+          "priceRange": "RM4-RM12",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Power"
+          ],
+          "voltage": [
+                "3.3V output",
+                "5V output",
+                "DC input"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Sensors",
+                "Breadboards"
+          ],
+          "suitableFor": [
+                "Quick sensor testing",
+                "Breadboard demos",
+                "Low-current logic rails"
+          ],
+          "notSuitableFor": [
+                "Motors",
+                "GSM modules",
+                "High-current relay banks"
+          ],
+          "commonMistakes": [
+                "Powering motors from breadboard rails",
+                "Wrong jumper voltage setting",
+                "Overheating regulator"
+          ],
+          "projectIdeas": [
+                "ESP32 DHT11 Firebase Temperature Monitoring FYP Guide",
+                "IoT Dashboard and Data Logging Guide for FYP Students"
+          ],
+          "alternatives": [
+                {
+                      "slug": "buck-converter-lm2596",
+                      "name": "LM2596",
+                      "reason": "Better for stronger regulated supply from batteries/adapters."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-power-supply-for-sensors-relays-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Use it for low-current logic testing, not final high-load prototypes."
+    },
+    {
+          "slug": "ads1115-adc",
+          "name": "ADS1115 16-bit ADC Module",
+          "shortName": "ADS1115",
+          "category": "sensors",
+          "categoryLabel": "ADC Module",
+          "tagline": "External high-resolution ADC for analog sensors and data logging.",
+          "description": "ADS1115 is a 16-bit I2C analog-to-digital converter. It is useful when a project needs better analog resolution or extra analog inputs than the controller provides.",
+          "priceRange": "RM10-RM28",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C",
+                "Analog input"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Precision analog readings",
+                "Extra ADC channels",
+                "Sensor data logging"
+          ],
+          "notSuitableFor": [
+                "Fast oscilloscope-style sampling",
+                "High-voltage direct measurement",
+                "No calibration projects"
+          ],
+          "commonMistakes": [
+                "Measuring voltage above VDD",
+                "Ignoring gain setting",
+                "No sensor calibration"
+          ],
+          "projectIdeas": [
+                "Water pH and Temperature Monitoring System",
+                "IoT-Based Hydroponic Nutrient Level and pH Monitoring Prototype"
+          ],
+          "alternatives": [
+                {
+                      "slug": "ina219",
+                      "name": "INA219",
+                      "reason": "Better for current and voltage monitoring of power rails."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-adc2-wifi-problem-fix",
+                "arduino-sensor-calibration-student-projects"
+          ],
+          "buyNotes": "Check input range and gain before connecting analog sensors."
+    },
+    {
+          "slug": "mcp23017-io-expander",
+          "name": "MCP23017 I/O Expander",
+          "shortName": "MCP23017",
+          "category": "drivers",
+          "categoryLabel": "I/O Expander",
+          "tagline": "I2C GPIO expander for projects that need more input/output pins.",
+          "description": "MCP23017 adds 16 GPIO pins over I2C. It is useful for keypads, LEDs, buttons and status panels when the main microcontroller runs out of pins.",
+          "priceRange": "RM8-RM22",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C",
+                "GPIO"
+          ],
+          "voltage": [
+                "1.8V-5.5V module-dependent"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "More GPIO pins",
+                "Button panels",
+                "LED status boards"
+          ],
+          "notSuitableFor": [
+                "High-current outputs",
+                "Very fast timing signals",
+                "Motor drive without driver"
+          ],
+          "commonMistakes": [
+                "Driving loads directly",
+                "Wrong I2C address",
+                "No pull-ups where needed"
+          ],
+          "projectIdeas": [
+                "ESP32-Based Student Workshop Safety Checklist Kiosk",
+                "Smart Cafeteria Queue Number Display with Button Counter Control"
+          ],
+          "alternatives": [
+                {
+                      "slug": "pcf8574-io-expander",
+                      "name": "PCF8574",
+                      "reason": "Simpler 8-bit I/O expander often used in LCD backpacks."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "esp32-pinout-tool-how-to-use-for-fyp",
+                "software-fyp-admin-panel-features-that-score"
+          ],
+          "buyNotes": "Use drivers or transistors if the expanded pins control loads."
+    },
+    {
+          "slug": "pcf8574-io-expander",
+          "name": "PCF8574 I/O Expander",
+          "shortName": "PCF8574",
+          "category": "drivers",
+          "categoryLabel": "I/O Expander",
+          "tagline": "Simple 8-bit I2C expander used in LCD backpacks and button panels.",
+          "description": "PCF8574 provides simple I/O expansion over I2C. It is widely used in 16x2 LCD I2C backpacks and can also read buttons or drive small logic signals.",
+          "priceRange": "RM4-RM12",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "I2C",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "LCD 16x2"
+          ],
+          "suitableFor": [
+                "LCD backpack",
+                "Button input panel",
+                "Simple GPIO expansion"
+          ],
+          "notSuitableFor": [
+                "High-current output",
+                "Precise PWM",
+                "High-speed signal control"
+          ],
+          "commonMistakes": [
+                "Wrong I2C address",
+                "Expecting strong output drive",
+                "No I2C pull-up consideration"
+          ],
+          "projectIdeas": [
+                "Smart School Bell and Announcement Trigger with Web Schedule",
+                "ESP32-Based Campus Notice Board with Web Update Control"
+          ],
+          "alternatives": [
+                {
+                      "slug": "mcp23017-io-expander",
+                      "name": "MCP23017",
+                      "reason": "More GPIO pins and stronger control features."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "lcd-16x2-i2c",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Useful when a project uses many LCDs, buttons or low-current status outputs."
+    },
+    {
+          "slug": "tca9548a-i2c-multiplexer",
+          "name": "TCA9548A I2C Multiplexer",
+          "shortName": "TCA9548A",
+          "category": "drivers",
+          "categoryLabel": "I2C Multiplexer",
+          "tagline": "I2C channel selector for multiple same-address sensors.",
+          "description": "TCA9548A lets one controller talk to multiple I2C devices that share the same address. It is useful for multi-sensor dashboards and classroom comfort monitoring nodes.",
+          "priceRange": "RM8-RM22",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Multiple same-address I2C sensors",
+                "Sensor arrays",
+                "Modular dashboards"
+          ],
+          "notSuitableFor": [
+                "SPI devices",
+                "Fixing bad wiring",
+                "High-speed long cable I2C without planning"
+          ],
+          "commonMistakes": [
+                "Using it when address can be changed",
+                "No pull-up planning",
+                "Forgetting to select channel in code"
+          ],
+          "projectIdeas": [
+                "ESP32-Based Wireless Sensor Network for Room Comfort Study",
+                "IoT-Based Classroom Noise and Comfort Score Display"
+          ],
+          "alternatives": [
+                {
+                      "slug": "mcp23017-io-expander",
+                      "name": "MCP23017",
+                      "reason": "Use when the project needs more GPIO rather than more I2C channels."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "iot-dashboard-data-logging-fyp-guide",
+                "esp32-pinout-tool-how-to-use-for-fyp"
+          ],
+          "buyNotes": "Use short I2C wiring and label each channel in the report."
+    },
+    {
+          "slug": "vl53l0x-time-of-flight",
+          "name": "VL53L0X Time-of-Flight Distance Sensor",
+          "shortName": "VL53L0X",
+          "category": "sensors",
+          "categoryLabel": "Distance Sensor",
+          "tagline": "Compact laser time-of-flight distance sensor for short-range measurement.",
+          "description": "VL53L0X measures short distance using time-of-flight sensing. It is useful when ultrasonic sensors are too bulky or when a compact short-range distance module is needed.",
+          "priceRange": "RM12-RM30",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V module variants"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Short-range distance",
+                "Object presence",
+                "Compact robot sensing"
+          ],
+          "notSuitableFor": [
+                "Long outdoor range",
+                "Transparent/reflective target accuracy",
+                "Dirty sensor window"
+          ],
+          "commonMistakes": [
+                "Expecting HC-SR04 range",
+                "Bad performance on reflective surfaces",
+                "No address handling for multiple modules"
+          ],
+          "projectIdeas": [
+                "Smart Lecture Hall Seat Occupancy Counter with Live Display",
+                "Mini AGV Path Tracking Robot with Station Check-In Display"
+          ],
+          "alternatives": [
+                {
+                      "slug": "hc-sr04",
+                      "name": "HC-SR04",
+                      "reason": "Cheaper ultrasonic option for longer basic distance demos."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "low-cost-sensors-that-make-strong-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Choose breakout boards with regulator/level shifting if using 5V controllers."
+    },
+    {
+          "slug": "bh1750-light-sensor",
+          "name": "BH1750 Digital Light Sensor",
+          "shortName": "BH1750",
+          "category": "sensors",
+          "categoryLabel": "Light Sensor",
+          "tagline": "Digital lux sensor for lighting, solar and comfort projects.",
+          "description": "BH1750 measures light intensity in lux over I2C. It gives more report-friendly light readings than a simple LDR divider.",
+          "priceRange": "RM5-RM18",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "I2C"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V module variants"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Light level monitoring",
+                "Solar tracker study",
+                "Room comfort dashboard"
+          ],
+          "notSuitableFor": [
+                "Color measurement",
+                "Camera exposure analysis",
+                "Outdoor waterproof sensing without enclosure"
+          ],
+          "commonMistakes": [
+                "Using without light shielding",
+                "Comparing against LDR raw values directly",
+                "Wrong I2C wiring"
+          ],
+          "projectIdeas": [
+                "ESP32-Based Classroom Air Comfort Score with Traffic Light Indicator",
+                "Smart Green Building Window Ventilation Control Prototype"
+          ],
+          "alternatives": [
+                {
+                      "slug": "ldr-sensor",
+                      "name": "LDR Sensor",
+                      "reason": "Cheaper analog light sensing option."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "low-cost-sensors-that-make-strong-fyp",
+                "smart-greenhouse-fyp-scope-components-testing"
+          ],
+          "buyNotes": "BH1750 is useful when the report needs lux values instead of raw ADC values."
+    },
+    {
+          "slug": "as5600-magnetic-encoder",
+          "name": "AS5600 Magnetic Rotary Encoder",
+          "shortName": "AS5600",
+          "category": "sensors",
+          "categoryLabel": "Rotary Position Sensor",
+          "tagline": "Magnetic angle sensor for non-contact rotary position measurement.",
+          "description": "AS5600 measures rotation angle using a magnet. It is useful for valve position, knob input, steering angle demos and mechanism feedback.",
+          "priceRange": "RM10-RM28",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C",
+                "Analog/PWM output"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V module variants"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Rotary position feedback",
+                "Valve angle sensing",
+                "Control knob input"
+          ],
+          "notSuitableFor": [
+                "No-magnet installation",
+                "Dirty mechanical mounting",
+                "High-speed industrial encoders"
+          ],
+          "commonMistakes": [
+                "Wrong magnet alignment",
+                "Loose shaft mounting",
+                "Ignoring wrap-around angle"
+          ],
+          "projectIdeas": [
+                "Smart Green Building Window Ventilation Control Prototype",
+                "Automatic Hand Tool Dispenser Prototype with RFID User Log"
+          ],
+          "alternatives": [
+                {
+                      "slug": "ky-040-rotary-encoder",
+                      "name": "KY-040 Encoder",
+                      "reason": "Cheaper manual knob encoder for menu input."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "fyp-electronics-troubleshooting-checklist",
+                "arduino-uno-vs-esp32-for-electronics-fyp"
+          ],
+          "buyNotes": "Buy with a matching diametric magnet or confirm your magnet orientation."
+    },
+    {
+          "slug": "max6675-thermocouple",
+          "name": "MAX6675 K-Type Thermocouple Module",
+          "shortName": "MAX6675",
+          "category": "sensors",
+          "categoryLabel": "High Temperature Sensor",
+          "tagline": "Thermocouple interface for higher-temperature measurement demos.",
+          "description": "MAX6675 modules read K-type thermocouples over SPI. They are useful for higher-temperature monitoring where DHT or DS18B20 sensors are not suitable.",
+          "priceRange": "RM12-RM35",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "SPI"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V module variants"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32"
+          ],
+          "suitableFor": [
+                "Heater monitoring",
+                "Oven demo",
+                "High-temperature logging"
+          ],
+          "notSuitableFor": [
+                "Humidity sensing",
+                "Medical temperature",
+                "No thermocouple calibration"
+          ],
+          "commonMistakes": [
+                "Loose thermocouple connection",
+                "Wrong thermocouple type",
+                "Touching unsafe hot surfaces"
+          ],
+          "projectIdeas": [
+                "IoT-Based Food Storage Humidity and Temperature Compliance Logger",
+                "Smart Lab Incubator Temperature Stability Logger"
+          ],
+          "alternatives": [
+                {
+                      "slug": "ds18b20-temperature-sensor",
+                      "name": "DS18B20",
+                      "reason": "Better for waterproof low-temperature monitoring."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "arduino-sensor-calibration-student-projects",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Use safe heat sources and document the thermocouple type in the report."
+    },
+    {
+          "slug": "mlx90614-ir-temperature",
+          "name": "MLX90614 Infrared Temperature Sensor",
+          "shortName": "MLX90614",
+          "category": "sensors",
+          "categoryLabel": "IR Temperature Sensor",
+          "tagline": "Non-contact temperature sensor for object surface measurement.",
+          "description": "MLX90614 measures object temperature without contact using infrared sensing. It is useful for surface temperature demos and safety screening prototypes, but depends strongly on target material and distance.",
+          "priceRange": "RM25-RM70",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "I2C"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V module variants"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Non-contact temperature",
+                "Surface temperature logging",
+                "Demo screening prototype"
+          ],
+          "notSuitableFor": [
+                "Medical diagnosis",
+                "Unknown emissivity accuracy",
+                "Long-distance thermal imaging"
+          ],
+          "commonMistakes": [
+                "Claiming medical accuracy",
+                "Wrong distance-to-target",
+                "Ignoring emissivity"
+          ],
+          "projectIdeas": [
+                "Smart Clinic Hand Hygiene Station with Usage Analytics",
+                "IoT-Based Electric Scooter Battery Temperature and Charge Monitor"
+          ],
+          "alternatives": [
+                {
+                      "slug": "ds18b20-temperature-sensor",
+                      "name": "DS18B20",
+                      "reason": "Contact temperature sensor for waterproof probes."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "fyp-electronics-troubleshooting-checklist",
+                "final-year-project-prototype-vs-product"
+          ],
+          "buyNotes": "Use it for educational surface-temperature prototypes, not certified medical measurement."
+    },
+    {
+          "slug": "ds18b20-temperature-sensor",
+          "name": "DS18B20 Waterproof Temperature Sensor",
+          "shortName": "DS18B20",
+          "category": "sensors",
+          "categoryLabel": "Temperature Sensor",
+          "tagline": "Waterproof digital temperature probe for tanks, aquaculture and outdoor builds.",
+          "description": "DS18B20 waterproof probes measure temperature over a 1-Wire digital bus. They are commonly used in water tanks, aquaculture, incubators and outdoor monitoring projects.",
+          "priceRange": "RM5-RM18",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "1-Wire"
+          ],
+          "voltage": [
+                "3.0V-5.5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Water temperature",
+                "Outdoor probe",
+                "Aquaculture monitoring"
+          ],
+          "notSuitableFor": [
+                "Humidity sensing",
+                "Fast thermal response",
+                "High-temperature ovens"
+          ],
+          "commonMistakes": [
+                "No pull-up resistor",
+                "Poor waterproof cable sealing",
+                "Confusing probe variants"
+          ],
+          "projectIdeas": [
+                "Water pH and Temperature Monitoring System",
+                "Smart Water Quality Monitoring for Aquaculture with IoT"
+          ],
+          "alternatives": [
+                {
+                      "slug": "dht22",
+                      "name": "DHT22",
+                      "reason": "Use for air temperature and humidity together."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "dht11-vs-dht22-vs-bme280-fyp-sensors",
+                "iot-water-monitoring-project-esp32-dht11"
+          ],
+          "buyNotes": "Use a 4.7k pull-up resistor and check probe waterproofing before immersion."
+    },
+    {
+          "slug": "dht11",
+          "name": "DHT11 Temperature Humidity Sensor",
+          "shortName": "DHT11",
+          "category": "sensors",
+          "categoryLabel": "Temperature Humidity Sensor",
+          "tagline": "Very low-cost temperature and humidity sensor for beginner demos.",
+          "description": "DHT11 is a basic digital temperature and humidity sensor. It is cheap and common in beginner kits, but less accurate and slower than DHT22 or BME280.",
+          "priceRange": "RM3-RM8",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Digital"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Beginner weather demo",
+                "Simple classroom monitoring",
+                "Low-cost practice project"
+          ],
+          "notSuitableFor": [
+                "Accurate environmental logging",
+                "Fast readings",
+                "Professional climate monitoring"
+          ],
+          "commonMistakes": [
+                "Expecting DHT22 accuracy",
+                "Reading too frequently",
+                "No pull-up resistor on bare sensor"
+          ],
+          "projectIdeas": [
+                "IoT Weather Monitoring Project ESP32 DHT11",
+                "ESP32 DHT11 Firebase Temperature Monitoring FYP Guide"
+          ],
+          "alternatives": [
+                {
+                      "slug": "dht22",
+                      "name": "DHT22",
+                      "reason": "Better accuracy and wider measurement range."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "dht11-vs-dht22-vs-bme280-fyp-sensors",
+                "esp32-dht11-firebase-temperature-monitoring-fyp-guide"
+          ],
+          "buyNotes": "Use DHT22 or BME280 if the project needs stronger measurement quality."
+    },
+    {
+          "slug": "reed-switch",
+          "name": "Magnetic Reed Switch Sensor",
+          "shortName": "Reed Switch",
+          "category": "sensors",
+          "categoryLabel": "Door Contact Sensor",
+          "tagline": "Simple magnetic switch for door, window and cabinet status detection.",
+          "description": "Reed switches detect whether a magnet is near the sensor. They are simple, low-cost modules for door-open, cabinet tamper and parcel box status projects.",
+          "priceRange": "RM2-RM10",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Digital"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi"
+          ],
+          "suitableFor": [
+                "Door status",
+                "Cabinet tamper",
+                "Parcel box detection"
+          ],
+          "notSuitableFor": [
+                "Distance measurement",
+                "High-security certified access",
+                "Heavy current switching"
+          ],
+          "commonMistakes": [
+                "Wrong magnet alignment",
+                "No pull-up or pull-down",
+                "Mounting sensor too far from magnet"
+          ],
+          "projectIdeas": [
+                "Smart Emergency Exit Door Open Status Monitoring System",
+                "Smart Parcel Drop Box with Weight Check and Door Status Log"
+          ],
+          "alternatives": [
+                {
+                      "slug": "pir-sensor",
+                      "name": "PIR Sensor",
+                      "reason": "Use for motion detection instead of door contact."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "low-cost-sensors-that-make-strong-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Buy normally-open/normally-closed variant that matches your logic."
+    },
+    {
+          "slug": "sw420-vibration-sensor",
+          "name": "SW-420 Vibration Sensor",
+          "shortName": "SW-420",
+          "category": "sensors",
+          "categoryLabel": "Vibration Sensor",
+          "tagline": "Low-cost vibration trigger module for impact and tamper demos.",
+          "description": "SW-420 modules detect vibration or impact as a digital trigger. They are useful for simple tamper alerts, crash demos and machine vibration awareness prototypes.",
+          "priceRange": "RM3-RM10",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Digital"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32"
+          ],
+          "suitableFor": [
+                "Tamper alert",
+                "Impact trigger",
+                "Simple vibration detection"
+          ],
+          "notSuitableFor": [
+                "Accurate vibration analysis",
+                "Bearing fault diagnosis",
+                "Frequency measurement"
+          ],
+          "commonMistakes": [
+                "Claiming precise vibration measurement",
+                "No sensitivity tuning",
+                "Mounting loosely"
+          ],
+          "projectIdeas": [
+                "IoT-Based Low-Cost Seismic Vibration Logger for Building Demo",
+                "ESP32-Based Vibration Logger for Small Motor Bearing Study"
+          ],
+          "alternatives": [
+                {
+                      "slug": "mpu6050",
+                      "name": "MPU6050",
+                      "reason": "Better for acceleration and motion data."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "tinyml-vibration-monitoring-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Use SW-420 for event detection; use accelerometers for measured vibration data."
+    },
+    {
+          "slug": "sound-sensor-module",
+          "name": "Sound Sensor Module",
+          "shortName": "Sound Sensor",
+          "category": "sensors",
+          "categoryLabel": "Sound Sensor",
+          "tagline": "Basic microphone module for noise level and sound-trigger demos.",
+          "description": "Sound sensor modules detect sound intensity using a microphone and amplifier. They are useful for classroom noise indicators and simple sound-triggered alerts.",
+          "priceRange": "RM3-RM12",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Analog",
+                "Digital"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32"
+          ],
+          "suitableFor": [
+                "Noise indicator",
+                "Clap trigger",
+                "Classroom comfort demo"
+          ],
+          "notSuitableFor": [
+                "Calibrated decibel meter",
+                "Voice recognition",
+                "Audio recording quality"
+          ],
+          "commonMistakes": [
+                "Claiming accurate dB without calibration",
+                "Bad threshold tuning",
+                "Mounting near buzzer or fan noise"
+          ],
+          "projectIdeas": [
+                "IoT-Based Classroom Noise and Comfort Score Display",
+                "IoT-Based Library Quiet Zone Noise Warning Display"
+          ],
+          "alternatives": [
+                {
+                      "slug": "max9814-microphone",
+                      "name": "MAX9814 Microphone",
+                      "reason": "Better microphone amplifier for audio-level projects."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "low-cost-sensors-that-make-strong-fyp",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Use as a relative noise indicator unless calibrated against a sound meter."
+    },
+    {
+          "slug": "max9814-microphone",
+          "name": "MAX9814 Microphone Amplifier",
+          "shortName": "MAX9814",
+          "category": "sensors",
+          "categoryLabel": "Microphone Module",
+          "tagline": "Microphone amplifier with automatic gain control for audio sensing.",
+          "description": "MAX9814 microphone amplifier modules provide an analog audio signal with automatic gain control. They are useful for sound-level prototypes and audio-triggered projects.",
+          "priceRange": "RM8-RM25",
+          "difficulty": "Intermediate",
+          "interfaces": [
+                "Analog"
+          ],
+          "voltage": [
+                "2.7V-5.5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi Pico"
+          ],
+          "suitableFor": [
+                "Audio amplitude sensing",
+                "Sound event detection",
+                "Noise trend logging"
+          ],
+          "notSuitableFor": [
+                "Speech recognition alone",
+                "Certified dB meter",
+                "Noisy power rails"
+          ],
+          "commonMistakes": [
+                "Sampling too slowly",
+                "No signal filtering",
+                "Expecting direct speech understanding"
+          ],
+          "projectIdeas": [
+                "IoT-Based Workshop Noise Exposure Warning Display",
+                "IoT-Based Classroom Noise and Comfort Score Display"
+          ],
+          "alternatives": [
+                {
+                      "slug": "sound-sensor-module",
+                      "name": "Sound Sensor",
+                      "reason": "Cheaper for simple digital sound triggers."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "machine-learning-fyp-evaluation-metrics-guide",
+                "fyp-electronics-troubleshooting-checklist"
+          ],
+          "buyNotes": "Pair with filtering and clear sampling explanation in the report."
+    },
+    {
+          "slug": "ky-040-rotary-encoder",
+          "name": "KY-040 Rotary Encoder Module",
+          "shortName": "KY-040 Encoder",
+          "category": "sensors",
+          "categoryLabel": "Rotary Input",
+          "tagline": "Rotary knob input module for menus, counters and adjustment controls.",
+          "description": "KY-040 rotary encoders provide incremental rotation and a push button. They are useful for embedded menus, setting values and manual counter controls.",
+          "priceRange": "RM3-RM10",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Digital",
+                "GPIO"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32",
+                "Raspberry Pi Pico"
+          ],
+          "suitableFor": [
+                "Menu control",
+                "Setpoint adjustment",
+                "Counter input"
+          ],
+          "notSuitableFor": [
+                "Absolute angle measurement",
+                "High-speed shaft feedback",
+                "No-debounce software"
+          ],
+          "commonMistakes": [
+                "No debounce handling",
+                "Confusing CLK/DT direction",
+                "Expecting absolute position"
+          ],
+          "projectIdeas": [
+                "Smart Cafeteria Queue Number Display with Button Counter Control",
+                "ESP32-Based Queue Token Display with WhatsApp Collection Alert"
+          ],
+          "alternatives": [
+                {
+                      "slug": "as5600-magnetic-encoder",
+                      "name": "AS5600",
+                      "reason": "Use for absolute magnetic angle measurement."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "arduino-uno-vs-esp32-for-electronics-fyp",
+                "student-project-dashboard-design-tips"
+          ],
+          "buyNotes": "Include debounce handling in code for reliable menu input."
+    },
+    {
+          "slug": "capacitive-soil-moisture",
+          "name": "Capacitive Soil Moisture Sensor",
+          "shortName": "Capacitive Soil",
+          "category": "sensors",
+          "categoryLabel": "Soil Moisture Sensor",
+          "tagline": "More durable soil moisture sensor for agriculture and irrigation prototypes.",
+          "description": "Capacitive soil moisture sensors estimate soil moisture without exposed resistive metal traces. They are usually more suitable than cheap resistive probes for longer agriculture demos.",
+          "priceRange": "RM5-RM18",
+          "difficulty": "Beginner",
+          "interfaces": [
+                "Analog"
+          ],
+          "voltage": [
+                "3.3V",
+                "5V"
+          ],
+          "compatibleWith": [
+                "Arduino",
+                "ESP32"
+          ],
+          "suitableFor": [
+                "Smart irrigation",
+                "Greenhouse monitoring",
+                "Plant moisture trend"
+          ],
+          "notSuitableFor": [
+                "Laboratory-grade soil water content",
+                "Direct long-term outdoor exposure without protection",
+                "No calibration projects"
+          ],
+          "commonMistakes": [
+                "No wet/dry calibration",
+                "Water entering electronics",
+                "Using raw values without threshold testing"
+          ],
+          "projectIdeas": [
+                "Smart Agriculture IoT FYP with Soil Moisture and Pump Control",
+                "IoT-Based Hydroponic Nutrient Level and pH Monitoring Prototype"
+          ],
+          "alternatives": [
+                {
+                      "slug": "soil-moisture-sensor",
+                      "name": "Soil Moisture Sensor",
+                      "reason": "Cheaper resistive probe for short demos."
+                }
+          ],
+          "relatedBlogSlugs": [
+                "smart-agriculture-iot-fyp-soil-moisture-guide",
+                "projek-pertanian-pintar-iot-soil-moisture-pam"
+          ],
+          "buyNotes": "Calibrate dry and wet readings using your actual soil sample."
+    },
   ]),
 ];
