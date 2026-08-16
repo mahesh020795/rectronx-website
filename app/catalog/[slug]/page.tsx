@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   AlertTriangle,
   ArrowLeft,
+  ArrowUpRight,
   CheckCircle2,
   Cpu,
   FileText,
@@ -23,6 +24,7 @@ import {
   getCatalogProjectSeo,
   getCatalogProjectSlug,
   getProjectTechnologies,
+  getProjectLearningLinks,
   getRelatedCatalogProjects,
 } from "@/lib/catalog";
 import {
@@ -85,6 +87,7 @@ export default function CatalogProjectPage({
   const technologies = getProjectTechnologies(project);
   const related = getRelatedCatalogProjects(project);
   const relatedTopics = getRelatedTopicHubsForProject(project);
+  const learningLinks = getProjectLearningLinks(project);
   const whatsappUrl = catalogWhatsAppLink(project);
 
   return (
@@ -248,6 +251,34 @@ export default function CatalogProjectPage({
                   </div>
                 )
               )}
+            </div>
+          </Section>
+
+          <Section title="Learning Resources" icon={<FileText size={20} />}>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {learningLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="group rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-blue hover:shadow-sm transition-all"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-brand-blue">
+                      {link.type}
+                    </span>
+                    <ArrowUpRight
+                      size={15}
+                      className="mt-1 shrink-0 text-slate-300 group-hover:text-brand-blue"
+                    />
+                  </div>
+                  <p className="mt-3 text-sm font-bold leading-6 text-brand-navy">
+                    {link.title}
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-slate-500">
+                    {link.description}
+                  </p>
+                </Link>
+              ))}
             </div>
           </Section>
 

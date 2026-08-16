@@ -2,6 +2,7 @@ import { allCatalogProjects } from "@/data/projects";
 import {
   ComponentCategory,
   ComponentGuide,
+  componentCategories,
   components,
 } from "@/data/components";
 
@@ -139,6 +140,18 @@ export function getComponentBySlug(slug: string) {
 
 export function getComponentsByCategory(category: ComponentCategory) {
   return getAllComponents().filter((component) => component.category === category);
+}
+
+export function getComponentCategoryBySlug(slug: string) {
+  return componentCategories.find((category) => category.slug === slug);
+}
+
+export function componentCategoryMetaTitle(category: { label: string }) {
+  return `${category.label} Components Malaysia | FYP Parts & Guides`;
+}
+
+export function componentCategoryMetaDescription(category: { label: string; description: string }) {
+  return `${category.label} component guides for Malaysian FYP students. ${category.description} Compare modules, wiring notes, common mistakes, project ideas and related Rectronx resources.`;
 }
 
 export function getComponentMap() {

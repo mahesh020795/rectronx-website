@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { getAllComponents } from "@/lib/components";
+import { componentCategories } from "@/data/components";
 import { allCatalogProjects } from "@/data/projects";
 import { getCatalogProjectSlug } from "@/lib/catalog";
 import { getAllTopicHubs } from "@/lib/topics";
@@ -38,6 +39,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
+  const componentCategoryPages: MetadataRoute.Sitemap = componentCategories.map((category) => ({
+    url: `${base}/components/${category.slug}`,
+    lastModified: new Date("2026-08-16"),
+    changeFrequency: "weekly",
+    priority: 0.82,
+  }));
+
   const catalogProjectPages: MetadataRoute.Sitemap = allCatalogProjects.map((project) => ({
     url: `${base}/catalog/${getCatalogProjectSlug(project)}`,
     lastModified: new Date("2026-07-15"),
@@ -59,5 +67,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.78,
   }));
 
-  return [...staticPages, ...blogPages, ...componentPages, ...catalogProjectPages, ...topicPages, ...servicePages];
+  return [
+    ...staticPages,
+    ...blogPages,
+    ...componentCategoryPages,
+    ...componentPages,
+    ...catalogProjectPages,
+    ...topicPages,
+    ...servicePages,
+  ];
 }

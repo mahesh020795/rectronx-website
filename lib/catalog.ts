@@ -22,6 +22,13 @@ export type CatalogSeo = {
   faqs: { q: string; a: string }[];
 };
 
+export type ProjectLearningLink = {
+  title: string;
+  description: string;
+  href: string;
+  type: "Tool" | "Guide" | "Comparison" | "Planning";
+};
+
 type ProjectProfile = {
   domain: string;
   input: string;
@@ -80,6 +87,118 @@ export function getRelatedCatalogProjects(project: CatalogProject, limit = 6) {
     .sort((a, b) => b.score - a.score || a.candidate.id - b.candidate.id)
     .slice(0, limit)
     .map((item) => item.candidate);
+}
+
+export function getProjectLearningLinks(project: CatalogProject, limit = 8): ProjectLearningLink[] {
+  const haystack = `${project.title} ${project.tags.join(" ")}`.toLowerCase();
+  const links: ProjectLearningLink[] = [];
+
+  const add = (link: ProjectLearningLink) => {
+    if (!links.some((item) => item.href === link.href)) {
+      links.push(link);
+    }
+  };
+
+  add({
+    title: "How to choose a strong FYP topic",
+    description: "Use this before locking the title, objectives and prototype scope.",
+    href: "/blog/how-to-choose-fyp-topic",
+    type: "Planning",
+  });
+
+  add({
+    title: "FYP proposal: title, objectives and scope",
+    description: "A practical guide for turning a project idea into a supervisor-ready proposal.",
+    href: "/blog/final-year-project-proposal-title-objectives-scope",
+    type: "Planning",
+  });
+
+  if (hasAny(haystack, ["esp32"])) {
+    add({
+      title: "ESP32 Pinout Tool",
+      description: "Check safe GPIO pins, ADC notes, boot pins and wiring choices before building.",
+      href: "/tools/esp32-pinout",
+      type: "Tool",
+    });
+    add({
+      title: "ESP32 safe GPIO pins guide",
+      description: "Avoid common ESP32 pin mistakes that can break a viva demo.",
+      href: "/blog/esp32-pinout-safe-gpio-pins-guide",
+      type: "Guide",
+    });
+  }
+
+  if (hasAny(haystack, ["arduino", "uno"])) {
+    add({
+      title: "Arduino Uno vs ESP32 for electronics FYP",
+      description: "Compare when Arduino is enough and when ESP32 is the better project controller.",
+      href: "/blog/arduino-uno-vs-esp32-for-electronics-fyp",
+      type: "Comparison",
+    });
+  }
+
+  if (hasAny(haystack, ["dht11", "dht22", "bme280", "weather", "temperature", "humidity"])) {
+    add({
+      title: "DHT11 vs DHT22 vs BME280 for FYP sensors",
+      description: "Pick a realistic temperature and humidity sensor for your project scope.",
+      href: "/blog/dht11-vs-dht22-vs-bme280-fyp-sensors",
+      type: "Comparison",
+    });
+  }
+
+  if (hasAny(haystack, ["rfid", "attendance", "access", "locker", "library"])) {
+    add({
+      title: "RFID attendance system FYP guide",
+      description: "Plan user registration, scan logs, database records and demo evidence.",
+      href: "/blog/rfid-attendance-system-fyp",
+      type: "Guide",
+    });
+  }
+
+  if (hasAny(haystack, ["gps", "gsm", "tracking", "vehicle", "panic", "location"])) {
+    add({
+      title: "GPS vehicle tracking system FYP guide",
+      description: "Understand GPS lock, GSM alerts, map links and testing limitations.",
+      href: "/blog/gps-vehicle-tracking-system-fyp",
+      type: "Guide",
+    });
+  }
+
+  if (hasAny(haystack, ["firebase", "dashboard", "blynk", "iot"])) {
+    add({
+      title: "IoT dashboard and data logging guide",
+      description: "Choose Blynk, Firebase, ThingsBoard or a custom dashboard with clearer evidence.",
+      href: "/blog/iot-dashboard-fyp-firebase-blynk-thingsboard-custom",
+      type: "Guide",
+    });
+  }
+
+  if (hasAny(haystack, ["camera", "opencv", "face", "recognition", "raspberry pi", "ai", "ml"])) {
+    add({
+      title: "AI final year project without a large dataset",
+      description: "Keep AI and camera projects achievable with realistic datasets and test metrics.",
+      href: "/blog/ai-final-year-project-without-large-dataset",
+      type: "Guide",
+    });
+  }
+
+  if (project.category === "software") {
+    add({
+      title: "Software FYP admin panel features that score",
+      description: "Improve software projects with roles, reports, validation and proper workflow evidence.",
+      href: "/blog/software-fyp-admin-panel-features-that-score",
+      type: "Guide",
+    });
+  } else {
+    add({
+      title: "Electronics troubleshooting checklist before demo",
+      description: "Check wiring, power, sensors, alerts and backup demo flow before viva day.",
+      href: "/blog/fyp-electronics-troubleshooting-checklist",
+      type: "Guide",
+    });
+  }
+
+  return links.slice(0, limit);
 }
 
 export function getCatalogProjectSeo(project: CatalogProject): CatalogSeo {

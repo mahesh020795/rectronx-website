@@ -13,16 +13,21 @@ import {
   Zap,
 } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
+import { componentCategories } from "@/data/components";
 import type { ComponentGuide, Difficulty } from "@/data/components";
-import { breadcrumbSchema, componentTechArticleSchema, faqSchema } from "@/lib/schema";
+import { breadcrumbSchema, componentTechArticleSchema, faqSchema, itemListSchema } from "@/lib/schema";
 import {
+  componentCategoryMetaDescription,
+  componentCategoryMetaTitle,
   componentMetaDescription,
   componentMetaTitle,
   componentImagePath,
   componentWhatsAppLink,
   getAllComponents,
   getAlternativeComponents,
+  getComponentCategoryBySlug,
   getComponentBySlug,
+  getComponentsByCategory,
   getRelatedProjects,
 } from "@/lib/components";
 import { getCatalogProjectSlug } from "@/lib/catalog";
@@ -33,14 +38,44 @@ type PageProps = {
 };
 
 export function generateStaticParams() {
-  return getAllComponents().map((component) => ({ slug: component.slug }));
+  return [
+    ...getAllComponents().map((component) => ({ slug: component.slug })),
+    ...componentCategories.map((category) => ({ slug: category.slug })),
+  ];
 }
 
 export function generateMetadata({ params }: PageProps): Metadata {
   const component = getComponentBySlug(params.slug);
 
   if (!component) {
-    return {};
+    const category = getComponentCategoryBySlug(params.slug);
+
+    if (!category) return {};
+
+    return {
+      title: {
+        absolute: componentCategoryMetaTitle(category),
+      },
+      description: componentCategoryMetaDescription(category),
+      alternates: {
+        canonical: `/components/${category.slug}`,
+        languages: { "en-MY": `https://rectronx.com/components/${category.slug}` },
+      },
+      openGraph: {
+        title: componentCategoryMetaTitle(category),
+        description: componentCategoryMetaDescription(category),
+        url: `https://rectronx.com/components/${category.slug}`,
+        type: "website",
+        images: [
+          {
+            url: "https://rectronx.com/og-image.png",
+            width: 1200,
+            height: 630,
+            alt: `${category.label} components guide by Rectronx`,
+          },
+        ],
+      },
+    };
   }
 
   return {
@@ -154,7 +189,9 @@ export default function ComponentDetailPage({ params }: PageProps) {
   const component = getComponentBySlug(params.slug);
 
   if (!component) {
-    notFound();
+    const category = getComponentCategoryBySlug(params.slug);
+    if (!category) notFound();
+    return <ComponentCategoryHub category={category} />;
   }
 
   const relatedProjects = getRelatedProjects(component);
@@ -527,6 +564,155 @@ export default function ComponentDetailPage({ params }: PageProps) {
           </div>
         </aside>
       </section>
+    </main>
+  );
+}
+
+function ComponentCategoryHub({
+  category,
+}: {
+  category: (typeof componentCategories)[number];
+}) {
+  const components = getComponentsByCategory(category.slug);
+  const featuredProjects = components
+    .flatMap((component) => getRelatedProjects(component, 2))
+    .filter(
+      (project, index, list) =>
+        list.findIndex((item) => getCatalogProjectSlug(item) === getCatalogProjectSlug(project)) === index
+    )
+    .slice(0, 8);
+  const waText = encodeURIComponent(
+    `Hi Rectronx! I need help choosing ${category.label.toLowerCase()} for my FYP project.`
+  );
+
+  return (
+    <main className="min-h-screen bg-slate-50 pt-16 text-slate-900">
+      <JsonLd
+        schema={[
+          breadcrumbSchema([
+            { name: "Home", url: "https://rectronx.com" },
+            { name: "Components", url: "https://rectronx.com/components" },
+            { name: category.label, url: `https://rectronx.com/components/${category.slug}` },
+          ]),
+          itemListSchema(
+            components.map((component, index) => ({
+              name: component.name,
+              url: `https://rectronx.com/components/${component.slug}`,
+              position: index + 1,
+            }))
+          ),
+        ]}
+      />
+
+      <section className="bg-[#080E1A] px-4 pb-14 pt-14 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <Link href="/components" className="text-sm font-bold text-brand-blue hover:text-white">
+            Components
+          </Link>
+          <div className="mt-5 grid gap-8 lg:grid-cols-[1fr_0.42fr] lg:items-end">
+            <div>
+              <span className="eyebrow">Rectronx Component Hub</span>
+              <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+                {category.label} components for FYP projects
+              </h1>
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+                {category.description} Use this hub to compare modules, check wiring guides,
+                avoid common mistakes and find suitable Projek Akhir Tahun ideas.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <p className="text-3xl font-extrabold text-white">{components.length}</p>
+              <p className="mt-1 text-sm text-slate-400">component guides in this category</p>
+              <a
+                href={`https://wa.me/60148600454?text=${waText}&utm_source=component_category_hub`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-3 text-sm font-bold text-white hover:bg-[#1ebe5d]"
+              >
+                <MessageCircle size={17} />
+                Ask for component advice
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-blue">
+              Compare parts
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-brand-navy">
+              {category.label} guides
+            </h2>
+          </div>
+          <Link href="/components" className="text-sm font-bold text-brand-blue hover:text-brand-navy">
+            View all components →
+          </Link>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {components.map((component) => (
+            <Link
+              key={component.slug}
+              href={`/components/${component.slug}`}
+              className="group flex min-h-[310px] flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-blue hover:shadow-lg"
+            >
+              <div className="flex min-h-[130px] items-center justify-center rounded-lg bg-slate-50">
+                <Image
+                  src={componentImagePath(component)}
+                  alt={component.imageHint}
+                  width={320}
+                  height={210}
+                  className="h-32 w-full object-contain"
+                />
+              </div>
+              <p className="mt-4 text-xs font-bold uppercase tracking-widest text-slate-400">
+                {component.categoryLabel}
+              </p>
+              <h3 className="mt-2 text-lg font-extrabold leading-6 text-brand-navy group-hover:text-brand-blue">
+                {component.shortName}
+              </h3>
+              <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-600">
+                {component.tagline}
+              </p>
+              <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                {component.interfaces.slice(0, 3).map((item) => (
+                  <span key={item} className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-brand-blue">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {featuredProjects.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 pb-12 sm:px-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand-blue">
+              Related FYP ideas
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold text-brand-navy">
+              Projects that use {category.label.toLowerCase()}
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {featuredProjects.map((project) => (
+                <Link
+                  key={project.id}
+                  href={`/catalog/${getCatalogProjectSlug(project)}`}
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-4 hover:border-brand-blue hover:bg-blue-50"
+                >
+                  <p className="text-sm font-bold leading-6 text-brand-navy">{project.title}</p>
+                  <p className="mt-2 text-xs text-slate-500">{project.tags.slice(0, 4).join(", ")}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
