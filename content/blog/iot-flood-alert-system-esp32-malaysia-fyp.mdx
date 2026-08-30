@@ -1,0 +1,113 @@
+---
+title: "IoT Flood Alert System with ESP32 for Malaysia FYP Students"
+excerpt: "Build a realistic flood alert final year project using ESP32, water level sensing, local alarm, dashboard logging and Malaysia-focused testing."
+category: "IoT"
+date: "2026-08-31"
+---
+
+## Quick Summary
+
+The prototype measures water level in a drain or model channel, categorises the risk level, sounds a local alarm, and sends a Telegram, dashboard or SMS-style alert. For a Malaysia final year project, the strongest version is not only a working circuit. It should also show a clear problem, a clean data flow, useful alerts, repeatable testing and honest limitations.
+
+Use this post to capture searches like IoT flood alert system, ESP32 flood monitoring Malaysia and Projek Akhir Tahun banjir IoT. The goal is to help students choose a topic that can be built, explained and defended during viva without overclaiming.
+
+## Why This Topic Works for Malaysia FYP
+
+Flood warning is a strong Malaysian use case because heavy rain and drainage overflow are familiar problems in many student project discussions. It also gives the student enough engineering content: sensor selection, ESP32 wiring, power planning, threshold logic, dashboard design and result validation.
+
+A good proposal can use this structure:
+
+- Problem: what user or environment issue is being monitored.
+- Input: what the sensor reads and how often it updates.
+- Processing: how the ESP32 filters data and decides the status.
+- Output: buzzer, relay, display, dashboard, Telegram or WhatsApp-style alert.
+- Evidence: screenshots, log tables and repeated test cases.
+
+## Recommended System Flow
+
+Use this flow for the report and presentation:
+
+1. Sensor reads the physical condition.
+2. ESP32 checks the reading against calibrated thresholds.
+3. Local display shows the latest value and status.
+4. Dashboard stores readings with timestamp.
+5. Alert is sent only when the status is warning or danger.
+6. The system returns to normal when the reading is stable again.
+
+This makes the project easier to explain than a simple sensor demo because every block has a purpose.
+
+## Core Components
+
+- ESP32 DevKit
+- Water level sensor, float switch or ultrasonic sensor
+- Buzzer
+- OLED display
+- Telegram bot, Firebase dashboard or GSM module for alert demonstration
+
+Check component details in the [Rectronx Components Database](/components). If your project uses ESP32, plan safe pins using the [ESP32 Pinout Tool](/tools/esp32-pinout) before wiring sensors, relays and displays.
+
+## Suggested Features
+
+- Live sensor reading with clear unit or status.
+- Normal, warning and danger states.
+- Dashboard table with timestamp.
+- Simple graph for trend analysis.
+- Local output such as buzzer, LED or display.
+- Manual reset or override where suitable.
+- Short error message when sensor data is missing.
+
+For more title ideas, browse the [500+ project catalog](/catalog). For implementation help, use the [contact page](/contact) and explain your required deadline, board and preferred dashboard.
+
+## Testing Plan
+
+- Use a transparent container so the panel can see level changes.
+- Define normal, warning and danger thresholds.
+- Log time, level and alert status.
+- Test repeated rising and falling levels.
+- Explain that real field deployment needs waterproof casing and maintenance.
+
+Testing is where many FYP projects become stronger. Instead of saying “the system works,” show a small table with test condition, expected result, actual result and screenshot evidence.
+
+## Common Mistakes
+
+- Claiming it predicts floods when it only detects local water level.
+- Leaving sensor wires exposed to water.
+- No debounce or filtering for unstable readings.
+- No local alarm when internet fails.
+- No explanation of false alarms during splashing.
+
+Avoid fixed cost promises in your report. Component prices in Malaysia change by supplier, stock, shipping and module quality, so it is safer to describe the bill of materials and explain what is optional.
+
+## What to Show During Viva
+
+Prepare a short demo path:
+
+- Show the wiring and explain the main sensor.
+- Open the dashboard before triggering the test.
+- Trigger normal, warning and danger conditions.
+- Show the timestamped log.
+- Explain one limitation honestly.
+- Mention one future upgrade such as casing, battery backup, LoRa, better calibration or mobile app.
+
+This gives the panel a complete story: problem, prototype, data, result and improvement.
+
+## Related Rectronx Pages
+
+- [Malaysia FYP project catalog](/catalog)
+- [Electronics components database](/components)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Contact Rectronx for project help](/contact)
+
+## FAQ
+
+### Is this IoT project suitable for beginners?
+
+Yes, if the first version uses one sensor, one ESP32 and one dashboard. Add extra sensors only after the basic flow is stable.
+
+### Do I need a mobile app for this FYP?
+
+Not always. A web dashboard, Firebase page, Blynk screen or Telegram alert can be enough if the data flow and testing are clear.
+
+### Can I claim high accuracy?
+
+Only if you calibrate and compare against a suitable reference. For most student prototypes, it is better to say the system monitors trends and alerts based on project-defined thresholds.

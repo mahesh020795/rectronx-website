@@ -1,0 +1,114 @@
+---
+title: "Projek IoT Amaran Banjir ESP32 untuk Pelajar Malaysia"
+excerpt: "Panduan Projek Akhir Tahun amaran banjir IoT menggunakan ESP32, sensor paras air, buzzer, notifikasi dan dashboard."
+category: "IoT"
+date: "2026-08-31"
+---
+
+## Ringkasan Cepat
+
+Sistem mengesan kenaikan paras air, menentukan tahap risiko, membunyikan buzzer dan menghantar amaran melalui dashboard, Telegram atau GSM. Untuk Projek Akhir Tahun di Malaysia, versi yang kuat bukan sekadar litar boleh hidup. Projek perlu ada masalah jelas, aliran data, dashboard, notifikasi, ujian berulang dan batasan yang jujur.
+
+Sesuai untuk carian projek amaran banjir IoT, Projek Akhir Tahun banjir ESP32 dan projek IoT Malaysia. Fokus utama ialah membantu pelajar memilih tajuk yang boleh dibina, diterangkan dan dipertahankan semasa viva.
+
+## Kenapa Tajuk Ini Sesuai untuk PAT Malaysia
+
+Banjir ialah masalah tempatan yang mudah dikaitkan dengan Malaysia, jadi tajuk ini sesuai untuk pelajar politeknik, kolej dan universiti. Tajuk ini juga ada kandungan teknikal yang cukup: pilihan sensor, wiring ESP32, bekalan kuasa, logik threshold, dashboard dan bukti ujian.
+
+Struktur proposal yang kemas:
+
+- Masalah: isu pengguna atau persekitaran yang mahu dipantau.
+- Input: sensor apa yang membaca data.
+- Proses: bagaimana ESP32 tapis bacaan dan tentukan status.
+- Output: buzzer, relay, display, dashboard atau notifikasi.
+- Bukti: screenshot, jadual log dan keputusan ujian.
+
+## Aliran Sistem Dicadangkan
+
+Gunakan aliran ini untuk laporan dan pembentangan:
+
+1. Sensor membaca keadaan fizikal.
+2. ESP32 semak bacaan dengan threshold yang dikalibrasi.
+3. Display tempatan tunjuk bacaan dan status.
+4. Dashboard simpan bacaan bersama masa.
+5. Notifikasi dihantar apabila status amaran atau bahaya.
+6. Sistem kembali normal apabila bacaan stabil.
+
+Aliran ini lebih kuat daripada demo sensor biasa kerana setiap bahagian ada fungsi yang jelas.
+
+## Komponen Utama
+
+- ESP32 DevKit
+- Sensor paras air, float switch atau ultrasonic
+- Buzzer
+- OLED
+- Modul GSM atau notifikasi internet
+- Bekas demo lutsinar
+
+Rujuk maklumat komponen di [Rectronx Components Database](/components). Jika projek guna ESP32, semak pin yang sesuai melalui [ESP32 Pinout Tool](/tools/esp32-pinout) sebelum sambung sensor, relay dan display.
+
+## Ciri yang Sesuai Ditambah
+
+- Bacaan sensor secara live.
+- Status normal, amaran dan bahaya.
+- Jadual dashboard dengan timestamp.
+- Graf ringkas untuk trend.
+- Output tempatan seperti buzzer, LED atau display.
+- Manual reset atau override jika sesuai.
+- Mesej ralat jika sensor tidak memberi bacaan stabil.
+
+Untuk lebih banyak idea, buka [500+ katalog projek](/catalog). Jika perlukan bantuan bina projek, hubungi melalui [contact page](/contact) dan nyatakan deadline, board serta jenis dashboard yang diperlukan.
+
+## Pelan Ujian
+
+- Sediakan tahap normal, amaran dan bahaya.
+- Naikkan paras air secara berperingkat.
+- Catat masa dan status amaran.
+- Uji bacaan turun semula selepas air rendah.
+- Terangkan batasan sensor dalam persekitaran sebenar.
+
+Bahagian ujian sangat penting. Jangan hanya tulis “sistem berjaya.” Sediakan jadual kecil dengan keadaan ujian, keputusan dijangka, keputusan sebenar dan bukti screenshot.
+
+## Kesilapan Biasa
+
+- Dakwa sistem meramal banjir sedangkan ia mengesan paras air setempat.
+- Wayar sensor tidak dilindungi.
+- Tiada penapis bacaan tidak stabil.
+- Tiada alarm tempatan jika internet gagal.
+- Tiada penerangan false alarm.
+
+Elakkan janji kos tetap dalam laporan. Harga komponen di Malaysia berubah mengikut supplier, stok, shipping dan kualiti module. Lebih selamat tulis senarai komponen dan nyatakan bahagian optional.
+
+## Apa Perlu Tunjuk Semasa Viva
+
+Sediakan laluan demo pendek:
+
+- Tunjuk wiring dan sensor utama.
+- Buka dashboard sebelum ujian.
+- Uji keadaan normal, amaran dan bahaya.
+- Tunjuk log bertimestamp.
+- Terangkan satu batasan projek dengan jujur.
+- Cadangkan naik taraf seperti casing, bateri backup, LoRa, kalibrasi lebih baik atau mobile app.
+
+Ini memberi panel cerita lengkap: masalah, prototaip, data, keputusan dan penambahbaikan.
+
+## Pautan Berkaitan
+
+- [Katalog projek Malaysia](/catalog)
+- [Database komponen elektronik](/components)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Hubungi Rectronx untuk bantuan projek](/contact)
+
+## FAQ
+
+### Adakah projek IoT ini sesuai untuk beginner?
+
+Ya, jika versi pertama guna satu sensor, satu ESP32 dan satu dashboard. Tambah sensor lain selepas aliran asas stabil.
+
+### Perlu bina mobile app untuk PAT ini?
+
+Tidak semestinya. Dashboard web, Firebase, Blynk atau Telegram alert sudah cukup jika data flow dan ujian jelas.
+
+### Boleh dakwa bacaan sangat tepat?
+
+Hanya jika ada kalibrasi dan perbandingan dengan alat rujukan yang sesuai. Untuk prototaip pelajar, lebih selamat tulis bahawa sistem memantau trend dan memberi amaran berdasarkan threshold projek.
