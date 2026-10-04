@@ -33,13 +33,13 @@ export default function CallToAction() {
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
             <div className="max-w-xl">
               <p className="text-white/60 text-[0.65rem] font-extrabold uppercase tracking-[0.25em] mb-5">
-                400+ students trusted us
+                Built around real student needs
               </p>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-[-0.04em] text-white leading-[0.95] mb-6">
                 Ready to start your project?
               </h2>
               <p className="text-white/70 leading-relaxed max-w-[42ch]">
-                WhatsApp us your requirements. Free quote in 2 hours. No commitment needed.
+                WhatsApp us your requirements. Free quote within one business day. No commitment needed.
               </p>
             </div>
 

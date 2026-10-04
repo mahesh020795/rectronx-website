@@ -13,7 +13,7 @@ const steps = [
   {
     step: "02",
     title: "WhatsApp us",
-    description: "Share your topic, deadline, and university requirements. We reply within 2 hours with a free quote.",
+    description: "Share your topic, deadline, and university requirements. We reply within one business day with a free quote.",
     accent: "#7c3aed",
   },
   {
@@ -50,7 +50,7 @@ export default function HowItWorks() {
             </h2>
           </div>
           <p className="text-white/40 text-sm max-w-[28ch] leading-relaxed">
-            400+ students have been through this process. Here&apos;s exactly what happens.
+            This process is built for student projects. Here&apos;s exactly what happens.
           </p>
         </motion.div>
 

@@ -7,9 +7,10 @@ export const contentType = "image/png";
 export default async function OgImage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const post = getPost(params.slug);
+  const { slug } = await params;
+  const post = getPost(slug);
   const title = post?.title ?? "Rectronx Blog";
 
   return new ImageResponse(

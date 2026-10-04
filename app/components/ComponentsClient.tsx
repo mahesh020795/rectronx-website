@@ -162,6 +162,18 @@ export default function ComponentsClient({ components }: { components: Component
             ))}
           </div>
 
+          <nav aria-label="Component category guides" className="flex gap-2 overflow-x-auto pb-1">
+            {categoryCounts.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/components/${item.slug}`}
+                className="shrink-0 text-xs font-semibold text-brand-blue underline-offset-4 hover:underline"
+              >
+                Browse {item.label} guide
+              </Link>
+            ))}
+          </nav>
+
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-slate-400">
               <Tag size={14} />
@@ -216,7 +228,6 @@ export default function ComponentsClient({ components }: { components: Component
                   <span className={`rounded-full px-3 py-1 text-xs font-bold ${categoryColors[component.category]}`}>
                     {component.categoryLabel}
                   </span>
-                  <span className="text-sm font-bold text-amber-500">{component.rating.toFixed(1)}/5</span>
                 </div>
 
                 <div className="mt-5 flex h-36 items-center justify-center overflow-hidden rounded-lg border border-slate-100 bg-slate-50 text-center">

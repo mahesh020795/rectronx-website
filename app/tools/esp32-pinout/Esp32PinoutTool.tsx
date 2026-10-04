@@ -474,7 +474,9 @@ export default function Esp32PinoutTool() {
       if (pin.gpio === null) return pin.label.toLowerCase() === pinParam;
       return `gpio${pin.gpio}` === pinParam || String(pin.gpio) === pinParam;
     });
-    if (requestedPin) setSelected(requestedPin);
+    if (!requestedPin) return;
+    const timer = window.setTimeout(() => setSelected(requestedPin), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {

@@ -21,7 +21,6 @@ export const organizationSchema = {
       "@type": "ContactPoint",
       telephone: "+60-14-8600454",
       contactType: "customer support",
-      contactOption: "TollFree",
       areaServed: "MY",
       availableLanguage: ["English", "Malay"],
     },
@@ -75,13 +74,6 @@ export const localBusinessSchema = {
     { "@type": "Country", name: "Malaysia" },
     { "@type": "State", name: "Penang" },
   ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.7",
-    reviewCount: "400",
-    bestRating: "5",
-    worstRating: "1",
-  },
   hasMap: "https://maps.google.com/?q=Rectronx+Circuits+Penang",
   openingHoursSpecification: [
     {
@@ -92,7 +84,6 @@ export const localBusinessSchema = {
         "Wednesday",
         "Thursday",
         "Friday",
-        "Saturday",
       ],
       opens: "09:00",
       closes: "22:00",
@@ -100,7 +91,8 @@ export const localBusinessSchema = {
   ],
 };
 
-// WebSite + SearchAction — enables the Google sitelinks search box.
+// WebSite identity. Google retired the sitelinks search box in November 2024,
+// so this intentionally does not publish an obsolete SearchAction.
 export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -111,14 +103,6 @@ export const websiteSchema = {
     "Final Year Projects & commercial software from Penang, Malaysia — IoT, Arduino, ESP32, Raspberry Pi.",
   publisher: { "@id": `${BASE}/#organization` },
   inLanguage: "en-MY",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${BASE}/catalog?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
 };
 
 export function faqSchema(faqs: { q: string; a: string }[]) {
@@ -151,6 +135,7 @@ export function articleSchema(post: {
   excerpt: string;
   slug: string;
   date: string;
+  language: "en-MY" | "ms-MY";
 }) {
   return {
     "@context": "https://schema.org",
@@ -172,7 +157,7 @@ export function articleSchema(post: {
       "@type": "WebPage",
       "@id": `${BASE}/blog/${post.slug}`,
     },
-    inLanguage: "en-MY",
+    inLanguage: post.language,
   };
 }
 
@@ -280,7 +265,7 @@ export function contactPageSchema() {
     "@id": `${BASE}/contact#contactpage`,
     url: `${BASE}/contact`,
     name: "Contact Rectronx Circuits",
-    description: "Contact Rectronx Circuits for Final Year Project development and commercial software. Free quote via WhatsApp within 2 hours.",
+    description: "Contact Rectronx Circuits for Final Year Project guidance and commercial software enquiries. Request a free quote by WhatsApp.",
     mainEntity: {
       "@id": `${BASE}/#organization`,
     },

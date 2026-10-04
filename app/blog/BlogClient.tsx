@@ -29,6 +29,7 @@ const CATEGORY_ORDER = [
 
 export default function BlogClient({ posts }: { posts: Post[] }) {
   const [active, setActive] = useState("All");
+  const [visibleCount, setVisibleCount] = useState(24);
 
   const featured = posts[0];
   const rest = posts.slice(1);
@@ -46,6 +47,7 @@ export default function BlogClient({ posts }: { posts: Post[] }) {
   const gridPosts = rest.filter(
     (p) => active === "All" || p.category === active
   );
+  const visiblePosts = gridPosts.slice(0, visibleCount);
 
   return (
     <div className="pt-24 bg-slate-50 min-h-screen">
@@ -120,7 +122,10 @@ export default function BlogClient({ posts }: { posts: Post[] }) {
           {filterTabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActive(tab)}
+              onClick={() => {
+                setActive(tab);
+                setVisibleCount(24);
+              }}
               className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors whitespace-nowrap shrink-0 ${
                 active === tab
                   ? "bg-[#2B7FD4] text-white border-[#2B7FD4]"
@@ -134,7 +139,7 @@ export default function BlogClient({ posts }: { posts: Post[] }) {
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {gridPosts.map((post) => {
+          {visiblePosts.map((post) => {
             const colors = categoryColors[post.category];
             return (
               <Link
@@ -173,6 +178,17 @@ export default function BlogClient({ posts }: { posts: Post[] }) {
             );
           })}
         </div>
+        {visibleCount < gridPosts.length && (
+          <div className="mt-8 text-center">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => count + 24)}
+              className="rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-[#0F1C2E] hover:border-[#2B7FD4] hover:text-[#2B7FD4]"
+            >
+              Load more articles
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

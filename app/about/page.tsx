@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Rectronx Circuits — Penang Engineering & Technology Company Since 2016",
     description:
-      "Founded in 2016, delivering 400+ Final Year Projects and commercial software products across Malaysia.",
+      "Founded in 2016, supporting Final Year Projects and commercial software work across Malaysia.",
     url: "https://rectronx.com/about",
     type: "website",
     images: [{ url: "https://rectronx.com/og-image.png", width: 1200, height: 630, alt: "Rectronx Circuits — Penang Engineering & Technology Company" }],
@@ -47,7 +47,7 @@ const values = [
 ];
 
 const stats = [
-  { value: "400+", label: "Projects Delivered", icon: Trophy },
+  { value: "500+", label: "Project Titles", icon: Trophy },
   { value: "500+", label: "Project Titles Available", icon: Smile },
   { value: "8", label: "Years Active", icon: Clock },
   { value: "12", label: "Commercial Products Built", icon: Package },
@@ -106,7 +106,7 @@ export default function AboutPage() {
               we built Spark — our own AI-powered WhatsApp product for businesses.
             </p>
             <p className="text-slate-600 leading-relaxed">
-              Today, Rectronx stands as both a trusted FYP partner for hundreds of
+              Today, Rectronx stands as both a trusted FYP partner for
               students across Malaysia and a growing engineering &amp; technology company shipping
               products used by real businesses.
             </p>
@@ -125,13 +125,13 @@ export default function AboutPage() {
             <div className="space-y-10">
               {[
                 { year: "2016", title: "Founded", desc: "Rectronx Circuits established in Penang, Malaysia." },
-                { year: "2017", title: "First Projects", desc: "Delivered our first 10 FYP projects to engineering students." },
+                { year: "2017", title: "Project Services", desc: "Began supporting engineering students with practical FYP builds." },
                 { year: "2019", title: "Smart Parking", desc: "Launched our first commercial product — a Smart Parking System." },
-                { year: "2020", title: "200+ Projects", desc: "Crossed the 200 projects delivered milestone across Malaysia." },
+                { year: "2020", title: "Nationwide Support", desc: "Expanded project support beyond Penang to students across Malaysia." },
                 { year: "2021", title: "Attendance & Access Control", desc: "Launched enterprise Attendance & Access Control system." },
                 { year: "2023", title: "Fleet Tracking", desc: "Released Fleet Tracking system for commercial vehicle management." },
                 { year: "2024", title: "Spark Launched", desc: "Built and launched Spark — our AI-powered WhatsApp platform for businesses." },
-                { year: "2025", title: "400+ Projects", desc: "Reached 400+ projects delivered and 12 commercial products built." },
+                { year: "2025", title: "Expanded Project Library", desc: "Expanded our project guidance across IoT, embedded systems and software." },
                 { year: "2026", title: "Spark Full Features", desc: "Flagship Spark release with full feature suite — our most powerful product yet." },
               ].map((m, i) => {
                 const isLeft = i % 2 === 0;

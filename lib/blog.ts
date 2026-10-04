@@ -12,7 +12,21 @@ export interface BlogPost {
   category: string;
   date: string;
   readTime: string;
+  language: "en-MY" | "ms-MY";
   content: string;
+}
+
+function detectPostLanguage(title: string, excerpt: string, content: string): "en-MY" | "ms-MY" {
+  const sample = `${title} ${excerpt} ${content.slice(0, 1800)}`.toLowerCase();
+  const malayTerms = ["projek", "akhir", "tahun", "cara", "panduan", "untuk", "dengan", "pelajar", "bina", "sistem", "yang", "dalam", "kesilapan", "senarai"];
+  const englishTerms = ["project", "final", "year", "how", "guide", "for", "with", "students", "build", "system", "common", "using", "mistakes", "list"];
+  const score = (terms: string[]) => terms.reduce((total, term) => total + (sample.match(new RegExp(`\\b${term}\\b`, "g"))?.length ?? 0), 0);
+  return score(malayTerms) > score(englishTerms) ? "ms-MY" : "en-MY";
+}
+
+function resolveLanguage(data: Record<string, unknown>, title: string, excerpt: string, content: string) {
+  if (data.language === "ms-MY" || data.language === "en-MY") return data.language;
+  return detectPostLanguage(title, excerpt, content);
 }
 
 export function getAllPosts(): Omit<BlogPost, "content">[] {
@@ -30,6 +44,7 @@ export function getAllPosts(): Omit<BlogPost, "content">[] {
         category: data.category,
         date: data.date,
         readTime: readingTime(content).text,
+        language: resolveLanguage(data, data.title, data.excerpt, content),
       };
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -113,6 +128,36 @@ export function getPost(slug: string): BlogPost | null {
     category: data.category,
     date: data.date,
     readTime: readingTime(content).text,
+    language: resolveLanguage(data, data.title, data.excerpt, content),
     content,
   };
+}
+
+export function getShareLinks(post: Pick<BlogPost, "slug" | "title">) {
+  const url = `https://rectronx.com/blog/${post.slug}`;
+  const text = `${post.title} - Rectronx Circuits`;
+  return {
+    x: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`,
+  };
+}
+
+export function getRelatedPosts(
+  post: Pick<BlogPost, "slug" | "title" | "category">,
+  posts: Omit<BlogPost, "content">[],
+  limit = 2
+) {
+  const stopWords = new Set(["and", "the", "for", "with", "cara", "dan", "untuk", "projek", "project", "fyp", "malaysia"]);
+  const words = new Set(post.title.toLowerCase().split(/[^a-z0-9]+/).filter((word) => word.length > 2 && !stopWords.has(word)));
+
+  return posts
+    .filter((candidate) => candidate.slug !== post.slug)
+    .map((candidate) => {
+      const candidateWords = candidate.title.toLowerCase().split(/[^a-z0-9]+/);
+      const overlap = candidateWords.reduce((score, word) => score + (words.has(word) ? 1 : 0), 0);
+      return { candidate, score: overlap * 3 + (candidate.category === post.category ? 2 : 0) };
+    })
+    .sort((a, b) => b.score - a.score || new Date(b.candidate.date).getTime() - new Date(a.candidate.date).getTime())
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
 }

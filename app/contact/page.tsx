@@ -26,17 +26,15 @@ function generateConfetti(count: number) {
 }
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", website: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [confetti, setConfetti] = useState<ReturnType<typeof generateConfetti>>([]);
 
   useEffect(() => {
-    if (status === "success") {
-      setConfetti(generateConfetti(18));
-      const t = setTimeout(() => setConfetti([]), 1500);
-      return () => clearTimeout(t);
-    }
-  }, [status]);
+    if (confetti.length === 0) return;
+    const timer = setTimeout(() => setConfetti([]), 1500);
+    return () => clearTimeout(timer);
+  }, [confetti.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +47,9 @@ export default function ContactPage() {
       });
       if (!res.ok) throw new Error();
       trackContactFormLead();
+      setConfetti(generateConfetti(18));
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "" });
+      setForm({ name: "", email: "", phone: "", message: "", website: "" });
     } catch {
       setStatus("error");
     }
@@ -66,7 +65,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-4 text-slate-500 max-w-xl mx-auto text-lg">
             Have a project in mind? Send us a message and we&apos;ll get back to
-            you within 24 hours.
+            you within one business day.
           </p>
         </div>
 
@@ -81,7 +80,7 @@ export default function ContactPage() {
               <div className="flex flex-col gap-1 pt-1">
                 <div className="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 px-2.5 py-1 rounded-full text-xs font-medium">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                  Typically reply within 2 hours
+                  Typically reply within one business day
                 </div>
                 <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-1">
                   <Clock size={11} />
@@ -102,7 +101,7 @@ export default function ContactPage() {
               </div>
               <p className="text-slate-500 text-sm mb-4 leading-relaxed">
                 For the quickest response, message us directly on WhatsApp.
-                We typically reply within a few hours.
+                We normally reply during the next business day.
               </p>
               <WhatsAppButton
                 label="Open WhatsApp Chat"
@@ -165,7 +164,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-xl font-bold text-brand-navy">Message Sent!</h3>
                 <p className="text-slate-500 text-sm mt-2 max-w-xs">
-                  We&apos;ll get back to you within 2 hours during office hours.
+                  We&apos;ll get back to you within one business day.
                 </p>
                 <button
                   onClick={() => setStatus("idle")}
@@ -178,6 +177,18 @@ export default function ContactPage() {
               <>
                 <h2 className="text-lg font-bold text-brand-navy mb-6">Send a Message</h2>
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="absolute -left-[10000px]" aria-hidden="true">
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website}
+                      onChange={(e) => setForm({ ...form, website: e.target.value })}
+                    />
+                  </div>
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
                       Full Name <span className="text-red-500">*</span>

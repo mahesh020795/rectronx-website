@@ -45,9 +45,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const project = getCatalogProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = getCatalogProjectBySlug(slug);
   if (!project) return {};
 
   const seo = getCatalogProjectSeo(project);
@@ -74,12 +75,13 @@ export async function generateMetadata({
   };
 }
 
-export default function CatalogProjectPage({
+export default async function CatalogProjectPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const project = getCatalogProjectBySlug(params.slug);
+  const { slug: routeSlug } = await params;
+  const project = getCatalogProjectBySlug(routeSlug);
   if (!project) notFound();
 
   const slug = getCatalogProjectSlug(project);

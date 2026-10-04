@@ -213,11 +213,14 @@ export function componentWhatsAppLink(component: ComponentGuide, source = "compo
 }
 
 export function componentMetaTitle(component: ComponentGuide) {
-  return `${component.shortName} Guide Malaysia | Pinout, Specs, FYP Uses`;
+  return component.referenceType === "connection-overview"
+    ? `${component.shortName} Guide Malaysia | Specs, Wiring & FYP Uses`
+    : `${component.shortName} Guide Malaysia | Pinout, Specs, FYP Uses`;
 }
 
 export function componentMetaDescription(component: ComponentGuide) {
-  return `${component.name} guide for Malaysian FYP students: specs, pinout, wiring, common mistakes, project ideas, alternatives and price range ${component.priceRange}.`;
+  const connectionLabel = component.referenceType === "connection-overview" ? "connection planning" : "pinout";
+  return `${component.name} guide for Malaysian FYP students: specs, ${connectionLabel}, wiring, common mistakes, project ideas, alternatives and price range ${component.priceRange}.`;
 }
 
 export function componentImagePath(component: ComponentGuide) {

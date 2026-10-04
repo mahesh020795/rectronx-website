@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
-import { getAllPosts, getPost, getPostImage } from "@/lib/blog";
+import { getAllPosts, getPost, getPostImage, getRelatedPosts, getShareLinks } from "@/lib/blog";
 import { Clock, ArrowLeft, Tag, Twitter } from "lucide-react";
 import Link from "next/link";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -17,9 +17,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const post = getPost(params.slug);
+  const { slug } = await params;
+  const post = getPost(slug);
   if (!post) return {};
   const url = `https://rectronx.com/blog/${post.slug}`;
   return {
@@ -50,42 +51,18 @@ const categoryColors: Record<string, string> = {
   "FYP Guidance": "bg-blue-50 text-blue-700",
 };
 
-// Related posts shown at the bottom (static stubs)
-const relatedStubs = [
-  {
-    slug: "arduino-vs-raspberry-pi",
-    title: "Arduino vs Raspberry Pi: Which Should You Use for Your FYP?",
-    category: "Components",
-    readTime: "7 min read",
-    date: "Coming Soon",
-  },
-  {
-    slug: "fyp-documentation-guide",
-    title: "The Complete FYP Documentation Guide: What to Write and How",
-    category: "FYP Guidance",
-    readTime: "10 min read",
-    date: "Coming Soon",
-  },
-];
-
-export default function BlogPostPage({
+export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const post = getPost(params.slug);
+  const { slug } = await params;
+  const post = getPost(slug);
   if (!post) notFound();
 
   const allPosts = getAllPosts();
-  const others = allPosts.filter((p) => p.slug !== post.slug);
-  // Prefer posts in the same category, then fill with the rest.
-  const sameCategory = others.filter((p) => p.category === post.category);
-  const otherCategory = others.filter((p) => p.category !== post.category);
-  const related = [...sameCategory, ...otherCategory].slice(0, 2);
-  const relatedPosts =
-    related.length >= 2
-      ? related
-      : [...related, ...relatedStubs.slice(0, 2 - related.length)];
+  const relatedPosts = getRelatedPosts(post, allPosts, 2);
+  const shareLinks = getShareLinks(post);
 
   const hero = getPostImage(post.slug);
 
@@ -122,7 +99,7 @@ export default function BlogPostPage({
 
         <div className="flex gap-10 items-start">
           {/* Main content */}
-          <article className="flex-1 min-w-0">
+          <article lang={post.language} className="flex-1 min-w-0">
             {/* Header */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 lg:p-10 mb-6">
               {/* Meta row */}
@@ -163,23 +140,29 @@ export default function BlogPostPage({
                     <p className="text-xs text-slate-400">{post.date}</p>
                   </div>
                 </div>
-                {/* Share buttons (visual only) */}
+                {/* Article share links */}
                 <div className="flex items-center gap-2">
-                  <button
-                    aria-label="Share on Twitter"
+                  <a
+                    href={shareLinks.x}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Share on X"
                     className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#2B7FD4] hover:border-[#2B7FD4] transition-colors"
                   >
                     <Twitter size={14} />
-                  </button>
+                  </a>
                   {/* WhatsApp icon as SVG */}
-                  <button
+                  <a
+                    href={shareLinks.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label="Share on WhatsApp"
                     className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:border-emerald-500 transition-colors"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -270,7 +253,7 @@ export default function BlogPostPage({
               <div className="bg-[#0F1C2E] rounded-xl p-5 text-center">
                 <p className="text-white font-bold text-base mb-2">Need Help With Your FYP?</p>
                 <p className="text-slate-400 text-xs mb-4 leading-relaxed">
-                  We&apos;ve helped hundreds of students finish on time. Get a free quote now.
+                  We&apos;ve helped students finish on time. Get a free quote now.
                 </p>
                 <WhatsAppButton
                   label="Chat with Rectronx"
@@ -286,7 +269,7 @@ export default function BlogPostPage({
         <div className="mt-12 lg:hidden bg-slate-100 rounded-2xl p-8 text-center">
           <h2 className="text-xl font-bold text-[#0F1C2E] mb-2">Need Help With Your FYP?</h2>
           <p className="text-slate-500 text-sm mb-5 max-w-md mx-auto">
-            We&apos;ve helped hundreds of students complete their projects on time. Get a free quote today.
+            We&apos;ve helped students complete their projects on time. Get a free quote today.
           </p>
           <WhatsAppButton
             label="Chat with Rectronx"

@@ -111,7 +111,7 @@ export default function OGImage() {
         <div style={{ display: "flex", gap: 40, marginTop: 48 }}>
           {[
             { value: "500+", label: "Project Titles" },
-            { value: "400+", label: "Delivered" },
+            { value: "500+", label: "Project Titles" },
             { value: "8 Yrs", label: "Experience" },
           ].map((s) => (
             <div key={s.label} style={{ display: "flex", flexDirection: "column" }}>

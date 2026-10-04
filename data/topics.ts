@@ -76,13 +76,21 @@ export const topicHubs: TopicHub[] = [
   },
   {
     slug: "iot",
-    title: "IoT FYP Projects Malaysia",
-    eyebrow: "Connected Systems Cluster",
+    title: "Projek IoT Malaysia",
+    eyebrow: "Projek IoT & Sistem Pintar",
     description:
-      "IoT project ideas for Malaysian students including sensors, dashboards, alerts, databases, automation and monitoring systems.",
-    keywords: ["IoT FYP Malaysia", "IoT project ideas", "smart monitoring project"],
-    tags: ["IoT", "ESP32", "Dashboard", "Firebase", "Blynk"],
-    searchTerms: ["iot", "dashboard", "monitoring", "smart"],
+      "Senarai idea projek IoT dan projek smart untuk pelajar Malaysia menggunakan ESP32, Arduino, sensor, dashboard, notifikasi, automasi dan data logging.",
+    keywords: [
+      "projek IoT",
+      "IoT project Malaysia",
+      "projek smart",
+      "senarai projek IoT",
+      "idea projek IoT",
+      "IoT FYP Malaysia",
+      "projek IoT ESP32",
+    ],
+    tags: ["Projek IoT", "ESP32", "Arduino", "Sistem Pintar", "Dashboard"],
+    searchTerms: ["iot", "dashboard", "monitoring", "smart", "sensor", "esp32", "arduino"],
   },
   {
     slug: "ai-ml",

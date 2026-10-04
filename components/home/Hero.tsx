@@ -10,7 +10,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 const rotating = ["ARDUINO", "ESP32", "IOT", "RASPBERRY PI", "PYTHON"];
 
 const stats = [
-  { value: "400+", label: "Projects" },
+  { value: "500+", label: "Project Titles" },
   { value: "500+", label: "Titles" },
   { value: "8", label: "Years" },
   { value: "4.7★", label: "Rating" },

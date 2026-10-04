@@ -6,19 +6,23 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "verify:iot-hub": "node scripts/verify-iot-topic-hub.mjs",
+    "verify:hardening": "node scripts/verify-site-hardening.mjs",
+    "test:contact": "node scripts/test-contact-security.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.44.4",
-    "@tailwindcss/typography": "^0.5.20",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.0",
     "gray-matter": "^4.0.3",
+    "js-yaml": "3.15.2",
     "lucide-react": "^0.400.0",
-    "next": "14.2.5",
+    "nanoid": "3.3.18",
+    "next": "16.3.8",
     "next-mdx-remote": "^6.0.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "reading-time": "^1.5.0",
     "remark-gfm": "^4.0.1",
     "resend": "^6.12.4"
@@ -30,15 +34,16 @@
     "edge >= 90"
   ],
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
     "critters": "^0.0.23",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "eslint": "^9.37.0",
+    "eslint-config-next": "^16.3.8",
+    "postcss": "^8.5.23",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5"
   }
 }

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     absolute: "Rectronx Circuits | FYP Projects Malaysia",
   },
   description:
-    "Custom FYP projects in Malaysia: IoT, Arduino, ESP32, Raspberry Pi and software. 400+ delivered from Penang. Free WhatsApp quote in 2 hours.",
+    "Custom FYP projects in Malaysia: IoT, Arduino, ESP32, Raspberry Pi and software support from Penang. Free WhatsApp quote within one business day.",
   keywords: [
     "final year project malaysia",
     "FYP malaysia",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 const faqs = [
-  { q: "How does it work?", a: "WhatsApp us your FYP title, university requirements, and deadline. We send a free quote within 2 hours. Once confirmed, we build and send progress updates throughout." },
+  { q: "How does it work?", a: "WhatsApp us your FYP title, university requirements, and deadline. We send a free quote within one business day. Once confirmed, we build and send progress updates throughout." },
   { q: "Is my project information kept private?", a: "Yes — full confidentiality. We don't share your project details, requirements, or personal information with anyone." },
   { q: "How long does it take?", a: "Most IoT and Arduino projects take 1–2 weeks. Software-heavy or complex systems may take 2–4 weeks. Tell us your deadline and we'll plan accordingly." },
   { q: "What if I need changes after delivery?", a: "Before we start, we lock in the full scope together. If something isn't working as agreed, we'll fix it. New requirements added after the build starts are quoted separately." },

@@ -48,6 +48,7 @@ export default function CatalogClient() {
   const [activeTech, setActiveTech] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(true);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(60);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
@@ -104,15 +105,19 @@ export default function CatalogClient() {
     return results;
   }, [searchQuery, activeCategory, activeTech]);
 
+  const visibleProjects = filtered.slice(0, visibleCount);
+
   const techPills = techFilters[activeCategory];
 
   function handleTechClick(tech: string) {
     setActiveTech((prev) => (prev === tech ? null : tech));
+    setVisibleCount(60);
   }
 
   function handleCategoryChange(cat: Category) {
     setActiveCategory(cat);
     setActiveTech(null);
+    setVisibleCount(60);
   }
 
   return (
@@ -161,7 +166,10 @@ export default function CatalogClient() {
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setVisibleCount(60);
+              }}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
               placeholder="Search by title, technology, or keyword..."
@@ -222,7 +230,7 @@ export default function CatalogClient() {
         {/* Count */}
         <p className="text-sm text-slate-500 mb-6">
           Showing{" "}
-          <span className="font-semibold text-slate-700">{filtered.length}</span>{" "}
+          <span className="font-semibold text-slate-700">{visibleProjects.length}</span>{" "}
           of{" "}
           <span className="font-semibold text-slate-700">{totalCount}</span>{" "}
           titles
@@ -246,7 +254,7 @@ export default function CatalogClient() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((project) => (
+            {visibleProjects.map((project) => (
               <div
                 key={project.id}
                 className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col gap-3 hover:shadow-md transition-shadow"
@@ -314,6 +322,18 @@ export default function CatalogClient() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {visibleCount < filtered.length && (
+          <div className="mt-8 text-center">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((count) => count + 60)}
+              className="rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-brand-navy hover:border-brand-blue hover:text-brand-blue"
+            >
+              Load more projects
+            </button>
           </div>
         )}
 

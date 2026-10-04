@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   keywords: ["FYP portfolio malaysia", "final year project examples", "arduino FYP examples", "IoT project malaysia", "ESP32 FYP portfolio", "raspberry pi project examples"],
   alternates: { canonical: "/projects", languages: { "en-MY": "https://rectronx.com/projects" } },
   openGraph: {
-    title: "400+ FYP Projects Delivered — Arduino, IoT, Software | Rectronx Circuits",
+    title: "FYP Project Portfolio — Arduino, IoT, Software | Rectronx Circuits",
     description:
-      "Browse 400+ Final Year Projects delivered across Malaysia — IoT, Arduino, ESP32, Raspberry Pi, Software & Robotics.",
+      "Browse selected Final Year Project examples and explore 500+ project titles across IoT, Arduino, ESP32, Raspberry Pi, software and robotics.",
     url: "https://rectronx.com/projects",
     type: "website",
     images: [{ url: "https://rectronx.com/og-image.png", width: 1200, height: 630, alt: "Rectronx FYP Projects Portfolio" }],

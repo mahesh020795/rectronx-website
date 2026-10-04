@@ -48,6 +48,7 @@ export interface ComponentGuide {
   priceRange: string;
   difficulty: Difficulty;
   rating: number;
+  referenceType?: "verified-pinout" | "connection-overview";
   imageHint: string;
   interfaces: string[];
   voltage: string[];
@@ -163,6 +164,7 @@ function createAdditionalComponents(seeds: AdditionalComponentSeed[]): Component
     priceRange: seed.priceRange,
     difficulty: seed.difficulty ?? "Intermediate",
     rating: 4.5,
+    referenceType: "connection-overview",
     imageHint: `${seed.name} electronics module illustration`,
     interfaces: seed.interfaces,
     voltage: seed.voltage,
@@ -175,19 +177,19 @@ function createAdditionalComponents(seeds: AdditionalComponentSeed[]): Component
       { label: "Best For", value: seed.suitableFor.slice(0, 2).join(", ") },
     ],
     pins: [
-      { name: "VCC", description: `Power input. Check whether the module expects ${seed.voltage.join(" or ")} before wiring.` },
-      { name: "GND", description: "Common ground with the controller and external supply." },
-      { name: seed.interfaces[0] ?? "SIGNAL", description: `Main ${seed.interfaces[0] ?? "signal"} connection used by the module.` },
-      { name: "IO", description: "Additional signal pins depend on the exact module variant." },
+      { name: "Power", description: `Use only a supply supported by the exact board or module variant. Common listings for this part mention ${seed.voltage.join(" or ")}.` },
+      { name: "Ground", description: "Connect a common ground between the controller, module and any external supply." },
+      { name: "Primary interface", description: `Plan for ${seed.interfaces.join(" / ")}; confirm the exact terminal names in the manufacturer documentation.` },
+      { name: "Variant-specific connections", description: "Connector names and optional pins can differ between breakout-board revisions." },
     ],
     wiring: [
       {
         platform: "Arduino / ESP32",
-        notes: `Connect power, ground and the ${seed.interfaces.join(" / ")} signal lines. Use level shifting when a 5V module connects to a 3.3V controller.`,
+        notes: `This is a planning overview, not a board-specific pin map. Confirm the exact module revision, supply limits and ${seed.interfaces.join(" / ")} terminals in its datasheet before wiring. Use suitable level shifting when logic voltages differ.`,
         connections: [
-          { label: `${seed.shortName} VCC`, value: seed.voltage.includes("5V") ? "5V or module-rated supply" : seed.voltage[0] },
-          { label: `${seed.shortName} GND`, value: "Controller GND" },
-          { label: "Signal pins", value: seed.interfaces.join(", ") },
+          { label: "Power", value: `Confirm against the exact board; listed variants commonly use ${seed.voltage.join(" / ")}` },
+          { label: "Ground", value: "Common ground with the controller" },
+          { label: "Interface", value: `${seed.interfaces.join(", ")} (exact pins vary by module)` },
         ],
       },
     ],
@@ -2290,7 +2292,7 @@ export const components: ComponentGuide[] = [
                 }
           ],
           "relatedBlogSlugs": [
-                "lcd-16x2-i2c",
+                "esp32-i2c-address-conflict-multiple-sensors",
                 "fyp-electronics-troubleshooting-checklist"
           ],
           "buyNotes": "Useful when a project uses many LCDs, buttons or low-current status outputs."
@@ -2668,7 +2670,7 @@ export const components: ComponentGuide[] = [
           ],
           "relatedBlogSlugs": [
                 "dht11-vs-dht22-vs-bme280-fyp-sensors",
-                "iot-water-monitoring-project-esp32-dht11"
+                "iot-fish-pond-water-quality-fyp-malaysia"
           ],
           "buyNotes": "Use a 4.7k pull-up resistor and check probe waterproofing before immersion."
     },

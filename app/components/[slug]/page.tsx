@@ -34,7 +34,7 @@ import { getCatalogProjectSlug } from "@/lib/catalog";
 import { getRelatedTopicHubsForComponent } from "@/lib/topics";
 
 type PageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
@@ -44,11 +44,12 @@ export function generateStaticParams() {
   ];
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const component = getComponentBySlug(params.slug);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const component = getComponentBySlug(slug);
 
   if (!component) {
-    const category = getComponentCategoryBySlug(params.slug);
+    const category = getComponentCategoryBySlug(slug);
 
     if (!category) return {};
 
@@ -88,7 +89,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
       component.name,
       `${component.shortName} Malaysia`,
       `${component.shortName} FYP`,
-      `${component.shortName} pinout`,
+      ...(component.referenceType === "connection-overview" ? [] : [`${component.shortName} pinout`]),
       `${component.shortName} wiring`,
       ...component.compatibleWith.map((item) => `${component.shortName} ${item}`),
     ],
@@ -185,11 +186,12 @@ function getComponentTroubleshooting(component: ComponentGuide) {
   return Array.from(items).slice(0, 6);
 }
 
-export default function ComponentDetailPage({ params }: PageProps) {
-  const component = getComponentBySlug(params.slug);
+export default async function ComponentDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const component = getComponentBySlug(slug);
 
   if (!component) {
-    const category = getComponentCategoryBySlug(params.slug);
+    const category = getComponentCategoryBySlug(slug);
     if (!category) notFound();
     return <ComponentCategoryHub category={category} />;
   }
@@ -200,6 +202,7 @@ export default function ComponentDetailPage({ params }: PageProps) {
   const waHref = componentWhatsAppLink(component);
   const timeRequired = getComponentTimeRequired(component.difficulty);
   const troubleshooting = getComponentTroubleshooting(component);
+  const hasVerifiedPinout = component.referenceType !== "connection-overview";
 
   return (
     <main className="min-h-screen bg-slate-50 pt-16 text-slate-900">
@@ -227,9 +230,6 @@ export default function ComponentDetailPage({ params }: PageProps) {
             <div className="mt-6 flex flex-wrap gap-2">
               <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-white">
                 {component.categoryLabel}
-              </span>
-              <span className="rounded-full bg-amber-400/10 px-3 py-1 text-sm font-bold text-amber-300">
-                {component.rating.toFixed(1)}/5
               </span>
               <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-white">
                 {component.priceRange}
@@ -361,7 +361,13 @@ export default function ComponentDetailPage({ params }: PageProps) {
             </p>
           </Section>
 
-          <Section title="Pinout" eyebrow="Connections">
+          <Section title={hasVerifiedPinout ? "Pinout" : "Connection overview"} eyebrow="Connections">
+            {!hasVerifiedPinout && (
+              <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
+                Module revisions can use different connector names and electrical limits. Treat this as a planning
+                overview and verify the exact board marking, manufacturer datasheet and seller documentation before wiring.
+              </div>
+            )}
             <div className="grid gap-3 sm:grid-cols-2">
               {component.pins.map((pin) => (
                 <div key={pin.name} className="rounded-lg border border-slate-200 bg-slate-50 p-4">

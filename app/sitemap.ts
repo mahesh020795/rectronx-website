@@ -22,6 +22,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/blog`, lastModified: new Date("2026-07-15"), changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/about`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/contact`, lastModified: new Date("2026-06-18"), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/privacy`, lastModified: new Date("2026-10-05"), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/terms`, lastModified: new Date("2026-10-05"), changeFrequency: "yearly", priority: 0.3 },
   ];
 
   const posts = getAllPosts();
