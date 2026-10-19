@@ -1,0 +1,87 @@
+---
+title: "Bill of Materials Projek Akhir Tahun: Komponen, Alternatif dan Risiko Bekalan"
+excerpt: "Cara menyediakan BOM projek elektronik yang boleh dibeli dan diaudit, termasuk part number, spesifikasi kritikal, alternatif serta risiko bekalan."
+category: "FYP Guide"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Bill of Materials atau BOM ialah senarai terkawal semua item yang diperlukan untuk membina versi projek tertentu. BOM yang hanya menulis "sensor", "relay" dan "wayar" tidak cukup untuk pembelian atau troubleshooting. Ia perlu mengenal pasti part, kuantiti, rating, fungsi, sumber dan alternatif yang benar-benar serasi.
+
+BOM membantu pelajar mengesan perubahan, mengawal kos dan mengurangkan risiko komponen tiba lewat. Harga berubah mengikut pembekal dan masa, jadi rekod harga sebagai snapshot bertarikh, bukan janji kos tetap. Jangan pilih komponen hanya kerana tajuk listing kelihatan sesuai.
+
+## Medan penting dalam BOM
+
+Gunakan reference seperti U1, R3 atau SENSOR1, nama part, manufacturer part number jika ada, kuantiti, spesifikasi kritikal, package atau connector, voltage, supplier, tarikh semakan dan status. Untuk module generik, simpan pautan, gambar kedua-dua sisi dan marking IC kerana listing yang sama boleh berubah reka bentuk.
+
+Pisahkan komponen wajib, consumable, alat dan item pilihan. Breadboard, terminal, enclosure, kabel serta adapter sering dilupakan walaupun menentukan demo.
+
+## Tentukan spesifikasi kritikal
+
+Alternatif hanya sah jika memenuhi parameter yang penting kepada litar dan firmware. Sensor suhu tidak boleh ditukar hanya kerana unit sama; interface, range, accuracy, response time, library dan voltage mungkin berbeza. Untuk regulator, semak input range, output, current, thermal dan pinout. Untuk relay, semak coil voltage, contact rating dan isolation sebenar modul.
+
+Tandakan parameter must match dan parameter yang boleh berubah. Ini menjadikan keputusan pembelian boleh dipertahankan semasa viva.
+
+## Kawal versi dan perubahan
+
+Letakkan nombor versi BOM yang sepadan dengan schematic dan firmware. Apabila part ditukar, rekod sebab, tarikh dan kesan pada wiring atau kod. Jangan edit senarai lama tanpa jejak kerana hasil ujian mungkin datang daripada versi hardware yang berbeza.
+
+Simpan satu as-built BOM selepas prototaip siap. Senarai ini mencerminkan apa yang benar-benar dipasang, bukan apa yang dirancang pada proposal.
+
+## Urus risiko pembelian
+
+Kenal pasti long lead item dan beli lebih awal hanya selepas interface disahkan. Simpan satu atau dua spare untuk part murah yang mudah rosak, tetapi elakkan membeli banyak sebelum proof of concept. Periksa reputasi pembekal dan kemungkinan counterfeit bagi komponen kritikal.
+
+Gunakan risk register ringkas: part, kemungkinan masalah, impak, tindakan dan alternatif. Risiko boleh berupa stok habis, connector berbeza, voltage tidak serasi atau library tidak lagi diselenggara.
+
+## Pelan Pengesahan
+
+- Semak setiap blok schematic mempunyai item BOM.
+- Pastikan part number atau gambar modul cukup untuk pembelian semula.
+- Uji alternatif pada breadboard sebelum menandainya approved.
+- Padankan as-built BOM dengan prototaip akhir dan gambar wiring.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menggunakan nama generik tanpa rating atau part number.
+- Menganggap module alternatif mempunyai pinout sama.
+- Mencampurkan harga lama dengan anggaran semasa.
+- Tidak merekod perubahan part selepas ujian.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Perlukah BOM memasukkan software?
+
+BOM biasanya fokus hardware, tetapi laporan boleh mempunyai senarai software, library dan versi berasingan. Kedua-duanya penting untuk reproducibility.
+
+### Boleh guna pautan marketplace sebagai part number?
+
+Ia membantu untuk module generik, tetapi listing boleh berubah. Rekod marking, spesifikasi, gambar dan tarikh semakan bersama pautan.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Medan penting dalam BOM**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Tentukan spesifikasi kritikal**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Kawal versi dan perubahan**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Urus risiko pembelian**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Bill of Materials Projek Akhir Tahun: Komponen, Alternatif dan Risiko Bekalan**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [NIST: Supply Chain Risk Management](https://csrc.nist.gov/projects/cyber-supply-chain-risk-management)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Database komponen](/components)
+- [Katalog projek](/catalog)
+- [Panduan memilih sensor ESP32](/blog/best-esp32-sensors-final-year-projects)
+- [Hubungi Rectronx](/contact)

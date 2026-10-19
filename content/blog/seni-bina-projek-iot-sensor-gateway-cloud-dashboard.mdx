@@ -1,0 +1,88 @@
+---
+title: "Seni Bina Projek IoT untuk FYP: Sensor, Gateway, Cloud dan Dashboard"
+excerpt: "Panduan menyusun seni bina projek IoT yang jelas daripada sensor hingga dashboard, termasuk aliran data, kegagalan rangkaian dan kaedah ujian."
+category: "IoT"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Seni bina projek IoT menerangkan bagaimana data bergerak daripada dunia fizikal kepada pengguna. Bagi projek akhir tahun, rajah yang baik perlu menunjukkan sensor, pengawal atau edge device, rangkaian, servis cloud, pangkalan data dan dashboard sebagai blok yang berbeza. Setiap anak panah mesti mempunyai maksud: jenis data, protokol, arah komunikasi dan tindakan apabila sambungan gagal.
+
+Skop yang kukuh tidak memerlukan semua teknologi. Satu ESP32, satu jenis sensor, satu saluran komunikasi dan satu dashboard sudah mencukupi jika pelajar dapat membuktikan ketepatan bacaan, penghantaran, penyimpanan dan pemulihan selepas gangguan. Seni bina patut dibina daripada keperluan projek, bukan daripada senarai modul yang popular.
+
+## Empat lapisan yang perlu dipisahkan
+
+Lapisan penderiaan memperoleh bacaan dan mesti menyatakan unit, julat serta kadar sampel. Lapisan edge menapis, menanda masa atau membuat keputusan tempatan. Lapisan komunikasi menghantar mesej melalui WiFi, Ethernet, LoRaWAN atau rangkaian selular. Lapisan aplikasi menyimpan, memaparkan dan menghasilkan amaran. Pisahkan lapisan ini dalam rajah supaya perubahan pada dashboard tidak dianggap sebagai perubahan pada litar sensor.
+
+Jika projek menggunakan MQTT, peranti menerbitkan mesej kepada topic dan aplikasi melanggan topic yang berkaitan. Spesifikasi MQTT menerangkan corak publish/subscribe dan tahap Quality of Service, tetapi QoS tidak menggantikan reka bentuk aplikasi seperti deduplication, timestamp dan semakan mesej lama. Jika menggunakan HTTP, nyatakan endpoint, kaedah request dan respons ralat.
+
+## Reka bentuk aliran data
+
+Tetapkan format payload sebelum menulis keseluruhan kod. Contoh medan yang berguna ialah device_id, timestamp, nilai, unit, status sensor dan nombor versi format. Jangan simpan nombor tanpa unit atau identiti peranti. Tentukan juga sama ada masa datang daripada peranti, gateway atau server. Untuk sistem yang membandingkan peranti, satu sumber masa yang konsisten lebih penting daripada paparan masa yang cantik.
+
+Dashboard mesti menjawab soalan pengguna. Graf trend sesuai untuk perubahan mengikut masa, kad status sesuai untuk keadaan semasa, dan jadual event sesuai untuk audit. Elakkan memaparkan sepuluh graf yang tidak menyokong objektif projek.
+
+## Apa berlaku apabila Internet terputus
+
+Projek IoT yang matang menerangkan degraded mode. Peranti boleh meneruskan kawalan tempatan, menyimpan sejumlah bacaan dalam buffer dan menghantar semula apabila sambungan pulih. Tentukan had buffer dan tingkah laku apabila penuh. Jangan mendakwa sistem real-time jika data sebenarnya tiba lewat selepas reconnect.
+
+Uji sekurang-kurangnya cold start, kehilangan WiFi, server tidak respons, sensor tercabut dan kuasa dipulihkan. Catat tempoh reconnect, jumlah rekod hilang dan sama ada output fizikal kekal dalam keadaan selamat. Bukti ini lebih bernilai daripada demo yang hanya berjalan dalam keadaan ideal.
+
+## Rajah yang patut masuk laporan
+
+Sediakan satu context diagram untuk pengguna dan sistem luar, satu block diagram untuk hardware, satu deployment diagram untuk peranti-gateway-cloud, dan satu sequence diagram bagi aliran utama. Gunakan nama yang sama dalam rajah, kod, database dan laporan. Jika blok dipanggil node_sensor_01 dalam sistem, jangan tukar kepada smart device tanpa penjelasan dalam bab lain.
+
+Senaraikan trust boundary seperti Internet awam dan servis pihak ketiga. Ini membantu pelajar menerangkan di mana authentication, encryption dan validation diperlukan.
+
+## Pelan Pengesahan
+
+- Bandingkan bacaan asal pada serial monitor dengan rekod database.
+- Putuskan rangkaian dan ukur masa pemulihan serta data yang hilang.
+- Hantar payload rosak untuk memastikan aplikasi menolak atau menandainya.
+- Ulang ujian selepas power cycle dan simpan log dengan timestamp.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Melukis cloud sebagai satu kotak tanpa servis atau aliran data.
+- Mencampurkan kawalan kritikal dengan dashboard yang bergantung pada Internet.
+- Tidak menentukan unit, timestamp atau identiti peranti.
+- Menganggap mesej dihantar bermaksud mesej sudah disimpan dengan betul.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Adakah projek IoT wajib menggunakan cloud?
+
+Tidak. Sistem dalam rangkaian tempatan masih boleh menjadi IoT jika peranti berkomunikasi dan menyediakan fungsi rangkaian. Pilih cloud hanya apabila akses jauh, penyimpanan atau analitik memang diperlukan.
+
+### MQTT atau HTTP lebih baik?
+
+Tiada jawapan tunggal. MQTT sesuai untuk publish/subscribe dan telemetri berterusan; HTTP mudah untuk request-response dan integrasi web. Nilai keperluan, keselamatan, rangkaian dan kemudahan ujian.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Empat lapisan yang perlu dipisahkan**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Reka bentuk aliran data**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Apa berlaku apabila Internet terputus**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Rajah yang patut masuk laporan**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Seni Bina Projek IoT untuk FYP: Sensor, Gateway, Cloud dan Dashboard**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+- [NIST IoT Device Cybersecurity Capability Core Baseline](https://www.nist.gov/publications/iot-device-cybersecurity-capability-core-baseline)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Cari tajuk projek IoT](/catalog?category=iot-embedded)
+- [Lihat komponen ESP32](/components/esp32)
+- [Gunakan ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Bincang skop projek](/contact)

@@ -1,0 +1,87 @@
+---
+title: "Design Review Projek Elektronik Sebelum Membeli Komponen"
+excerpt: "Checklist design review untuk mengesan isu voltage, pin, kuasa, interface, keselamatan dan testability sebelum pelajar membeli komponen FYP."
+category: "Electronics"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Design review sebelum pembelian mengurangkan risiko modul tidak serasi dan skop berubah selepas wang dibelanjakan. Review bukan mesyuarat formal yang panjang. Ia ialah semakan requirement, block diagram, interface, power budget, pin allocation, risiko dan rancangan ujian oleh pelajar bersama penyelia atau rakan yang memahami projek.
+
+Tujuannya bukan membuktikan reka bentuk sudah sempurna. Tujuannya ialah menemui andaian tersembunyi ketika perubahan masih murah. Setiap keputusan penting perlu mempunyai evidence seperti datasheet, calculation atau prototaip kecil.
+
+## Mulakan daripada requirement
+
+Senaraikan pengguna, persekitaran, input, output, response, kuasa, connectivity dan batas keselamatan. Bezakan requirement wajib daripada idea tambahan. Jika projek mesti berjalan luar bangunan, enclosure, suhu, air, antenna dan sumber kuasa menjadi sebahagian reka bentuk, bukan aksesori akhir.
+
+Semak setiap feature menyokong objektif. Buang feature yang tidak mempunyai pengguna, test atau masa pembangunan.
+
+## Semak semua interface
+
+Buat interface table untuk setiap sambungan: signal, arah, voltage logic, protocol, connector, pull-up dan pin controller. I2C memerlukan alamat yang tidak bertembung dan pull-up sesuai; UART memerlukan silang TX/RX serta baud; analog memerlukan julat input yang tidak melebihi ADC.
+
+Gunakan datasheet dan schematic papan sebenar. Nama pin pada tutorial mungkin merujuk papan lain. Untuk ESP32, semak input-only, strapping pin dan pin yang digunakan flash sebelum menetapkan GPIO.
+
+## Power, thermal dan beban
+
+Lengkapkan power budget dan periksa regulator, kabel, connector serta arus puncak. Tentukan cara motor, relay atau solenoid dipacu; GPIO bukan output kuasa. Semak flyback protection, transistor atau driver, common ground dan isolation jika diperlukan.
+
+Untuk beban mains, jangan bina pada breadboard. Gunakan modul dan enclosure yang sesuai serta penyeliaan orang kompeten. Projek pelajar boleh mendemonstrasikan logik dengan beban voltan rendah jika risiko mains tidak dapat dikawal.
+
+## Design for test
+
+Sediakan test point untuk ground, rail dan signal penting. Pastikan connector boleh dicapai dan komponen boleh diganti. Tentukan bagaimana firmware debug dan bagaimana sistem dipulihkan jika konfigurasi salah. Sediakan status LED atau log yang memberi makna, bukan sekadar menyala.
+
+Akhir review dengan action list: isu, pemilik, deadline dan keputusan. Jangan membeli part kritikal sehingga isu voltage, interface dan kuasa ditutup.
+
+## Pelan Pengesahan
+
+- Semak datasheet bagi setiap interface kritikal.
+- Padankan pin allocation dengan tool atau schematic rasmi.
+- Kira power budget termasuk beban puncak.
+- Bina proof of concept bagi risiko tertinggi sebelum pembelian penuh.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Membeli semua komponen berdasarkan tajuk projek.
+- Menganggap semua module menerima logic 5 V.
+- Melupakan alamat I2C, pin boot atau input-only.
+- Tidak merancang titik ukuran dan cara debug.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Siapa patut hadir design review?
+
+Pelajar, penyelia dan jika boleh seorang rakan yang boleh mencabar andaian. Review kecil dengan bahan lengkap lebih berguna daripada ramai orang tanpa dokumen.
+
+### Perlu schematic lengkap sebelum review?
+
+Sekurang-kurangnya block diagram, interface table dan power plan perlu ada. Schematic terperinci boleh melalui review kedua sebelum PCB dibuat.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Mulakan daripada requirement**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Semak semua interface**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Power, thermal dan beban**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Design for test**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Design Review Projek Elektronik Sebelum Membeli Komponen**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [Espressif ESP32 Schematic Checklist](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Database komponen](/components)
+- [Katalog projek elektronik](/catalog?category=iot-embedded)
+- [Bincang reka bentuk](/contact)

@@ -1,0 +1,87 @@
+---
+title: "Common Ground dalam Projek ESP32, Sensor, Relay dan Motor"
+excerpt: "Penerangan praktikal common ground, laluan arus balik dan pemisahan beban untuk mengelakkan signal tidak stabil dalam projek elektronik ESP32."
+category: "Electronics"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Signal voltage hanya bermakna berbanding satu rujukan. Apabila ESP32 menghantar HIGH kepada driver relay atau membaca output sensor, kedua-dua litar biasanya memerlukan rujukan ground bersama supaya penerima mentafsir voltan dengan betul. Common ground tidak bermaksud semua arus patut dipaksa melalui satu wayar nipis atau semua sistem mesti disambungkan tanpa memikirkan isolation.
+
+Masalah ground sering muncul sebagai bacaan sensor meloncat, komunikasi UART gagal atau ESP32 reset apabila motor bermula. Penyelesaian memerlukan pemahaman laluan arus balik, bukan sekadar menambah wayar GND secara rawak.
+
+## Apa maksud common ground
+
+Jika output ESP32 ialah 3.3 V relatif kepada GND ESP32, input driver perlu melihat rujukan yang sama. Dengan dua bekalan DC berasingan tetapi tidak isolated pada signal, sambungkan ground pada titik yang dirancang. Jangan sambung terminal positif antara rail yang berbeza.
+
+Sesetengah modul optocoupler boleh digunakan dengan isolation, tetapi banyak relay module mempunyai jumper atau ground layout yang menghapus isolation. Semak schematic modul, bukan warna board atau label iklan.
+
+## Laluan arus motor dan relay
+
+Arus motor tidak patut kembali melalui laluan ground sensor yang sempit. Gunakan routing yang memisahkan arus tinggi dan signal, kemudian satukan pada titik rujukan sesuai berhampiran bekalan atau driver. Tambahkan flyback diode bagi coil DC dan decoupling mengikut datasheet.
+
+Breadboard mempunyai resistance serta contact yang tidak ideal. Motor, servo dan modem boleh menghasilkan voltage drop. Untuk prototaip, gunakan wayar pendek, connector sesuai dan ukur voltan antara ground points ketika beban aktif.
+
+## Bila ground tidak boleh disambung terus
+
+Sistem mains, industrial field wiring atau dua peralatan dengan perbezaan potensi memerlukan analisis keselamatan dan mungkin galvanic isolation. Jangan sambung ground oscilloscope atau USB secara sembarangan pada litar mains. Projek pelajar patut menggunakan voltan rendah dan penyeliaan kompeten jika risiko tidak difahami.
+
+Communication interface seperti RS-485 juga mempunyai had common-mode. Isolation bukan aksesori; ia ialah keputusan sistem berdasarkan voltage, fault dan keselamatan.
+
+## Cara troubleshoot ground
+
+Matikan kuasa dan periksa continuity pada ground yang sepatutnya berkongsi rujukan. Hidupkan litar, ukur voltage drop antara ground ESP32 dan ground driver semasa beban aktif. Gunakan probe pendek dan titik ukuran jelas. Jika bacaan berubah apabila motor mula, lihat current return dan supply transient.
+
+Uji sensor tanpa beban, kemudian tambah driver dan motor satu demi satu. Rekod konfigurasi yang mencetuskan masalah supaya pembaikan boleh dibuktikan.
+
+## Pelan Pengesahan
+
+- Lukis laluan arus bekalan dan arus balik pada schematic.
+- Ukur voltage drop antara ground points ketika beban puncak.
+- Uji sensor sebelum dan selepas motor atau relay diaktifkan.
+- Semak sama ada modul optocoupler benar-benar isolated dalam wiring sebenar.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menyambung signal antara dua litar tanpa rujukan bersama.
+- Membawa arus motor melalui ground sensor.
+- Menganggap semua relay module memberikan isolation.
+- Menggunakan alat ber-ground pada mains tanpa latihan keselamatan.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Jika motor guna adapter lain, perlu sambung ground?
+
+Jika ESP32 mengawal driver tanpa galvanic isolation, biasanya rujukan ground perlu dikongsi. Sambungan tepat bergantung pada driver dan schematic; jangan sambung rail positif yang berlainan.
+
+### Adakah star ground wajib?
+
+Tidak untuk semua litar. Ia satu teknik mengawal laluan arus. Layout terbaik bergantung pada frekuensi, arus dan topology. Fokus pada current return yang nyata.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Apa maksud common ground**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Laluan arus motor dan relay**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Bila ground tidak boleh disambung terus**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Cara troubleshoot ground**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Common Ground dalam Projek ESP32, Sensor, Relay dan Motor**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [Texas Instruments PCB Layout and Decoupling Guidelines](https://www.ti.com/lit/an/scea042/scea042.pdf)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Panduan bekalan kuasa ESP32](/blog/bekalan-kuasa-esp32-sensor-relay-projek-pelajar)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Komponen ESP32](/components/esp32)
+- [Bincang wiring projek](/contact)

@@ -1,0 +1,87 @@
+---
+title: "Pelan Ujian Projek Akhir Tahun Elektronik: Test Case, Acceptance Criteria dan Bukti"
+excerpt: "Panduan membina pelan ujian FYP elektronik yang boleh diulang, dengan test case, acceptance criteria, data mentah dan bukti untuk viva."
+category: "FYP Guide"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Pelan ujian menukar dakwaan projek kepada bukti. Demo sekali yang berjaya tidak menunjukkan reliability, manakala screenshot tanpa keadaan ujian sukar diaudit. Pelajar perlu menentukan apa yang diuji, input, prosedur, expected result, acceptance criteria dan bukti sebelum menjalankan eksperimen.
+
+Mulakan daripada objektif dan requirement. Functional test membuktikan fungsi, performance test mengukur masa atau throughput, reliability test mengulang operasi, dan fault test menilai tingkah laku apabila sensor, kuasa atau rangkaian bermasalah. Tidak semua projek memerlukan ujian makmal kompleks, tetapi semua memerlukan prosedur yang jelas.
+
+## Anatomi satu test case
+
+Berikan ID seperti TC-POWER-01, requirement yang dirujuk, setup, precondition, langkah, input, expected result, acceptance criteria, actual result dan status. Nyatakan versi firmware, wiring dan peralatan kerana perubahan kecil boleh mengubah keputusan. Lampirkan gambar setup atau rajah titik ukuran.
+
+Expected result ialah tingkah laku; acceptance criteria ialah sempadan lulus. "Dashboard memaparkan data" terlalu kabur. "Rekod dengan device_id dan timestamp muncul dalam 10 saat bagi 19 daripada 20 percubaan di rangkaian ujian" boleh dinilai, tetapi threshold mesti dijustifikasikan.
+
+## Uji keadaan normal dan ralat
+
+Happy path hanya satu bahagian. Cabut sensor, masukkan input luar julat, matikan router, reboot mikropengawal dan pulihkan kuasa. Output fizikal perlu menuju keadaan selamat apabila input tidak sah. Sistem juga perlu memberitahu pengguna bahawa data stale atau peranti offline, bukan terus memaparkan bacaan lama sebagai bacaan semasa.
+
+Untuk relay atau motor, gunakan beban ujian selamat dan pengawasan yang sesuai. Jangan menguji mains voltage pada breadboard atau tanpa penyeliaan kompeten.
+
+## Kumpul bukti yang boleh diaudit
+
+Simpan data mentah dalam CSV, log serial, screenshot bertimestamp, gambar setup dan video ringkas untuk event yang sukar diulang. Namakan fail mengikut test case dan tarikh. Jangan hanya menyimpan screenshot berjaya; rekod kegagalan dan tindakan pembetulan membuktikan proses kejuruteraan.
+
+Dalam Bab 4, ringkaskan keputusan tetapi kekalkan data mentah sebagai lampiran atau repository terkawal. Graf mesti mempunyai paksi, unit, sample count dan keadaan ujian.
+
+## Daripada keputusan kepada kesimpulan
+
+Pisahkan failure sistem daripada failure prosedur. Jika sensor belum stabil, ulang selepas warm-up yang ditentukan. Jika alat rujukan tidak sesuai, jangan jadikan angka itu bukti accuracy. Laporkan bilangan percubaan dan variation, bukan hanya purata yang menyembunyikan outlier.
+
+Apabila acceptance criteria gagal, pilih sama ada membaiki reka bentuk, mengecilkan requirement atau menerangkan limitasi. Jangan menukar criteria selepas melihat keputusan tanpa merekod sebab.
+
+## Pelan Pengesahan
+
+- Jejak setiap objektif kepada test case dan bukti.
+- Jalankan ujian berulang, bukan satu demo berjaya.
+- Sertakan sekurang-kurangnya satu fault-recovery test.
+- Pastikan graf mempunyai unit, bilangan sampel dan keadaan ujian.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menulis prosedur selepas keputusan diperoleh.
+- Menggunakan pass atau fail tanpa acceptance criteria.
+- Memilih screenshot terbaik dan membuang kegagalan.
+- Menguji banyak pemboleh ubah serentak tanpa control.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Berapa kali ujian perlu diulang?
+
+Ia bergantung pada variability dan tuntutan. Nyatakan bilangan percubaan dan alasan. Untuk fungsi diskret, beberapa puluh percubaan boleh menunjukkan pola; accuracy memerlukan reka bentuk eksperimen yang lebih formal.
+
+### Adakah video demo dikira bukti?
+
+Video berguna untuk urutan operasi, tetapi tidak menggantikan data berstruktur, prosedur dan log. Gunakan video bersama test record.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Anatomi satu test case**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Uji keadaan normal dan ralat**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Kumpul bukti yang boleh diaudit**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Daripada keputusan kepada kesimpulan**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Pelan Ujian Projek Akhir Tahun Elektronik: Test Case, Acceptance Criteria dan Bukti**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [NIST/SEMATECH Engineering Statistics Handbook](https://itl.nist.gov/div898/handbook/index2.htm)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Checklist ujian IoT sebelum viva](/blog/test-iot-final-year-project-before-viva)
+- [Katalog projek](/catalog)
+- [Panduan projek akhir tahun](/topics)
+- [Bincang pelan ujian](/contact)

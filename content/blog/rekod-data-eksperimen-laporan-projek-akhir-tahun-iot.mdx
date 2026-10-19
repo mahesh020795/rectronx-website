@@ -1,0 +1,88 @@
+---
+title: "Cara Rekod Data Eksperimen untuk Laporan Projek Akhir Tahun IoT"
+excerpt: "Panduan merekod eksperimen IoT supaya keputusan boleh diulang, diaudit dan digunakan dengan betul dalam Bab Metodologi serta Bab Keputusan."
+category: "FYP Guide"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Rekod eksperimen ialah jambatan antara prototaip dan kesimpulan. Tanpa catatan versi, setup, masa, input dan data mentah, pelajar mungkin tidak dapat menerangkan mengapa dua ujian memberi hasil berbeza. Rekod yang baik membolehkan orang lain mengulang prosedur dan memahami limitasi.
+
+Sediakan experiment ID sebelum ujian. Simpan hypothesis atau soalan, pemboleh ubah, alat, konfigurasi, prosedur, data mentah, pemerhatian dan keputusan. Jangan bergantung pada ingatan atau chat message yang tidak tersusun.
+
+## Bina experiment log
+
+Setiap sesi perlu mempunyai tarikh dan masa dengan zon, nama penguji, lokasi, hardware revision, firmware commit, konfigurasi rangkaian dan alat rujukan. Catat perubahan walaupun nampak kecil seperti kabel, power adapter atau kedudukan sensor. Gambar setup mesti menunjukkan skala atau label yang membantu pembaca.
+
+Gunakan nama fail konsisten, contohnya EXP-07_run-03_raw.csv. Jangan overwrite data lama selepas filter atau calibration; hasil diproses perlu fail berasingan bersama script atau formula.
+
+## Kawal pemboleh ubah
+
+Kenal pasti independent variable yang diubah, dependent variable yang diukur dan control variable yang dikekalkan. Jika menguji jarak komunikasi, jangan ubah antena dan kuasa pada masa sama tanpa reka bentuk factorial yang disengajakan. Randomise urutan jika drift masa atau suhu boleh mempengaruhi hasil.
+
+Nyatakan sample interval, sample count, warm-up dan tempoh. Sensor yang memerlukan stabilization tidak boleh dibandingkan menggunakan bacaan pertama sahaja.
+
+## Jaga integriti data
+
+Simpan timestamp standard, unit dalam header atau schema, missing value secara eksplisit dan calibration record. Gunakan checksum atau repository bagi fail penting jika perlu. Jangan salin nilai secara manual daripada graf apabila export tersedia kerana transcription error sukar dikesan.
+
+Rekod exclusion dengan sebab. Jika satu run dibuang kerana kuasa terputus, kekalkan rekod bahawa ia berlaku. Selective reporting melemahkan kesimpulan.
+
+## Tukar data kepada Bab 4
+
+Mulakan dengan jadual ringkas keadaan ujian dan bilangan sampel. Gunakan graf yang sepadan dengan soalan: time series untuk trend, scatter untuk hubungan, box plot untuk distribution atau confusion matrix untuk classification. Setiap rajah perlu caption yang menerangkan apa, keadaan dan penemuan utama.
+
+Pisahkan observation daripada interpretation. "Voltan turun kepada nilai X ketika relay aktif" ialah observation; "adapter tidak cukup" ialah interpretation yang memerlukan ujian sokongan.
+
+## Pelan Pengesahan
+
+- Minta orang lain mengulang satu ujian hanya menggunakan log.
+- Padankan setiap graf dengan fail data mentah.
+- Semak unit, timezone dan versi firmware direkod.
+- Simpan kegagalan serta exclusion bersama justifikasi.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Mengubah fail data mentah selepas eksperimen.
+- Tidak merekod firmware atau wiring revision.
+- Menggunakan graf tanpa unit atau sample count.
+- Membuang run gagal tanpa jejak.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Excel atau CSV lebih baik?
+
+CSV mudah diproses dan version-control, manakala spreadsheet sesuai untuk semakan manual. Simpan data mentah dalam format terbuka dan formula analisis secara berasingan.
+
+### Perlukah semua data masuk laporan?
+
+Tidak. Laporan boleh menunjukkan ringkasan dan sampel, tetapi data mentah serta prosedur perlu disimpan supaya keputusan boleh diaudit mengikut polisi institusi.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Bina experiment log**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Kawal pemboleh ubah**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Jaga integriti data**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Tukar data kepada Bab 4**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Cara Rekod Data Eksperimen untuk Laporan Projek Akhir Tahun IoT**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [RFC 3339 Internet Timestamps](https://www.rfc-editor.org/info/rfc3339/)
+- [NIST/SEMATECH Engineering Statistics Handbook](https://itl.nist.gov/div898/handbook/index2.htm)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Pelan ujian IoT sebelum viva](/blog/test-iot-final-year-project-before-viva)
+- [Katalog projek](/catalog)
+- [Topik IoT](/topics/iot)
+- [Bincang metodologi](/contact)

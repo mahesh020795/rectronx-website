@@ -1,0 +1,88 @@
+---
+title: "Cara Pilih Resistor untuk LED dan Pembahagi Voltan dalam Projek Elektronik"
+excerpt: "Panduan mengira resistor LED dan voltage divider, menyemak kuasa, tolerance, loading serta had input ADC dalam projek elektronik pelajar."
+category: "Electronics"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Resistor bukan dipilih dengan menyalin warna daripada gambar. Untuk LED, resistor menghadkan arus berdasarkan supply voltage, forward voltage dan arus sasaran. Untuk pembahagi voltan, nisbah resistor menentukan output tanpa beban, tetapi input ADC dan leakage menjadikan litar sebenar tidak ideal.
+
+Setiap pengiraan perlu disemak dengan standard value, tolerance dan power dissipation. Ukur prototaip kerana forward voltage LED, supply dan resistor sebenar mempunyai variasi. Jangan gunakan divider sebagai power supply untuk beban yang berubah.
+
+## Resistor siri LED
+
+Gunakan R = (Vsupply - Vf) / I. Jika GPIO 3.3 V memacu LED dengan forward voltage 2.0 V pada sasaran 5 mA, anggaran resistor ialah 260 ohm; pilih nilai standard yang selamat seperti 270 atau 330 ohm bergantung brightness. Ini hanya contoh, bukan nilai universal.
+
+Semak arus maksimum GPIO dan jumlah arus papan dalam datasheet. Arus sasaran selalunya boleh lebih rendah daripada rating maksimum LED. Kira kuasa resistor P = I^2R dan pilih rating dengan margin.
+
+## Pembahagi voltan
+
+Bagi dua resistor ideal, Vout = Vin x Rbottom / (Rtop + Rbottom). Nilai besar mengurangkan arus divider tetapi meningkatkan source impedance. ADC sample-and-hold mungkin memerlukan impedance lebih rendah atau masa sampling lebih panjang. Nilai kecil membazir kuasa dan membebankan sumber.
+
+Pastikan Vin maksimum termasuk transient menghasilkan Vout di bawah had absolute maximum input. Tambahkan perlindungan yang sesuai jika sumber boleh melebihi jangkaan. Jangan bergantung pada software clamp.
+
+## Tolerance dan error
+
+Resistor 1% masih menghasilkan error nisbah berdasarkan kombinasi tolerance. Reference ADC, noise, calibration dan loading juga menyumbang. Jika mengukur bateri, uji beberapa voltan dengan alat rujukan dan fit calibration hanya jika prosedur boleh dipertahankan.
+
+Sensor dengan output impedance atau input dengan leakage mengubah divider. Gunakan model Thevenin untuk memahami source resistance dan loading.
+
+## Praktikal breadboard
+
+Ukur resistor sebenar sebelum memasang jika warna sukar dibaca. Pastikan ground common, gunakan probe pada titik yang betul dan mulakan dengan voltage rendah. Untuk LED, polariti salah biasanya tidak menyala; jangan terus mengecilkan resistor tanpa diagnosis.
+
+Dokumentasikan formula, nilai dipilih, nilai diukur dan hasil. Ini menunjukkan keputusan kejuruteraan, bukan trial and error.
+
+## Pelan Pengesahan
+
+- Kira worst-case menggunakan voltan dan tolerance maksimum.
+- Ukur Vout tanpa beban dan ketika ADC disambungkan.
+- Semak kuasa resistor serta arus GPIO.
+- Bandingkan beberapa titik input dengan multimeter rujukan.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menggunakan rating maksimum LED sebagai arus wajib.
+- Menganggap divider boleh membekalkan relay atau sensor.
+- Mengabaikan impedance ADC dan tolerance.
+- Membenarkan input melebihi had absolute maximum.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Mengapa LED masih terang dengan resistor lebih besar?
+
+LED moden boleh kelihatan terang pada beberapa milliampere. Nilai lebih besar mengurangkan arus dan biasanya lebih selamat selagi brightness mencukupi.
+
+### Boleh turunkan 5 V ke 3.3 V dengan divider?
+
+Divider boleh mengubah signal berimpedance tinggi, bukan menjadi regulator untuk beban berubah. Untuk bekalan kuasa gunakan regulator yang sesuai.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Resistor siri LED**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Pembahagi voltan**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Tolerance dan error**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Praktikal breadboard**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Cara Pilih Resistor untuk LED dan Pembahagi Voltan dalam Projek Elektronik**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [Texas Instruments Voltage Divider Calculator](https://www.ti.com/download/kbase/volt/volt_div3.htm)
+- [TI Voltage-Sensing Divider Application Brief](https://www.ti.com/document-viewer/lit/html/SNAA363/GUID-7B0D26D5-46C0-4D6F-94BC-9579FEFB9A94)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Database komponen](/components)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Panduan wiring ESP32](/blog/common-esp32-wiring-mistakes-fyp-demo)
+- [Bincang litar projek](/contact)

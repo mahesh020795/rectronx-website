@@ -1,0 +1,88 @@
+---
+title: "Data Sensor IoT Berkualiti: Timestamp, Unit, Missing Data dan Validasi"
+excerpt: "Cara menghasilkan data sensor IoT yang boleh dipercayai untuk analisis dan laporan projek akhir tahun, daripada timestamp hingga pengendalian missing data."
+category: "IoT"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Dashboard yang cantik tidak menjadikan data sensor berkualiti. Data projek IoT perlu mempunyai maksud yang jelas, masa yang boleh dibandingkan, unit yang konsisten, identiti sumber dan status kualiti. Tanpa elemen ini, pelajar sukar membuktikan sama ada perubahan graf datang daripada persekitaran, sensor, rangkaian atau kesilapan perisian.
+
+Reka bentuk data patut bermula sebelum kutipan. Tentukan data dictionary, kadar sampel, peraturan validasi, kaedah mengesan rekod hilang dan polisi menyimpan data mentah. Jangan membersihkan data secara senyap sehingga keputusan nampak lebih baik.
+
+## Bina data dictionary
+
+Untuk setiap medan, catat nama, jenis data, unit, julat munasabah, sumber dan sama ada medan wajib. Contoh temperature_c lebih jelas daripada value1. Bezakan reading sensor daripada setpoint dan status output. Sertakan device_id serta firmware_version apabila beberapa peranti atau versi kod digunakan.
+
+Julat validasi bukan semestinya julat fizikal mutlak. Ia boleh menjadi julat operasi projek yang ditetapkan dengan alasan. Rekod di luar julat boleh ditanda invalid atau suspicious, tetapi jangan terus dibuang tanpa jejak.
+
+## Timestamp dan zon masa
+
+Gunakan format yang tidak mengelirukan dan simpan offset zon masa atau UTC. RFC 3339 mentakrifkan format timestamp Internet berasaskan profil ISO 8601. Contoh dengan Z menunjukkan UTC, manakala +08:00 menunjukkan offset Malaysia. Paparan dashboard boleh ditukar kepada masa tempatan selepas penyimpanan.
+
+Nyatakan siapa menghasilkan timestamp. Jam peranti boleh hanyut atau reset jika tiada real-time clock dan synchronisation. Masa server pula menunjukkan masa diterima, bukan semestinya masa bacaan dibuat. Jika kedua-duanya penting, simpan measured_at dan received_at secara berasingan.
+
+## Missing data, duplicate dan outlier
+
+Gunakan sequence number atau kadar sampel jangkaan untuk mengesan jurang. Missing data tidak patut diganti dengan sifar kerana sifar mungkin nilai sebenar. Tandakan null atau status missing dan jelaskan kaedah imputasi jika analisis memerlukannya. Duplicate boleh muncul selepas retry rangkaian, jadi gabungan device_id dan measurement_id membantu deduplication.
+
+Outlier perlu disiasat. Semak wiring, bekalan kuasa, had sensor, perubahan persekitaran dan log komunikasi. Median filter boleh menahan spike, tetapi filter juga boleh menyembunyikan event sebenar. Laporkan data mentah dan data diproses secara berasingan.
+
+## Validasi daripada sensor hingga database
+
+Bandingkan bacaan peranti pada serial monitor dengan payload rangkaian dan rekod database untuk timestamp yang sama. Ini menguji transformasi unit dan parsing. Gunakan input rujukan atau alat perbandingan yang sesuai; perbandingan dengan sensor kedua yang sama tidak semestinya membuktikan ketepatan mutlak.
+
+Untuk laporan, nyatakan resolution, repeatability yang diperhatikan, kadar kehilangan paket dan peraturan exclusion. Jangan gunakan perkataan accurate tanpa kaedah, rujukan dan uncertainty yang munasabah.
+
+## Pelan Pengesahan
+
+- Semak 100 rekod berurutan untuk jurang sequence dan duplicate.
+- Bandingkan nilai serial, payload dan database bagi timestamp sama.
+- Masukkan nilai invalid untuk menguji validation dan error logging.
+- Eksport data mentah supaya analisis boleh diulang.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menyimpan nombor tanpa unit atau device_id.
+- Menggunakan masa tempatan tanpa offset.
+- Menggantikan semua missing data dengan sifar.
+- Membuang outlier tanpa rekod atau justifikasi.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Perlu simpan data mentah atau data ditapis?
+
+Simpan data mentah apabila ruang dan privasi membenarkan, kemudian simpan kaedah atau versi pemprosesan. Ini membolehkan keputusan diaudit dan analisis diulang.
+
+### Berapa kerap sensor perlu dibaca?
+
+Kadar sampel bergantung pada kelajuan fenomena, response time sensor, kuasa, rangkaian dan objektif. Lebih kerap tidak semestinya lebih baik jika sensor belum stabil atau data hanya berulang.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Bina data dictionary**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Timestamp dan zon masa**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Missing data, duplicate dan outlier**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Validasi daripada sensor hingga database**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Data Sensor IoT Berkualiti: Timestamp, Unit, Missing Data dan Validasi**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [RFC 3339: Date and Time on the Internet](https://www.rfc-editor.org/info/rfc3339/)
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Idea projek IoT](/blog/iot-project-ideas-2025)
+- [Katalog projek](/catalog)
+- [Database komponen](/components)
+- [Bincang pelan pengujian](/contact)

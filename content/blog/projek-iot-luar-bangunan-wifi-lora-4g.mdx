@@ -1,0 +1,88 @@
+---
+title: "Projek IoT Luar Bangunan: Pilih WiFi, LoRa atau 4G Mengikut Jarak dan Kuasa"
+excerpt: "Perbandingan praktikal WiFi, LoRa atau LoRaWAN dan 4G untuk projek IoT luar bangunan berdasarkan liputan, data, kuasa, gateway dan ujian tapak."
+category: "IoT"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Pemilihan rangkaian untuk projek IoT luar bangunan tidak boleh dibuat berdasarkan jarak iklan sahaja. Liputan dipengaruhi antena, frekuensi, halangan, ketinggian, gangguan, kuasa penghantaran dan peraturan tempatan. WiFi, LoRa atau LoRaWAN dan 4G menyelesaikan masalah yang berbeza.
+
+Mulakan dengan jumlah data, kekerapan penghantaran, latency, sumber kuasa, kawasan deployment, akses kepada gateway dan kos operasi. Jalankan site survey atau ujian lapangan di lokasi sebenar. Keputusan makmal dalam jarak lima meter tidak membuktikan sistem sesuai untuk ladang, sungai atau kawasan bandar.
+
+## Bila WiFi sesuai
+
+WiFi praktikal apabila access point tersedia, jarak sederhana, data lebih besar atau integrasi IP terus diperlukan. Ia sesuai untuk rumah hijau, bangunan kampus atau kawasan berhampiran router. Kekurangannya ialah penggunaan kuasa dan liputan yang bergantung kuat pada tapak. Reconnect, pertukaran SSID dan kehilangan Internet perlu diuji.
+
+Jangan letakkan password WiFi dalam screenshot laporan atau repository. Untuk deployment institusi, rangkaian mungkin mempunyai captive portal atau polisi yang tidak sesuai untuk mikropengawal.
+
+## Bila LoRa atau LoRaWAN sesuai
+
+LoRa ialah teknologi radio; LoRaWAN ialah protokol rangkaian dengan end device, gateway, network server dan application server. LoRaWAN direka untuk LPWA dan peranti berkuasa bateri, tetapi payload kecil dan duty cycle perlu dihormati. Ia bukan pilihan untuk video atau data kadar tinggi.
+
+Jika menggunakan sambungan LoRa point-to-point, jangan memanggilnya LoRaWAN. Nyatakan frekuensi, spreading factor, bandwidth, kuasa, antena dan topologi. Semak pelan frekuensi serta keperluan pengawal selia Malaysia sebelum deployment sebenar.
+
+## Bila 4G sesuai
+
+Rangkaian selular sesuai apabila lokasi mempunyai liputan operator tetapi tiada infrastruktur tempatan. Modem memerlukan SIM, pelan data dan bekalan kuasa yang mampu menghadapi arus puncak. Liputan pada telefon tidak semestinya sama dengan prestasi antena modem dalam enclosure.
+
+Reka firmware untuk reconnect, timeout, backoff dan penggunaan data. Simpan data sementara apabila rangkaian tiada. Pantau perubahan teknologi dan ketersediaan rangkaian; elakkan mereka bentuk projek baharu bergantung pada servis lama tanpa semakan operator.
+
+## Kaedah membuat keputusan
+
+Bina decision matrix dengan kriteria berwajaran: liputan tapak, tenaga sehari, payload, latency, gateway, kos berulang, keselamatan dan kesukaran integrasi. Beri skor berdasarkan ukuran atau sumber, bukan rasa. Pilihan terbaik ialah yang memenuhi requirement paling penting dengan risiko boleh dikawal.
+
+Untuk ujian lapangan, rekod RSSI atau metrik berkaitan, packet delivery ratio, latency, tenaga dan cuaca pada beberapa titik. Metrik radio antara teknologi tidak semestinya boleh dibandingkan terus; gunakan hasil end-to-end seperti mesej berjaya diterima.
+
+## Pelan Pengesahan
+
+- Uji di lokasi sebenar pada beberapa jarak dan halangan.
+- Rekod sekurang-kurangnya 100 penghantaran bagi setiap konfigurasi.
+- Ukur penggunaan tenaga semasa sleep, transmit dan reconnect.
+- Uji pemulihan selepas gateway, router atau rangkaian selular hilang.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menggunakan tuntutan jarak maksimum sebagai hasil projek.
+- Menyamakan LoRa point-to-point dengan LoRaWAN.
+- Mengabaikan arus puncak modem dan reka bentuk antena.
+- Tidak menyemak frekuensi serta peraturan deployment tempatan.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Adakah LoRa sentiasa lebih jauh daripada WiFi?
+
+LoRa direka untuk link budget dan kadar data yang berbeza, tetapi jarak sebenar bergantung pada konfigurasi dan tapak. Ujian lapangan diperlukan; tiada jarak tetap yang boleh dijamin.
+
+### Perlu bina gateway LoRaWAN sendiri?
+
+Tidak semestinya. Anda boleh menggunakan gateway sendiri atau rangkaian yang tersedia, tetapi projek mesti menerangkan siapa mengendalikan gateway dan server serta apa berlaku jika servis itu gagal.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Bila WiFi sesuai**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Bila LoRa atau LoRaWAN sesuai**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Bila 4G sesuai**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Kaedah membuat keputusan**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Projek IoT Luar Bangunan: Pilih WiFi, LoRa atau 4G Mengikut Jarak dan Kuasa**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [LoRa Alliance: LoRaWAN for Developers](https://lora-alliance.org/lorawan-for-developers/)
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Panduan node sensor LoRa](/blog/cara-bina-node-sensor-ladang-lora)
+- [Katalog projek IoT](/catalog?category=iot-embedded)
+- [Database komponen](/components)
+- [Bincang pemilihan teknologi](/contact)

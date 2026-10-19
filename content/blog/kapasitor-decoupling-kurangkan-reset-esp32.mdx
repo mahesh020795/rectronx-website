@@ -1,0 +1,88 @@
+---
+title: "Kapasitor Decoupling: Cara Mengurangkan Reset ESP32 dengan Betul"
+excerpt: "Fahami fungsi decoupling dan bulk capacitor, lokasi pemasangan serta ujian voltage drop untuk menangani reset ESP32 tanpa tekaan."
+category: "Electronics"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+ESP32 yang reset ketika WiFi, relay atau sensor aktif mungkin mengalami gangguan bekalan, tetapi menambah kapasitor secara rawak bukan diagnosis. Decoupling capacitor menyediakan laluan impedance rendah untuk arus transient tempatan dan membantu mengurangkan noise pada rail. Bulk capacitor menyokong perubahan beban lebih perlahan. Kedua-duanya melengkapkan bekalan yang betul, bukan menggantikannya.
+
+Nilai kapasitor, ESR, voltage rating, dielectric dan penempatan mempengaruhi hasil. Ikut schematic dan hardware design guideline bagi cip atau papan sebenar. Papan pembangunan sudah mempunyai kapasitor tertentu; beban luaran mungkin memerlukan reka bentuk tambahan pada titik beban.
+
+## Decoupling berbanding bulk
+
+Kapasitor kecil seperti 0.1 uF lazim diletakkan sangat dekat dengan pin supply IC untuk transient frekuensi tinggi. Kapasitor bulk yang lebih besar diletakkan pada kemasukan rail atau berhampiran beban untuk perubahan arus lebih lambat. Ini ialah prinsip umum; datasheet menentukan nilai dan susunan khusus.
+
+Trace dan via mempunyai inductance. Kapasitor jauh daripada pin kurang efektif pada frekuensi tinggi. Texas Instruments dan Espressif menekankan penempatan dekat dengan pin atau kemasukan bekalan.
+
+## Mengapa ESP32 reset
+
+Punca boleh termasuk adapter lemah, kabel USB resistance tinggi, regulator panas, motor noise, pin EN terganggu, short sekejap atau firmware watchdog. Log serial boleh menunjukkan brownout atau reset reason, tetapi measurement diperlukan untuk mengesahkan punca.
+
+Ukur rail pada papan ketika event berlaku. Multimeter mungkin tidak menangkap transient sangat singkat; oscilloscope lebih sesuai jika tersedia dan digunakan dengan selamat. Walaupun begitu, ujian A/B dengan beban dan bekalan membantu mengecilkan punca.
+
+## Cara menambah kapasitor dengan selamat
+
+Semak polariti electrolytic, voltage rating dan keadaan power-off sebelum pemasangan. Letakkan decoupling kecil berhampiran pin atau modul yang memerlukan, dan bulk capacitor berhampiran kemasukan beban mengikut guideline. Elakkan lead panjang. Kapasitor terlalu besar boleh meningkatkan inrush current dan menjejaskan regulator atau switch.
+
+Jangan meletakkan kapasitor pada signal boot, EN atau komunikasi tanpa memahami timing. Penyelesaian power tidak patut mengubah signal secara tidak sengaja.
+
+## Buktikan pembaikan
+
+Tetapkan ujian yang konsisten: operasi WiFi, switching relay dan startup beban pada sela tertentu. Rekod bilangan reset, voltan minimum, suhu regulator dan konfigurasi capacitor. Tukar satu faktor pada satu masa.
+
+Jika kabel atau adapter menyelesaikan masalah, nyatakan punca paling mungkin ialah supply path. Jika capacitor membantu tetapi voltage masih di luar spec, reka bentuk belum selesai.
+
+## Pelan Pengesahan
+
+- Baca reset reason dan padankan dengan masa beban aktif.
+- Ukur rail pada input papan dan titik beban.
+- Bandingkan ujian sebelum dan selepas dengan prosedur sama.
+- Semak polariti, voltage rating dan suhu semua komponen kuasa.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menambah electrolytic tanpa memeriksa polariti.
+- Meletakkan kapasitor jauh dengan lead panjang.
+- Menggunakan kapasitor untuk menutup regulator tidak mencukupi.
+- Mengubah beberapa komponen sekali gus dan tidak tahu punca sebenar.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Berapa nilai kapasitor perlu ditambah?
+
+Tiada nilai universal. Ikut guideline papan, profile beban dan measurement. Espressif memberikan cadangan pada power entrance dan pin bekalan untuk reka bentuk ESP32, tetapi papan siap mungkin berbeza.
+
+### Adakah reset ESP32 sentiasa brownout?
+
+Tidak. Watchdog, exception, pin EN, boot pin, overheating atau firmware juga boleh menyebabkan reset. Gunakan reset log dan ujian berstruktur.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Decoupling berbanding bulk**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Mengapa ESP32 reset**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Cara menambah kapasitor dengan selamat**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Buktikan pembaikan**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Kapasitor Decoupling: Cara Mengurangkan Reset ESP32 dengan Betul**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [Espressif ESP32 Schematic Checklist](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html)
+- [Texas Instruments Decoupling Capacitor Guidelines](https://www.ti.com/lit/an/slaa921/slaa921.pdf)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Bekalan kuasa ESP32](/blog/bekalan-kuasa-esp32-sensor-relay-projek-pelajar)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Komponen ESP32](/components/esp32)
+- [Bincang masalah reset](/contact)

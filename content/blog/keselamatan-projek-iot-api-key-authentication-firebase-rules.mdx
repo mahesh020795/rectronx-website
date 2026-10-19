@@ -1,0 +1,89 @@
+---
+title: "Keselamatan Projek IoT Pelajar: API Key, Authentication dan Firebase Rules"
+excerpt: "Panduan keselamatan praktikal untuk projek IoT pelajar: lindungi secret, hadkan akses data, uji Firebase Rules dan dokumentasikan risiko secara jujur."
+category: "IoT"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Keselamatan projek IoT bukan sekadar menambah halaman login. Sistem perlu mengenal peranti dan pengguna, menghadkan tindakan mengikut peranan, melindungi data, mengurus konfigurasi serta merekod keadaan penting. Bagi projek akhir tahun, skop kecil yang diuji lebih baik daripada mendakwa sistem secure tanpa threat model.
+
+Mulakan dengan aset dan risiko: data pengguna, arahan relay, lokasi GPS, credential WiFi, token servis dan kunci pentadbir. Kemudian tentukan siapa patut membaca, menulis atau mengubah setiap aset. NIST IR 8259A menyediakan baseline keupayaan seperti identiti peranti, konfigurasi, perlindungan data, kawalan akses, kemas kini dan kesedaran status keselamatan.
+
+## Bezakan API key, secret dan identiti
+
+Tidak semua API key mempunyai sifat sama. Sesetengah key ialah identifier projek yang direka berada dalam aplikasi klien, tetapi akses sebenar mesti dikawal oleh rules, authentication dan restriction servis. Private key service account, password, token refresh dan server key ialah rahsia dan tidak boleh dimasukkan dalam repository awam atau firmware yang mudah dibaca.
+
+Gunakan fail environment untuk pembangunan dan secret manager atau konfigurasi server bagi deployment. Tambahkan fail secret ke .gitignore, tetapi fahami bahawa menghapus fail selepas commit tidak semestinya menghapus secret daripada sejarah Git. Rotate credential yang pernah terdedah.
+
+## Authentication tidak sama dengan authorization
+
+Authentication menjawab siapa pengguna; authorization menjawab apa yang dibenarkan. Pengguna yang berjaya login tidak patut mendapat akses kepada semua rekod. Reka path data supaya owner atau role boleh diperiksa. Untuk peranti, gunakan identiti berasingan jika platform menyokongnya dan elakkan satu credential dikongsi oleh semua prototaip.
+
+Firebase menerangkan penggunaan Authentication bersama Security Rules. Rules boleh memeriksa request.auth dan uid. Uji akses sah dan akses yang patut ditolak menggunakan emulator atau test rules. Jangan kekalkan test mode pada deployment kerana akses terbuka boleh membenarkan pihak luar membaca atau menulis data.
+
+## Threat model yang sesuai untuk FYP
+
+Lukis aliran data dan tandakan trust boundary: peranti, rangkaian WiFi, Internet, cloud, aplikasi dan panel pentadbir. Senaraikan ancaman mudah seperti credential bocor, pengguna melihat data orang lain, replay arahan, payload terlalu besar, input tidak sah dan peranti hilang. Bagi setiap ancaman, nyatakan kawalan dan baki risiko.
+
+Jangan janji keselamatan mutlak. Nyatakan bahawa prototaip telah diuji untuk senario tertentu, contohnya unauthenticated write ditolak dan user A tidak dapat membaca data user B.
+
+## Logging dan kemas kini
+
+Log event keselamatan yang berguna seperti login gagal, perubahan role, arahan actuator dan perubahan konfigurasi. Jangan log password atau token penuh. Pastikan log mempunyai timestamp dan identiti tindakan. Hadkan retention supaya data sensitif tidak disimpan tanpa sebab.
+
+Jika projek menyokong OTA, periksa mekanisme pengesahan imej dan rollback yang disediakan platform. Jika tidak menyokong OTA, nyatakan proses kemas kini fizikal dan limitasinya. Software update ialah sebahagian penting lifecycle, bukan ciri hiasan.
+
+## Pelan Pengesahan
+
+- Pastikan request tanpa login ditolak pada path peribadi.
+- Uji user A tidak boleh mengubah data user B.
+- Imbas repository untuk secret dan rotate apa-apa credential ujian yang terdedah.
+- Rekod event pentadbir tanpa menyimpan token atau password.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Menganggap halaman login sudah melindungi database.
+- Menggunakan Firebase test mode untuk demo awam.
+- Meletakkan service-account key dalam aplikasi klien.
+- Menulis tuntutan secure tanpa threat model atau negative test.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Adakah Firebase API key mesti dirahsiakan?
+
+Firebase menjelaskan bahawa API key tertentu mengenal pasti projek dan bukan satu-satunya kawalan akses. Namun key perlu dihadkan kepada API berkaitan, sementara service-account private key dan server credential mesti kekal rahsia. Security Rules tetap wajib.
+
+### Perlu bina encryption sendiri?
+
+Tidak. Gunakan protokol dan library yang diselenggara seperti TLS yang disediakan platform. Cryptography buatan sendiri meningkatkan risiko dan sukar divalidasi dalam skop pelajar.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Bezakan API key, secret dan identiti**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Authentication tidak sama dengan authorization**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Threat model yang sesuai untuk FYP**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Logging dan kemas kini**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Keselamatan Projek IoT Pelajar: API Key, Authentication dan Firebase Rules**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [NIST IR 8259A IoT Cybersecurity Baseline](https://www.nist.gov/publications/iot-device-cybersecurity-capability-core-baseline)
+- [Firebase Security Checklist](https://firebase.google.com/support/guides/security-checklist)
+- [Firebase Rules and Authentication](https://firebase.google.com/docs/rules/rules-and-auth)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [Katalog projek IoT](/catalog?category=iot-embedded)
+- [Panduan projek Firebase](/blog/aplikasi-mobile-firebase-projek-akhir-tahun)
+- [Topik IoT](/topics/iot)
+- [Hubungi Rectronx](/contact)

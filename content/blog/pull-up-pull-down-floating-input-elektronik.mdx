@@ -1,0 +1,87 @@
+---
+title: "Pull-Up, Pull-Down dan Floating Input: Punca Input Digital Tidak Stabil"
+excerpt: "Fahami mengapa input digital terapung, cara resistor pull-up dan pull-down menetapkan keadaan lalai, serta cara menguji button dan sensor dengan betul."
+category: "Electronics"
+date: "2026-10-19"
+language: "ms-MY"
+---
+
+## Ringkasan Pantas
+
+Input digital berimpedance tinggi boleh bertukar antara HIGH dan LOW apabila tidak dipacu. Keadaan ini dipanggil floating dan boleh menyebabkan button seolah-olah ditekan, interrupt palsu atau relay bertukar tanpa arahan. Resistor pull-up atau pull-down memberikan keadaan lalai yang diketahui sambil membenarkan signal mengatasinya.
+
+Pilihan resistor tidak boleh dibuat hanya berdasarkan satu tutorial. Semak datasheet mikropengawal, voltage logic, leakage current, kelajuan signal, penggunaan kuasa dan noise persekitaran. Internal pull resistor memudahkan prototaip tetapi nilainya mungkin mempunyai julat yang luas.
+
+## Bagaimana pull-up berfungsi
+
+Pull-up menyambungkan input kepada rail logic melalui resistor. Apabila switch terbuka, input dibaca HIGH; apabila switch menutup ke ground, input LOW. Resistor mengehadkan arus supaya switch tidak short rail terus ke ground. Pull-down melakukan arah bertentangan dan memberi LOW semasa terbuka.
+
+Logik active-low bukan masalah. Namakan signal seperti BUTTON_N atau relay_active_low dan terangkan dalam kod supaya pembacaan tidak terbalik secara senyap.
+
+## Pilih internal atau external
+
+Internal pull sesuai untuk button atau signal pendek dalam banyak prototaip, tetapi tidak semua pin menyediakannya. Dokumentasi ESP32 menyatakan GPIO34 dan ke atas ialah input-only dan tidak mempunyai internal pull-up atau pull-down. Pin khusus berbeza mengikut cip dan papan, jadi semak datasheet.
+
+External resistor memberi nilai terkawal dan boleh diletakkan berhampiran penerima. Nilai terlalu rendah membazir arus ketika signal aktif; terlalu tinggi lebih sensitif kepada leakage dan noise. Nilai sekitar julat kilo-ohm sering digunakan, tetapi pengiraan dan datasheet menentukan pilihan akhir.
+
+## Button bounce dan noise
+
+Pull resistor tidak menghapus mechanical bounce. Satu tekanan boleh menghasilkan beberapa transition dalam milisaat. Gunakan debounce software berdasarkan masa atau rangkaian hardware yang direka dengan betul. Jangan menggunakan delay panjang yang menghalang semua tugas jika sistem perlu responsif.
+
+Kabel panjang bertindak sebagai antenna dan menambah capacitance. Untuk persekitaran bising, pertimbangkan shielding, twisted pair, filter, Schmitt-trigger input atau protokol differential daripada membawa GPIO mentah jauh.
+
+## Kaedah diagnosis
+
+Ukur voltage input relatif kepada ground dalam keadaan switch terbuka dan tertutup. Jika voltan berada di kawasan pertengahan atau berubah apabila tangan menghampiri, input mungkin floating. Aktifkan internal pull secara eksplisit dalam pinMode atau konfigurasi framework, bukan menganggap default.
+
+Gunakan logic analyser untuk melihat bounce dan pulse ringkas. Rekod bilangan event bagi satu tekanan sebelum dan selepas debounce.
+
+## Pelan Pengesahan
+
+- Ukur voltage input bagi semua keadaan switch.
+- Uji 100 tekanan dan kira event tambahan.
+- Reboot papan untuk memastikan keadaan lalai selamat.
+- Semak pin sebenar menyokong internal pull yang digunakan.
+
+Jalankan ujian dengan satu pemboleh ubah berubah pada satu masa. Simpan konfigurasi, data mentah dan keputusan gagal, bukan hanya screenshot yang berjaya. Untuk projek akhir tahun, bukti yang boleh diulang lebih kuat daripada tuntutan pemasaran. Jika alat atau kaedah tidak cukup untuk mengesahkan sesuatu dakwaan, tulis sebagai limitasi dan cadangkan ujian lanjutan.
+
+## Kesilapan Biasa
+
+- Membiarkan input tidak dipacu.
+- Menganggap semua GPIO mempunyai internal pull.
+- Menyalahkan software sebelum mengukur voltage input.
+- Menganggap pull resistor menyelesaikan button bounce.
+
+Kesilapan ini patut dimasukkan dalam risk register atau checklist sebelum demo. Satu isu yang dikesan awal biasanya lebih murah dan lebih mudah diperbaiki daripada perubahan selepas hardware, firmware dan laporan sudah saling bergantung.
+
+## FAQ
+
+### Berapa nilai resistor pull-up?
+
+Ia bergantung pada leakage, capacitance, kelajuan dan penggunaan kuasa. Nilai seperti 4.7 kOhm atau 10 kOhm lazim dalam keadaan tertentu, tetapi semak datasheet dan ukur signal.
+
+### Boleh guna pull-up dan pull-down serentak?
+
+Divider boleh menetapkan bias, tetapi untuk input switch biasa ia biasanya tidak perlu dan membazir arus. Gunakan topology yang mempunyai tujuan jelas.
+
+## Soalan Viva yang Patut Boleh Dijawab
+
+- Bagi bahagian **Bagaimana pull-up berfungsi**, apakah keputusan reka bentuk ke-1 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Pilih internal atau external**, apakah keputusan reka bentuk ke-2 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Button bounce dan noise**, apakah keputusan reka bentuk ke-3 yang dibuat dan bukti apakah yang menyokongnya?
+- Bagi bahagian **Kaedah diagnosis**, apakah keputusan reka bentuk ke-4 yang dibuat dan bukti apakah yang menyokongnya?
+
+Jawapan yang kuat perlu merujuk kepada requirement, datasheet, pengiraan atau data ujian projek sendiri. Untuk topik **Pull-Up, Pull-Down dan Floating Input: Punca Input Digital Tidak Stabil**, elakkan jawapan seperti "tutorial menggunakan cara ini". Terangkan pilihan yang dibuat, alternatif yang ditolak, keadaan ujian dan limitasi. Jika keputusan belum dapat dibuktikan, nyatakan dengan jujur serta cadangkan eksperimen yang diperlukan. Pendekatan ini menunjukkan bahawa prototaip dibangunkan melalui proses kejuruteraan, bukan sekadar menyalin sambungan dan kod.
+
+## Rujukan Teknikal
+
+- [Espressif ESP32 Schematic Checklist](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html)
+
+Rujukan di atas digunakan untuk prinsip teknikal. Semak juga datasheet bagi model komponen, revision papan dan versi library yang benar-benar digunakan kerana pin, had elektrik dan tingkah laku boleh berbeza.
+
+## Bacaan dan Langkah Seterusnya
+
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Panduan pin ESP32 selamat](/blog/esp32-pinout-safe-gpio-pins-guide)
+- [Komponen ESP32](/components/esp32)
+- [Hubungi Rectronx](/contact)
