@@ -39,3 +39,38 @@ export function trackContactFormLead() {
     source: "contact_page",
   });
 }
+
+export function trackPlannerStarted() {
+  trackEvent("planner_started", { tool: "fyp_project_planner" });
+}
+
+export function trackPlannerCompleted(preferenceCount: number, broadened: boolean) {
+  trackEvent("planner_completed", {
+    tool: "fyp_project_planner",
+    preference_count: preferenceCount,
+    broadened,
+  });
+}
+
+export function trackPlannerRecommendationOpened(projectId: number) {
+  trackEvent("recommendation_opened", {
+    tool: "fyp_project_planner",
+    project_id: projectId,
+  });
+}
+
+export function trackPlannerLearningLinkOpened(projectId: number, linkType: string) {
+  trackEvent("learning_link_opened", {
+    tool: "fyp_project_planner",
+    project_id: projectId,
+    link_type: linkType,
+  });
+}
+
+export function trackPlannerWhatsAppEnquiry(projectId: number) {
+  trackEvent("whatsapp_enquiry_opened", {
+    tool: "fyp_project_planner",
+    project_id: projectId,
+  });
+  trackWhatsAppLead("fyp_project_planner");
+}

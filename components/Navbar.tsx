@@ -18,6 +18,7 @@ const links = [
 const resourceLinks = [
   { href: "/topics", label: "Topics", description: "Engineering hubs" },
   { href: "/blog", label: "Blog", description: "Guides and tutorials" },
+  { href: "/tools/fyp-project-planner", label: "FYP Project Planner", description: "Match projects to your scope" },
   { href: "/tools/esp32-pinout", label: "ESP32 Pinout Tool", description: "Interactive GPIO reference" },
 ];
 
@@ -147,7 +148,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         <div className={clsx(
           "lg:hidden overflow-hidden transition-all duration-300",
-          open ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
         )}>
           <div className="bg-[#080E1A] border-b border-white/8 px-5 pb-6 pt-2">
             <nav className="space-y-0.5 mb-5" aria-label="Mobile navigation">
