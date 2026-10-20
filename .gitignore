@@ -10,3 +10,4 @@ Thumbs.db
 
 .vercel
 work-dev-server*.log
+.worktrees/
