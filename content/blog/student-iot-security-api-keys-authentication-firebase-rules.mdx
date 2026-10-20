@@ -1,0 +1,89 @@
+---
+title: "Student IoT Security: API Keys, Authentication and Firebase Rules"
+excerpt: "A practical security guide for student IoT projects covering secrets, identity, authorization, Firebase Rules, threat modelling and honest validation."
+category: "IoT"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+IoT security is more than adding a login screen. A system should identify devices and users, restrict actions by role, protect data, control configuration and record important security events. For a final year project, a small tested security scope is stronger than calling the whole prototype secure without a threat model.
+
+Begin with assets and risks: personal data, actuator commands, GPS locations, WiFi credentials, service tokens and administrator keys. Decide who may read, write or change each asset. NIST IR 8259A provides a useful baseline around device identity, configuration, data protection, interface access, software updates and cybersecurity-state awareness.
+
+## Distinguish identifiers from secrets
+
+Not every API key has the same security meaning. Some Firebase keys identify a project and are designed to appear in client configuration, while actual data access must be enforced by Authentication, Security Rules and API restrictions. Service-account private keys, passwords, refresh tokens and server credentials are secrets and must not be committed to a public repository or embedded in exposed client code.
+
+Use environment configuration for development and server-side secret storage for deployment. If a secret ever enters Git history, deleting the current file is not enough; rotate the credential.
+
+## Authentication is not authorization
+
+Authentication establishes who made a request. Authorization decides what that identity may do. A signed-in user should not automatically read or modify every record. Structure data so ownership or role can be checked, and avoid sharing one device credential across every prototype.
+
+Firebase documents the use of Authentication with Security Rules through request.auth and uid. Test both permitted and denied requests with an emulator or rules tests. Never leave a public demonstration database in test mode.
+
+## Build an FYP-sized threat model
+
+Draw the data flow and mark trust boundaries across device, WiFi, Internet, cloud, application and administrator interface. Consider leaked credentials, cross-user data access, replayed commands, malformed payloads and lost devices. For each threat, identify a control and remaining risk.
+
+Do not promise absolute security. State exactly what was tested, such as anonymous writes being rejected and user A being unable to read user B's private records.
+
+## Plan logs and updates
+
+Log useful events such as failed sign-ins, role changes, actuator commands and configuration changes. Never log full passwords or tokens. Include a timestamp and acting identity, then choose a retention period that fits the project's privacy needs.
+
+If over-the-air updates are supported, examine image verification and rollback provided by the platform. If they are not supported, document the physical update process and limitation. Software maintenance is part of the lifecycle, not a decorative feature.
+
+## Validation Plan
+
+- Confirm unauthenticated requests fail on private paths.
+- Verify user A cannot alter user B's data.
+- Scan the repository for secrets and rotate exposed test credentials.
+- Record administrative events without passwords or complete tokens.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Assuming a login page protects the database.
+- Deploying Firebase test-mode rules publicly.
+- Placing service-account keys in a client application.
+- Claiming security without negative tests.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Must a Firebase API key always be secret?
+
+Firebase explains that its client API keys identify the project and are not the sole access control. Restrict them to relevant APIs, keep service-account and server credentials secret, and enforce Security Rules.
+
+### Should students build their own encryption?
+
+No. Use maintained platform implementations of protocols such as TLS. Custom cryptography is difficult to validate and creates unnecessary risk in a student project.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Distinguish identifiers from secrets**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Authentication is not authorization**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Build an FYP-sized threat model**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Plan logs and updates**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **Student IoT Security: API Keys, Authentication and Firebase Rules**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [NIST IR 8259A IoT Cybersecurity Baseline](https://www.nist.gov/publications/iot-device-cybersecurity-capability-core-baseline)
+- [Firebase Security Checklist](https://firebase.google.com/support/guides/security-checklist)
+- [Firebase Rules and Authentication](https://firebase.google.com/docs/rules/rules-and-auth)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [Browse IoT project titles](/catalog?category=iot-embedded)
+- [Firebase FYP guide](/blog/booking-system-fyp-laravel-nextjs-firebase)
+- [IoT topic hub](/topics/iot)
+- [Contact Rectronx](/contact)

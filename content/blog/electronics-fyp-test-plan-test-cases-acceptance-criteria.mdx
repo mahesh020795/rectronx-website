@@ -1,0 +1,87 @@
+---
+title: "Electronics FYP Test Plan: Test Cases, Acceptance Criteria and Evidence"
+excerpt: "Build a repeatable electronics FYP test plan with traceable test cases, acceptance criteria, raw data, recovery tests and viva-ready evidence."
+category: "FYP Guidance"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+A test plan converts project claims into evidence. One successful demonstration does not establish reliability, while a screenshot without test conditions is difficult to audit. Students should define the item under test, input, procedure, expected result, acceptance criteria and evidence before running the experiment.
+
+Start from objectives and requirements. Functional tests prove behaviour, performance tests measure timing or throughput, reliability tests repeat operations, and fault tests examine what happens when a sensor, supply or network fails. Every project needs a clear procedure even when it does not require a complex laboratory.
+
+## Define a complete test case
+
+Give every case an identifier such as TC-POWER-01, the linked requirement, setup, preconditions, steps, input, expected result, acceptance criteria, actual result and status. Record firmware version, wiring revision and equipment because small changes can alter the outcome. A photograph or labelled diagram should show measurement points.
+
+Expected result describes behaviour; acceptance criteria define the pass boundary. "The dashboard shows data" is vague. A measurable criterion states the record fields, allowed delay, trial count and required success rate, with justification.
+
+## Test normal and failure conditions
+
+The happy path is only one part of validation. Disconnect a sensor, inject an out-of-range value, stop the router, reboot the controller and restore power. A physical output should move to a defined safe state when input is invalid. The dashboard should identify stale or offline data rather than presenting an old value as current.
+
+Use safe low-voltage loads for relay and motor tests. Do not place mains voltage on a breadboard or work without competent supervision.
+
+## Preserve auditable evidence
+
+Keep raw CSV data, serial logs, timestamped screenshots, setup photographs and short video for events that are difficult to describe. Name each file using its test-case ID and date. Preserve failures and corrective actions rather than collecting only successful screenshots.
+
+Chapter 4 can summarise results while raw material remains in an appendix or controlled repository. Every graph needs labelled axes, units, sample count and conditions.
+
+## Turn results into a defensible conclusion
+
+Separate a system failure from a procedure failure. If a sensor was not stabilised, repeat the test after the required warm-up. If the reference instrument is unsuitable, do not use the number as proof of accuracy. Report trial count and variation, not only an average that hides failures.
+
+When criteria are not met, improve the design, revise the requirement with justification or report the limitation. Never quietly change the criterion after seeing the result.
+
+## Validation Plan
+
+- Trace every objective to a test case and evidence file.
+- Repeat tests instead of relying on one successful demo.
+- Include at least one failure-and-recovery scenario.
+- Confirm every graph states units, sample count and conditions.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Writing the procedure after obtaining results.
+- Using pass or fail without criteria.
+- Keeping only the best screenshot.
+- Changing several variables without controls.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### How many test repetitions are enough?
+
+It depends on variability and the claim. State the trial count and rationale. Discrete functions may use repeated trials, while accuracy claims need a more formal experimental design.
+
+### Is a demo video valid evidence?
+
+Video is useful for an operational sequence, but it does not replace structured data, test conditions and logs. Use it as supporting evidence.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Define a complete test case**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Test normal and failure conditions**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Preserve auditable evidence**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Turn results into a defensible conclusion**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **Electronics FYP Test Plan: Test Cases, Acceptance Criteria and Evidence**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [NIST/SEMATECH Engineering Statistics Handbook](https://itl.nist.gov/div898/handbook/index2.htm)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [Test an IoT FYP before viva](/blog/test-iot-final-year-project-before-viva)
+- [Project catalog](/catalog)
+- [FYP guidance topics](/topics)
+- [Discuss a test plan](/contact)

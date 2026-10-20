@@ -1,0 +1,87 @@
+---
+title: "Electronics Project Design Review Before Buying Components"
+excerpt: "A student design-review checklist for voltage, GPIO, interfaces, power, safety, testability and component compatibility before purchasing FYP hardware."
+category: "Electronics"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+A design review before purchasing reduces the risk of incompatible modules and late scope changes. It does not need to be a long formal meeting. It is a structured check of requirements, block diagrams, interfaces, power, pin allocation, safety, project risks and the test plan with a supervisor or technically informed peer.
+
+The purpose is not to prove the design is perfect. It is to expose hidden assumptions while changes are still inexpensive. Important decisions should point to a datasheet, calculation, requirement or small proof-of-concept test.
+
+## Review the requirements first
+
+List the user, environment, inputs, outputs, response, power source, connectivity and safety boundaries. Separate required behaviour from optional ideas. For an outdoor project, enclosure, temperature, moisture, antenna placement and power become design inputs rather than accessories added at the end.
+
+Check that every feature supports an objective. Remove features without a user need, test method or realistic development window.
+
+## Audit every interface
+
+Create an interface table with signal name, direction, logic voltage, protocol, connector, pull resistor and controller pin. I2C devices need compatible addresses and pull-ups; UART requires correct TX/RX routing and baud rate; analogue inputs must stay within the ADC range.
+
+Use documentation for the exact board. For ESP32 designs, check input-only GPIOs, strapping pins and pins used by flash before finalising allocation. A tutorial may use a different board revision.
+
+## Review power, heat and loads
+
+Complete a power budget and check regulators, connectors, cable loss and peak current. Define how motors, solenoids and relay coils are driven because a GPIO is not a power output. Review flyback protection, transistor or driver choice, common ground and isolation requirements.
+
+Do not prototype mains voltage on a breadboard. Demonstrate control logic with safe low voltage unless the project has appropriate hardware and competent supervision.
+
+## Design the project for testing
+
+Add accessible test points for ground, supply rails and critical signals. Ensure connectors can be reached and damaged modules can be replaced. Plan firmware recovery and debugging before an incorrect configuration locks the device. Status indicators should convey a defined state.
+
+Finish the review with an action list containing the issue, owner, due date and decision. Do not purchase a critical module while voltage, interface or power questions remain open.
+
+## Validation Plan
+
+- Read the primary datasheet for every critical interface.
+- Check pin allocation against the official board schematic or tool.
+- Calculate the power budget including peaks.
+- Prototype the highest-risk interface before full purchasing.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Buying all parts from a project title alone.
+- Assuming every module accepts 5 V logic.
+- Ignoring I2C addresses, boot pins or input-only pins.
+- Providing no test points or recovery method.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Who should attend a student design review?
+
+The student, supervisor and ideally one person willing to challenge assumptions. A small review with complete material is better than a large meeting without evidence.
+
+### Is a full schematic required?
+
+At minimum, bring requirements, a block diagram, interface table and power plan. A detailed schematic should receive a later review before PCB fabrication.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Review the requirements first**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Audit every interface**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Review power, heat and loads**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Design the project for testing**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **Electronics Project Design Review Before Buying Components**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [Espressif ESP32 Schematic Checklist](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32/schematic-checklist.html)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Component database](/components)
+- [Electronics project catalog](/catalog?category=iot-embedded)
+- [Discuss a project design](/contact)

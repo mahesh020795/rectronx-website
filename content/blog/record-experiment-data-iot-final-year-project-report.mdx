@@ -1,0 +1,88 @@
+---
+title: "How to Record Experiment Data for an IoT Final Year Project Report"
+excerpt: "Record IoT experiments so results can be reproduced, audited and used correctly in the methodology and results chapters of an FYP report."
+category: "FYP Guidance"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+An experiment record connects the prototype to the conclusion. Without versions, setup, time, inputs and raw data, a student may be unable to explain why two runs differ. A good record lets another person reproduce the procedure and understand its limitations.
+
+Assign an experiment ID before testing. Preserve the question or hypothesis, variables, equipment, configuration, procedure, raw data, observations and decision. Do not depend on memory or scattered chat messages.
+
+## Build an experiment log
+
+Every session should record date and time with zone, operator, location, hardware revision, firmware commit, network configuration and reference equipment. Note apparently small changes such as the USB cable, adapter or sensor position. Setup photographs should include labels or scale.
+
+Use consistent file names such as EXP-07_run-03_raw.csv. Never overwrite raw data after filtering or calibration. Processed outputs belong in separate files together with the script, spreadsheet formula or method that produced them.
+
+## Control the variables
+
+Identify the independent variable being changed, dependent variable being measured and controls being held constant. When testing radio range, do not change antenna and transmit power simultaneously unless the experiment deliberately studies both. Randomise order when time drift or temperature could bias the result.
+
+State sample interval, sample count, warm-up and duration. A sensor that requires stabilisation cannot be compared using only its first reading.
+
+## Protect data integrity
+
+Store standard timestamps, units in the schema or header, explicit missing values and calibration records. Use checksums or versioned storage for important datasets where appropriate. Export numerical data rather than manually copying points from a chart, which creates transcription errors.
+
+Record every exclusion with a reason. If power failed during a run, preserve that event. Selectively reporting only clean runs weakens the conclusion.
+
+## Convert records into a results chapter
+
+Begin with a table describing conditions and sample counts. Select charts that fit the question: time series for trends, scatter plots for relationships, distributions for variation and confusion matrices for classification. Every figure needs units, conditions and a caption explaining the relevant observation.
+
+Separate observation from interpretation. "The rail fell to X volts when the relay activated" is an observation; "the adapter is undersized" is an interpretation requiring supporting tests.
+
+## Validation Plan
+
+- Ask another person to reproduce one test from the log.
+- Trace every plotted point to a raw-data file.
+- Confirm units, time zone and firmware revision are recorded.
+- Keep failed runs and exclusions with reasons.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Editing a raw-data file after the experiment.
+- Omitting firmware or wiring revision.
+- Using graphs without units or sample count.
+- Removing failed runs without an audit trail.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Is CSV or Excel better for FYP data?
+
+CSV is open and easy to process or version, while a spreadsheet is convenient for manual inspection. Keep raw data in an open format and preserve analysis formulas separately.
+
+### Must all raw data appear in the report?
+
+No. The report can present summaries and representative results, while raw data and procedures remain available under the institution's storage and privacy policy.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Build an experiment log**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Control the variables**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Protect data integrity**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Convert records into a results chapter**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **How to Record Experiment Data for an IoT Final Year Project Report**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [RFC 3339 Internet Timestamps](https://www.rfc-editor.org/info/rfc3339/)
+- [NIST/SEMATECH Engineering Statistics Handbook](https://itl.nist.gov/div898/handbook/index2.htm)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [IoT testing before viva](/blog/test-iot-final-year-project-before-viva)
+- [Project catalog](/catalog)
+- [IoT topic hub](/topics/iot)
+- [Discuss an FYP methodology](/contact)

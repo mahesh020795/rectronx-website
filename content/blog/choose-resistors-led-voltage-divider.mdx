@@ -1,0 +1,88 @@
+---
+title: "How to Choose Resistors for LEDs and Voltage Dividers"
+excerpt: "Calculate LED current-limiting and voltage-divider resistors while checking power, tolerance, loading and ADC input limits in student electronics projects."
+category: "Electronics"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+A resistor should not be chosen by copying colour bands from a photograph. For an LED, the resistor limits current according to supply voltage, forward voltage and target current. For a voltage divider, the resistor ratio defines the unloaded output, but ADC input behaviour and leakage make a real circuit less ideal.
+
+Every calculation should be checked against standard values, tolerance and power dissipation. Measure the prototype because LED forward voltage, supply voltage and resistor values vary. A divider is not a regulated power supply for a changing load.
+
+## Calculate an LED series resistor
+
+Use R = (Vsupply - Vf) / I. If a 3.3 V output drives an LED with a 2.0 V forward voltage at a 5 mA target, the estimate is 260 ohms; a standard 270 or 330 ohm value may be selected according to brightness and margin. This is an example, not a universal value.
+
+Check both per-pin and total controller current limits in the datasheet. An indicator LED often needs much less than its maximum rated current. Calculate resistor power using P = I squared times R and select a suitable rating.
+
+## Calculate a voltage divider
+
+For an ideal unloaded divider, Vout = Vin x Rbottom / (Rtop + Rbottom). Large resistor values reduce divider current but raise source impedance. An ADC sample-and-hold input may require lower impedance, more acquisition time or buffering. Small values consume power and load the source.
+
+Use maximum input voltage, including credible transients, to keep Vout below the input's absolute maximum. Add suitable protection when the source can exceed the expected range.
+
+## Account for tolerance and loading
+
+A 1% resistor can still produce ratio error from the combination of both tolerances. ADC reference uncertainty, noise, calibration and loading add further error. For battery measurement, test several known voltages with a suitable reference and document any fitted calibration.
+
+Sensor output impedance and input leakage change the effective divider. Use the Thevenin equivalent when assessing source resistance and load error.
+
+## Verify the breadboard circuit
+
+Measure actual resistor values when markings are uncertain. Confirm common ground, use clearly labelled probe points and begin at a safe low voltage. If an LED does not illuminate, check polarity, wiring and output state before reducing the resistor.
+
+Record the equation, selected standard value, measured value and result. This demonstrates engineering selection rather than trial and error.
+
+## Validation Plan
+
+- Calculate worst case using voltage and resistor tolerances.
+- Measure divider output unloaded and with the ADC connected.
+- Check resistor power and controller current limits.
+- Compare several input points with a suitable meter.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Treating the LED maximum rating as a required current.
+- Using a divider to power a sensor or relay.
+- Ignoring ADC source impedance and tolerance.
+- Allowing an input to exceed its absolute maximum.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Why is an LED still bright with a larger resistor?
+
+Modern LEDs can be clearly visible at a few milliamps. A larger resistor reduces current and is often safer when the brightness remains adequate.
+
+### Can a divider convert 5 V into a 3.3 V power supply?
+
+A divider can scale a high-impedance signal, but it is not a regulator for a changing load. Use a suitable regulator for power.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Calculate an LED series resistor**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Calculate a voltage divider**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Account for tolerance and loading**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Verify the breadboard circuit**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **How to Choose Resistors for LEDs and Voltage Dividers**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [Texas Instruments Voltage Divider Calculator](https://www.ti.com/download/kbase/volt/volt_div3.htm)
+- [TI Voltage-Sensing Divider Application Brief](https://www.ti.com/document-viewer/lit/html/SNAA363/GUID-7B0D26D5-46C0-4D6F-94BC-9579FEFB9A94)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [Component database](/components)
+- [ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Common ESP32 wiring mistakes](/blog/common-esp32-wiring-mistakes-fyp-demo)
+- [Discuss an electronics circuit](/contact)

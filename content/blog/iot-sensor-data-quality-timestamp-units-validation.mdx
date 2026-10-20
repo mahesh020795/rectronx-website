@@ -1,0 +1,88 @@
+---
+title: "IoT Sensor Data Quality: Timestamps, Units, Missing Values and Validation"
+excerpt: "Produce trustworthy IoT sensor data for analysis and FYP reporting by defining timestamps, units, missing records, duplicates, outliers and validation rules."
+category: "IoT"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+A polished dashboard does not make sensor data trustworthy. An IoT dataset needs a clear meaning, comparable time, consistent units, source identity and quality status. Without those elements, students cannot determine whether a graph changed because of the environment, the sensor, the network or a software mistake.
+
+Design the dataset before collection begins. Define a data dictionary, sample interval, validation rules, missing-record strategy and raw-data retention policy. Never silently remove records merely to make results look cleaner.
+
+## Create a data dictionary
+
+For every field, record the name, type, unit, plausible range, source and whether it is required. temperature_c is clearer than value1. Keep measurements separate from setpoints and actuator states. Include device_id and firmware_version when several devices or revisions contribute data.
+
+A validation range is not always a physical absolute limit; it may be a justified operating range for the experiment. Mark readings outside it as invalid or suspicious, but preserve the original value and reason instead of deleting the evidence.
+
+## Handle timestamps and time zones
+
+Use an unambiguous format with UTC or an explicit offset. RFC 3339 defines an Internet timestamp profile based on ISO 8601. A value ending in Z represents UTC, while +08:00 records the Malaysian offset. Convert for display after storage rather than stripping the offset.
+
+State where time originates. A device clock can drift or reset without synchronization. A server timestamp records arrival, not necessarily measurement time. Store measured_at and received_at separately when delay or offline buffering matters.
+
+## Treat gaps, duplicates and outliers honestly
+
+Use a sequence number or expected interval to detect gaps. Never replace every missing reading with zero because zero may be a valid measurement. Represent absence explicitly and document any imputation. Retries can create duplicates, so a measurement identifier helps the database reject repeated messages.
+
+Investigate outliers through wiring, supply, sensor limits, environmental events and communication logs. A median filter can suppress spikes, but it can also erase a real short event. Preserve raw and processed series separately.
+
+## Validate the full data path
+
+Match a device reading in the serial log to the transmitted payload and stored database record using the same identifier or timestamp. This catches unit conversion and parsing errors. Compare against an appropriate reference when accuracy matters; a second identical low-cost sensor does not automatically establish true accuracy.
+
+Report resolution, observed repeatability, packet-loss rate and exclusion rules. Avoid the word accurate unless the method, reference and uncertainty support it.
+
+## Validation Plan
+
+- Inspect at least 100 sequential records for gaps and duplicates.
+- Match serial, payload and database values for the same measurement.
+- Inject invalid values to test validation and logging.
+- Export raw data so the analysis can be reproduced.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Storing numbers without units or device identity.
+- Using local time without an offset.
+- Replacing missing data with zero.
+- Removing outliers without a record or justification.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Should an FYP store raw or filtered data?
+
+Keep raw data when storage and privacy permit, then record the processing method and version. This allows an examiner to audit the result and lets the student repeat the analysis.
+
+### How often should a sensor be sampled?
+
+Sampling depends on the phenomenon, sensor response time, energy, network load and project objective. Faster is not better when the sensor has not settled or the records only repeat noise.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Create a data dictionary**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Handle timestamps and time zones**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Treat gaps, duplicates and outliers honestly**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Validate the full data path**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **IoT Sensor Data Quality: Timestamps, Units, Missing Values and Validation**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [RFC 3339 Internet Timestamps](https://www.rfc-editor.org/info/rfc3339/)
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [IoT project ideas](/blog/iot-project-ideas-2025)
+- [Project catalog](/catalog)
+- [Component database](/components)
+- [Discuss a validation plan](/contact)

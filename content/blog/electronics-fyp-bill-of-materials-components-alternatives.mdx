@@ -1,0 +1,87 @@
+---
+title: "Electronics FYP Bill of Materials: Components, Alternatives and Supply Risk"
+excerpt: "Create an auditable electronics BOM with part identification, critical specifications, compatible alternatives, revision control and purchasing risk."
+category: "FYP Guidance"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+A bill of materials, or BOM, is a controlled list of everything required to build a specific project revision. A list containing only sensor, relay and wire is not enough for purchasing or troubleshooting. The BOM should identify each part, quantity, rating, function, source and alternatives that are genuinely compatible.
+
+A good BOM helps students track design changes, manage spending and reduce the risk of late components. Prices vary by supplier and date, so record each price as a dated snapshot rather than a guaranteed project cost.
+
+## Include fields that support rebuilding
+
+Record a reference such as U1 or SENSOR1, description, manufacturer part number where available, quantity, critical specification, package or connector, voltage, supplier, date checked and approval status. For generic modules, preserve the listing, markings and photographs because the same product name may be sold with a different circuit later.
+
+Separate required components, consumables, tools and optional upgrades. Enclosures, terminal blocks, cables and adapters are frequently forgotten even though they determine whether the final demo is reliable.
+
+## Define critical specifications
+
+An alternative is valid only when it meets the electrical and software parameters that matter. Two temperature sensors can differ in interface, range, response time, voltage and library support. For regulators, compare input range, output, current, heat and pinout. For relays, compare coil voltage, contact rating and actual isolation arrangement.
+
+Mark parameters that must match and parameters that may vary. This turns purchasing into a defendable engineering decision.
+
+## Control revisions and substitutions
+
+Give the BOM a revision that matches the schematic and firmware. When a part changes, record the date, reason and effect on wiring or code. Do not overwrite the old list, because earlier test results may belong to a different hardware revision.
+
+Create an as-built BOM when the prototype is complete. It records what is physically installed rather than what the proposal originally planned.
+
+## Manage purchasing risk
+
+Identify long-lead parts and buy them early only after interfaces have been checked. Keep limited spares for inexpensive failure-prone items, but avoid buying a full set before proving the highest-risk module. Consider seller traceability and counterfeit risk for critical devices.
+
+Maintain a simple risk register containing part, possible issue, impact, mitigation and approved alternative. Typical risks include unavailable stock, a changed connector, incompatible logic voltage and abandoned software support.
+
+## Validation Plan
+
+- Check that every schematic block has a BOM item.
+- Ensure identification is sufficient to purchase the same part again.
+- Bench-test alternatives before marking them approved.
+- Match the as-built BOM to the final prototype and wiring photographs.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Using generic names without ratings or identifiers.
+- Assuming replacement modules share a pinout.
+- Presenting old prices as current commitments.
+- Failing to record substitutions after testing.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Should software be included in a BOM?
+
+A BOM normally focuses on hardware, but the report should keep a separate software and library inventory with versions. Both are required for reproducibility.
+
+### Is a marketplace link enough to identify a module?
+
+It helps, but listings can change. Preserve markings, specifications, photographs and the date alongside the link.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Include fields that support rebuilding**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Define critical specifications**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Control revisions and substitutions**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Manage purchasing risk**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **Electronics FYP Bill of Materials: Components, Alternatives and Supply Risk**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [NIST Cybersecurity Supply Chain Risk Management](https://csrc.nist.gov/projects/cyber-supply-chain-risk-management)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [Component database](/components)
+- [Project catalog](/catalog)
+- [ESP32 sensor selection guide](/blog/best-esp32-sensors-final-year-projects)
+- [Contact Rectronx](/contact)

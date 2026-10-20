@@ -1,0 +1,88 @@
+---
+title: "Outdoor IoT Projects: Choosing WiFi, LoRa or 4G for Range and Power"
+excerpt: "Compare WiFi, LoRa or LoRaWAN and 4G for outdoor IoT projects using coverage, payload, energy, gateway, recurring cost and field-test evidence."
+category: "IoT"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+An outdoor IoT network should not be selected from an advertised range figure. Coverage changes with antennas, frequency, obstacles, mounting height, interference, transmit settings and local regulation. WiFi, LoRa or LoRaWAN and 4G solve different connectivity problems.
+
+Start with payload size, reporting interval, latency, power source, deployment area, gateway access and recurring cost. Perform a site survey or field test at the real location. A five-metre laboratory test does not prove suitability for a farm, river or urban street.
+
+## When WiFi is appropriate
+
+WiFi is practical when an access point already exists, the range is moderate, payloads are larger or direct IP integration is useful. It can fit greenhouses, campus buildings and locations close to a managed router. Power consumption and site-dependent coverage are the main constraints.
+
+Test reconnect behaviour, changed credentials and loss of Internet separately from loss of the local access point. Institutional WiFi may use captive portals or policies that an embedded controller cannot support.
+
+## When LoRa or LoRaWAN is appropriate
+
+LoRa is a radio modulation technology; LoRaWAN is a network protocol involving end devices, gateways, a network server and application services. LoRaWAN is designed for low-power wide-area operation and small messages. It is not a video or high-throughput connection.
+
+Do not call a point-to-point LoRa link LoRaWAN. Document frequency, spreading factor, bandwidth, transmit power, antennas and topology. Check Malaysia's applicable spectrum requirements before a real deployment.
+
+## When cellular service is appropriate
+
+Cellular connectivity fits sites with operator coverage but no local infrastructure. A modem needs a SIM, data plan, suitable antenna and a supply that can tolerate current peaks. Signal on a smartphone does not guarantee identical performance inside the project's enclosure.
+
+Firmware should handle timeouts, reconnects, backoff and data usage. Buffer measurements during outages. Confirm that the chosen network service and module remain supported rather than designing around an obsolete technology.
+
+## Make the decision with evidence
+
+Create a weighted decision matrix covering coverage, daily energy, payload, latency, gateway needs, recurring cost, security and implementation difficulty. Scores should come from measurements or reliable documentation rather than preference.
+
+In field tests, record successful delivery rate, end-to-end latency, energy and environmental conditions at several points. Radio metrics from different technologies are not always directly comparable, so focus on whether the application message reached its destination correctly.
+
+## Validation Plan
+
+- Test at the real site across several distances and obstacles.
+- Send at least 100 defined messages for each configuration.
+- Measure energy during sleep, transmit and reconnect states.
+- Test recovery after the router, gateway or cellular link disappears.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Treating maximum advertised range as a project result.
+- Confusing point-to-point LoRa with LoRaWAN.
+- Ignoring modem peak current and antenna placement.
+- Deploying without checking local spectrum requirements.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Is LoRa always longer range than WiFi?
+
+LoRa is designed for a different link budget and data rate, but real range depends on configuration and the site. A field test is required; no fixed distance can be guaranteed.
+
+### Must an FYP build its own LoRaWAN gateway?
+
+No. A project can use an available gateway or deploy one, but the architecture must identify who operates the gateway and servers and what happens when they fail.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **When WiFi is appropriate**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **When LoRa or LoRaWAN is appropriate**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **When cellular service is appropriate**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Make the decision with evidence**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **Outdoor IoT Projects: Choosing WiFi, LoRa or 4G for Range and Power**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [LoRa Alliance: LoRaWAN for Developers](https://lora-alliance.org/lorawan-for-developers/)
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [LoRa sensor-node guide](/blog/cara-bina-node-sensor-ladang-lora)
+- [IoT project catalog](/catalog?category=iot-embedded)
+- [Component database](/components)
+- [Discuss technology selection](/contact)

@@ -1,0 +1,88 @@
+---
+title: "IoT System Architecture for FYP: Sensor, Gateway, Cloud and Dashboard"
+excerpt: "A practical guide to designing a clear IoT architecture from sensor to dashboard, including data flow, offline behaviour, security boundaries and testing."
+category: "IoT"
+date: "2026-10-20"
+language: "en-MY"
+---
+
+## Quick Summary
+
+An IoT system architecture explains how measurements travel from the physical world to the person who uses them. For a final year project, the architecture should separate sensing, edge processing, communications, storage and the user application. Every arrow in the diagram should describe something real: the data format, protocol, direction and behaviour when a connection fails.
+
+A strong FYP does not require every available technology. One ESP32, one meaningful sensor, one communications path and one dashboard can be enough when the student can prove acquisition, transmission, storage and recovery. Architecture must follow project requirements rather than a shopping list of popular modules.
+
+## Separate the system into layers
+
+The sensing layer acquires a physical quantity and should define its unit, range and sampling interval. The edge layer validates readings, applies limited processing or makes local decisions. The communications layer carries messages through WiFi, Ethernet, LoRaWAN or cellular service. The application layer stores, presents and acts on the information. Keeping these layers separate makes design changes easier to explain and test.
+
+If MQTT is selected, document topics, payloads, retained messages and the required Quality of Service. MQTT delivery options do not replace application controls such as timestamps, duplicate detection and stale-data handling. With HTTP, specify endpoints, methods, authentication and error responses.
+
+## Define the data contract early
+
+Agree on the payload before building the entire dashboard. Useful fields include device_id, measurement_id, timestamp, value, unit, sensor status and schema version. A number without its unit or source is weak evidence. Decide whether time is assigned by the device, gateway or server, and distinguish measured_at from received_at when network delay matters.
+
+Choose each dashboard element to answer a user question. Trend charts show change over time, status cards show current conditions and event tables support auditing. Ten decorative charts do not improve an engineering project if none supports an objective.
+
+## Design for an Internet outage
+
+A credible IoT project defines a degraded mode. A controller may continue safe local control, buffer a limited number of readings and upload them after reconnection. State the buffer limit and what happens when it fills. Do not call a result real-time when records arrive minutes later after a network recovery.
+
+Test cold start, loss of WiFi, an unavailable server, a disconnected sensor and power restoration. Record reconnection time, lost records and the final actuator state. This evidence is stronger than a demo that only works under ideal conditions.
+
+## Create diagrams that support the report
+
+Use a context diagram for users and external systems, a block diagram for hardware, a deployment diagram for device-to-cloud placement and a sequence diagram for the main workflow. Keep names consistent across diagrams, firmware, database fields and the report. Inconsistent names make traceability difficult.
+
+Mark trust boundaries such as the public Internet and third-party services. This gives a clear reason for authentication, encryption, input validation and access control instead of adding security terminology without a design.
+
+## Validation Plan
+
+- Compare the serial reading, network payload and stored record for the same timestamp.
+- Disconnect the network and measure recovery time and data loss.
+- Send a malformed payload and confirm it is rejected or flagged.
+- Repeat the workflow after a full power cycle and preserve the logs.
+
+Run tests with one controlled change at a time. Preserve configuration, raw measurements and failed runs rather than only successful screenshots. For a final year project, repeatable evidence is stronger than promotional claims. When the available instrument or method cannot prove a statement, report that limitation and define the additional experiment that would be required.
+
+## Common Mistakes
+
+- Drawing the cloud as one unexplained box.
+- Making essential local control depend entirely on a dashboard.
+- Omitting units, timestamps or device identity.
+- Assuming a transmitted message was stored correctly.
+
+Move these risks into a checklist or project risk register before demo day. A fault found while architecture and wiring are still flexible is normally less expensive to correct than one discovered after hardware, firmware and report chapters depend on the same assumption.
+
+## FAQ
+
+### Does every IoT project need a public cloud?
+
+No. A local network system can still be an IoT project when connected devices exchange data and provide a networked service. Use cloud infrastructure only when remote access, managed storage or analysis is required.
+
+### Is MQTT better than HTTP?
+
+Neither is universally better. MQTT fits publish-subscribe telemetry, while HTTP is straightforward for request-response web integration. Decide from requirements, network conditions, security and testability.
+
+## Viva Questions You Should Be Able to Answer
+
+- For **Separate the system into layers**, what was design decision 1, which alternative was rejected, and what evidence supports the choice?
+- For **Define the data contract early**, what was design decision 2, which alternative was rejected, and what evidence supports the choice?
+- For **Design for an Internet outage**, what was design decision 3, which alternative was rejected, and what evidence supports the choice?
+- For **Create diagrams that support the report**, what was design decision 4, which alternative was rejected, and what evidence supports the choice?
+
+A strong answer should cite a requirement, primary datasheet, calculation or result from the student's own tests. For **IoT System Architecture for FYP: Sensor, Gateway, Cloud and Dashboard**, avoid saying only that a tutorial used the same method. Explain the selected option, the rejected alternative, test conditions and remaining limitation. Honest boundaries show engineering judgement and make future improvements credible.
+
+## Technical References
+
+- [OASIS MQTT Version 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+- [NIST IoT Device Cybersecurity Baseline](https://www.nist.gov/publications/iot-device-cybersecurity-capability-core-baseline)
+
+These references support the general technical principles. Always verify the datasheet for the exact component model, board revision and library version used in the prototype because pins, electrical limits and behaviour can differ.
+
+## Related Rectronx Resources
+
+- [Browse IoT project titles](/catalog?category=iot-embedded)
+- [Explore the ESP32 component](/components/esp32)
+- [Use the ESP32 Pinout Tool](/tools/esp32-pinout)
+- [Discuss an FYP scope](/contact)
