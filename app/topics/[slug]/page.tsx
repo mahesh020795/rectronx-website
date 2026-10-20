@@ -214,6 +214,23 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         </div>
 
         <aside className="space-y-5">
+          {(isPatHub || isIotHub || topic.slug === "esp32") && (
+            <div className="rounded-2xl border border-brand-blue/20 bg-blue-50 p-5">
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-blue">
+                Project planning tool
+              </p>
+              <p className="mt-2 text-lg font-bold text-brand-navy">Find a realistic FYP direction</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Filter existing Rectronx titles by platform, difficulty, duration and the outcome you want to demonstrate.
+              </p>
+              <Link
+                href="/tools/fyp-project-planner"
+                className="mt-4 inline-flex rounded-lg bg-brand-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-brand-blue-dark"
+              >
+                Open FYP Project Planner
+              </Link>
+            </div>
+          )}
           <div className="rounded-2xl border border-slate-200 bg-white p-5">
             <p className="text-lg font-bold text-brand-navy">Why This Hub Matters</p>
             <ul className="mt-4 space-y-3 text-sm text-slate-600">

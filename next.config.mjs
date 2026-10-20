@@ -1,6 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/blog/projek-akhir-tahun-idea",
+        destination: "/blog/idea-projek-akhir-tahun-2026-malaysia",
+        permanent: true,
+      },
+      {
+        source: "/blog/top-esp32-project-titles-for-fyp-2026",
+        destination: "/blog/esp32-project-ideas",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

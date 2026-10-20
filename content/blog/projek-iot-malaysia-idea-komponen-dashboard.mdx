@@ -9,9 +9,23 @@ date: "2026-07-15"
 
 [**Projek IoT**](/topics/iot) ialah projek yang menghubungkan sensor, controller dan output kepada dashboard, aplikasi atau sistem notifikasi. Untuk Projek Akhir Tahun, IoT sangat sesuai kerana pelajar boleh tunjuk demo fizikal dan data digital pada masa yang sama. Hub Projek IoT Rectronx menyusun idea mengikut kategori, komponen, aliran sistem dan kaedah ujian.
 
+Jika masih membandingkan beberapa tajuk, gunakan [FYP Project Planner](/tools/fyp-project-planner) untuk tapis katalog berdasarkan platform, kesukaran, tempoh dan hasil demo.
+
 Formula mudah projek IoT:
 
 > Sensor -> ESP32/Arduino/Raspberry Pi -> Internet atau local dashboard -> Alert, graph, database atau automation.
+
+## Seni Bina Projek IoT yang Boleh Diuji
+
+| Lapisan | Keputusan yang perlu dibuat | Bukti untuk laporan |
+|---|---|---|
+| Input | Sensor apa, julat bacaan dan kadar sampel | Datasheet, bacaan rujukan dan jadual kalibrasi |
+| Controller | ESP32, Arduino atau Raspberry Pi | Rajah pin, aliran firmware dan log serial |
+| Komunikasi | WiFi, GSM, LoRa, BLE atau sambungan tempatan | Masa penghantaran, kehilangan paket dan kaedah pemulihan |
+| Data | Blynk, Firebase, MQTT atau database sendiri | Struktur data, timestamp dan sejarah bacaan |
+| Output | Alert, relay, motor, buzzer atau dashboard | Masa respons serta keadaan normal, amaran dan ralat |
+
+Pilih satu keputusan utama pada setiap lapisan. Menambah dua dashboard, tiga kaedah komunikasi dan terlalu banyak sensor biasanya meningkatkan risiko integrasi tanpa semestinya menambah nilai kepada objektif.
 
 ## Contoh Projek IoT yang Sesuai untuk FYP
 
@@ -78,6 +92,14 @@ Sediakan sekurang-kurangnya tiga situasi:
 3. Keadaan ralat atau sensor tidak stabil.
 
 Untuk laporan, masukkan gambar setup, screenshot dashboard, jadual bacaan dan penerangan batasan sensor.
+
+| Ujian | Kaedah | Metrik yang boleh direkod |
+|---|---|---|
+| Sensor | Bandingkan dengan rujukan pada beberapa titik | Ralat mutlak, variasi dan bacaan hilang |
+| Rangkaian | Putus dan sambung semula WiFi atau GSM | Masa sambung semula dan data yang hilang |
+| Alert | Paksa bacaan melepasi threshold | Masa tindak balas dan alert berulang |
+| Kuasa | Jalankan sensor, radio dan actuator serentak | Reset, voltan jatuh dan kestabilan bekalan |
+| Pemulihan | Restart controller atau matikan dashboard | Keadaan output selepas sistem kembali hidup |
 
 ## Kesilapan Biasa Projek IoT
 
