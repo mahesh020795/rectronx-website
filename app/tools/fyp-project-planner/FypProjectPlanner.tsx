@@ -5,6 +5,9 @@ import Link from "next/link";
 import { ArrowUpRight, Check, FileText, MessageCircle, X, Zap } from "lucide-react";
 import clsx from "clsx";
 import {
+  getPlannerLearningLinks,
+  getPlannerTestingPriorities,
+  getPlannerTimeRequired,
   recommendProjects,
   type PlannerPreferences,
   type PlannerProject,
@@ -184,7 +187,14 @@ export default function FypProjectPlanner({ projects }: { projects: PlannerProje
                         </span>
                       </div>
                       <h3 className="mt-3 text-xl font-bold leading-7 text-brand-navy">{project.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-500">{project.timeRequired}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {project.tags.slice(0, 3).map((tag) => (
+                          <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-slate-500">{getPlannerTimeRequired(project)}</p>
                     </div>
                     <Link
                       href={`/catalog/${project.slug}`}
@@ -214,7 +224,7 @@ export default function FypProjectPlanner({ projects }: { projects: PlannerProje
                     <div>
                       <p className="text-xs font-bold uppercase tracking-wider text-slate-400">First testing priorities</p>
                       <ol className="mt-3 space-y-2">
-                        {project.testingPriorities.map((priority, priorityIndex) => (
+                        {getPlannerTestingPriorities(project).map((priority, priorityIndex) => (
                           <li key={priority} className="flex gap-2 text-sm leading-6 text-slate-700">
                             <span className="font-bold text-brand-blue">{priorityIndex + 1}.</span>
                             <span>{priority}</span>
@@ -225,7 +235,7 @@ export default function FypProjectPlanner({ projects }: { projects: PlannerProje
                   </div>
 
                   <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-5">
-                    {project.learningLinks.map((link) => (
+                    {getPlannerLearningLinks(project).map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}

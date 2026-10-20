@@ -7,7 +7,6 @@ import { allCatalogProjects } from "@/data/projects";
 import {
   getCatalogProjectSeo,
   getCatalogProjectSlug,
-  getProjectLearningLinks,
 } from "@/lib/catalog";
 import {
   buildPlannerCatalog,
@@ -66,10 +65,7 @@ const plannerCatalog = buildPlannerCatalog(allCatalogProjects, (project) => {
     slug: getCatalogProjectSlug(project),
     difficulty: seo.difficulty,
     duration: durationFromDifficulty(seo.difficulty),
-    timeRequired: seo.timeRequired,
     outcomes: classifyPlannerOutcomes(project),
-    testingPriorities: seo.testingPlan.slice(0, 3),
-    learningLinks: getProjectLearningLinks(project, 3),
   };
 });
 

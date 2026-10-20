@@ -39,6 +39,16 @@ for (const primary of [
   assert.match(read(primary), /\/tools\/fyp-project-planner/, `${primary} must link to the FYP planner`);
 }
 
+const primaryMalay = read("content/blog/idea-projek-akhir-tahun-2026-malaysia.mdx");
+for (const unsupportedClaim of [
+  "pemeriksa suka skop yang luas",
+  "selalu menang dengan pemeriksa",
+  "pemeriksa jangkakan",
+  "harganya bawah RM20",
+]) {
+  assert.equal(primaryMalay.includes(unsupportedClaim), false, `Unsupported claim remains: ${unsupportedClaim}`);
+}
+
 const triage = read("docs/seo/2026-10-20-index-coverage-triage.md");
 for (const required of [
   "1,160 indexed",

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   buildPlannerCatalog,
+  classifyPlannerOutcomes,
   recommendProjects,
 } from "../lib/fyp-planner.ts";
 
@@ -80,9 +81,27 @@ const anyPreferences = {
 }
 
 {
+  const result = recommendProjects(catalog, {
+    category: "iot",
+    technology: "ESP32",
+    difficulty: "Beginner",
+    duration: "8-12",
+    outcome: "computer-vision",
+  });
+  assert.equal(result.recommendations.length, 3, "contradictory optional preferences should still return a useful shortlist");
+  assert.equal(result.broadened, true, "partial matches must be disclosed as broadened");
+}
+
+{
   const result = recommendProjects(catalog, { ...anyPreferences, category: "iot", outcome: "monitoring" }, 4);
   const ids = result.recommendations.map((item) => item.project.id);
   assert.equal(ids.includes(1) && ids.includes(2), false, "near-identical titles should not both be selected");
+}
+
+{
+  const duplicatesOnly = catalog.filter((project) => project.id === 1 || project.id === 2);
+  const result = recommendProjects(duplicatesOnly, anyPreferences, 2);
+  assert.equal(result.recommendations.length, 1, "duplicate suppression must remain active during fallback filling");
 }
 
 {
@@ -93,6 +112,16 @@ const anyPreferences = {
     second.recommendations.map((item) => item.project.id),
     "same preferences must produce stable ordering",
   );
+}
+
+{
+  const outcomes = classifyPlannerOutcomes({
+    id: 99,
+    title: "ESP32 WiFi Signal Mapping Tool",
+    category: "iot",
+    tags: ["ESP32", "WiFi"],
+  });
+  assert.equal(outcomes.includes("application-workflow"), false, "mapping must not be mistaken for the word app");
 }
 
 console.log("FYP project planner tests passed.");

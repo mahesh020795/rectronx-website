@@ -28,7 +28,6 @@ export type PlannerSourceProject = {
 
 export type PlannerLearningLink = {
   title: string;
-  description: string;
   href: string;
   type: "Tool" | "Guide" | "Comparison" | "Planning";
 };
@@ -37,10 +36,7 @@ export type PlannerProject = PlannerSourceProject & {
   slug: string;
   difficulty: PlannerDifficulty;
   duration: PlannerDuration;
-  timeRequired: string;
   outcomes: PlannerOutcome[];
-  testingPriorities: string[];
-  learningLinks: PlannerLearningLink[];
 };
 
 export type PlannerRecommendation = {
@@ -104,25 +100,28 @@ export function recommendProjects(
     usedDifficulties.add(selected.project.difficulty);
   }
 
-  if (recommendations.length < limit) {
-    for (const candidate of ranked) {
-      if (recommendations.some((selected) => selected.project.id === candidate.project.id)) continue;
-      recommendations.push(candidate);
-      if (recommendations.length === limit) break;
-    }
-  }
-
   const hasOptionalPreference =
     preferences.technology !== "any" ||
     preferences.difficulty !== "any" ||
     preferences.duration !== "any" ||
     preferences.outcome !== "any";
-  const positiveMatches = ranked.filter((candidate) => candidate.score > 0).length;
 
   return {
     recommendations,
-    broadened: hasOptionalPreference && positiveMatches < Math.min(limit, categoryCandidates.length),
+    broadened:
+      hasOptionalPreference &&
+      recommendations.some(({ project }) => !matchesEveryOptionalPreference(project, preferences)),
   };
+}
+
+function matchesEveryOptionalPreference(project: PlannerProject, preferences: PlannerPreferences) {
+  const haystack = normalize(`${project.title} ${project.tags.join(" ")}`);
+  return (
+    (preferences.technology === "any" || haystack.includes(normalize(preferences.technology))) &&
+    (preferences.difficulty === "any" || project.difficulty === preferences.difficulty) &&
+    (preferences.duration === "any" || project.duration === preferences.duration) &&
+    (preferences.outcome === "any" || project.outcomes.includes(preferences.outcome))
+  );
 }
 
 function scoreProject(project: PlannerProject, preferences: PlannerPreferences): PlannerRecommendation {
@@ -233,11 +232,70 @@ export function classifyPlannerOutcomes(project: PlannerSourceProject): PlannerO
   addWhen(/access|attendance|rfid|fingerprint|locker|biometric|otp/, "access-control");
   addWhen(/dashboard|blynk|firebase|report|analytics|visual/, "dashboard");
   addWhen(/camera|vision|image|face|opencv|recognition|classif/, "computer-vision");
-  addWhen(/management|booking|portal|inventory|workflow|application|website|app/, "application-workflow");
+  addWhen(/management|booking|portal|inventory|workflow|application|website|(?:^| )app(?: |$)/, "application-workflow");
 
   if (outcomes.size === 0) {
     outcomes.add(project.category === "iot" ? "monitoring" : "application-workflow");
   }
 
   return [...outcomes];
+}
+
+export function getPlannerTimeRequired(project: PlannerProject) {
+  if (project.difficulty === "Advanced") {
+    return project.category === "software"
+      ? "8-12 weeks for planning, development, testing and report evidence"
+      : "8-12 weeks including component testing, integration, calibration and demo preparation";
+  }
+  if (project.difficulty === "Intermediate") {
+    return project.category === "software"
+      ? "4-8 weeks for core workflow, database, testing and presentation screens"
+      : "4-8 weeks for wiring, coding, dashboard or app integration and repeated testing";
+  }
+  return project.category === "software"
+    ? "2-4 weeks for a focused prototype with a simple database workflow"
+    : "2-4 weeks for a basic prototype with one reliable input-output workflow";
+}
+
+export function getPlannerTestingPriorities(project: PlannerProject) {
+  const outcome = project.outcomes[0] ?? (project.category === "iot" ? "monitoring" : "application-workflow");
+  const focused: Record<PlannerOutcome, string> = {
+    monitoring: "Compare readings or status changes against controlled reference conditions.",
+    alerting: "Measure alert delivery, missed alerts, duplicate alerts and recovery after a connection loss.",
+    automation: "Verify trigger thresholds, output response, manual override and safe recovery behavior.",
+    tracking: "Test location or movement updates in open, obstructed and disconnected conditions.",
+    "access-control": "Test valid, invalid, duplicate and revoked credentials without exposing personal data.",
+    dashboard: "Verify stored records, timestamps, filtering and behavior when data is missing or delayed.",
+    "computer-vision": "Separate training and test examples, then record false positives and false negatives under repeatable scenes.",
+    "application-workflow": "Test each user role through normal, invalid and recovery paths with traceable records.",
+  };
+  return [
+    focused[outcome],
+    "Test the smallest end-to-end workflow before adding optional features.",
+    "Capture logs, screenshots, readings or database records as report evidence.",
+  ];
+}
+
+export function getPlannerLearningLinks(project: PlannerProject): PlannerLearningLink[] {
+  const haystack = normalize(`${project.title} ${project.tags.join(" ")}`);
+  const links: PlannerLearningLink[] = [
+    { title: "How to choose a strong FYP topic", href: "/blog/how-to-choose-fyp-topic", type: "Planning" },
+    { title: "FYP proposal: title, objectives and scope", href: "/blog/final-year-project-proposal-title-objectives-scope", type: "Planning" },
+  ];
+
+  if (haystack.includes("esp32")) {
+    links.push({ title: "ESP32 Pinout Tool", href: "/tools/esp32-pinout", type: "Tool" });
+  } else if (/arduino|uno/.test(haystack)) {
+    links.push({ title: "Arduino Uno vs ESP32 for electronics FYP", href: "/blog/arduino-uno-vs-esp32-for-electronics-fyp", type: "Comparison" });
+  } else if (/camera|opencv|face|recognition| ai | ml /.test(` ${haystack} `)) {
+    links.push({ title: "AI final year project without a large dataset", href: "/blog/ai-final-year-project-without-large-dataset", type: "Guide" });
+  } else if (/gps|gsm|tracking|vehicle|location/.test(haystack)) {
+    links.push({ title: "GPS vehicle tracking system FYP guide", href: "/blog/gps-vehicle-tracking-system-fyp", type: "Guide" });
+  } else if (project.category === "software") {
+    links.push({ title: "Software FYP admin panel features", href: "/blog/software-fyp-admin-panel-features-that-score", type: "Guide" });
+  } else {
+    links.push({ title: "Electronics troubleshooting checklist", href: "/blog/fyp-electronics-troubleshooting-checklist", type: "Guide" });
+  }
+
+  return links;
 }
