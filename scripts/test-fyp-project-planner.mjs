@@ -78,6 +78,7 @@ const anyPreferences = {
   const result = recommendProjects(catalog, { ...anyPreferences, category: "iot", technology: "LoRa" });
   assert.equal(result.recommendations.length, 3, "sparse optional preferences should broaden rather than empty");
   assert.equal(result.broadened, true);
+  assert.equal(result.relaxation, "scope", "missing technology requires explicit scope relaxation");
 }
 
 {
@@ -90,6 +91,22 @@ const anyPreferences = {
   });
   assert.equal(result.recommendations.length, 3, "contradictory optional preferences should still return a useful shortlist");
   assert.equal(result.broadened, true, "partial matches must be disclosed as broadened");
+  assert.equal(result.relaxation, "scope", "contradictory difficulty and duration require explicit scope relaxation");
+}
+
+{
+  const result = recommendProjects(catalog, {
+    category: "iot",
+    technology: "any",
+    difficulty: "Intermediate",
+    duration: "4-8",
+    outcome: "computer-vision",
+  }, 2);
+  assert.equal(result.relaxation, "outcome", "outcome should be the only relaxed preference when other filters have enough matches");
+  assert.ok(
+    result.recommendations.every((item) => item.project.difficulty === "Intermediate" && item.project.duration === "4-8"),
+    "outcome relaxation must preserve difficulty and duration",
+  );
 }
 
 {

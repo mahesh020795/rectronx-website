@@ -45,6 +45,10 @@ for (const unsupportedClaim of [
   "selalu menang dengan pemeriksa",
   "pemeriksa jangkakan",
   "harganya bawah RM20",
+  "akan suka ni",
+  "Semua orang di viva",
+  "syarikat betul-betul berminat",
+  "mengesankan",
 ]) {
   assert.equal(primaryMalay.includes(unsupportedClaim), false, `Unsupported claim remains: ${unsupportedClaim}`);
 }

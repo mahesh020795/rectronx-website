@@ -43,16 +43,16 @@ Kesan kehadiran menggunakan sensor PIR atau gabungan beberapa input, kemudian ka
 Pantau PM2.5 menggunakan sensor partikulat seperti PMS5003, CO2 menggunakan sensor NDIR seperti SCD41, serta suhu dan kelembapan menggunakan BME280 atau sensor setara. Sensor MQ tidak sesuai untuk mendakwa bacaan CO2 tepat. Paparkan bacaan dan batasan sensor pada dashboard.
 
 **4. Tong Sampah Pintar dengan Pengesanan Tahap Isi**
-Sensor ultrasonik dalam tong hantar amaran bila 80% penuh, supaya pekerja kebersihan hanya servis tong yang perlu. Bina mudah tapi cerita reka bentuk sistem kuat.
+Sensor ultrasonik dalam tong hantar amaran apabila paras melepasi had yang ditetapkan. Uji bacaan pada beberapa bentuk sampah dan jarak kerana permukaan tidak rata boleh mempengaruhi sensor.
 
 **5. Sistem Automasi Rumah Guna Arahan Suara**
-ESP32 + IFTTT atau lapisan NLP asas untuk kawal lampu, kipas, dan soket melalui suara. Demo nampak hebat dan mengesankan — bagus untuk hari viva.
+ESP32 bersama perkhidmatan arahan suara atau lapisan NLP asas boleh mengawal beban voltan rendah. Ukur masa tindak balas, arahan yang gagal dan tingkah laku apabila sambungan terputus.
 
 **6. Sistem Pemantauan Pertanian Pintar**
 Sensor kelembapan tanah, suhu, kelembapan, dan cahaya hantar data ke dashboard. Siram automatik bila tanah kering. Konteks pertanian Malaysia (padi, taman bumbung) buat pernyataan masalah senang ditulis.
 
 **7. Sistem Peringatan dan Pengedar Ubat IoT**
-Kotak pil pintar yang hantar peringatan pada waktu yang ditetapkan melalui Telegram dan log sama ada petak dah dibuka. Sudut kemanusiaan kuat — penyelia yang buat kajian penjagaan warga emas akan suka ni.
+Kotak pil pintar yang menghantar peringatan pada waktu ditetapkan melalui Telegram dan merekod sama ada petak telah dibuka. Nilai projek melalui ketepatan jadual, log peristiwa dan pengendalian peringatan yang terlepas.
 
 ---
 
@@ -70,7 +70,7 @@ Peranti yang boleh dipakai dengan sensor ultrasonik di hadapan, kiri, dan kanan.
 Sensor IR picu pam, LCD papar jumlah pengunjung. Mudah tapi ada ruang nak kembangkan dengan log data dan dashboard.
 
 **11. Penganalisis pH Tanah dan Nutrien untuk Petani**
-Gabungkan sensor pH, sensor NPK, dan prob suhu dalam satu peranti yang cadangkan jenis dan jumlah baja. Fokus pertanian Malaysia buat ia menonjol.
+Gabungkan sensor pH, sensor NPK dan prob suhu dalam satu peranti. Elakkan cadangan baja automatik tanpa rujukan agronomi; fokus pada kalibrasi, julat bacaan dan perbandingan dengan kaedah rujukan.
 
 **12. Sistem Penyiraman Pokok Automatik dengan Notifikasi Mudah Alih**
 Arduino baca kelembapan tanah, aktifkan pam air, hantar notifikasi melalui modul ESP8266 bila paras air dalam takungan rendah.
@@ -82,10 +82,10 @@ Arduino baca kelembapan tanah, aktifkan pam air, hantar notifikasi melalui modul
 ESP32 sesuai dipertimbangkan apabila projek memerlukan WiFi, Bluetooth atau lebih banyak pilihan periferal. Semak model papan, spesifikasi dan harga semasa daripada pembekal sebelum menetapkan senarai komponen.
 
 **13. Sistem Keselamatan Berasaskan ESP32-Cam dengan Pengesanan Muka**
-Tangkap gambar bila gerakan dikesan, jalankan pengesanan muka asas, dan hantar gambar amaran ke Telegram. Demo sangat visual, sangat bagus untuk viva.
+Tangkap gambar apabila gerakan dikesan, jalankan pengesanan muka asas dan hantar gambar amaran ke Telegram. Rekod pencahayaan, sudut kamera, masa pemprosesan serta kadar pengesanan salah.
 
 **14. Monitor Meter Elektrik Pintar**
-Sensor arus clamp pada bekalan utama rumah, kira penggunaan kuasa masa nyata, dan papar kos dalam RM pada dashboard. Semua orang di viva terus faham kenapa ia penting.
+Gunakan sensor arus yang sesuai pada rig voltan rendah untuk menganggar penggunaan dan memaparkan data pada dashboard. Bandingkan bacaan dengan meter rujukan dan nyatakan bahawa pengukuran tenaga sebenar memerlukan reka bentuk serta penyeliaan elektrik yang sesuai.
 
 **15. Sistem Penjejakan Buku Perpustakaan Berasaskan RFID**
 Setiap buku ada tag RFID. Pengimbas di pintu keluar log buku mana yang keluar dan bila. Dashboard papar inventori masa nyata. Bagus untuk kampus universiti.
@@ -94,7 +94,7 @@ Setiap buku ada tag RFID. Pengimbas di pintu keluar log buku mana yang keluar da
 Ukur SpO2, kadar jantung, dan suhu. Hantar tanpa wayar ke dashboard stesen jururawat. Tandakan bacaan luar biasa. Dengan BLE ESP32, boleh kekalkan tanpa wayar betul-betul.
 
 **17. Sistem Loker Pintar dengan Buka Kunci OTP**
-Pengguna minta loker melalui aplikasi web, terima OTP melalui Telegram/WhatsApp, masukkan pada papan kekunci yang disambungkan ke ESP32 yang buka solenoid. Sangat praktikal dan syarikat betul-betul berminat dengan sistem macam ni.
+Pengguna meminta akses melalui aplikasi web, menerima OTP melalui saluran yang dipilih dan memasukkannya pada papan kekunci ESP32 untuk mengawal prototaip kunci. Uji tamat tempoh OTP, cubaan berulang, log akses dan keadaan rangkaian terputus.
 
 ---
 
@@ -106,16 +106,16 @@ Untuk pelajar sains komputer dan IT yang lebih suka duduk dalam kod.
 Berikan set subjek, bilik darjah, dan ketersediaan pensyarah, jana jadual waktu bebas konflik guna algoritma genetik atau kepuasan kekangan. Masalah sebenar, pengguna universiti sebenar, dan boleh demo secara langsung.
 
 **19. Aplikasi Pengurangan Pembaziran Makanan untuk Kafeteria Universiti**
-Jejak apa yang dibuang, ramal permintaan, bantu kakitangan kafeteria rancang saiz hidangan. Sudut kelestarian sangat kuat pada 2026.
+Jejak kategori dan kuantiti makanan yang dibuang, kemudian uji sama ada ramalan permintaan membantu perancangan hidangan. Nyatakan tempoh data, ralat ramalan dan faktor luar yang tidak direkod.
 
 **20. Aplikasi Penjejakan Kesihatan Mental untuk Pelajar Universiti**
-Jurnal mood harian, sokongan rakan sebaya tanpa nama, cadangan sumber. Reka bentuk fokus privasi. Projek akhir tahun yang kuat dalam ruang teknologi sosial.
+Jurnal mood harian, sokongan rakan sebaya tanpa nama dan pautan kepada sumber bantuan. Hadkan tuntutan kepada fungsi aplikasi; utamakan persetujuan, privasi, penyimpanan data dan paparan krisis yang sesuai.
 
 **21. Alat Pengesanan Deepfake**
-Muat naik gambar atau video pendek, jalankan melalui model CNN yang telah dilatih, kembalikan skor keyakinan sama ada ia nyata atau dijana AI. Sangat semasa, sangat mengesankan untuk 2026.
+Muat naik gambar atau video pendek, jalankan melalui model yang telah dilatih dan paparkan skor model. Nilai dengan set ujian berasingan, matriks kekeliruan dan penjelasan bahawa skor bukan bukti muktamad kandungan palsu.
 
 **22. Pengecaman Bahasa Isyarat Guna MediaPipe**
-Guna webcam dan penjejakan tangan MediaPipe untuk kenali isyarat Bahasa Isyarat Malaysia masa nyata. Tukar kepada teks. Sudut kebolehcapaian kuat, demo langsung mengesankan.
+Gunakan webcam dan penjejakan tangan MediaPipe untuk mengenali set isyarat Bahasa Isyarat Malaysia yang ditakrifkan dengan jelas. Ukur ketepatan, latensi dan prestasi bagi pengguna serta latar yang berbeza.
 
 **23. Aplikasi Web Ketersediaan Parkir dengan Lapisan AR**
 Gabungkan suapan kamera dengan penanda AR untuk tunjukkan tempat parkir kosong pada peta langsung. Backend jejak ketersediaan dari sensor ultrasonik dalam setiap petak.
@@ -136,7 +136,7 @@ Webcam pantau nisbah aspek mata guna dlib. Amaran picu bila mata kekal tertutup 
 Model NLP dilatih pada artikel berita Malaysia berlabel. Pengguna tampal tajuk berita atau URL dan dapat skor kredibiliti. Sangat relevan pada 2026.
 
 **27. Sistem Pertuturan-ke-Teks untuk Bahasa Malaysia**
-Guna model sumber terbuka yang diperhalusi dengan data pertuturan Melayu. Kebanyakan AI pertuturan masih lemah dalam Bahasa Melayu — ini jurang penyelidikan sebenar yang boleh kamu tulis ulasan literatur yang kuat tentangnya.
+Gunakan model sumber terbuka dengan set data pertuturan Melayu yang sumber dan lesennya boleh dinyatakan. Bandingkan kadar ralat perkataan mengikut keadaan rakaman dan elakkan mendakwa jurang prestasi tanpa rujukan penilaian yang sesuai.
 
 ---
 
@@ -149,7 +149,7 @@ Klasik tapi boleh dibezakan dengan kamera Raspberry Pi untuk pengecaman tanda tr
 Sensor EMG pada lengan bawah ambil pengecutan otot dan petakan kepada pergerakan servo. Aplikasi pemulihan buat pernyataan masalah kuat.
 
 **30. Robot Mengimbangi Diri Guna Kawalan PID**
-Giroskop + pecutan + pengawal PID + pemacu motor. Matematik cukup mencabar untuk tulis bab metodologi yang kuat dan demo langsung selalu mengesankan.
+Gunakan giroskop, pecutan, pengawal PID dan pemacu motor. Rekod masa pemulihan, ralat sudut, tindak balas terhadap gangguan dan proses penalaan untuk menyokong bab metodologi.
 
 ---
 

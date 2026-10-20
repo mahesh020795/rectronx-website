@@ -164,9 +164,15 @@ export default function FypProjectPlanner({ projects }: { projects: PlannerProje
               <p className="text-sm text-slate-500">{projects.length} catalog titles evaluated</p>
             </div>
 
-            {result.broadened && (
+            {result.relaxation === "outcome" && (
               <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                Few titles matched every optional preference, so the results were broadened while keeping your selected category.
+                Few titles matched your preferred outcome. Technology, difficulty and duration remain unchanged; the outcome was broadened to complete the shortlist.
+              </p>
+            )}
+
+            {result.relaxation === "scope" && (
+              <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                Fewer than three titles matched the selected technology, difficulty and duration together. These alternatives keep your category; change one of those selections for a closer shortlist.
               </p>
             )}
 

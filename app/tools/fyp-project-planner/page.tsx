@@ -51,7 +51,7 @@ const plannerFaqs = [
   },
   {
     q: "What happens when very few projects match my preferences?",
-    a: "The planner keeps your required category and broadens optional preferences such as platform or outcome. It clearly marks the result as broadened instead of returning an empty list.",
+    a: "The planner first keeps technology, difficulty and duration while relaxing only the preferred outcome. If those scope selections still produce fewer than three titles, it shows category-safe alternatives with a separate message asking you to adjust one selection.",
   },
   {
     q: "Can I use the recommendations without contacting Rectronx?",

@@ -32,6 +32,7 @@ assert.match(client, /Reset/, "Reset control is missing");
 assert.match(client, /\/catalog\//, "Recommendations must link to catalog details");
 assert.match(client, /wa\.me\/60148600454/, "Planner WhatsApp action is missing");
 assert.match(client, /broadened/i, "Planner must explain broadened matches");
+assert.match(client, /change one of those selections/, "Planner must distinguish full scope relaxation");
 assert.match(client, /project\.tags\.slice\(0, 3\)/, "Recommendation cards must show core technology tags");
 
 assert.doesNotMatch(page, /timeRequired:\s*seo\.timeRequired/, "Repeated time guidance must not be serialized per project");

@@ -48,6 +48,7 @@ export type PlannerRecommendation = {
 export type PlannerResult = {
   recommendations: PlannerRecommendation[];
   broadened: boolean;
+  relaxation: "none" | "outcome" | "scope";
 };
 
 type PlannerEnrichment = Omit<
@@ -71,7 +72,22 @@ export function recommendProjects(
     (project) => preferences.category === "either" || project.category === preferences.category,
   );
 
-  const ranked = categoryCandidates
+  const targetCount = Math.min(limit, categoryCandidates.length);
+  const scopeMatches = categoryCandidates.filter((project) => matchesScopePreferences(project, preferences));
+  const hasScopePreference =
+    preferences.technology !== "any" ||
+    preferences.difficulty !== "any" ||
+    preferences.duration !== "any";
+  const relaxation: PlannerResult["relaxation"] =
+    hasScopePreference && scopeMatches.length < targetCount
+      ? "scope"
+      : preferences.outcome !== "any" &&
+          scopeMatches.filter((project) => project.outcomes.includes(preferences.outcome as PlannerOutcome)).length < targetCount
+        ? "outcome"
+        : "none";
+  const candidatePool = relaxation === "scope" ? categoryCandidates : scopeMatches;
+
+  const ranked = candidatePool
     .map((project) => scoreProject(project, preferences))
     .sort((a, b) => b.score - a.score || a.project.id - b.project.id);
 
@@ -100,27 +116,19 @@ export function recommendProjects(
     usedDifficulties.add(selected.project.difficulty);
   }
 
-  const hasOptionalPreference =
-    preferences.technology !== "any" ||
-    preferences.difficulty !== "any" ||
-    preferences.duration !== "any" ||
-    preferences.outcome !== "any";
-
   return {
     recommendations,
-    broadened:
-      hasOptionalPreference &&
-      recommendations.some(({ project }) => !matchesEveryOptionalPreference(project, preferences)),
+    broadened: relaxation !== "none",
+    relaxation,
   };
 }
 
-function matchesEveryOptionalPreference(project: PlannerProject, preferences: PlannerPreferences) {
+function matchesScopePreferences(project: PlannerProject, preferences: PlannerPreferences) {
   const haystack = normalize(`${project.title} ${project.tags.join(" ")}`);
   return (
     (preferences.technology === "any" || haystack.includes(normalize(preferences.technology))) &&
     (preferences.difficulty === "any" || project.difficulty === preferences.difficulty) &&
-    (preferences.duration === "any" || project.duration === preferences.duration) &&
-    (preferences.outcome === "any" || project.outcomes.includes(preferences.outcome))
+    (preferences.duration === "any" || project.duration === preferences.duration)
   );
 }
 
