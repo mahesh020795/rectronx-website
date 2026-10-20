@@ -6,12 +6,13 @@ Increase qualified organic traffic without adding another large batch of overlap
 
 ## Scope
 
-This programme covers four connected deliverables:
+This programme covers five connected deliverables:
 
 1. Preserve the complete available Search Console baseline.
-2. Assign keyword ownership and identify pages competing for the same intent.
-3. Consolidate the Projek Akhir Tahun, Projek IoT, and ESP32 FYP clusters conservatively.
-4. Build `/tools/fyp-project-planner` and connect it to the existing catalog, learning content, and contact journey.
+2. Triage index exclusions and separate genuine content problems from intentional or non-page URLs.
+3. Assign keyword ownership and identify pages competing for the same intent.
+4. Consolidate the Projek Akhir Tahun, Projek IoT, and ESP32 FYP clusters conservatively.
+5. Build `/tools/fyp-project-planner` and connect it to the existing catalog, learning content, and contact journey.
 
 It does not include bulk blog creation, a new main navigation category, paid advertising, fabricated pricing, AI-generated recommendations at runtime, or mass deletion of indexed pages.
 
@@ -27,6 +28,42 @@ Search Console was exported on 20 October 2026 with the `Last 16 months` setting
 - Not-indexed pages shown on the Search Console overview: 111
 - Country leader: Malaysia with 581 clicks and 7,334 impressions
 - Device split: mobile 418 clicks; desktop 355 clicks; tablet 13 clicks
+
+The latest 28-day Search Console comparison shows 332 clicks, up 36%, and 7,810 impressions, down 21%. This is not evidence of a sitewide penalty: clicks and the leading FYP pages are growing while Google is becoming more selective about which URLs receive impressions.
+
+## Index Coverage Findings
+
+The Search Console coverage report contains 1,160 indexed URLs and 111 excluded URLs. The headline exclusion count overstates the number of current content pages requiring action:
+
+- 14 alternative canonical URLs and ten redirected URLs are normally intentional states and should not be forced into the index.
+- The two reported 404 examples, `https://www.rectronx.com/terms` and `https://www.rectronx.com/privacy`, now return permanent redirects to their non-`www` destinations. They are stale historical examples rather than current broken routes.
+- Of 40 `Crawled - currently not indexed` examples, five are generated Open Graph PNG URLs, one is `manifest.webmanifest`, and two are historical `www` variants. These are not missing content pages.
+- The remaining crawled examples contain 19 catalog pages, 13 blog pages, and one component page. They return HTTP 200 and current HTML pages use self-referencing canonicals.
+- All 45 `Discovered - currently not indexed` URLs return HTTP 200, are indexable, use self-referencing canonicals, and appear in the live sitemap. They include 34 blog posts, five service pages, three catalog pages, one component page, one topic page, and the ESP32 Pinout Tool.
+
+The 34 discovered blog posts are the strongest quality warning. Their body lengths range from 386 to 778 words, with a median of about 635 words, but they use only five distinct heading structures. The closest pairs have vocabulary-set overlap above 0.80. This does not prove a Google quality classification, but it is strong evidence that large template-driven batches are creating many similar pages for Google to prioritise.
+
+### Indexing Response
+
+- Do not submit all excluded URLs manually or treat every exclusion as an error.
+- Do not attempt to index generated Open Graph images, the web manifest, redirected hosts, or intentional canonical alternatives.
+- Pause further bulk article batches until the 34 discovered articles have been mapped by intent and either differentiated, merged, or retired.
+- Review real excluded pages in priority order: pages with Search Console impressions first, strategic service/tool pages second, then catalog pages with unique demand.
+- Strengthen crawl paths from the relevant topic hub and primary cluster page using a small number of descriptive, contextual links. Do not add sitewide link blocks merely to increase link counts.
+- Rework retained articles around unique evidence: a specific circuit or architecture, component limitations, test procedure, measurable acceptance criteria, original diagram, comparison table, or troubleshooting decision tree.
+- Request validation in Search Console only after affected URLs have materially changed and the deployed responses have been verified.
+
+### Content Quality Gate
+
+No new article should be published merely by changing a title, component name, or project type in a shared template. Before publication, each article must have:
+
+- one clearly assigned search intent and primary query family;
+- a purpose that does not duplicate an existing primary page;
+- a unique outline rather than a batch-standard heading sequence;
+- technically validated details specific to the selected project or component;
+- at least one useful original element, such as a wiring table, test matrix, decision tree, calculation, code explanation, or realistic limitation analysis;
+- direct internal links from and to the owning topic or cluster page;
+- a decision to publish, merge, or omit based on usefulness, not a target article count.
 
 The repository currently contains 375 blog posts and 781 catalog project titles. A title-level similarity check found 19 pairs with Jaccard similarity of at least 0.60 after removing broad stop terms. Similar titles are a review signal, not proof of cannibalisation; Search Console query-to-page evidence controls consolidation decisions.
 
@@ -203,5 +240,7 @@ Use Search Console comparisons after release, allowing enough time for recrawl a
 - Number of queries where two Rectronx pages compete for the same exact intent
 - Planner sessions, completion rate, project-detail clicks, and WhatsApp enquiries
 - Indexed destination URLs and Google-selected canonicals
+- Count of genuine indexable pages remaining in `Discovered` and `Crawled - currently not indexed`
+- Percentage of retained articles passing the content quality gate
 
 No traffic or ranking increase is guaranteed. The decision to expand the approach will be based on measured Search Console and analytics results, not publication volume.
