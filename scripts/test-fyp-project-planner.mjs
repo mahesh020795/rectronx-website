@@ -141,4 +141,19 @@ const anyPreferences = {
   assert.equal(outcomes.includes("application-workflow"), false, "mapping must not be mistaken for the word app");
 }
 
+{
+  const outcomeCompetition = [
+    { id: 1, title: "Clinic Booking Portal", category: "software", tags: ["Web"], slug: "clinic", difficulty: "Advanced", duration: "8-12", outcomes: ["application-workflow"] },
+    { id: 10, title: "River Level Monitor", category: "iot", tags: ["Sensor"], slug: "river", difficulty: "Beginner", duration: "2-4", outcomes: ["monitoring"] },
+    { id: 11, title: "Greenhouse Climate Meter", category: "iot", tags: ["Climate"], slug: "greenhouse", difficulty: "Beginner", duration: "2-4", outcomes: ["monitoring"] },
+    { id: 12, title: "Factory Vibration Logger", category: "iot", tags: ["Vibration"], slug: "factory", difficulty: "Beginner", duration: "2-4", outcomes: ["monitoring"] },
+  ];
+  const result = recommendProjects(outcomeCompetition, { ...anyPreferences, outcome: "monitoring" });
+  assert.equal(result.relaxation, "none");
+  assert.ok(
+    result.recommendations.every((item) => item.project.outcomes.includes("monitoring")),
+    "exact outcome matches must not be displaced when enough exist",
+  );
+}
+
 console.log("FYP project planner tests passed.");

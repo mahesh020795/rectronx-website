@@ -78,14 +78,21 @@ export function recommendProjects(
     preferences.technology !== "any" ||
     preferences.difficulty !== "any" ||
     preferences.duration !== "any";
+  const fullMatches = scopeMatches.filter(
+    (project) => preferences.outcome === "any" || project.outcomes.includes(preferences.outcome),
+  );
   const relaxation: PlannerResult["relaxation"] =
     hasScopePreference && scopeMatches.length < targetCount
       ? "scope"
-      : preferences.outcome !== "any" &&
-          scopeMatches.filter((project) => project.outcomes.includes(preferences.outcome as PlannerOutcome)).length < targetCount
+      : preferences.outcome !== "any" && fullMatches.length < targetCount
         ? "outcome"
         : "none";
-  const candidatePool = relaxation === "scope" ? categoryCandidates : scopeMatches;
+  const candidatePool =
+    relaxation === "scope"
+      ? categoryCandidates
+      : relaxation === "outcome"
+        ? scopeMatches
+        : fullMatches;
 
   const ranked = candidatePool
     .map((project) => scoreProject(project, preferences))
