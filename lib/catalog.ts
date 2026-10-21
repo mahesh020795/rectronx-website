@@ -1,5 +1,6 @@
 import { allCatalogProjects, CatalogProject } from "@/data/projects";
 import { getComponentByTag } from "@/lib/components";
+import { getProjectEngineering } from "@/lib/project-engineering";
 
 export type CatalogSeo = {
   metaTitle: string;
@@ -206,8 +207,9 @@ export function getCatalogProjectSeo(project: CatalogProject): CatalogSeo {
   const title = project.title;
   const categoryLabel = project.category === "iot" ? "IoT & Embedded" : "Software & AI";
   const difficulty = getDifficulty(project);
-  const mainTechnologies = project.tags.slice(0, 4).join(", ");
-  const profile = getProjectProfile(project);
+  const engineering = getProjectEngineering(project);
+  const mainTechnologies = engineering.components.slice(0, 4).map((item) => item.name).join(", ");
+  const profile = getEngineeringProjectProfile(project);
 
   return {
     metaTitle: `${title} | FYP Project Guide Malaysia`,
@@ -228,6 +230,44 @@ export function getCatalogProjectSeo(project: CatalogProject): CatalogSeo {
     reportSections: getReportSections(profile, mainTechnologies),
     upgrades: getUpgrades(tags, project.category, profile),
     faqs: getFaqs(project, difficulty, profile),
+  };
+}
+
+function getEngineeringProjectProfile(project: CatalogProject): ProjectProfile {
+  const engineering = getProjectEngineering(project);
+  const inputs = engineering.components
+    .filter((item) => item.category === "input")
+    .map((item) => item.name)
+    .join(", ");
+  const outputs = engineering.components
+    .filter((item) => item.category === "output" || item.category === "communication")
+    .map((item) => item.name)
+    .join(", ");
+  const data = engineering.components
+    .filter((item) => item.category === "data")
+    .map((item) => item.name)
+    .join(", ");
+  const processing = engineering.diagram.nodes
+    .filter((item) => item.kind === "process")
+    .map((item) => item.detail)
+    .join("; ");
+  const isAi = engineering.profile.startsWith("AI");
+
+  return {
+    domain: engineering.profile.toLowerCase(),
+    input: inputs,
+    processing,
+    output: outputs,
+    data: data || (project.category === "software" ? "validated records, status history, timestamps, and test results" : "input readings, decisions, output states, timestamps, and test results"),
+    testFocus: isAi
+      ? "held-out test results, class-wise metrics, false positives, false negatives, and dataset limitations"
+      : project.category === "software"
+        ? "role permissions, valid and invalid records, data integrity, conflicting updates, and the complete user-to-admin flow"
+        : "input calibration or baseline, response time, repeatability, power stability, communications failure, and safe-state behaviour",
+    scopeAdvice: project.category === "software"
+      ? "Complete one validated end-to-end user workflow before adding notifications, analytics, payment, or extra roles."
+      : "Validate the input-to-controller-to-output path with safe bench tests before adding cloud features, casing, or extra modules.",
+    coreModules: engineering.components.slice(0, 4).map((item) => item.name),
   };
 }
 
@@ -437,10 +477,10 @@ function withArticle(phrase: string) {
 
 function getOutcome(project: CatalogProject, profile: ProjectProfile) {
   if (project.category === "software") {
-    return `${project.title} is ${withArticle(profile.domain)} concept built around ${profile.input}. A realistic FYP outcome is a working system that performs ${profile.processing}, then shows ${profile.output}. The scope should capture ${profile.data} as evidence for the report.`;
+    return `${project.title} is ${withArticle(profile.domain)} concept built around ${profile.input}. A realistic FYP outcome is a working system with this processing path: ${profile.processing}. The result is delivered through ${profile.output}, while ${profile.data} provides evidence for the report.`;
   }
 
-  return `${project.title} is ${withArticle(profile.domain)} that can be demonstrated with ${profile.input}. A realistic FYP outcome is a working prototype where ${profile.processing}, then produces ${profile.output}. The important proof is repeatable ${profile.data}, not just a device that powers on.`;
+  return `${project.title} is ${withArticle(profile.domain)} that can be demonstrated with ${profile.input}. A realistic FYP outcome is a working prototype with this processing path: ${profile.processing}. The result is delivered through ${profile.output}. The important proof is repeatable ${profile.data}, not just a device that powers on.`;
 }
 
 function getHowItWorks(project: CatalogProject, profile: ProjectProfile) {

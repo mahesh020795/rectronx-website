@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "verify:iot-hub": "node scripts/verify-iot-topic-hub.mjs",
     "verify:hardening": "node scripts/verify-site-hardening.mjs",
+    "test:project-engineering": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/test-project-engineering.mjs",
     "test:contact": "node scripts/test-contact-security.mjs"
   },
   "dependencies": {

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
   AlertTriangle,
+  ArrowRight,
   ArrowLeft,
   ArrowUpRight,
   CheckCircle2,
@@ -23,10 +24,11 @@ import {
   getCatalogProjectBySlug,
   getCatalogProjectSeo,
   getCatalogProjectSlug,
-  getProjectTechnologies,
   getProjectLearningLinks,
   getRelatedCatalogProjects,
 } from "@/lib/catalog";
+import { getProjectEngineering } from "@/lib/project-engineering";
+import { getComponentByTag } from "@/lib/components";
 import {
   breadcrumbSchema,
   catalogProjectTechArticleSchema,
@@ -86,7 +88,7 @@ export default async function CatalogProjectPage({
 
   const slug = getCatalogProjectSlug(project);
   const seo = getCatalogProjectSeo(project);
-  const technologies = getProjectTechnologies(project);
+  const engineering = getProjectEngineering(project);
   const related = getRelatedCatalogProjects(project);
   const relatedTopics = getRelatedTopicHubsForProject(project);
   const learningLinks = getProjectLearningLinks(project);
@@ -184,15 +186,14 @@ export default async function CatalogProjectPage({
                 <SnapshotRow label="Suitable for" value="Diploma, Degree, FYP, Projek Akhir Tahun" />
                 <SnapshotRow
                   label="Components"
-                  value={project.tags.slice(0, 4).join(", ")}
+                  value={engineering.components.slice(0, 4).map((item) => item.name).join(", ")}
                 />
                 <SnapshotRow
                   label="Expected output"
-                  value={
-                    project.category === "iot"
-                      ? "Prototype demo, alerts, dashboard, app, or database"
-                      : "Working software flow, database records, reports, and user screens"
-                  }
+                  value={engineering.components
+                    .filter((item) => item.category === "output" || item.category === "communication")
+                    .map((item) => item.name)
+                    .join(", ")}
                 />
               </div>
             </div>
@@ -209,50 +210,104 @@ export default async function CatalogProjectPage({
                 <AiSummaryCard label="Difficulty" value={seo.difficulty} />
                 <AiSummaryCard label="Time Required" value={seo.timeRequired} />
                 <AiSummaryCard label="Cost" value={seo.costGuidance} />
-                <AiSummaryCard label="Components" value={project.tags.slice(0, 4).join(", ")} />
+                <AiSummaryCard label="Engineering profile" value={engineering.profile} />
               </div>
             </div>
           </Section>
 
-          <Section title="How This Project Works" icon={<Cpu size={20} />}>
+          <Section title="Function Flow" icon={<Cpu size={20} />}>
             <div className="grid gap-3">
-              {seo.howItWorks.map((step, index) => (
+              {engineering.functionFlow.map((item) => (
                 <div
-                  key={step}
+                  key={item.step}
                   className="flex gap-3 rounded-xl border border-slate-200 bg-white p-4"
                 >
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-brand-blue">
-                    {index + 1}
+                    {item.step}
                   </span>
-                  <p className="text-sm leading-relaxed text-slate-600">{step}</p>
+                  <div>
+                    <h3 className="text-sm font-bold text-brand-navy">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{item.description}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </Section>
 
-          <Section title="Components" icon={<Package size={20} />}>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {technologies.map(({ tag, component }) =>
-                component ? (
+          <Section title="System Block Diagram" icon={<Cpu size={20} />}>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+              <p className="mb-5 text-sm leading-6 text-slate-500">
+                Functional signal and data path for the recommended prototype scope. Final pin assignments and electrical wiring must follow the exact module datasheets.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {engineering.diagram.nodes.map((node) => (
+                  <div key={node.id} className="rounded-xl border border-blue-100 bg-blue-50/60 p-4">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-brand-blue">{node.kind}</span>
+                    <h3 className="mt-1 text-sm font-bold text-brand-navy">{node.label}</h3>
+                    <p className="mt-2 text-xs leading-5 text-slate-600">{node.detail}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 space-y-2" aria-label="Block diagram connections">
+                {engineering.diagram.edges.map((edge) => {
+                  const from = engineering.diagram.nodes.find((node) => node.id === edge.from);
+                  const to = engineering.diagram.nodes.find((node) => node.id === edge.to);
+                  return (
+                    <div key={`${edge.from}-${edge.to}-${edge.label}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-xs sm:text-sm">
+                      <span className="text-right font-semibold text-slate-700">{from?.label}</span>
+                      <span className="flex flex-col items-center text-brand-blue">
+                        <span className="text-[10px] text-slate-500">{edge.label}</span>
+                        <ArrowRight size={18} aria-hidden="true" />
+                      </span>
+                      <span className="font-semibold text-slate-700">{to?.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Section>
+
+          <Section title="Recommended Components & Platform" icon={<Package size={20} />}>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {engineering.components.map((item) => {
+                const componentGuide = getComponentByTag(item.name);
+                const content = (
+                  <>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-brand-navy">{item.name}</p>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-500">{item.category}</span>
+                      {!item.required && <span className="text-[10px] font-semibold text-slate-400">Optional</span>}
+                    </div>
+                    <p className="mt-2 text-xs leading-5 text-slate-500">{item.role}</p>
+                    {componentGuide && <p className="mt-2 text-xs font-semibold text-brand-blue">View component guide</p>}
+                  </>
+                );
+
+                return componentGuide ? (
                   <Link
-                    key={tag}
-                    href={`/components/${component.slug}`}
+                    key={item.name}
+                    href={`/components/${componentGuide.slug}`}
                     className="rounded-xl border border-slate-200 bg-white p-4 hover:border-brand-blue hover:shadow-sm transition-all"
                   >
-                    <p className="font-semibold text-brand-navy">{tag}</p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      View {component.shortName} component guide
-                    </p>
+                    {content}
                   </Link>
                 ) : (
-                  <div key={tag} className="rounded-xl border border-slate-200 bg-white p-4">
-                    <p className="font-semibold text-brand-navy">{tag}</p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      Technology or project feature
-                    </p>
+                  <div key={item.name} className="rounded-xl border border-slate-200 bg-white p-4">
+                    {content}
                   </div>
-                )
-              )}
+                );
+              })}
+            </div>
+          </Section>
+
+          <Section title="Engineering Validation Notes" icon={<Shield size={20} />}>
+            <div className="grid gap-3">
+              {engineering.validationNotes.map((note) => (
+                <div key={note} className="flex gap-3 rounded-xl border border-slate-200 bg-white p-4">
+                  <CheckCircle2 size={17} className="mt-0.5 shrink-0 text-emerald-600" />
+                  <p className="text-sm leading-relaxed text-slate-600">{note}</p>
+                </div>
+              ))}
             </div>
           </Section>
 
